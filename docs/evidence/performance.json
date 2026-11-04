@@ -1,0 +1,237 @@
+{
+  "date": "2026-11-04T10:16:03.170Z",
+  "database": "autoparts_load_1793787362814",
+  "environment": {
+    "node": "v24.16.0",
+    "platform": "win32",
+    "cpu": "Intel(R) Core(TM) i7-8850H CPU @ 2.60GHz",
+    "logicalCpus": 12,
+    "memoryBytes": 34056257536,
+    "transport": "Fastify inject (real PostgreSQL; no TCP or WAN latency)",
+    "profiles": "Host machine, unthrottled. Not Android/device measurements.",
+    "postgresql": "PostgreSQL 18.4 on x86_64-windows, compiled by msvc-19.44.35226, 64-bit"
+  },
+  "fixtures": {
+    "products": 100000,
+    "vehicles": 10000,
+    "fitments": 1000000,
+    "warehouses": 3
+  },
+  "scenarios": [
+    {
+      "name": "exact SKU search, initially unprimed application cache",
+      "requests": 1000,
+      "requestedRate": 50,
+      "actualRate": 49.96382444236987,
+      "durationSeconds": 20.0144875,
+      "p50": 40.24,
+      "p95": 178.71,
+      "p99": 1119.44,
+      "statuses": {
+        "200": 1000
+      },
+      "targetP95": 500,
+      "pass": true
+    },
+    {
+      "name": "exact SKU repeated warm set",
+      "requests": 1000,
+      "requestedRate": 50,
+      "actualRate": 49.919308682270184,
+      "durationSeconds": 20.032331099999997,
+      "p50": 43.41,
+      "p95": 104.78,
+      "p99": 650.78,
+      "statuses": {
+        "200": 1000
+      },
+      "targetP95": 500,
+      "pass": true
+    },
+    {
+      "name": "variant verified fitment filter",
+      "requests": 500,
+      "requestedRate": 25,
+      "actualRate": 25.002249202338234,
+      "durationSeconds": 19.99820150000001,
+      "p50": 29.6,
+      "p95": 50.11,
+      "p99": 54.87,
+      "statuses": {
+        "200": 500
+      },
+      "targetP95": 900,
+      "pass": true
+    },
+    {
+      "name": "product and stock read",
+      "requests": 1000,
+      "requestedRate": 50,
+      "actualRate": 50.034976449937545,
+      "durationSeconds": 19.986020099999994,
+      "p50": 4.55,
+      "p95": 7.91,
+      "p99": 9,
+      "statuses": {
+        "200": 1000
+      },
+      "targetP95": 300,
+      "pass": true
+    },
+    {
+      "name": "receipt writes, 20 per second",
+      "requests": 400,
+      "requestedRate": 20,
+      "actualRate": 20.028148962522373,
+      "durationSeconds": 19.97189129999999,
+      "p50": 12.85,
+      "p95": 21.41,
+      "p99": 22.88,
+      "statuses": {
+        "200": 400
+      },
+      "targetP95": 800,
+      "pass": true
+    },
+    {
+      "name": "dashboard",
+      "requests": 20,
+      "requestedRate": 2,
+      "actualRate": 2.037907587758644,
+      "durationSeconds": 9.813988799999992,
+      "p50": 241.52,
+      "p95": 364.31,
+      "p99": 436.64,
+      "statuses": {
+        "200": 20
+      },
+      "targetP95": 1500,
+      "pass": true
+    }
+  ],
+  "seedMilliseconds": 72282.2377,
+  "actualCounts": {
+    "products": 100000,
+    "vehicles": 10000,
+    "fitments": 1000000,
+    "warehouses": 3
+  },
+  "reconciliation": {
+    "balanced": true,
+    "items": []
+  },
+  "peakRSSBytes": 234975232,
+  "queryPlan": [
+    {
+      "Plan": {
+        "Node Type": "Limit",
+        "Parallel Aware": false,
+        "Async Capable": false,
+        "Startup Cost": 51.72,
+        "Total Cost": 90.56,
+        "Plan Rows": 10,
+        "Plan Width": 384,
+        "Actual Startup Time": 2.488,
+        "Actual Total Time": 2.53,
+        "Actual Rows": 1,
+        "Actual Loops": 1,
+        "Disabled": false,
+        "Shared Hit Blocks": 47,
+        "Shared Read Blocks": 41,
+        "Shared Dirtied Blocks": 0,
+        "Shared Written Blocks": 0,
+        "Local Hit Blocks": 0,
+        "Local Read Blocks": 0,
+        "Local Dirtied Blocks": 0,
+        "Local Written Blocks": 0,
+        "Temp Read Blocks": 0,
+        "Temp Written Blocks": 0,
+        "Plans": [
+          {
+            "Node Type": "Bitmap Heap Scan",
+            "Parent Relationship": "Outer",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Relation Name": "products",
+            "Alias": "products",
+            "Startup Cost": 51.72,
+            "Total Cost": 90.56,
+            "Plan Rows": 10,
+            "Plan Width": 384,
+            "Actual Startup Time": 2.487,
+            "Actual Total Time": 2.528,
+            "Actual Rows": 1,
+            "Actual Loops": 1,
+            "Disabled": false,
+            "Recheck Cond": "(search_text ~~ '%syn000003%'::text)",
+            "Rows Removed by Index Recheck": 111,
+            "Filter": "(org_id = '00000000-0000-4000-8000-000000000001'::uuid)",
+            "Rows Removed by Filter": 0,
+            "Exact Heap Blocks": 9,
+            "Lossy Heap Blocks": 0,
+            "Shared Hit Blocks": 47,
+            "Shared Read Blocks": 41,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0,
+            "Plans": [
+              {
+                "Node Type": "Bitmap Index Scan",
+                "Parent Relationship": "Outer",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Index Name": "products_search_trgm",
+                "Startup Cost": 0,
+                "Total Cost": 51.71,
+                "Plan Rows": 10,
+                "Plan Width": 0,
+                "Actual Startup Time": 2.462,
+                "Actual Total Time": 2.462,
+                "Actual Rows": 112,
+                "Actual Loops": 1,
+                "Disabled": false,
+                "Index Cond": "(search_text ~~ '%syn000003%'::text)",
+                "Index Searches": 1,
+                "Shared Hit Blocks": 38,
+                "Shared Read Blocks": 41,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              }
+            ]
+          }
+        ]
+      },
+      "Planning": {
+        "Shared Hit Blocks": 69,
+        "Shared Read Blocks": 16,
+        "Shared Dirtied Blocks": 0,
+        "Shared Written Blocks": 0,
+        "Local Hit Blocks": 0,
+        "Local Read Blocks": 0,
+        "Local Dirtied Blocks": 0,
+        "Local Written Blocks": 0,
+        "Temp Read Blocks": 0,
+        "Temp Written Blocks": 0
+      },
+      "Planning Time": 7.626,
+      "Triggers": [],
+      "Execution Time": 4.219
+    }
+  ],
+  "limits": [
+    "No slow network, Android hardware, saturation soak or cold OS disk cache measured.",
+    "100k import resumability is a separate acceptance test; SQL fixture generation does not pass it.",
+    "Database retained for inspection; no real customer/company data."
+  ]
+}

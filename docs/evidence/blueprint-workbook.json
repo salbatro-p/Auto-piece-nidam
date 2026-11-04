@@ -1,0 +1,339 @@
+{
+  "inspection": "read only; no workbook changes",
+  "sha256": "168891943d24c57044badb6a74849e379020078d0c4a2b36ed5929e0ed834040",
+  "sheets": [
+    {
+      "sheet": "START_HERE",
+      "nonemptyRows": 11,
+      "dataRowsExcludingFirst": 10,
+      "header": [
+        "FIELD",
+        "VALUE",
+        "IMPORTANT NOTE"
+      ],
+      "sample": [
+        [
+          "PURPOSE",
+          "V1 internal inventory / V2 ecommerce enabled",
+          "Not a completed global fitment catalog"
+        ],
+        [
+          "DATA STATUS",
+          "All model rows are market-research seeds",
+          "No stock/part fitment in this workbook is claimed verified"
+        ]
+      ]
+    },
+    {
+      "sheet": "Brands_MA",
+      "nonemptyRows": 26,
+      "dataRowsExcludingFirst": 25,
+      "header": [
+        "brand_seed_id",
+        "brand_name",
+        "market_priority",
+        "model_examples",
+        "basis",
+        "source_url",
+        "status"
+      ],
+      "sample": [
+        [
+          "001",
+          "DACIA",
+          "P1",
+          "Dacia Logan / Sandero / Duster",
+          "Maroc new vehicle sales priority",
+          "https://autonews.ma/actualite-auto/actualite-nationalemarche/22473-top-10-des-voitures-neuves-vendues-au-maroc-en-2025",
+          "SEED_ONLY"
+        ],
+        [
+          "002",
+          "RENAULT",
+          "P1",
+          "Clio / Express / Kardian",
+          "Maroc new vehicle sales priority",
+          "https://autonews.ma/actualite-auto/actualite-nationalemarche/22473-top-10-des-voitures-neuves-vendues-au-maroc-en-2025",
+          "SEED_ONLY"
+        ]
+      ]
+    },
+    {
+      "sheet": "Models_MA_Seed",
+      "nonemptyRows": 50,
+      "dataRowsExcludingFirst": 49,
+      "header": [
+        "seed_id",
+        "make",
+        "model",
+        "rank_2025",
+        "new_sales_2025",
+        "source_year",
+        "source_scope",
+        "source_url",
+        "verification",
+        "variant_status"
+      ],
+      "sample": [
+        [
+          "MA25-001",
+          "DACIA",
+          "LOGAN",
+          1,
+          18282,
+          2025,
+          "Full-year top 10 new car sales",
+          "https://autonews.ma/actualite-auto/actualite-nationalemarche/22473-top-10-des-voitures-neuves-vendues-au-maroc-en-2025",
+          "MODEL_ONLY",
+          "Year/engine/trim TBD"
+        ],
+        [
+          "MA25-002",
+          "DACIA",
+          "SANDERO",
+          2,
+          17572,
+          2025,
+          "Full-year top 10 new car sales",
+          "https://autonews.ma/actualite-auto/actualite-nationalemarche/22473-top-10-des-voitures-neuves-vendues-au-maroc-en-2025",
+          "MODEL_ONLY",
+          "Year/engine/trim TBD"
+        ]
+      ]
+    },
+    {
+      "sheet": "Vehicle_Variants",
+      "nonemptyRows": 1,
+      "dataRowsExcludingFirst": 0,
+      "header": [
+        "vehicle_variant_id",
+        "market",
+        "make",
+        "model",
+        "generation_or_platform",
+        "model_year_from",
+        "model_year_to",
+        "engine_code",
+        "fuel",
+        "displacement_cc",
+        "power_kw",
+        "transmission",
+        "body",
+        "steering_position",
+        "vehicle_source_url",
+        "source_license",
+        "verification_status",
+        "reviewer",
+        "reviewed_at"
+      ],
+      "sample": []
+    },
+    {
+      "sheet": "Part_Taxonomy",
+      "nonemptyRows": 101,
+      "dataRowsExcludingFirst": 100,
+      "header": [
+        "category_code",
+        "group_code",
+        "group_ar",
+        "group_fr",
+        "category_ar",
+        "category_fr",
+        "fitment_scope",
+        "review_note"
+      ],
+      "sample": [
+        [
+          "ENGINE_OIL_FILTER",
+          "ENGINE",
+          "المحرك",
+          "Moteur",
+          "فلتر الزيت",
+          "Filtre à huile",
+          "Specific",
+          "Catalog taxonomy; fitment not asserted"
+        ],
+        [
+          "ENGINE_AIR_FILTER",
+          "ENGINE",
+          "المحرك",
+          "Moteur",
+          "فلتر الهواء",
+          "Filtre à air",
+          "Specific",
+          "Catalog taxonomy; fitment not asserted"
+        ]
+      ]
+    },
+    {
+      "sheet": "Products_Import",
+      "nonemptyRows": 1,
+      "dataRowsExcludingFirst": 0,
+      "header": [
+        "product_id",
+        "sku",
+        "manufacturer_brand",
+        "manufacturer_part_no",
+        "oem_ref",
+        "supplier_ref",
+        "gtin",
+        "name_ar",
+        "name_fr",
+        "name_en",
+        "category_code",
+        "specifications_json",
+        "unit",
+        "cost_mad",
+        "sale_price_mad",
+        "tax_class",
+        "photo_url_or_asset",
+        "supplier_id",
+        "source_url",
+        "source_license",
+        "review_status",
+        "active"
+      ],
+      "sample": []
+    },
+    {
+      "sheet": "Fitment_Import",
+      "nonemptyRows": 1,
+      "dataRowsExcludingFirst": 0,
+      "header": [
+        "fitment_id",
+        "product_id",
+        "vehicle_variant_id",
+        "position_front_rear",
+        "left_right",
+        "conditions",
+        "oem_cross_ref",
+        "source_url",
+        "source_license",
+        "confidence",
+        "review_status",
+        "reviewer",
+        "reviewed_at"
+      ],
+      "sample": []
+    },
+    {
+      "sheet": "Locations_Stock",
+      "nonemptyRows": 1,
+      "dataRowsExcludingFirst": 0,
+      "header": [
+        "warehouse_id",
+        "location_id",
+        "aisle",
+        "rack",
+        "bin",
+        "product_id",
+        "batch_or_lot",
+        "quantity_counted",
+        "count_date",
+        "counted_by",
+        "unit_cost_mad",
+        "reserved_qty",
+        "source_document",
+        "verified_status"
+      ],
+      "sample": []
+    },
+    {
+      "sheet": "Stock_Movements",
+      "nonemptyRows": 1,
+      "dataRowsExcludingFirst": 0,
+      "header": [
+        "movement_id",
+        "timestamp_utc",
+        "warehouse_id",
+        "location_id",
+        "product_id",
+        "movement_type",
+        "quantity_delta",
+        "reference_type",
+        "reference_id",
+        "employee_id",
+        "unit_cost_mad",
+        "reason",
+        "idempotency_key",
+        "review_status"
+      ],
+      "sample": []
+    },
+    {
+      "sheet": "Suppliers_Import",
+      "nonemptyRows": 1,
+      "dataRowsExcludingFirst": 0,
+      "header": [
+        "supplier_id",
+        "name",
+        "trade_name",
+        "phone",
+        "email",
+        "city",
+        "country",
+        "payment_terms",
+        "lead_time_days",
+        "catalog_format",
+        "contact_status"
+      ],
+      "sample": []
+    },
+    {
+      "sheet": "Sources_Licenses",
+      "nonemptyRows": 12,
+      "dataRowsExcludingFirst": 11,
+      "header": [
+        "id",
+        "organization",
+        "scope",
+        "source_url",
+        "use_caveat"
+      ],
+      "sample": [
+        [
+          "SRC001",
+          "TecAlliance / TecDoc",
+          "Vehicle + parts fitment commercial provider",
+          "https://www.tecalliance.net/products/cards/tecdoc-catalogue",
+          "Licensing/API eligibility to confirm"
+        ],
+        [
+          "SRC002",
+          "Auto Care Association",
+          "ACES/PIES fitment and product standards (Americas)",
+          "https://www.autocare.org/data-standards",
+          "Paid reference DBs; standards not data access"
+        ]
+      ]
+    },
+    {
+      "sheet": "Execution_Plan",
+      "nonemptyRows": 9,
+      "dataRowsExcludingFirst": 8,
+      "header": [
+        "step",
+        "phase",
+        "activities",
+        "deliverable",
+        "acceptance_gate"
+      ],
+      "sample": [
+        [
+          "0",
+          "Discovery",
+          "Company interviews, locations, current ERP, inventory exports",
+          "Confirmed requirements + data contract",
+          "No production data changed"
+        ],
+        [
+          "1",
+          "Data normalization",
+          "Brand/model seeds, part taxonomy, SKU mapping, identifiers",
+          "Validated taxonomy + import diagnostics",
+          "Provenance attached, duplicates reported"
+        ]
+      ]
+    }
+  ]
+}

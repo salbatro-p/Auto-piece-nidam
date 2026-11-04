@@ -1,0 +1,50 @@
+{
+  "name": "autoparts-morocco",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.16.0 <25"
+  },
+  "scripts": {
+    "dev:api": "node --env-file=.env --import=tsx apps/api/src/server.ts",
+    "dev:business": "vite --config apps/business/vite.config.ts",
+    "typecheck": "tsc --noEmit",
+    "build": "vite build --config apps/business/vite.config.ts",
+    "test": "node --env-file=.env --import=tsx --test tests/*.test.ts apps/api/tests/*.test.ts",
+    "test:e2e": "playwright test",
+    "db:migrate": "node --env-file=.env --import=tsx apps/api/src/migrate.ts",
+    "db:seed": "node --env-file=.env --import=tsx apps/api/src/seed.ts",
+    "demo:otp": "node --env-file=.env scripts/demo-otp.mjs",
+    "setup:local": "pwsh -NoProfile -File scripts/setup-local.ps1"
+  },
+  "dependencies": {
+    "@fastify/cookie": "11.1.5",
+    "@fastify/helmet": "13.2.0",
+    "@fastify/rate-limit": "11.2.1",
+    "csv-parse": "7.0.3",
+    "fastify": "5.12.7",
+    "fflate": "0.8.3",
+    "intl-messageformat": "12.1.4",
+    "lucide-react": "1.64.0",
+    "pg": "8.23.1",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "read-excel-file": "9.3.14",
+    "sharp": "0.35.5",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
+    "@playwright/test": "1.64.1",
+    "@types/node": "26.6.6",
+    "@types/pg": "8.23.1",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.1.2",
+    "prettier": "3.9.10",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "vite": "8.3.5"
+  }
+}

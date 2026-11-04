@@ -1,0 +1,149 @@
+{
+  "date": "2026-11-04T10:25:35.066Z",
+  "environment": "Windows native PostgreSQL18.4, isolated synthetic data. New local recovery database.",
+  "sourceDatabase": "autoparts",
+  "restoredDatabase": "autoparts_restore_1793787933724",
+  "backupMilliseconds": 471.9957999999999,
+  "restoreMilliseconds": 510.82449999999994,
+  "backupSha256": "9bea1e85a9c322e0644b225042d43f0d3a29bf9f8a212e2c417700f65d999f02",
+  "checksumsBefore": {
+    "products": {
+      "rows": 6,
+      "sha256": "f612d90a1ac446bf4daea6be4c5844b86b0cbf989c04cb82a4deb9ccb4587458"
+    },
+    "product_identifiers": {
+      "rows": 18,
+      "sha256": "f65419cbbbe092cba563c518ccb761a90efd5b9d401ba7c30498cd16e45c1743"
+    },
+    "inventory_balances": {
+      "rows": 6,
+      "sha256": "765cf4d0b6a4f72c1a0f7ad89a96e127992733867c032c04e456bb036606abd6"
+    },
+    "stock_movements": {
+      "rows": 6,
+      "sha256": "c2b008e7f021044fde8f012010cc592fd8da712d7a0e7613b56c86b2b903b077"
+    },
+    "business_documents": {
+      "rows": 6,
+      "sha256": "5f13d31120fb5454320794ad832b95754085416d1c5bdc3c55b9ffb84353ac58"
+    },
+    "reservations": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "reservation_lines": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "sales": {
+      "rows": 1,
+      "sha256": "6d88843bd56ad0193634d03ab98f75c6e5cf23fc6cbb757b2e6112d76b9892fc"
+    },
+    "sale_lines": {
+      "rows": 1,
+      "sha256": "986b947932d21ba714a8481000498147d9044ef83896a54bf2198ff2e71042af"
+    },
+    "returns": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stock_counts": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "audit_events": {
+      "rows": 9,
+      "sha256": "d5ce304770d0597227de2c97c0fbf3c4c878a5f9c7a028f2b3e55d9e1483de78"
+    },
+    "idempotency": {
+      "rows": 1,
+      "sha256": "5204f607169ab7f71b4f24da741c77b66820f01485f37af8cecd14c152d02a3f"
+    },
+    "outbox_events": {
+      "rows": 1,
+      "sha256": "c58478cf069009cdd7dad5f882ae7471e32ff529141c41ac75fbb9103fdbee08"
+    },
+    "product_media": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "checksumsAfter": {
+    "products": {
+      "rows": 6,
+      "sha256": "f612d90a1ac446bf4daea6be4c5844b86b0cbf989c04cb82a4deb9ccb4587458"
+    },
+    "product_identifiers": {
+      "rows": 18,
+      "sha256": "f65419cbbbe092cba563c518ccb761a90efd5b9d401ba7c30498cd16e45c1743"
+    },
+    "inventory_balances": {
+      "rows": 6,
+      "sha256": "765cf4d0b6a4f72c1a0f7ad89a96e127992733867c032c04e456bb036606abd6"
+    },
+    "stock_movements": {
+      "rows": 6,
+      "sha256": "c2b008e7f021044fde8f012010cc592fd8da712d7a0e7613b56c86b2b903b077"
+    },
+    "business_documents": {
+      "rows": 6,
+      "sha256": "5f13d31120fb5454320794ad832b95754085416d1c5bdc3c55b9ffb84353ac58"
+    },
+    "reservations": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "reservation_lines": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "sales": {
+      "rows": 1,
+      "sha256": "6d88843bd56ad0193634d03ab98f75c6e5cf23fc6cbb757b2e6112d76b9892fc"
+    },
+    "sale_lines": {
+      "rows": 1,
+      "sha256": "986b947932d21ba714a8481000498147d9044ef83896a54bf2198ff2e71042af"
+    },
+    "returns": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stock_counts": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "audit_events": {
+      "rows": 9,
+      "sha256": "d5ce304770d0597227de2c97c0fbf3c4c878a5f9c7a028f2b3e55d9e1483de78"
+    },
+    "idempotency": {
+      "rows": 1,
+      "sha256": "5204f607169ab7f71b4f24da741c77b66820f01485f37af8cecd14c152d02a3f"
+    },
+    "outbox_events": {
+      "rows": 1,
+      "sha256": "c58478cf069009cdd7dad5f882ae7471e32ff529141c41ac75fbb9103fdbee08"
+    },
+    "product_media": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "identicalCriticalTables": true,
+  "businessFlow": {
+    "saleStatus": 200,
+    "replayStatus": 200,
+    "exactlyOneDeduction": true
+  },
+  "reconciliation": {
+    "balanced": true,
+    "items": []
+  },
+  "pass": true,
+  "limits": [
+    "Local logical snapshot recovery only; remote encrypted storage and WAL/PITR not configured.",
+    "This elapsed restore does not establish a hosted RTO or 15-minute RPO.",
+    "Production migration rollback and physical failover not rehearsed."
+  ]
+}

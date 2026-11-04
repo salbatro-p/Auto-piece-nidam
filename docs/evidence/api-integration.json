@@ -1,0 +1,123 @@
+{
+  "started": "2026-11-04T11:05:16.063Z",
+  "finished": "2026-11-04T11:05:20.622Z",
+  "environment": {
+    "node": "v24.16.0",
+    "platform": "win32",
+    "database": "isolated PostgreSQL database; synthetic fixtures; API injection with real transactions"
+  },
+  "tests": [
+    {
+      "id": "INV-01",
+      "status": "PASS",
+      "durationMs": 611.3561999999997
+    },
+    {
+      "id": "INV-02",
+      "status": "PASS",
+      "durationMs": 67.76559999999972
+    },
+    {
+      "id": "INV-03",
+      "status": "PASS",
+      "durationMs": 35.088100000000395
+    },
+    {
+      "id": "INV-04",
+      "status": "PASS",
+      "durationMs": 90.30330000000004
+    },
+    {
+      "id": "INV-05",
+      "status": "PASS",
+      "durationMs": 66.04010000000017
+    },
+    {
+      "id": "INV-06",
+      "status": "PASS",
+      "durationMs": 89.64539999999988
+    },
+    {
+      "id": "INV-07",
+      "status": "PASS",
+      "durationMs": 15.8766999999998
+    },
+    {
+      "id": "INV-08",
+      "status": "PASS",
+      "durationMs": 21.916299999999865
+    },
+    {
+      "id": "COUNT-CONTROLS",
+      "status": "PASS",
+      "durationMs": 74.4001000000003
+    },
+    {
+      "id": "SEC-01",
+      "status": "PASS",
+      "durationMs": 37.19399999999996
+    },
+    {
+      "id": "SEC-02",
+      "status": "PASS",
+      "durationMs": 367.0362
+    },
+    {
+      "id": "MFA-SESSION",
+      "status": "PASS",
+      "durationMs": 146.94270000000006
+    },
+    {
+      "id": "DATA-01-SMALL",
+      "status": "PASS",
+      "durationMs": 55.63639999999987
+    },
+    {
+      "id": "DATA-02",
+      "status": "PASS",
+      "durationMs": 38.715799999999945
+    },
+    {
+      "id": "I18N-API",
+      "status": "PASS",
+      "durationMs": 110.72640000000001
+    },
+    {
+      "id": "REL-01-ROLLBACK-REL-03",
+      "status": "PASS",
+      "durationMs": 29.044800000000123
+    },
+    {
+      "id": "LEDGER-RECONCILIATION",
+      "status": "PASS",
+      "durationMs": 5.435500000000502
+    },
+    {
+      "id": "DATA-01-REL-02-IMPORT",
+      "status": "PASS",
+      "durationMs": 682.3016000000007
+    },
+    {
+      "id": "INV-BINS",
+      "status": "PASS",
+      "durationMs": 83.90369999999984
+    },
+    {
+      "id": "I18N-CONTENT-REVIEW",
+      "status": "PASS",
+      "durationMs": 49.19430000000011
+    },
+    {
+      "id": "QUOTES-TAX",
+      "status": "PASS",
+      "durationMs": 76.44700000000012
+    },
+    {
+      "id": "SEC-ONBOARDING",
+      "status": "PASS",
+      "durationMs": 126.1230000000005
+    }
+  ],
+  "passed": 22,
+  "failed": 0
+}

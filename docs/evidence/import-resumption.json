@@ -1,0 +1,36 @@
+{
+  "date": "2026-11-04T10:42:22.907Z",
+  "database": "autoparts_import_1793788941726",
+  "fixture": "100000 fictional products; no company data",
+  "transport": "Fastify inject with real PostgreSQL and separate worker OS processes",
+  "count": 100000,
+  "observations": [
+    {
+      "event": "Worker process forcibly terminated after committed 50% checkpoint",
+      "code": null,
+      "signal": "SIGKILL"
+    },
+    "Fresh worker completed exactly 100000 rows"
+  ],
+  "workerPeakRssBytes": 261648384,
+  "apiPeakRssBytes": 312844288,
+  "uploadAndValidationMs": 4908.2595,
+  "commitWithRestartMs": 25827.1846,
+  "concurrentRead": {
+    "requests": 101,
+    "p95Ms": 159.24009999999907,
+    "maxMs": 173.3895999999986
+  },
+  "totalMs": 36595.424600000006,
+  "result": "PASS",
+  "imported": {
+    "count": 100000,
+    "distinct_count": 100000
+  },
+  "invalidFile": {
+    "rows": 100000,
+    "rejectedRows": 3,
+    "productsCreated": 0
+  },
+  "balanced": true
+}

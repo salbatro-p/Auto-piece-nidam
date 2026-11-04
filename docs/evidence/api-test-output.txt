@@ -1,0 +1,34 @@
+
+> autoparts-morocco@0.1.0 test
+> node --env-file=.env --import=tsx --test tests/*.test.ts apps/api/tests/*.test.ts
+
+Applied 001_initial.sql
+Applied 002_query_indexes.sql
+Isolated synthetic demo seeded; credentials are read from local environment only
+✔ INV-01: one of 100 simultaneous last-unit reservations wins (2268.7558ms)
+✔ INV-02: ten receipt retries and ten sale retries commit once (62.3163ms)
+✔ INV-03: sale versus transfer of the last unit is serialized (44.8718ms)
+✔ INV-04: opposite multi-SKU orders lock consistently; failed sale rolls back all lines (68.8372ms)
+✔ INV-05: fulfill/release race and expired reservation release have one terminal state (69.1742ms)
+✔ INV-06: duplicate return stays quarantined and damaged inspection cannot restore availability (88.8532ms)
+✔ INV-07: carton conversion, duplicate bill and invalid quantity are enforced (19.1865ms)
+✔ INV-08: client balance tampering and append-only ledger edits are rejected (23.7065ms)
+✔ Counts require different approver and reject stale balances (50.76ms)
+✔ SEC-01: costs, privileged routes, branch and tenant boundaries are server enforced (44.9875ms)
+✔ SEC-02: CSRF, SQL injection, brute force, malformed image and public endpoints are defended (390.777ms)
+✔ MFA: sensitive-role OTP required, replay rejected, session revoked (152.0865ms)
+✔ DATA-01 subset: previews reject duplicate/existing/formula rows; idempotent import and safe revert (58.4523ms)
+✔ DATA-02: variants remain separate and unreviewed fitment is never confirmed (44.7437ms)
+✔ I18N: locale preference is per user; stock and receipt arithmetic do not change (103.6679ms)
+✔ REL-01 bounded failure: thrown transaction rolls back; REL-03 outbox replay is deduplicated (31.2932ms)
+✔ Final reconciliation: every balance equals immutable ledger in every condition (5.4627ms)
+✔ public projection refuses internal draft even when rights are approved (1.0179ms)
+✔ missing Arabic review blocks publication across all locale routes (0.2788ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4671.4107

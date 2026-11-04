@@ -1,0 +1,17 @@
+{
+  "date": "2026-11-04T11:05:15.706Z",
+  "keysPerLocale": 409,
+  "technicalCoverage": {
+    "ar": 100,
+    "fr": 100,
+    "en": 100
+  },
+  "backendDomainErrorCodes": 35,
+  "missing": [],
+  "reviewStatus": {
+    "ar": "NOT_REVIEWED",
+    "fr": "NOT_REVIEWED",
+    "en": "NOT_REVIEWED"
+  },
+  "professionallyApprovedPercent": 0
+}
