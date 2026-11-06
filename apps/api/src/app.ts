@@ -15,6 +15,9 @@ import { registerPricing } from './pricing.js';
 import { registerCatalogLinks } from './catalog-links.js';
 import { registerOpeningBalances } from './opening-balances.js';
 import {registerCatalogExport} from './catalog-export.js';
+import {registerMediaCatalog} from './media-catalog.js';
+import {registerCatalogDiscovery} from './catalog-discovery.js';
+import {registerMediaImports} from './media-imports.js';
 
 export async function createApp(pool: Pool, options: { logger?: boolean } = {}) {
   protectPool(pool);
@@ -143,6 +146,9 @@ export async function createApp(pool: Pool, options: { logger?: boolean } = {}) 
   registerCatalogLinks(app, pool);
   registerOpeningBalances(app, pool);
   registerCatalogExport(app,pool);
+  registerMediaCatalog(app,pool);
+  registerCatalogDiscovery(app,pool);
+  registerMediaImports(app,pool);
   app.get('/api/openapi.json', async (request) => {
     requirePermission((request as AuthedRequest).actor, 'audit');
     return {

@@ -35,7 +35,7 @@ export function SourceManager() {
       </button>
       {open && (
         <Modal title={t('sources')} onClose={() => setOpen(false)} wide>
-          <div className="table-wrap">
+          <div className="table-wrap" tabIndex={0} role="region" aria-label={t('scrollableTable')}>
             <table>
               <thead>
                 <tr>
@@ -298,6 +298,8 @@ export function TranslationReviewer({ product, onSaved }: { product: Product; on
             <div className="panel" lang={language} dir={language === 'ar' ? 'rtl' : 'ltr'}>
               <h3>{product.names[language as 'ar'] || '—'}</h3>
               <p>{product.descriptions?.[language as 'ar'] || '—'}</p>
+              <p>{product.categoryNames?.[language as 'ar']||product.category}</p>
+              {product.companyMetadata?.technicalAttributes?.map((a,i)=><p key={i}><bdi>{a.labels[language as 'ar']||t('translationMissing')}</bdi>: <bdi>{a.value} {a.unit}</bdi></p>)}
             </div>
             <Field label={t('reviewNote')}>
               <textarea value={note} onChange={(e) => setNote(e.target.value)} />

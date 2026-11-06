@@ -5,8 +5,133 @@
     "height": 844
   },
   "locale": "fr",
-  "violations": [],
-  "passes": 27,
+  "violations": [
+    {
+      "id": "target-size",
+      "impact": "serious",
+      "tags": [
+        "cat.sensory-and-visual-cues",
+        "wcag22aa",
+        "wcag258",
+        "EN-301-549v4",
+        "EN-9.2.5.8"
+      ],
+      "description": "Ensure touch targets have sufficient size and space",
+      "help": "All touch targets must be 24px large, or leave sufficient space",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.14/target-size?application=playwright",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "target-size",
+              "data": {
+                "messageKey": "partiallyObscured",
+                "minSize": 24,
+                "width": 150,
+                "height": 16.3
+              },
+              "relatedNodes": [
+                {
+                  "html": "<button type=\"button\" lang=\"ar\" dir=\"rtl\" data-testid=\"language-ar\" aria-pressed=\"false\">العربية (AR)</button>",
+                  "target": [
+                    "button[lang=\"ar\"]"
+                  ]
+                },
+                {
+                  "html": "<button type=\"button\" lang=\"fr\" dir=\"ltr\" data-testid=\"language-fr\" aria-pressed=\"true\">Français (FR)</button>",
+                  "target": [
+                    "button[data-testid=\"language-fr\"]"
+                  ]
+                }
+              ],
+              "impact": "serious",
+              "message": "Target has insufficient size because it is partially obscured (smallest space is 150px by 16.3px, should be at least 24px by 24px)"
+            },
+            {
+              "id": "target-offset",
+              "data": {
+                "closestOffset": 23.2,
+                "minOffset": 24
+              },
+              "relatedNodes": [
+                {
+                  "html": "<a class=\"button secondary\" href=\"/api/reports/products.csv\">Exporter CSV</a>",
+                  "target": [
+                    "a[href$=\"products.csv\"]"
+                  ]
+                }
+              ],
+              "impact": "serious",
+              "message": "Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 23.2px instead of at least 24px."
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<button class=\"button secondary\">Collecte des photos</button>",
+          "target": [
+            ".heading-actions > .secondary.button:nth-child(1)"
+          ],
+          "failureSummary": "Fix any of the following:\n  Target has insufficient size because it is partially obscured (smallest space is 150px by 16.3px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 23.2px instead of at least 24px."
+        },
+        {
+          "any": [
+            {
+              "id": "target-size",
+              "data": {
+                "messageKey": "partiallyObscured",
+                "minSize": 24,
+                "width": 181.3,
+                "height": 16.3
+              },
+              "relatedNodes": [
+                {
+                  "html": "<button type=\"button\" lang=\"fr\" dir=\"ltr\" data-testid=\"language-fr\" aria-pressed=\"true\">Français (FR)</button>",
+                  "target": [
+                    "button[data-testid=\"language-fr\"]"
+                  ]
+                },
+                {
+                  "html": "<button type=\"button\" lang=\"en\" dir=\"ltr\" data-testid=\"language-en\" aria-pressed=\"false\">English (EN)</button>",
+                  "target": [
+                    "button[lang=\"en\"]"
+                  ]
+                }
+              ],
+              "impact": "serious",
+              "message": "Target has insufficient size because it is partially obscured (smallest space is 181.3px by 16.3px, should be at least 24px by 24px)"
+            },
+            {
+              "id": "target-offset",
+              "data": {
+                "closestOffset": 23.2,
+                "minOffset": 24
+              },
+              "relatedNodes": [
+                {
+                  "html": "<button class=\"button primary\" data-testid=\"product-create\">",
+                  "target": [
+                    ".primary"
+                  ]
+                }
+              ],
+              "impact": "serious",
+              "message": "Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 23.2px instead of at least 24px."
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<button class=\"button secondary\">Importer un lot de photos</button>",
+          "target": [
+            ".heading-actions > .secondary.button:nth-child(2)"
+          ],
+          "failureSummary": "Fix any of the following:\n  Target has insufficient size because it is partially obscured (smallest space is 181.3px by 16.3px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 23.2px instead of at least 24px."
+        }
+      ]
+    }
+  ],
+  "passes": 29,
   "incomplete": [
     {
       "id": "color-contrast",

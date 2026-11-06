@@ -16,6 +16,12 @@ Restore into a NEW empty isolated database. Verify dump hash, migration version,
 
 ## Incident response
 
+### v1.3 protected media recovery
+
+Persist `MEDIA_STORAGE_DIR` separately from application build output. It must not be a public web root. A consistent database snapshot identifies the immutable content-addressed source/display/thumbnail files that must accompany each backup. `scripts/restore-drill.mts` now copies those exact files, records individual hashes, restores into a new database/private directory and tests an approved thumbnail through the authenticated API. License records, media reviews, fitment evidence and image ingestion checkpoints are included in critical table checks. Do not delete legacy database bytes until the matching private objects have been written and verified; explicit image matching performs this migration and keeps the asset review-required.
+
+Schema migrations use a dedicated bounded ten-minute statement timeout and thirty-second lock timeout for large evidence backfills. API transactions retain their fifteen-second statement/five-second lock limits. A failed migration rolls back its transaction; successful migration messages are emitted only after commit. Rehearse on the actual staging volume before any approved upgrade. Orphaned private objects from rolled-back uploads are retained safely; automated garbage collection is not enabled.
+
 For a suspected ledger discrepancy, stop writes to affected locations, retain request IDs, run reconciliation, compare immutable movements and documents, and involve the owner. Never fix a balance directly with SQL. Apply an approved compensating correction only after the cause is understood. For duplicate requests, look up the original idempotency result; do not invent a fresh key. For lost connection, retry with the same key and payload. For auth compromise, revoke sessions, reset affected credentials/MFA through a controlled recovery flow, and inspect redacted audit events.
 
 For database outage, UI remains draft/read-only and reports unconfirmed writes. On recovery, check readiness and reconcile before resuming. For supplier failure, continue authorized local catalog operation; queue/review imports without granting new rights or fitment. For outbox failure, preserve pending events and retry idempotently; future external consumers need delivery deduplication and dead-letter review.

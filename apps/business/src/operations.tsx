@@ -1,4 +1,7 @@
 import { TranslationReviewer } from './catalog-admin';
+import {MediaGallery,MediaCoverage} from './media';
+import {VehicleFilter} from './vehicle-filter';
+import {MediaBulk} from './media-bulk';
 import {AttributeEditor,Attributes} from './technical-attributes';
 import { Replacements } from './catalog-links';
 import { OpeningBalances } from './opening-balances';
@@ -235,16 +238,21 @@ export function Dashboard({
 
 export function Catalog({ vehicleId, clearVehicle }: { vehicleId: string; clearVehicle: () => void }) {
   const { t, can, locale } = useApp();
+  const [exactVehicle,setExactVehicle]=useState(vehicleId),[category,setCategory]=useState('');
+  useEffect(()=>{setExactVehicle(vehicleId);setPage(1);},[vehicleId]);
+  const categories=useLoad<{items:{category:string;names:Record<string,string>}[]}>('/catalog/categories');
   const [q, setQ] = useState(''),
     [page, setPage] = useState(1),
     [editing, setEditing] = useState<Product | null | undefined>(),
     [selected, setSelected] = useState<Product | null>(null);
   const { data, error, loading, reload } = useLoad<{ items: Product[]; total: number }>(
-    `/products?q=${encodeURIComponent(q)}&page=${page}${vehicleId ? `&vehicleId=${vehicleId}` : ''}`,
+    `/products?q=${encodeURIComponent(q)}&page=${page}${exactVehicle ? `&vehicleId=${exactVehicle}` : ''}${category?`&category=${encodeURIComponent(category)}`:''}`,
   );
   return (
     <>
       <PageHeading title="catalog" hint="catalogHint">
+        <MediaCoverage onSelect={setSelected}/>
+        <MediaBulk/>
         {can('catalog')&&<a className="button secondary" href="/api/reports/products.csv">{t('export')}</a>}
         {can('catalog') && (
           <button className="button primary" data-testid="product-create" onClick={() => setEditing(null)}>
@@ -265,8 +273,10 @@ export function Catalog({ vehicleId, clearVehicle }: { vehicleId: string; clearV
           <RefreshCw size={18} />
         </button>
       </div>
-      {vehicleId && (
-        <button className="text-button" onClick={clearVehicle}>
+      <VehicleFilter value={exactVehicle} onChange={id=>{setExactVehicle(id);setPage(1);}}/>
+      <Field label={t('category')}><select value={category} onChange={e=>{setCategory(e.target.value);setPage(1);}}><option value="">{t('all')}</option>{categories.data?.items.map(c=><option key={c.category} value={c.category}>{c.names[locale]||c.category}</option>)}</select></Field>
+      {exactVehicle && (
+        <button className="text-button" onClick={()=>{clearVehicle();setExactVehicle('');setPage(1);}}>
           {t('clearVehicle')}
           <X size={16} />
         </button>
@@ -276,7 +286,7 @@ export function Catalog({ vehicleId, clearVehicle }: { vehicleId: string; clearV
         <span>{t('productsCount', { count: data?.total ?? 0 })}</span>
         <span>{t('privateWorkspace')}</span>
       </div>
-      <section className="panel table-wrap">
+      <section className="panel table-wrap" tabIndex={0} role="region" aria-label={t('scrollableTable')}>
         <table className="catalog-table">
           <thead>
             <tr>
@@ -309,6 +319,7 @@ export function Catalog({ vehicleId, clearVehicle }: { vehicleId: string; clearV
                     {p.sku}
                   </bdi>
                   <small className="sub-ref">
+                    <bdi dir="ltr">{p.manufacturerPartNo}</bdi>
                     <bdi dir="ltr">{p.oem}</bdi>
                   </small>
                 </td>
@@ -320,6 +331,7 @@ export function Catalog({ vehicleId, clearVehicle }: { vehicleId: string; clearV
                 </td>
                 <td>
                   <Status value={p.status} />
+                  {exactVehicle&&<Status value="VERIFIED"/>}
                 </td>
                 <td>
                   {can('catalog') ? (
@@ -391,6 +403,7 @@ function ProductDetails({ product: p, onClose }: { product: Product; onClose: ()
         <p className="warning-text">{t('translationMissing')}</p>
       )}
       <dl className="detail-grid">
+        <div><dt>{t('manufacturerPartNo')}</dt><dd><bdi dir="ltr">{p.manufacturerPartNo||'—'}</bdi></dd></div>
         <div>
           <dt>{t('oem')}</dt>
           <dd>
@@ -418,9 +431,10 @@ function ProductDetails({ product: p, onClose }: { product: Product; onClose: ()
       </dl>
       <div className="notice warning">{t('fitmentWarning')}</div>
       <Replacements product={p} />
+      <MediaGallery product={p}/>
       <Attributes product={p}/>
       <h3>{t('inventory')}</h3>
-      <div className="table-wrap">
+      <div className="table-wrap" tabIndex={0} role="region" aria-label={t('scrollableTable')}>
         <table>
           <thead>
             <tr>
@@ -450,9 +464,8 @@ function ProductDetails({ product: p, onClose }: { product: Product; onClose: ()
       {p.fitments?.length ? (
         p.fitments.map((f: any, i) => (
           <div className="list-row" key={i}>
-            <bdi>
-              {f.make} {f.model} · {f.engine} · {f.market}
-            </bdi>
+            <div><bdi>{f.make} {f.model} · {f.generation} · {f.yearFrom}–{f.yearTo} · {f.engine} · {f.market} · {f.equipment}</bdi>
+            <p className="small"><bdi>{f.qualifiers}</bdi></p><details><summary>{t('evidence')}</summary><p><bdi>{f.evidence}</bdi></p><p>{t('source')}: <bdi>{f.sourceName}</bdi></p></details></div>
             <Status value={f.status} />
           </div>
         ))
@@ -515,7 +528,7 @@ export function ProductEditor({
         file &&
         (file.size > 3 * 1024 * 1024 ||
           !['image/png', 'image/jpeg', 'image/webp'].includes(file.type) ||
-          rights.trim().length < 5)
+          rights.trim().length < 10)
       )
         throw new ApiError('INVALID_FILE');
       let id = savedId;

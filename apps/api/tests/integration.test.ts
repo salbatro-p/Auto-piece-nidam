@@ -13,6 +13,9 @@ import { processOutbox } from '../src/worker.js';
 import { processImportChunk } from '../src/imports.js';
 import { ORG_ID, transaction, hash } from '../src/db.js';
 import {parse as parseCsv} from 'csv-parse/sync';
+import sharp from 'sharp';
+import {zipSync,strToU8} from 'fflate';
+import {ImageArchive} from '../../business/src/image-manifest.js';
 
 type Session = { cookie: string; csrf: string; id: string };
 let app: FastifyInstance, pool: Pool, maintenance: Pool;
@@ -23,6 +26,106 @@ const observations: { id: string; status: string; durationMs: number }[] = [];
 const started = new Date().toISOString();
 const localUrl = new URL(process.env.DATABASE_URL!);
 const evidencePath = 'docs/evidence/api-integration.json';
+
+test('Dashboard totals equal scoped physical balances and protect cost information',()=>measured('DASHBOARD-SCOPE',async()=>{
+ const p=await product(5,{manufacturerPartNo:'DASH-01'});await request(owner,'POST','/api/inventory/receipts',{productId:p.id,warehouseId:depot,quantity:7,unit:'PCS',reference:'DASH-'+randomUUID()});
+ await request(sales,'POST','/api/inventory/reservations',{warehouseId:counter,lines:[{productId:p.id,quantity:2}]});
+ const rows=(await pool.query('SELECT b.*,p.cost_minor FROM inventory_balances b JOIN products p ON p.id=b.product_id WHERE b.org_id=$1',[ORG_ID])).rows;
+ for(const [actor,scope] of [[owner,null],[sales,counter]] as const){const response=await request(actor,'GET','/api/dashboard');assert.equal(response.statusCode,200,response.body);const result=response.json(),filtered=rows.filter(r=>scope===null||r.warehouse_id===scope);
+  for(const [field,column] of [['onHand','on_hand'],['reserved','reserved'],['quarantine','quarantine'],['damaged','damaged']])assert.equal(result[field],filtered.reduce((sum,r)=>sum+Number(r[column]),0));
+  assert.equal(result.available,result.onHand-result.reserved);if(actor===sales)assert.equal(result.inventoryValueMinor,undefined);else assert.equal(result.inventoryValueMinor,filtered.reduce((sum,r)=>sum+Number(r.on_hand)*Number(r.cost_minor),0));
+ }
+}));
+
+test('IMG-07/10: exact engine/equipment filters, separate diagrams, rights expiry and coverage remain authoritative',()=>measured('IMG-VARIANTS-COVERAGE',async()=>{
+ const p=await product(4,{manufacturerPartNo:'V13-EXACT-007'}),other=await product(3,{manufacturerPartNo:'V13-OTHER-008'});
+ const base={make:'QA v13',model:'Same model',generation:'G1',yearFrom:2020,yearTo:2024,market:'MA',engine:'ENGINE-A',equipment:'BRAKE-280',fuel:'DIESEL',transmission:'MANUAL',body:'VAN',sourceId};
+ const a=(await request(owner,'POST','/api/vehicles',{...base,externalId:randomUUID()})).json(),b=(await request(owner,'POST','/api/vehicles',{...base,engine:'ENGINE-B',equipment:'BRAKE-300',externalId:randomUUID()})).json();
+ for(const [part,variant] of [[p,a],[other,b]])assert.equal((await request(owner,'POST','/api/fitments',{productId:part.id,vehicleId:variant.id,status:'VERIFIED',sourceId,evidence:'Synthetic exact engine and brake equipment evidence; no actual vehicle claims.',qualifiers:'Synthetic only; exact engine and brake diameter.'})).statusCode,200);
+ const options=await request(sales,'GET','/api/catalog/vehicle-options?make=QA%20v13&model=Same%20model&generation=G1&year=2022&market=MA&engine=ENGINE-A&equipment=BRAKE-280');assert.equal(options.statusCode,200,options.body);assert.deepEqual(options.json().items.map((v:any)=>v.id),[a.id]);
+ assert.deepEqual((await request(sales,'GET',`/api/products?vehicleId=${a.id}&category=filters`)).json().items.map((v:any)=>v.id),[p.id]);
+ assert.deepEqual((await request(sales,'GET',`/api/products?vehicleId=${b.id}`)).json().items.map((v:any)=>v.id),[other.id]);
+ assert.equal((await request(sales,'GET',`/api/products?vehicleId=${a.id}&category=NO_MATCH`)).json().total,0);
+ assert.equal((await request(sales,'GET',`/api/vehicles/${a.id}/media`)).json().items.length,0);
+ const licenseBody={name:'Synthetic diagram rights',sourceType:'COMPANY',termsVersion:'QA-v13',proof:'Original synthetic diagram pixels for rights testing only.',internalDisplayPermitted:true,publicDisplayPermitted:true};
+ const license=(await request(owner,'POST','/api/media/licenses',licenseBody)).json(),data=(await sharp({create:{width:640,height:480,channels:3,background:'#9818b0'}}).png().toBuffer()).toString('base64');
+ const diagram={kind:'EXPLODED_DIAGRAM',vehicleVariantId:a.id,licenseId:license.id,mime:'image/png',data,provider:'SYNTHETIC QA',illustrationId:'QA-FIG-01',applicability:{engine:'ENGINE-A',equipment:'BRAKE-280'},callouts:[{reference:'01',label:'Synthetic callout, no commercial SKU mapping'}]};
+ const staged=await request(owner,'POST','/api/media/stage',diagram);assert.equal(staged.statusCode,200,staged.body);
+ const approval={version:1,state:'APPROVED_PUBLIC',note:'Synthetic rights and exact variant reviewed; no real diagram coverage.',physicalMatchConfirmed:true,applicabilityConfirmed:true};
+ assert.equal((await request(owner,'POST',`/api/media/${staged.json().id}/review`,approval)).statusCode,200);
+ assert.equal((await request(sales,'GET',`/api/vehicles/${a.id}/media`)).json().items.length,1);assert.equal((await request(sales,'GET',`/api/vehicles/${b.id}/media`)).json().items.length,0);
+ assert.equal((await pool.query('SELECT id FROM usable_public_media WHERE id=$1',[staged.json().id])).rowCount,1);
+ const wrong=await request(owner,'POST','/api/media/stage',{...diagram,vehicleVariantId:b.id});assert.equal(wrong.json().state,'DISPUTED');assert.equal((await request(owner,'POST',`/api/media/${wrong.json().id}/review`,{...approval,duplicateUseConfirmed:true})).json().code,'MEDIA_APPLICABILITY_MISMATCH');
+ assert.equal((await request(owner,'POST',`/api/media/licenses/${license.id}/update`,{...licenseBody,version:1,expiresAt:new Date(Date.now()-1000).toISOString()})).statusCode,200);
+ assert.equal((await pool.query('SELECT id FROM usable_public_media WHERE id=$1',[staged.json().id])).rowCount,0);assert.equal((await request(sales,'GET',`/api/vehicles/${a.id}/media`)).json().items.length,0);
+ const coverage=await request(owner,'GET','/api/media/coverage?queue=missing');assert.equal(coverage.statusCode,200,coverage.body);assert.ok(coverage.json().items.some((r:any)=>r.id===p.id&&r.fitment&&!r.exact));assert.ok(coverage.json().summary.totalStockedSkus>=2);assert.equal((await request(sales,'GET','/api/media/coverage')).statusCode,403);
+ await writeFile('docs/evidence/image-coverage-synthetic.json',JSON.stringify({recordedAt:new Date().toISOString(),scope:'Isolated synthetic fixtures only; no company image or real fitment coverage',...coverage.json()},null,2));
+}));
+
+test('IMG-05: 1,000 Excel/ZIP photo rows remain bounded, reject bad mappings and resume without duplicates',()=>measured('IMG-BATCH-1000',async()=>{
+ const startedAt=new Date().toISOString(),time=performance.now(),p=await product(2,{manufacturerPartNo:'000-EXACT-BATCH'});
+ const license=(await request(owner,'POST','/api/media/licenses',{name:'Synthetic batch fixture rights',sourceType:'COMPANY',termsVersion:'QA-1000',proof:'All fixture pixels generated solely for software testing. Not automotive photography.',internalDisplayPermitted:true,publicDisplayPermitted:false})).json();
+ const archiveFiles:Record<string,Uint8Array>={},grid:string[][]=[['filename','sku','manufacturer_brand','manufacturer_part_no']];
+ for(let i=0;i<1000;i++){
+  const filename=`photos/${String(i).padStart(4,'0')}.png`;let bytes:Buffer;
+  if(i<900)bytes=await sharp({create:{width:32,height:32,channels:3,background:{r:i%256,g:Math.floor(i/256),b:65}}}).png().toBuffer();
+  else if(i<950)bytes=Buffer.from(archiveFiles['photos/0000.png']);else if(i<970)bytes=Buffer.from('Broken synthetic image, must fail decoding');else bytes=await sharp({create:{width:32,height:32,channels:3,background:{r:i%256,g:Math.floor(i/256),b:99}}})[i>=990?'jpeg':'png']().toBuffer();
+  archiveFiles[filename]=bytes;grid.push([filename,p.data.sku,'SYNTHETIC',i>=970&&i<990?'WRONG-PART': '000-EXACT-BATCH']);
+ }
+ const xml=(s:string)=>s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
+ const workbook=zipSync({'[Content_Types].xml':strToU8('<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/></Types>'),'xl/workbook.xml':strToU8('<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="Photos" sheetId="1" r:id="rId1"/></sheets></workbook>'),'xl/_rels/workbook.xml.rels':strToU8('<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Target="worksheets/sheet1.xml" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet"/></Relationships>'),'xl/worksheets/sheet1.xml':strToU8('<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetData>'+grid.map((row,i)=>`<row r="${i+1}">${row.map((v,c)=>`<c r="${String.fromCharCode(65+c)}${i+1}" t="inlineStr"><is><t>${xml(v)}</t></is></c>`).join('')}</row>`).join('')+'</sheetData></worksheet>')});
+ archiveFiles['manifest.xlsx']=workbook;const zipped=zipSync(archiveFiles),archive=new ImageArchive(zipped.buffer as ArrayBuffer),manifest=await archive.manifest(license.id);assert.equal(manifest.rows.length,1000);
+ const job=await request(owner,'POST','/api/media/imports',{fileHash:manifest.fileHash,total:1000});assert.equal(job.statusCode,200,job.body);let peakRss=process.memoryUsage().rss;const outcomes:Record<string,number>={};
+ for(let i=0;i<1000;i++){
+  const body={...manifest.rows[i],...archive.file(manifest.rows[i])};const path=`/api/media/imports/${job.json().id}/rows/${i+1}`,result=await request(owner,'POST',path,body);assert.equal(result.statusCode,200,`Row ${i+1}: ${result.body}`);outcomes[result.json().status]=(outcomes[result.json().status]??0)+1;peakRss=Math.max(peakRss,process.memoryUsage().rss);
+  if(i===499){await app.close();app=await createApp(pool);const replay=await request(owner,'POST',path,body);assert.deepEqual(replay.json(),result.json());}
+  await new Promise(resolve=>setTimeout(resolve,110));
+ }
+ assert.deepEqual(outcomes,{STAGED:900,DUPLICATE:50,ERROR:50});
+ assert.equal((await request(owner,'POST','/api/media/imports',{fileHash:manifest.fileHash,total:1000})).json().id,job.json().id);
+ assert.equal(Number((await pool.query('SELECT count(*) FROM product_media WHERE product_id=$1',[p.id])).rows[0].count),900);assert.equal((await balance(p.id)).on_hand,2);
+ assert.equal(Number((await pool.query('SELECT count(*) FROM image_ingest_rows WHERE job_id=$1 AND input ? \'data\'',[job.json().id])).rows[0].count),0);
+ assert.ok(peakRss<512*1024*1024,`Peak RSS ${peakRss}`);assert.equal((await request(sales,'GET',`/api/products/${p.id}/gallery`)).json().items.length,0);
+ const report={startedAt,finishedAt:new Date().toISOString(),durationMs:performance.now()-time,rows:1000,outcomes,archiveBytes:zipped.byteLength,peakRssMiB:peakRss/1024/1024,memoryCeilingMiB:512,apiRestartAfter:500,replaySameRow:true,unchangedStock:true,automaticallyApproved:0,scope:'Synthetic pixel fixtures, not real vehicle photos. Real PostgreSQL/API, same Excel/ZIP parser as browser; sequential bounded processing.',status:'PASS'};
+ await writeFile('docs/evidence/image-batch-1000.json',JSON.stringify(report,null,2));
+}));
+test('IMG-01/02/03/04/06: exact images require review and valid rights, retain references, and never create fitment',()=>measured('IMG-EXACT-RIGHTS',async()=>{
+ const p=await product(0,{manufacturerPartNo:'00-LEFT-01',companyMetadata:{technicalAttributes:[{code:'side',labels:{en:'Side',fr:'Côté',ar:'الجهة'},value:'LEFT',unit:''}]}}),other=await product(0,{manufacturerPartNo:'00-RIGHT-02'});
+ const licenseBody={name:'Synthetic original fixture license',sourceType:'COMPANY',termsVersion:'QA-1',proof:'Original synthetic pixel fixture; no real automotive image or compatibility claim.',internalDisplayPermitted:true,publicDisplayPermitted:false};
+ const license=(await request(owner,'POST','/api/media/licenses',licenseBody)).json();assert.ok(license.id);
+ const bytes=await sharp({create:{width:640,height:480,channels:3,background:'#215e85'}}).png().toBuffer();
+ const body={productId:p.id,kind:'COMPANY_ORIGINAL_PHOTO',sku:p.data.sku,manufacturerBrand:p.data.brand,manufacturerPartNumber:'00-LEFT-01',licenseId:license.id,mime:'image/png',data:bytes.toString('base64'),applicability:{side:'LEFT'},viewAngle:'Synthetic front view'};
+ assert.equal((await request(sales,'POST','/api/media/stage',body)).statusCode,403);
+ assert.equal((await request(owner,'POST','/api/media/stage',{...body,manufacturerPartNumber:'00-RIGHT-02'})).json().code,'MEDIA_REFERENCE_MISMATCH');
+ assert.equal((await request(owner,'POST','/api/media/stage',{...body,mime:'image/jpeg'})).json().code,'INVALID_IMAGE');
+ const staged=await request(owner,'POST','/api/media/stage',body);assert.equal(staged.statusCode,200,staged.body);const id=staged.json().id;
+ assert.equal(staged.json().state,'REVIEW_REQUIRED');assert.equal((await request(sales,'GET',`/api/products/${p.id}/gallery`)).json().items.length,0);
+ assert.equal((await request(owner,'POST','/api/media/stage',body)).json().state,'DUPLICATE');
+ assert.equal((await request(owner,'POST',`/api/media/${id}/review`,{version:1,state:'APPROVED_INTERNAL',note:'Synthetic physical/reference review',physicalMatchConfirmed:false,applicabilityConfirmed:true})).json().code,'MEDIA_REVIEW_REQUIRED');
+ const approval={version:1,state:'APPROVED_INTERNAL',note:'Synthetic fixture source and exact identifiers independently inspected.',physicalMatchConfirmed:true,applicabilityConfirmed:true};
+ assert.equal((await request(owner,'POST',`/api/media/${id}/review`,approval)).statusCode,200);
+ assert.equal((await pool.query('SELECT id FROM usable_public_media WHERE id=$1',[id])).rowCount,0);
+ assert.equal((await request(owner,'POST',`/api/media/${id}/review`,{...approval,version:2,state:'APPROVED_PUBLIC'})).json().code,'MEDIA_RIGHTS_BLOCKED');
+ const photo=await request(sales,'GET',`/api/media/${id}?size=thumbnail`);assert.equal(photo.statusCode,200);assert.equal(photo.headers['content-type'],'image/webp');const meta=await sharp(photo.rawPayload).metadata();assert.ok(meta.width!<=320);assert.equal(meta.exif,undefined);
+ assert.equal((await app.inject({method:'GET',url:`/api/media/${id}`})).statusCode,401);
+ assert.equal((await request(sales,'GET',`/api/media/${id}?size=source`)).statusCode,403);
+ const crossed=await request(owner,'POST','/api/media/stage',{...body,productId:other.id,sku:other.data.sku,manufacturerPartNumber:'00-RIGHT-02'});assert.equal(crossed.json().state,'DISPUTED');assert.equal((await request(owner,'POST',`/api/media/${crossed.json().id}/review`,approval)).json().code,'MEDIA_REVIEW_REQUIRED');
+ const rightBytes=await sharp({create:{width:32,height:32,channels:3,background:'#992288'}}).png().toBuffer();const wrongSide=await request(owner,'POST','/api/media/stage',{...body,data:rightBytes.toString('base64'),applicability:{side:'RIGHT'}});assert.equal((await request(owner,'POST',`/api/media/${wrongSide.json().id}/review`,approval)).json().code,'MEDIA_APPLICABILITY_MISMATCH');
+ assert.equal(Number((await pool.query('SELECT count(*) FROM fitments WHERE product_id=$1',[p.id])).rows[0].count),0);
+ const row=(await pool.query('SELECT bytes,object_key,thumbnail_key FROM product_media WHERE id=$1',[id])).rows[0];assert.equal(row.bytes,null);assert.ok(row.object_key&&row.thumbnail_key);
+ assert.equal((await request(owner,'POST',`/api/media/licenses/${license.id}/update`,{...licenseBody,version:1,revoked:true})).statusCode,200);
+ assert.equal((await request(sales,'GET',`/api/products/${p.id}`)).json().mediaId,undefined);
+ assert.equal((await request(sales,'GET',`/api/media/${id}`)).statusCode,403);
+ assert.equal((await request(owner,'GET',`/api/media/${id}`)).json().code,'MEDIA_RIGHTS_BLOCKED');
+ await assert.rejects(pool.query("UPDATE media_reviews SET note='tampered' WHERE media_id=$1",[id]),/IMMUTABLE_RECORD/);
+}));
+test('Technical specifications retain exact values and require new translation review when changed',()=>measured('TECHNICAL-ATTRIBUTES',async()=>{
+ const attribute={code:'diameter',labels:{ar:'القطر',fr:'Diamètre',en:'Diameter'},value:'012.50',unit:'mm'},p=await product(0,{descriptions:{ar:'وصف تقني تجريبي',fr:'Description de test',en:'Synthetic technical description'},companyMetadata:{technicalAttributes:[attribute]}});
+ const before=(await request(owner,'GET',`/api/products/${p.id}`)).json();assert.equal(before.companyMetadata.technicalAttributes[0].value,'012.50');
+ assert.equal((await request(owner,'POST',`/api/products/${p.id}/translations/review`,{version:1,locale:'ar',note:'Synthetic review of exact technical labels and units.'})).statusCode,200);
+ assert.equal((await request(owner,'POST',`/api/products/${p.id}/update`,{...p.data,version:2,companyMetadata:{technicalAttributes:[{...attribute,value:'013.50'}]}})).statusCode,200);
+ const after=(await request(owner,'GET',`/api/products/${p.id}`)).json();assert.equal(after.translationStatus.ar,'REVIEW_REQUIRED');assert.equal(after.companyMetadata.technicalAttributes[0].unit,'mm');
+}));
 test('Localized product export retains identifiers, escapes formulas and hides costs from curators',()=>measured('CATALOG-EXPORT',async()=>{
  const p=await product(1,{costMinor:5000,barcode:'0012345678905',names:{en:'  =MALICIOUS()',fr:'Pièce export',ar:'قطعة تصدير'},manufacturerPartNo:'00-OEM/ع'});
  const exported=await request(owner,'GET','/api/reports/products.csv');assert.equal(exported.statusCode,200);

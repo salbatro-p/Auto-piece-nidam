@@ -13,11 +13,11 @@ export class ApiError extends Error {
 }
 export async function api<T>(
   path: string,
-  options: { method?: string; body?: unknown; key?: string } = {},
+  options: { method?: string; body?: unknown; key?: string; onUploadProgress?:(percent:number)=>void } = {},
 ): Promise<T> {
   let response: Response;
   try {
-    response = await fetch(`/api${path}`, {
+    const init={
       method: options.method ?? 'GET',
       credentials: 'same-origin',
       signal: AbortSignal.timeout(15000),
@@ -27,7 +27,14 @@ export async function api<T>(
         ...(options.key ? { 'Idempotency-Key': options.key } : {}),
       },
       body: options.body !== undefined ? JSON.stringify(options.body) : undefined,
-    });
+    };
+    response=options.onUploadProgress?await new Promise<Response>((resolve,reject)=>{
+      const xhr=new XMLHttpRequest();xhr.open(init.method,`/api${path}`);xhr.timeout=60000;
+      for(const [key,value] of Object.entries(init.headers))xhr.setRequestHeader(key,value);
+      xhr.upload.onprogress=e=>{if(e.lengthComputable)options.onUploadProgress?.(Math.round(e.loaded/e.total*100));};
+      xhr.onerror=xhr.ontimeout=()=>reject(new Error('NETWORK_ERROR'));
+      xhr.onload=()=>resolve(new Response(xhr.responseText,{status:xhr.status,headers:{'Content-Type':'application/json'}}));xhr.send(init.body);
+    }):await fetch(`/api${path}`,{...init,credentials:'same-origin'});
   } catch {
     throw new ApiError('NETWORK_ERROR');
   }

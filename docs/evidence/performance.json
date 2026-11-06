@@ -1,5 +1,5 @@
 {
-  "date": "2026-11-04T19:52:03.761Z",
+  "date": "2026-11-06T15:41:36.212Z",
   "database": "autoparts_load_1793821634264",
   "environment": {
     "node": "v24.16.0",
@@ -22,27 +22,27 @@
       "name": "exact SKU search, initially unprimed application cache",
       "requests": 1000,
       "requestedRate": 50,
-      "actualRate": 50.007748200506185,
-      "durationSeconds": 19.996918299999997,
-      "p50": 6.58,
-      "p95": 10.27,
-      "p99": 15.91,
+      "actualRate": 49.974295471252844,
+      "durationSeconds": 20.0103321,
+      "p50": 31.77,
+      "p95": 230.89,
+      "p99": 3443.07,
       "statuses": {
         "200": 1000
       },
       "targetP95": 500,
       "targetP99": 1500,
-      "pass": true
+      "pass": false
     },
     {
       "name": "exact SKU repeated warm set",
       "requests": 1000,
       "requestedRate": 50,
-      "actualRate": 50.025353099077385,
-      "durationSeconds": 19.989868199999997,
-      "p50": 6.93,
-      "p95": 10.58,
-      "p99": 13.24,
+      "actualRate": 49.963391323543355,
+      "durationSeconds": 20.014658799999975,
+      "p50": 21.86,
+      "p95": 31.51,
+      "p99": 35.97,
       "statuses": {
         "200": 1000
       },
@@ -54,26 +54,26 @@
       "name": "variant verified fitment filter",
       "requests": 500,
       "requestedRate": 25,
-      "actualRate": 24.987182075338996,
-      "durationSeconds": 20.010260300000002,
-      "p50": 29.88,
-      "p95": 51.48,
-      "p99": 53.81,
+      "actualRate": 20.112066688137777,
+      "durationSeconds": 24.86069920000003,
+      "p50": 4478.46,
+      "p95": 5721.18,
+      "p99": 6982.59,
       "statuses": {
         "200": 500
       },
       "targetP95": 900,
-      "pass": true
+      "pass": false
     },
     {
       "name": "product and stock read",
       "requests": 1000,
       "requestedRate": 50,
-      "actualRate": 49.996540489380834,
-      "durationSeconds": 20.001384900000005,
-      "p50": 5.75,
-      "p95": 8.99,
-      "p99": 9.65,
+      "actualRate": 49.993268656341854,
+      "durationSeconds": 20.002694299999973,
+      "p50": 17.9,
+      "p95": 24.4,
+      "p99": 27.23,
       "statuses": {
         "200": 1000
       },
@@ -84,11 +84,11 @@
       "name": "receipt writes, 20 per second",
       "requests": 400,
       "requestedRate": 20,
-      "actualRate": 20.018010905041642,
-      "durationSeconds": 19.982005600000004,
-      "p50": 13.83,
-      "p95": 26.94,
-      "p99": 28.82,
+      "actualRate": 20.006218132657835,
+      "durationSeconds": 19.993784999999974,
+      "p50": 28.84,
+      "p95": 244.48,
+      "p99": 471.18,
       "statuses": {
         "200": 400
       },
@@ -99,24 +99,167 @@
       "name": "dashboard",
       "requests": 20,
       "requestedRate": 2,
-      "actualRate": 2.0492197585523213,
-      "durationSeconds": 9.759812300000005,
-      "p50": 207.5,
-      "p95": 313.39,
-      "p99": 338.09,
+      "actualRate": 1.640096932352854,
+      "durationSeconds": 12.194401899999997,
+      "p50": 7177.27,
+      "p95": 11677.9,
+      "p99": 12189.34,
       "statuses": {
         "200": 20
       },
       "targetP95": 1500,
+      "pass": false
+    },
+    {
+      "name": "catalog list plus bounded thumbnail reads",
+      "requests": 40,
+      "requestedRate": 2,
+      "actualRate": 2.006623885512318,
+      "durationSeconds": 19.933980500000004,
+      "p50": 448.99,
+      "p95": 591.69,
+      "p99": 820.63,
+      "statuses": {
+        "200": 40
+      },
+      "targetP95": 900,
       "pass": true
     }
   ],
-  "seedMilliseconds": 12489.024099999999,
+  "seedMilliseconds": 214468.88069999998,
   "actualCounts": {
     "products": 100000,
     "vehicles": 10000,
     "fitments": 1000000,
     "warehouses": 3
+  },
+  "mediaFixtures": {
+    "count": 30,
+    "inputDimensions": "1280×960",
+    "generatedTextures": true,
+    "sizes": [
+      {
+        "source": 2435424,
+        "thumbnail": 10116
+      },
+      {
+        "source": 2434084,
+        "thumbnail": 10184
+      },
+      {
+        "source": 2433280,
+        "thumbnail": 9986
+      },
+      {
+        "source": 2433106,
+        "thumbnail": 10314
+      },
+      {
+        "source": 2435610,
+        "thumbnail": 10816
+      },
+      {
+        "source": 2436980,
+        "thumbnail": 10750
+      },
+      {
+        "source": 2435678,
+        "thumbnail": 10208
+      },
+      {
+        "source": 2433964,
+        "thumbnail": 10252
+      },
+      {
+        "source": 2435204,
+        "thumbnail": 10084
+      },
+      {
+        "source": 2434174,
+        "thumbnail": 10910
+      },
+      {
+        "source": 2434904,
+        "thumbnail": 10026
+      },
+      {
+        "source": 2432002,
+        "thumbnail": 10082
+      },
+      {
+        "source": 2432912,
+        "thumbnail": 10082
+      },
+      {
+        "source": 2437026,
+        "thumbnail": 9986
+      },
+      {
+        "source": 2430034,
+        "thumbnail": 10178
+      },
+      {
+        "source": 2429038,
+        "thumbnail": 9978
+      },
+      {
+        "source": 2436226,
+        "thumbnail": 10022
+      },
+      {
+        "source": 2435256,
+        "thumbnail": 9992
+      },
+      {
+        "source": 2431492,
+        "thumbnail": 10762
+      },
+      {
+        "source": 2430086,
+        "thumbnail": 10024
+      },
+      {
+        "source": 2434174,
+        "thumbnail": 10250
+      },
+      {
+        "source": 2433014,
+        "thumbnail": 10140
+      },
+      {
+        "source": 2432128,
+        "thumbnail": 10008
+      },
+      {
+        "source": 2429456,
+        "thumbnail": 10816
+      },
+      {
+        "source": 2435276,
+        "thumbnail": 9954
+      },
+      {
+        "source": 2433960,
+        "thumbnail": 10158
+      },
+      {
+        "source": 2433194,
+        "thumbnail": 10930
+      },
+      {
+        "source": 2432962,
+        "thumbnail": 10006
+      },
+      {
+        "source": 2432000,
+        "thumbnail": 10774
+      },
+      {
+        "source": 2429930,
+        "thumbnail": 10772
+      }
+    ],
+    "maxConcurrentPerList": 6
   },
   "reconciliation": {
     "balanced": true,
@@ -127,24 +270,24 @@
     "warehouseDifferences": [],
     "ledgerDifferences": []
   },
-  "peakRSSBytes": 330461184,
+  "peakRSSBytes": 423211008,
   "queryPlan": [
     {
       "Plan": {
         "Node Type": "Limit",
         "Parallel Aware": false,
         "Async Capable": false,
-        "Startup Cost": 51.72,
-        "Total Cost": 90.59,
+        "Startup Cost": 68.72,
+        "Total Cost": 107.59,
         "Plan Rows": 10,
-        "Plan Width": 410,
-        "Actual Startup Time": 1.611,
-        "Actual Total Time": 1.908,
+        "Plan Width": 411,
+        "Actual Startup Time": 26.588,
+        "Actual Total Time": 26.592,
         "Actual Rows": 1,
         "Actual Loops": 1,
         "Disabled": false,
-        "Shared Hit Blocks": 44,
-        "Shared Read Blocks": 46,
+        "Shared Hit Blocks": 50,
+        "Shared Read Blocks": 45,
         "Shared Dirtied Blocks": 0,
         "Shared Written Blocks": 0,
         "Local Hit Blocks": 0,
@@ -161,12 +304,12 @@
             "Async Capable": false,
             "Relation Name": "products",
             "Alias": "products",
-            "Startup Cost": 51.72,
-            "Total Cost": 90.59,
+            "Startup Cost": 68.72,
+            "Total Cost": 107.59,
             "Plan Rows": 10,
-            "Plan Width": 410,
-            "Actual Startup Time": 1.61,
-            "Actual Total Time": 1.906,
+            "Plan Width": 411,
+            "Actual Startup Time": 26.585,
+            "Actual Total Time": 26.587,
             "Actual Rows": 1,
             "Actual Loops": 1,
             "Disabled": false,
@@ -174,10 +317,10 @@
             "Rows Removed by Index Recheck": 111,
             "Filter": "(org_id = '00000000-0000-4000-8000-000000000001'::uuid)",
             "Rows Removed by Filter": 0,
-            "Exact Heap Blocks": 11,
+            "Exact Heap Blocks": 12,
             "Lossy Heap Blocks": 0,
-            "Shared Hit Blocks": 44,
-            "Shared Read Blocks": 46,
+            "Shared Hit Blocks": 50,
+            "Shared Read Blocks": 45,
             "Shared Dirtied Blocks": 0,
             "Shared Written Blocks": 0,
             "Local Hit Blocks": 0,
@@ -194,18 +337,18 @@
                 "Async Capable": false,
                 "Index Name": "products_search_trgm",
                 "Startup Cost": 0,
-                "Total Cost": 51.71,
+                "Total Cost": 68.71,
                 "Plan Rows": 10,
                 "Plan Width": 0,
-                "Actual Startup Time": 1.59,
-                "Actual Total Time": 1.591,
-                "Actual Rows": 112,
+                "Actual Startup Time": 26.324,
+                "Actual Total Time": 26.325,
+                "Actual Rows": 114,
                 "Actual Loops": 1,
                 "Disabled": false,
                 "Index Cond": "(search_text ~~ '%syn000003%'::text)",
                 "Index Searches": 1,
                 "Shared Hit Blocks": 38,
-                "Shared Read Blocks": 41,
+                "Shared Read Blocks": 45,
                 "Shared Dirtied Blocks": 0,
                 "Shared Written Blocks": 0,
                 "Local Hit Blocks": 0,
@@ -220,8 +363,8 @@
         ]
       },
       "Planning": {
-        "Shared Hit Blocks": 48,
-        "Shared Read Blocks": 13,
+        "Shared Hit Blocks": 1,
+        "Shared Read Blocks": 0,
         "Shared Dirtied Blocks": 0,
         "Shared Written Blocks": 0,
         "Local Hit Blocks": 0,
@@ -231,9 +374,9 @@
         "Temp Read Blocks": 0,
         "Temp Written Blocks": 0
       },
-      "Planning Time": 4.021,
+      "Planning Time": 0.449,
       "Triggers": [],
-      "Execution Time": 2.601
+      "Execution Time": 29.737
     }
   ],
   "limits": [
@@ -241,5 +384,5 @@
     "100k import resumability is a separate acceptance test; SQL fixture generation does not pass it.",
     "Database retained for inspection; no real customer/company data."
   ],
-  "result": "PASS"
+  "result": "FAIL"
 }

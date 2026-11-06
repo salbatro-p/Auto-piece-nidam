@@ -1,0 +1,18 @@
+{
+  "recordedAt": "2026-11-06T15:53:57.517Z",
+  "rows": 4,
+  "firstRowWrites": 1,
+  "assets": 1,
+  "states": [
+    "Staged for review",
+    "Duplicate retained once",
+    "Error",
+    "Error"
+  ],
+  "errors": [
+    "INVALID_IMAGE",
+    "MEDIA_REFERENCE_MISMATCH"
+  ],
+  "languageDraftsPreserved": true,
+  "axeViolations": []
+}

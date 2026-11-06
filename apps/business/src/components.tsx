@@ -70,12 +70,14 @@ export function ProductName({ product }: { product: Product }) {
   );
 }
 export function ProductVisual({ product }: { product: Product }) {
+  const {t}=useApp(),[failed,setFailed]=useState(false);
+  useEffect(()=>setFailed(false),[product.mediaId]);
   return (
     <div className="product-visual">
-      {product.mediaId ? (
-        <img alt="" src={`/api/media/${product.mediaId}`} loading="lazy" />
+      {product.mediaId&&!failed ? (
+        <img alt="" src={`/api/media/${product.mediaId}?size=thumbnail`} loading="lazy" decoding="async" width="64" height="64" onError={()=>setFailed(true)} />
       ) : (
-        <Package strokeWidth={1.4} size={30} />
+        <Package aria-label={t('IMAGE_UNAVAILABLE')} strokeWidth={1.4} size={30} />
       )}
     </div>
   );
@@ -178,41 +180,45 @@ export function useLoad<T>(path: string, dependencies: unknown[] = []) {
 }
 export function useMutation() {
   const [busy, setBusy] = useState(false);
+  const busyRef=useRef(false);
   const [error, setError] = useState<unknown>();
   const [pending, setPending] = useState<{ path: string; body: unknown; key: string; method: string } | null>(
     null,
   );
+  const pendingRef=useRef<typeof pending>(null);
+  function updatePending(value:typeof pending){pendingRef.current=value;setPending(value);}
   const { online } = useApp();
-  async function run<T>(path: string, body: unknown, method = 'POST'): Promise<T | undefined> {
-    if (busy) return;
-    const request = pending ?? { path, body, key: mutationKey(), method };
+  async function run<T>(path: string, body: unknown, method = 'POST',onUploadProgress?:(percent:number)=>void): Promise<T | undefined> {
+    if (busyRef.current) return;
+    const recovering=pendingRef.current;
+    const request = recovering ?? { path, body, key: mutationKey(), method };
     if (!online) {
       setError(new ApiError('NETWORK_ERROR'));
       return;
     }
-    setBusy(true);
+    busyRef.current=true;setBusy(true);
     setError(undefined);
     try {
-      if (pending) {
+      if (recovering) {
         const recovered = await api<{ status: string; response: T }>(
           '/requests/' + encodeURIComponent(request.key),
         );
         if (recovered.status === 'COMMITTED') {
-          setPending(null);
+          updatePending(null);
           return recovered.response;
         }
       }
-      const result = await api<T>(request.path, request);
-      setPending(null);
+      const result = await api<T>(request.path, {...request,onUploadProgress});
+      updatePending(null);
       return result;
     } catch (err) {
       setError(err);
       if (err instanceof ApiError && (err.code === 'NETWORK_ERROR' || (err.status ?? 0) >= 500))
-        setPending(request);
-      else setPending(null);
+        updatePending(request);
+      else updatePending(null);
       return;
     } finally {
-      setBusy(false);
+      busyRef.current=false;setBusy(false);
     }
   }
   return {
@@ -222,7 +228,7 @@ export function useMutation() {
     pending,
     reset: () => {
       setError(undefined);
-      setPending(null);
+      updatePending(null);
     },
   };
 }

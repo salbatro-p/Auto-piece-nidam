@@ -36,7 +36,7 @@ function SupplierItems({ supplierId, editable }: { supplierId: string; editable:
   return (
     <>
       <ErrorBanner error={list.error} />
-      <div className="table-wrap">
+      <div className="table-wrap" tabIndex={0} role="region" aria-label={t('scrollableTable')}>
         <table>
           <thead>
             <tr>

@@ -109,7 +109,7 @@ function OpeningEditor() {
       )}
       <MutationState state={save} />
       <ErrorBanner error={list.error} />
-      <div className="table-wrap">
+      <div className="table-wrap" tabIndex={0} role="region" aria-label={t('scrollableTable')}>
         <table>
           <thead>
             <tr>
@@ -138,7 +138,7 @@ function OpeningEditor() {
       {selected && (
         <section className="operation-preview">
           <h3>{t('preview')}</h3>
-          <div className="table-wrap">
+          <div className="table-wrap" tabIndex={0} role="region" aria-label={t('scrollableTable')}>
             <table>
               <thead>
                 <tr>

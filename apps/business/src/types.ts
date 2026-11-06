@@ -94,6 +94,7 @@ export interface Vehicle {
   fuel: string;
   transmission: string;
   body: string;
+  equipment?: string;
 }
 export interface Source {
   id: string;

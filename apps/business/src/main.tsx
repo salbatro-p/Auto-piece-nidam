@@ -76,6 +76,7 @@ function App() {
     [locale],
   );
   const can = useCallback((permission: string) => !!user?.permissions.includes(permission), [user]);
+  useEffect(()=>{window.scrollTo({top:0,left:0,behavior:'instant'});},[page]);
   useEffect(() => {
     const expired = () => {
       if (user) setLocked(true);

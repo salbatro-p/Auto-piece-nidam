@@ -1,0 +1,41 @@
+{
+  "recordedAt": "2026-11-06T15:35:28.752Z",
+  "syntheticOnly": true,
+  "uploadResponseLost": true,
+  "writes": 1,
+  "assets": 1,
+  "stockUnchanged": true,
+  "audits": [
+    {
+      "device": "phone",
+      "locale": "fr",
+      "violations": 0
+    },
+    {
+      "device": "phone",
+      "locale": "ar",
+      "violations": 0
+    },
+    {
+      "device": "phone",
+      "locale": "en",
+      "violations": 0
+    },
+    {
+      "device": "tablet",
+      "locale": "fr",
+      "violations": 0
+    },
+    {
+      "device": "tablet",
+      "locale": "ar",
+      "violations": 0
+    },
+    {
+      "device": "tablet",
+      "locale": "en",
+      "violations": 0
+    }
+  ],
+  "brokenImageFallback": true
+}

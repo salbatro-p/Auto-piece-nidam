@@ -1,0 +1,185 @@
+{
+  "recordedAt": "2026-11-06T15:33:31.281Z",
+  "scope": "Isolated synthetic fixtures only; no company image or real fitment coverage",
+  "summary": {
+    "totalStockedSkus": 7,
+    "withApprovedExactPhoto": 0,
+    "withVerifiedVehicleFitment": 2,
+    "withRightsForPublic": 0,
+    "missingPhoto": 7,
+    "disputedMatch": 0,
+    "poorQuality": 0,
+    "reviewRequired": 0
+  },
+  "items": [
+    {
+      "id": "082092dc-6ebb-4e33-9fc6-ad72e120c832",
+      "sku": "AP-SPK-004",
+      "names": {
+        "ar": "شمعة الإشعال",
+        "en": "Spark plug",
+        "fr": "Bougie d’allumage"
+      },
+      "translationStatus": {
+        "ar": "REVIEW_REQUIRED",
+        "en": "REVIEW_REQUIRED",
+        "fr": "REVIEW_REQUIRED"
+      },
+      "brand": "DEMO",
+      "manufacturerPartNo": null,
+      "pieces": 48,
+      "exact": false,
+      "fitment": false,
+      "public": false,
+      "disputed": false,
+      "poorQuality": false,
+      "reviewRequired": false,
+      "sold90Days": 0
+    },
+    {
+      "id": "ee181e74-e724-4e05-8f74-51c1d79d46bc",
+      "sku": "AP-FLT-001",
+      "names": {
+        "ar": "فلتر الزيت",
+        "en": "Oil filter",
+        "fr": "Filtre à huile"
+      },
+      "translationStatus": {
+        "ar": "REVIEW_REQUIRED",
+        "en": "REVIEW_REQUIRED",
+        "fr": "REVIEW_REQUIRED"
+      },
+      "brand": "DEMO",
+      "manufacturerPartNo": null,
+      "pieces": 30,
+      "exact": false,
+      "fitment": false,
+      "public": false,
+      "disputed": false,
+      "poorQuality": false,
+      "reviewRequired": false,
+      "sold90Days": 0
+    },
+    {
+      "id": "d037f433-618e-4cef-838b-d23aca78c731",
+      "sku": "AP-BRK-002",
+      "names": {
+        "ar": "وسادات الفرامل الأمامية",
+        "en": "Front brake pads",
+        "fr": "Plaquettes de frein avant"
+      },
+      "translationStatus": {
+        "ar": "REVIEW_REQUIRED",
+        "en": "REVIEW_REQUIRED",
+        "fr": "REVIEW_REQUIRED"
+      },
+      "brand": "DEMO",
+      "manufacturerPartNo": null,
+      "pieces": 12,
+      "exact": false,
+      "fitment": false,
+      "public": false,
+      "disputed": false,
+      "poorQuality": false,
+      "reviewRequired": false,
+      "sold90Days": 0
+    },
+    {
+      "id": "b7a33b9d-e58f-42c9-9a07-0f2917abe176",
+      "sku": "AP-WIP-006",
+      "names": {
+        "ar": "شفرة المسّاحة",
+        "en": "Wiper blade",
+        "fr": "Balai d’essuie-glace"
+      },
+      "translationStatus": {
+        "ar": "REVIEW_REQUIRED",
+        "en": "REVIEW_REQUIRED",
+        "fr": "REVIEW_REQUIRED"
+      },
+      "brand": "DEMO",
+      "manufacturerPartNo": null,
+      "pieces": 8,
+      "exact": false,
+      "fitment": false,
+      "public": false,
+      "disputed": false,
+      "poorQuality": false,
+      "reviewRequired": false,
+      "sold90Days": 0
+    },
+    {
+      "id": "2ead86bc-e725-4091-ab58-cad972dbf893",
+      "sku": "AP-AIR-003",
+      "names": {
+        "ar": "فلتر الهواء",
+        "en": "Air filter",
+        "fr": "Filtre à air"
+      },
+      "translationStatus": {
+        "ar": "REVIEW_REQUIRED",
+        "en": "REVIEW_REQUIRED",
+        "fr": "REVIEW_REQUIRED"
+      },
+      "brand": "DEMO",
+      "manufacturerPartNo": null,
+      "pieces": 4,
+      "exact": false,
+      "fitment": false,
+      "public": false,
+      "disputed": false,
+      "poorQuality": false,
+      "reviewRequired": false,
+      "sold90Days": 0
+    },
+    {
+      "id": "c2be85c2-20e0-4a9f-8c80-34f88d84cc48",
+      "sku": "TEST-00c6767d-8992-44e9-9319-db06aba9c58c",
+      "names": {
+        "ar": "قطعة اختبار",
+        "en": "Synthetic test part",
+        "fr": "Pièce de test"
+      },
+      "translationStatus": {
+        "ar": "REVIEW_REQUIRED",
+        "en": "REVIEW_REQUIRED",
+        "fr": "REVIEW_REQUIRED"
+      },
+      "brand": "SYNTHETIC",
+      "manufacturerPartNo": "V13-EXACT-007",
+      "pieces": 4,
+      "exact": false,
+      "fitment": true,
+      "public": false,
+      "disputed": false,
+      "poorQuality": false,
+      "reviewRequired": false,
+      "sold90Days": 0
+    },
+    {
+      "id": "1fa5c1a0-bc3d-411a-9a55-da92c8c1697f",
+      "sku": "TEST-78427c7c-ba93-4496-b52f-90e7003f4290",
+      "names": {
+        "ar": "قطعة اختبار",
+        "en": "Synthetic test part",
+        "fr": "Pièce de test"
+      },
+      "translationStatus": {
+        "ar": "REVIEW_REQUIRED",
+        "en": "REVIEW_REQUIRED",
+        "fr": "REVIEW_REQUIRED"
+      },
+      "brand": "SYNTHETIC",
+      "manufacturerPartNo": "V13-OTHER-008",
+      "pieces": 3,
+      "exact": false,
+      "fitment": true,
+      "public": false,
+      "disputed": false,
+      "poorQuality": false,
+      "reviewRequired": false,
+      "sold90Days": 0
+    }
+  ],
+  "page": 1
+}

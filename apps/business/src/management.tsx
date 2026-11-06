@@ -120,7 +120,7 @@ export function Purchases() {
       </PageHeading>
       <ErrorBanner error={list.error} />
       <MutationState state={save} />
-      <section className="panel table-wrap">
+      <section className="panel table-wrap" tabIndex={0} role="region" aria-label={t('scrollableTable')}>
         <table>
           <thead>
             <tr>
@@ -265,7 +265,7 @@ export function Vehicles({ onSelect }: { onSelect: (id: string) => void }) {
       </div>
       <div className="notice warning">{t('fitmentWarning')}</div>
       <ErrorBanner error={list.error} />
-      <section className="panel table-wrap">
+      <section className="panel table-wrap" tabIndex={0} role="region" aria-label={t('scrollableTable')}>
         <table>
           <thead>
             <tr>
@@ -436,7 +436,7 @@ export function Audit() {
           {t(result.balanced ? 'balanced' : 'mismatch')}
         </div>
       )}
-      <section className="panel table-wrap">
+      <section className="panel table-wrap" tabIndex={0} role="region" aria-label={t('scrollableTable')}>
         <table>
           <thead>
             <tr>
@@ -520,7 +520,7 @@ export function Team() {
           {t('save')}
         </button>
       </section>
-      <section className="panel table-wrap">
+      <section className="panel table-wrap" tabIndex={0} role="region" aria-label={t('scrollableTable')}>
         <table>
           <thead>
             <tr>

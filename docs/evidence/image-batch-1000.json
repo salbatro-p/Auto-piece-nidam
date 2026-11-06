@@ -1,0 +1,20 @@
+{
+  "startedAt": "2026-11-06T15:33:31.291Z",
+  "finishedAt": "2026-11-06T15:37:05.381Z",
+  "durationMs": 214091.8253,
+  "rows": 1000,
+  "outcomes": {
+    "STAGED": 900,
+    "DUPLICATE": 50,
+    "ERROR": 50
+  },
+  "archiveBytes": 239265,
+  "peakRssMiB": 302.390625,
+  "memoryCeilingMiB": 512,
+  "apiRestartAfter": 500,
+  "replaySameRow": true,
+  "unchangedStock": true,
+  "automaticallyApproved": 0,
+  "scope": "Synthetic pixel fixtures, not real vehicle photos. Real PostgreSQL/API, same Excel/ZIP parser as browser; sequential bounded processing.",
+  "status": "PASS"
+}

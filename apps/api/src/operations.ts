@@ -477,13 +477,15 @@ export function registerOperations(app: FastifyInstance, pool: Pool) {
   app.get('/api/dashboard', async (request) => {
     const actor = (request as AuthedRequest).actor;
     const scope = [actor.org_id, actor.warehouse_ids];
-    const [stock, products, sales, imports, fitments, activity] = await Promise.all([
+    const [summary, sales, imports, fitments, activity] = await Promise.all([
       pool.query(
-        'SELECT coalesce(sum(b.on_hand),0)::integer AS "onHand",coalesce(sum(b.reserved),0)::integer reserved,coalesce(sum(b.on_hand-b.reserved),0)::integer available,coalesce(sum(b.quarantine),0)::integer quarantine,coalesce(sum(b.damaged),0)::integer damaged,coalesce(sum(b.on_hand*p.cost_minor),0) AS "inventoryValueMinor" FROM inventory_balances b JOIN products p ON p.id=b.product_id WHERE b.org_id=$1 AND (cardinality($2::uuid[])=0 OR b.warehouse_id=ANY($2::uuid[]))',
-        scope,
-      ),
-      pool.query(
-        `SELECT count(*)::integer AS "productCount",count(*) FILTER(WHERE coalesce(s.available,0)=0)::integer AS "outOfStock",count(*) FILTER(WHERE coalesce(s.available,0)>0 AND coalesce(s.available,0)<=p.reorder_level)::integer AS "lowStock" FROM products p LEFT JOIN (SELECT product_id,sum(on_hand-reserved) available FROM inventory_balances WHERE (cardinality($2::uuid[])=0 OR warehouse_id=ANY($2::uuid[])) GROUP BY product_id) s ON s.product_id=p.id WHERE p.org_id=$1 AND p.status<>'ARCHIVED'`,
+        `WITH s AS (SELECT product_id,sum(on_hand) on_hand,sum(reserved) reserved,sum(on_hand-reserved) available,sum(quarantine) quarantine,sum(damaged) damaged FROM inventory_balances WHERE org_id=$1 AND (cardinality($2::uuid[])=0 OR warehouse_id=ANY($2::uuid[])) GROUP BY product_id)
+         SELECT count(*) FILTER(WHERE p.status<>'ARCHIVED')::integer AS "productCount",
+         count(*) FILTER(WHERE p.status<>'ARCHIVED' AND coalesce(s.available,0)=0)::integer AS "outOfStock",
+         count(*) FILTER(WHERE p.status<>'ARCHIVED' AND coalesce(s.available,0)>0 AND s.available<=p.reorder_level)::integer AS "lowStock",
+         coalesce(sum(s.on_hand),0)::integer AS "onHand",coalesce(sum(s.reserved),0)::integer reserved,coalesce(sum(s.available),0)::integer available,
+         coalesce(sum(s.quarantine),0)::integer quarantine,coalesce(sum(s.damaged),0)::integer damaged,coalesce(sum(s.on_hand*p.cost_minor),0) AS "inventoryValueMinor"
+         FROM products p LEFT JOIN s ON s.product_id=p.id WHERE p.org_id=$1`,
         scope,
       ),
       pool.query(
@@ -504,8 +506,7 @@ export function registerOperations(app: FastifyInstance, pool: Pool) {
       ),
     ]);
     const result = {
-      ...stock.rows[0],
-      ...products.rows[0],
+      ...summary.rows[0],
       ...sales.rows[0],
       pendingImports: imports.rows[0].pending,
       pendingFitments: fitments.rows[0].pending,

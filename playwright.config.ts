@@ -15,6 +15,7 @@ export default defineConfig({
   ],
   outputDir: 'test-results',
   use: {
+    actionTimeout:15000,
     baseURL: process.env.E2E_BASE_URL ?? 'http://127.0.0.1:4173',
     browserName: 'chromium',
     locale: 'fr-FR',

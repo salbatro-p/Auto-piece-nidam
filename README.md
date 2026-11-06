@@ -32,6 +32,9 @@ For editing with automatic reload use `npm run dev:business` instead of the prev
 - Always-visible Arabic, French and English controls; RTL; per-user language preferences; language changes preserve current drafts, images, carts and sessions. System dialogs have their own accessible language controls.
 - Invited staff, scoped roles, privileged MFA, session locking, access revocation, immutable audit records and server-side authorization.
 - Trilingual catalog, exact SKU/OEM/barcode search, manufacturer identity, translation review records, rights-checked sources, exact vehicle variants and evidence-based fitment review.
+- v1.3 exact-reference image galleries, separate vehicle/diagram media, private thumbnails, versioned rights and explicit internal/public review. Revoked, expired or changed license terms stop previously approved display until reviewed again. Legacy uploads remain unapproved and can be matched/migrated through the review screen.
+- Make → model → generation → production year/market → engine/equipment filtering, with exact variant selection before verified results. Separate diagram view states clearly when no licensed diagram is available.
+- Photo collection report prioritizes stocked SKUs by recent sales and highlights missing, disputed and low-resolution photos. Multi-angle upload shows progress and resumes unknown outcomes without duplicate assets. CSV/Excel manifests plus ZIP photos are previewed, processed per row and recoverable by selecting the same files/license after reopening.
 - Receipts in pieces or cartons, reservations, sales, warehouse and bin transfers, quarantined returns, inspection, counts with a different approver and ledger reconciliation.
 - Suppliers, purchase orders, protected cost fields, printable quotations and receipts, exact MAD tax arithmetic and explicit unconfigured-tax state.
 - Supplier references with concurrent-edit protection; source-reviewed replacement chains with cycle prevention and withdrawal. Replacement references do not establish vehicle compatibility.
@@ -64,5 +67,7 @@ Observed evidence is in [docs/evidence](docs/evidence). Consult [acceptance stat
 ## Application boundaries
 
 `apps/business` is the private staff interface. `apps/api` is the authoritative backend. PostgreSQL stores the ledger, reservations, catalog and financial snapshots. `packages/i18n` is shared localization; `packages/contracts` defines public projection and future payment/shipping boundaries. `apps/shop` is reserved for the separate Phase 2 public application. It must never receive Business bundles or unrestricted product records.
+
+Images are held under `MEDIA_STORAGE_DIR` (default `.local/media`), outside public static hosting. The API authorizes every request and strips EXIF/location metadata while generating WebP source/display/thumbnail variants. Back up this directory with the matching database snapshot; the restore drill verifies every referenced file. Photo ZIPs are limited to 64 MB compressed/256 MB expanded, 10,000 manifest rows, and 4 MB per photo. Keep SKU/manufacturer identifiers as text. New assets always require review; a photograph never creates a verified fitment record.
 
 No production deployment, external provider connection, public publication or real-company import has been performed. Docker and CI definitions are supplied; running them in their target environments remains an acceptance task.

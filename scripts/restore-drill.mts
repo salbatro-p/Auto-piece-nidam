@@ -5,6 +5,7 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { resolve, join } from 'node:path';
 import { createApp } from '../apps/api/src/app.js';
+import {readMediaObject} from '../apps/api/src/media-store.js';
 if (process.env.DEMO_MODE !== 'true')
   throw new Error('This drill is restricted to synthetic isolated local data');
 const url = new URL(process.env.DATABASE_URL!);
@@ -31,6 +32,11 @@ const tables = [
   'idempotency',
   'outbox_events',
   'product_media',
+  'media_source_licenses',
+  'media_reviews',
+  'fitment_evidence',
+  'image_ingest_jobs',
+  'image_ingest_rows',
   'warehouse_bins',
   'bin_balances',
   'bin_movements',
@@ -75,6 +81,15 @@ const start = performance.now();
 await snapshot.query('BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY');
 const snapshotId = (await snapshot.query('SELECT pg_export_snapshot() AS id')).rows[0].id;
 const before = await checksums(snapshot);
+const mediaRoot=file+'.media';
+const mediaObjects=(await snapshot.query('SELECT object_key,display_key,thumbnail_key FROM product_media WHERE object_key IS NOT NULL')).rows;
+const mediaFiles:Record<string,{bytes:number;sha256:string}>={};
+for(const key of new Set<string>(mediaObjects.flatMap(row=>[row.object_key,row.display_key,row.thumbnail_key]).filter(Boolean))){
+ if(!/^[a-f0-9]{64}\/(source|display|thumbnail)\.webp$/.test(key))throw new Error('Invalid private media key in backup');
+ const bytes=await readMediaObject(key);await mkdir(join(mediaRoot,key.split('/')[0]),{recursive:true});await writeFile(join(mediaRoot,key),bytes,{mode:0o600});
+ mediaFiles[key]={bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')};
+}
+await writeFile(mediaRoot+'.manifest.json',JSON.stringify(mediaFiles,null,2),{mode:0o600});
 await run(
   join(pgBin, 'pg_dump.exe'),
   [...common, '-d', url.pathname.slice(1), '-Fc', '--snapshot=' + snapshotId, '-f', file],
@@ -96,6 +111,9 @@ url.pathname = '/' + restoreName;
 const restored = new Pool({ connectionString: url.href });
 const after = await checksums(restored);
 const identical = JSON.stringify(before) === JSON.stringify(after);
+process.env.MEDIA_STORAGE_DIR=mediaRoot;
+let mediaFilesIdentical=true;
+for(const [key,expected] of Object.entries(mediaFiles)){const bytes=await readMediaObject(key);if(bytes.length!==expected.bytes||createHash('sha256').update(bytes).digest('hex')!==expected.sha256)mediaFilesIdentical=false;}
 const app = await createApp(restored);
 const auth = await app.inject({
   method: 'POST',
@@ -131,6 +149,9 @@ const auditAuth = await app.inject({
   payload: { email: 'auditor@demo.local', password: process.env.DEMO_PASSWORD },
 });
 const auditCookie = String(auditAuth.headers['set-cookie']).split(';')[0];
+const approvedPhoto=(await restored.query('SELECT id FROM usable_internal_media LIMIT 1')).rows[0];
+const restoredMediaResponse=approvedPhoto?await app.inject({url:'/api/media/'+approvedPhoto.id+'?size=thumbnail',headers:{cookie}}):undefined;
+const restoredMediaPass=!!restoredMediaResponse&&restoredMediaResponse.statusCode===200&&restoredMediaResponse.headers['content-type']==='image/webp';
 const reconciliation = (
   await app.inject({ url: '/api/inventory/reconciliation', headers: { cookie: auditCookie } })
 ).json();
@@ -150,6 +171,7 @@ const report = {
   checksumsBefore: before,
   checksumsAfter: after,
   identicalCriticalTables: identical,
+  privateMedia:{objects:Object.keys(mediaFiles).length,totalBytes:Object.values(mediaFiles).reduce((sum,v)=>sum+v.bytes,0),allFileHashesMatch:mediaFilesIdentical,approvedThumbnailAfterRestore:restoredMediaPass,manifest:mediaFiles},
   businessFlow: {
     saleStatus: sale.statusCode,
     replayStatus: replay.statusCode,
@@ -157,7 +179,7 @@ const report = {
   },
   reconciliation,
   binReconciliation,
-  pass: identical && flowPass && reconciliation.balanced === true && binReconciliation.balanced === true,
+  pass: identical && flowPass && mediaFilesIdentical && restoredMediaPass && reconciliation.balanced === true && binReconciliation.balanced === true,
   limits: [
     'Local logical snapshot recovery only; remote encrypted storage and WAL/PITR not configured.',
     'This elapsed restore does not establish a hosted RTO or 15-minute RPO.',

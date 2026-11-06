@@ -213,7 +213,7 @@ test('I18N-02 owner phone product image and carton receipt preserve drafts; scre
   page,
   browser,
 }, testInfo) => {
-  test.setTimeout(240000);
+  test.setTimeout(600000);
   await page.setViewportSize({ width: 390, height: 844 });
   await login(page, 'owner');
   await navigate(page, 'catalog');

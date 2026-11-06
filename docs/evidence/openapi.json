@@ -384,6 +384,62 @@
                     },
                     "type": "object",
                     "properties": {
+                      "technicalAttributes": {
+                        "maxItems": 50,
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "pattern": "^[a-zA-Z0-9_-]{1,50}$"
+                            },
+                            "labels": {
+                              "type": "object",
+                              "properties": {
+                                "ar": {
+                                  "default": "",
+                                  "type": "string",
+                                  "maxLength": 3000
+                                },
+                                "fr": {
+                                  "default": "",
+                                  "type": "string",
+                                  "maxLength": 3000
+                                },
+                                "en": {
+                                  "default": "",
+                                  "type": "string",
+                                  "maxLength": 3000
+                                }
+                              },
+                              "required": [
+                                "ar",
+                                "fr",
+                                "en"
+                              ],
+                              "additionalProperties": false
+                            },
+                            "value": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 200
+                            },
+                            "unit": {
+                              "default": "",
+                              "type": "string",
+                              "maxLength": 30
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "labels",
+                            "value",
+                            "unit"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
                       "supplierReference": {
                         "default": "",
                         "type": "string",
@@ -713,6 +769,62 @@
                     },
                     "type": "object",
                     "properties": {
+                      "technicalAttributes": {
+                        "maxItems": 50,
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "pattern": "^[a-zA-Z0-9_-]{1,50}$"
+                            },
+                            "labels": {
+                              "type": "object",
+                              "properties": {
+                                "ar": {
+                                  "default": "",
+                                  "type": "string",
+                                  "maxLength": 3000
+                                },
+                                "fr": {
+                                  "default": "",
+                                  "type": "string",
+                                  "maxLength": 3000
+                                },
+                                "en": {
+                                  "default": "",
+                                  "type": "string",
+                                  "maxLength": 3000
+                                }
+                              },
+                              "required": [
+                                "ar",
+                                "fr",
+                                "en"
+                              ],
+                              "additionalProperties": false
+                            },
+                            "value": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 200
+                            },
+                            "unit": {
+                              "default": "",
+                              "type": "string",
+                              "maxLength": 30
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "labels",
+                            "value",
+                            "unit"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
                       "supplierReference": {
                         "default": "",
                         "type": "string",
@@ -994,128 +1106,6 @@
             "schema": {
               "type": "string"
             }
-          }
-        ]
-      }
-    },
-    "/api/products/{id}/media": {
-      "parameters": [
-        {
-          "in": "path",
-          "name": "id",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
-      "post": {
-        "summary": "/api/products/:id/media",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$schema": "https://json-schema.org/draft/2020-12/schema",
-                "type": "object",
-                "properties": {
-                  "data": {
-                    "type": "string",
-                    "maxLength": 6000000
-                  },
-                  "mime": {
-                    "type": "string",
-                    "enum": [
-                      "image/jpeg",
-                      "image/png",
-                      "image/webp"
-                    ]
-                  },
-                  "rights": {
-                    "type": "string",
-                    "minLength": 5,
-                    "maxLength": 2000
-                  }
-                },
-                "required": [
-                  "data",
-                  "mime",
-                  "rights"
-                ],
-                "additionalProperties": false
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful response"
-          },
-          "400": {
-            "description": "Stable domain error code"
-          },
-          "401": {
-            "description": "Authentication required"
-          },
-          "403": {
-            "description": "Permission denied"
-          }
-        },
-        "security": [
-          {
-            "businessSession": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "header",
-            "name": "X-CSRF-Token",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "header",
-            "name": "Idempotency-Key",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ]
-      }
-    },
-    "/api/media/{id}": {
-      "parameters": [
-        {
-          "in": "path",
-          "name": "id",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
-      "get": {
-        "summary": "/api/media/:id",
-        "responses": {
-          "200": {
-            "description": "Successful response"
-          },
-          "400": {
-            "description": "Stable domain error code"
-          },
-          "401": {
-            "description": "Authentication required"
-          },
-          "403": {
-            "description": "Permission denied"
-          }
-        },
-        "security": [
-          {
-            "businessSession": []
           }
         ]
       }
@@ -5083,6 +5073,1410 @@
         "security": [
           {
             "businessSession": []
+          }
+        ]
+      }
+    },
+    "/api/media/licenses": {
+      "get": {
+        "summary": "/api/media/licenses",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Stable domain error code"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Permission denied"
+          }
+        },
+        "security": [
+          {
+            "businessSession": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "/api/media/licenses",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 200
+                  },
+                  "sourceType": {
+                    "type": "string",
+                    "enum": [
+                      "COMPANY",
+                      "SUPPLIER",
+                      "LICENSED_CATALOG",
+                      "OTHER"
+                    ]
+                  },
+                  "sourceId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "termsVersion": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  },
+                  "proof": {
+                    "type": "string",
+                    "minLength": 10,
+                    "maxLength": 4000
+                  },
+                  "internalDisplayPermitted": {
+                    "type": "boolean"
+                  },
+                  "publicDisplayPermitted": {
+                    "type": "boolean"
+                  },
+                  "attributionText": {
+                    "default": "",
+                    "type": "string",
+                    "maxLength": 500
+                  },
+                  "territory": {
+                    "default": "MA",
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 100
+                  },
+                  "restrictions": {
+                    "default": "",
+                    "type": "string",
+                    "maxLength": 2000
+                  },
+                  "expiresAt": {
+                    "default": null,
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "date-time",
+                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "name",
+                  "sourceType",
+                  "termsVersion",
+                  "proof",
+                  "internalDisplayPermitted",
+                  "publicDisplayPermitted",
+                  "attributionText",
+                  "territory",
+                  "restrictions",
+                  "expiresAt"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Stable domain error code"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Permission denied"
+          }
+        },
+        "security": [
+          {
+            "businessSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-CSRF-Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/media/licenses/{id}/update": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "summary": "/api/media/licenses/:id/update",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 200
+                  },
+                  "sourceType": {
+                    "type": "string",
+                    "enum": [
+                      "COMPANY",
+                      "SUPPLIER",
+                      "LICENSED_CATALOG",
+                      "OTHER"
+                    ]
+                  },
+                  "sourceId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "termsVersion": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  },
+                  "proof": {
+                    "type": "string",
+                    "minLength": 10,
+                    "maxLength": 4000
+                  },
+                  "internalDisplayPermitted": {
+                    "type": "boolean"
+                  },
+                  "publicDisplayPermitted": {
+                    "type": "boolean"
+                  },
+                  "attributionText": {
+                    "default": "",
+                    "type": "string",
+                    "maxLength": 500
+                  },
+                  "territory": {
+                    "default": "MA",
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 100
+                  },
+                  "restrictions": {
+                    "default": "",
+                    "type": "string",
+                    "maxLength": 2000
+                  },
+                  "expiresAt": {
+                    "default": null,
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "date-time",
+                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "version": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "revoked": {
+                    "default": false,
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "name",
+                  "sourceType",
+                  "termsVersion",
+                  "proof",
+                  "internalDisplayPermitted",
+                  "publicDisplayPermitted",
+                  "attributionText",
+                  "territory",
+                  "restrictions",
+                  "expiresAt",
+                  "version",
+                  "revoked"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Stable domain error code"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Permission denied"
+          }
+        },
+        "security": [
+          {
+            "businessSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-CSRF-Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/media/stage": {
+      "post": {
+        "summary": "/api/media/stage",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "productId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "vehicleVariantId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "EXACT_PRODUCT_PHOTO",
+                      "COMPANY_ORIGINAL_PHOTO",
+                      "GENERIC_CATEGORY_ILLUSTRATION",
+                      "VEHICLE_PHOTO",
+                      "EXPLODED_DIAGRAM"
+                    ]
+                  },
+                  "sku": {
+                    "default": "",
+                    "type": "string",
+                    "maxLength": 80
+                  },
+                  "manufacturerBrand": {
+                    "default": "",
+                    "type": "string",
+                    "maxLength": 100
+                  },
+                  "manufacturerPartNumber": {
+                    "default": "",
+                    "type": "string",
+                    "maxLength": 100
+                  },
+                  "licenseId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "sourceUrl": {
+                    "default": "",
+                    "type": "string",
+                    "maxLength": 1000
+                  },
+                  "viewAngle": {
+                    "default": "",
+                    "type": "string",
+                    "maxLength": 100
+                  },
+                  "applicability": {
+                    "default": {},
+                    "type": "object",
+                    "properties": {
+                      "side": {
+                        "type": "string",
+                        "enum": [
+                          "LEFT",
+                          "RIGHT",
+                          "BOTH"
+                        ]
+                      },
+                      "axle": {
+                        "type": "string",
+                        "enum": [
+                          "FRONT",
+                          "REAR",
+                          "BOTH"
+                        ]
+                      },
+                      "engine": {
+                        "type": "string",
+                        "maxLength": 100
+                      },
+                      "equipment": {
+                        "type": "string",
+                        "maxLength": 500
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "provider": {
+                    "default": "",
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "illustrationId": {
+                    "default": "",
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "callouts": {
+                    "default": [],
+                    "maxItems": 200,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "reference": {
+                          "type": "string",
+                          "maxLength": 80
+                        },
+                        "label": {
+                          "type": "string",
+                          "maxLength": 500
+                        }
+                      },
+                      "required": [
+                        "reference",
+                        "label"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "data": {
+                    "type": "string",
+                    "maxLength": 6000000
+                  },
+                  "mime": {
+                    "type": "string",
+                    "enum": [
+                      "image/png",
+                      "image/jpeg",
+                      "image/webp"
+                    ]
+                  }
+                },
+                "required": [
+                  "kind",
+                  "sku",
+                  "manufacturerBrand",
+                  "manufacturerPartNumber",
+                  "licenseId",
+                  "sourceUrl",
+                  "viewAngle",
+                  "applicability",
+                  "provider",
+                  "illustrationId",
+                  "callouts",
+                  "data",
+                  "mime"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Stable domain error code"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Permission denied"
+          }
+        },
+        "security": [
+          {
+            "businessSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-CSRF-Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/media/{id}/match": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "summary": "/api/media/:id/match",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "productId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "vehicleVariantId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "EXACT_PRODUCT_PHOTO",
+                      "COMPANY_ORIGINAL_PHOTO",
+                      "GENERIC_CATEGORY_ILLUSTRATION",
+                      "VEHICLE_PHOTO",
+                      "EXPLODED_DIAGRAM"
+                    ]
+                  },
+                  "sku": {
+                    "default": "",
+                    "type": "string",
+                    "maxLength": 80
+                  },
+                  "manufacturerBrand": {
+                    "default": "",
+                    "type": "string",
+                    "maxLength": 100
+                  },
+                  "manufacturerPartNumber": {
+                    "default": "",
+                    "type": "string",
+                    "maxLength": 100
+                  },
+                  "licenseId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "sourceUrl": {
+                    "default": "",
+                    "type": "string",
+                    "maxLength": 1000
+                  },
+                  "viewAngle": {
+                    "default": "",
+                    "type": "string",
+                    "maxLength": 100
+                  },
+                  "applicability": {
+                    "default": {},
+                    "type": "object",
+                    "properties": {
+                      "side": {
+                        "type": "string",
+                        "enum": [
+                          "LEFT",
+                          "RIGHT",
+                          "BOTH"
+                        ]
+                      },
+                      "axle": {
+                        "type": "string",
+                        "enum": [
+                          "FRONT",
+                          "REAR",
+                          "BOTH"
+                        ]
+                      },
+                      "engine": {
+                        "type": "string",
+                        "maxLength": 100
+                      },
+                      "equipment": {
+                        "type": "string",
+                        "maxLength": 500
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "provider": {
+                    "default": "",
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "illustrationId": {
+                    "default": "",
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "callouts": {
+                    "default": [],
+                    "maxItems": 200,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "reference": {
+                          "type": "string",
+                          "maxLength": 80
+                        },
+                        "label": {
+                          "type": "string",
+                          "maxLength": 500
+                        }
+                      },
+                      "required": [
+                        "reference",
+                        "label"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "version": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "note": {
+                    "type": "string",
+                    "minLength": 10,
+                    "maxLength": 2000
+                  }
+                },
+                "required": [
+                  "kind",
+                  "sku",
+                  "manufacturerBrand",
+                  "manufacturerPartNumber",
+                  "licenseId",
+                  "sourceUrl",
+                  "viewAngle",
+                  "applicability",
+                  "provider",
+                  "illustrationId",
+                  "callouts",
+                  "version",
+                  "note"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Stable domain error code"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Permission denied"
+          }
+        },
+        "security": [
+          {
+            "businessSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-CSRF-Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/products/{id}/media": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "summary": "/api/products/:id/media",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "type": "string",
+                    "maxLength": 6000000
+                  },
+                  "mime": {
+                    "type": "string",
+                    "enum": [
+                      "image/png",
+                      "image/jpeg",
+                      "image/webp"
+                    ]
+                  },
+                  "rights": {
+                    "type": "string",
+                    "minLength": 10,
+                    "maxLength": 2000
+                  }
+                },
+                "required": [
+                  "data",
+                  "mime",
+                  "rights"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Stable domain error code"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Permission denied"
+          }
+        },
+        "security": [
+          {
+            "businessSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-CSRF-Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/products/{id}/gallery": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "summary": "/api/products/:id/gallery",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Stable domain error code"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Permission denied"
+          }
+        },
+        "security": [
+          {
+            "businessSession": []
+          }
+        ]
+      }
+    },
+    "/api/vehicles/{id}/media": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "summary": "/api/vehicles/:id/media",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Stable domain error code"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Permission denied"
+          }
+        },
+        "security": [
+          {
+            "businessSession": []
+          }
+        ]
+      }
+    },
+    "/api/media/{id}/review": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "summary": "/api/media/:id/review",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "version": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "state": {
+                    "type": "string",
+                    "enum": [
+                      "APPROVED_INTERNAL",
+                      "APPROVED_PUBLIC",
+                      "REJECTED"
+                    ]
+                  },
+                  "note": {
+                    "type": "string",
+                    "minLength": 10,
+                    "maxLength": 2000
+                  },
+                  "physicalMatchConfirmed": {
+                    "type": "boolean"
+                  },
+                  "applicabilityConfirmed": {
+                    "type": "boolean"
+                  },
+                  "duplicateUseConfirmed": {
+                    "default": false,
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "version",
+                  "state",
+                  "note",
+                  "physicalMatchConfirmed",
+                  "applicabilityConfirmed",
+                  "duplicateUseConfirmed"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Stable domain error code"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Permission denied"
+          }
+        },
+        "security": [
+          {
+            "businessSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-CSRF-Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/media/{id}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "summary": "/api/media/:id",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Stable domain error code"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Permission denied"
+          }
+        },
+        "security": [
+          {
+            "businessSession": []
+          }
+        ]
+      }
+    },
+    "/api/catalog/vehicle-options": {
+      "get": {
+        "summary": "/api/catalog/vehicle-options",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Stable domain error code"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Permission denied"
+          }
+        },
+        "security": [
+          {
+            "businessSession": []
+          }
+        ]
+      }
+    },
+    "/api/vehicles/{id}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "summary": "/api/vehicles/:id",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Stable domain error code"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Permission denied"
+          }
+        },
+        "security": [
+          {
+            "businessSession": []
+          }
+        ]
+      }
+    },
+    "/api/catalog/categories": {
+      "get": {
+        "summary": "/api/catalog/categories",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Stable domain error code"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Permission denied"
+          }
+        },
+        "security": [
+          {
+            "businessSession": []
+          }
+        ]
+      }
+    },
+    "/api/media/coverage": {
+      "get": {
+        "summary": "/api/media/coverage",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Stable domain error code"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Permission denied"
+          }
+        },
+        "security": [
+          {
+            "businessSession": []
+          }
+        ]
+      }
+    },
+    "/api/media/imports": {
+      "post": {
+        "summary": "/api/media/imports",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "fileHash": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  },
+                  "total": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 10000
+                  }
+                },
+                "required": [
+                  "fileHash",
+                  "total"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Stable domain error code"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Permission denied"
+          }
+        },
+        "security": [
+          {
+            "businessSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-CSRF-Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/media/imports/{id}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "summary": "/api/media/imports/:id",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Stable domain error code"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Permission denied"
+          }
+        },
+        "security": [
+          {
+            "businessSession": []
+          }
+        ]
+      }
+    },
+    "/api/media/imports/{id}/rows/{row}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "in": "path",
+          "name": "row",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "summary": "/api/media/imports/:id/rows/:row",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "vehicleVariantId": {
+                    "type": "string",
+                    "maxLength": 80
+                  },
+                  "kind": {
+                    "type": "string",
+                    "maxLength": 80
+                  },
+                  "sku": {
+                    "default": "",
+                    "type": "string",
+                    "maxLength": 80
+                  },
+                  "manufacturerBrand": {
+                    "default": "",
+                    "type": "string",
+                    "maxLength": 100
+                  },
+                  "manufacturerPartNumber": {
+                    "default": "",
+                    "type": "string",
+                    "maxLength": 100
+                  },
+                  "licenseId": {
+                    "type": "string",
+                    "maxLength": 80
+                  },
+                  "sourceUrl": {
+                    "default": "",
+                    "type": "string",
+                    "maxLength": 1000
+                  },
+                  "viewAngle": {
+                    "default": "",
+                    "type": "string",
+                    "maxLength": 100
+                  },
+                  "applicability": {
+                    "default": {},
+                    "type": "object",
+                    "propertyNames": {
+                      "type": "string",
+                      "maxLength": 50
+                    },
+                    "additionalProperties": {
+                      "type": "string",
+                      "maxLength": 500
+                    }
+                  },
+                  "provider": {
+                    "default": "",
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "illustrationId": {
+                    "default": "",
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "callouts": {
+                    "default": [],
+                    "maxItems": 200,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "reference": {
+                          "type": "string",
+                          "maxLength": 80
+                        },
+                        "label": {
+                          "type": "string",
+                          "maxLength": 500
+                        }
+                      },
+                      "required": [
+                        "reference",
+                        "label"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "data": {
+                    "type": "string",
+                    "maxLength": 6000000
+                  },
+                  "mime": {
+                    "type": "string",
+                    "maxLength": 80
+                  },
+                  "filename": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 300
+                  },
+                  "clientError": {
+                    "type": "string",
+                    "enum": [
+                      "INVALID_IMAGE",
+                      "IMAGE_UNAVAILABLE",
+                      "MEDIA_REFERENCE_MISMATCH",
+                      "VALIDATION_ERROR"
+                    ]
+                  }
+                },
+                "required": [
+                  "kind",
+                  "sku",
+                  "manufacturerBrand",
+                  "manufacturerPartNumber",
+                  "licenseId",
+                  "sourceUrl",
+                  "viewAngle",
+                  "applicability",
+                  "provider",
+                  "illustrationId",
+                  "callouts",
+                  "data",
+                  "mime",
+                  "filename"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Stable domain error code"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Permission denied"
+          }
+        },
+        "security": [
+          {
+            "businessSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-CSRF-Token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ]
       }

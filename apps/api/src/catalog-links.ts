@@ -1,7 +1,7 @@
 import type { FastifyInstance } from 'fastify';
 import type { Pool } from 'pg';
 import { z } from 'zod';
-import { DomainError, normalize } from './db.js';
+import { audit, DomainError, normalize } from './db.js';
 import { type AuthedRequest, requirePermission } from './auth.js';
 import { mutation } from './inventory.js';
 const uuid = z.string().uuid();
@@ -57,7 +57,7 @@ export function registerCatalogLinks(app: FastifyInstance, pool: Pool) {
       )
         throw new DomainError('NOT_FOUND', 404);
       const current = (
-        await c.query('SELECT version FROM supplier_items WHERE supplier_id=$1 AND product_id=$2', [
+        await c.query('SELECT * FROM supplier_items WHERE supplier_id=$1 AND product_id=$2', [
           id,
           d.productId,
         ])
@@ -75,6 +75,7 @@ export function registerCatalogLinks(app: FastifyInstance, pool: Pool) {
         "INSERT INTO product_identifiers(product_id,type,raw_value,normalized_value) VALUES($1,'SUPPLIER',$2,$3) ON CONFLICT DO NOTHING",
         [d.productId, d.reference, normalize(d.reference)],
       );
+      await audit(c,actor,'SUPPLIER_REFERENCE_UPDATED',d.productId,{supplierId:id,previous:current??null,current:d,version:row.version},req.id);
       return { productId: d.productId, version: row.version };
     },
   );
@@ -148,6 +149,7 @@ export function registerCatalogLinks(app: FastifyInstance, pool: Pool) {
         [actor.org_id, id, d.replacementId, d.version],
       );
       if (!result.rowCount) throw new DomainError('EDIT_CONFLICT', 409);
+      await audit(c,actor,'REPLACEMENT_WITHDRAWN',id,d,req.id);
       return {
         productId: id,
         replacementId: d.replacementId,

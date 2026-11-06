@@ -1,5 +1,6 @@
 import { parseMoney } from '../../../packages/i18n/src/index';
 const supported = new Set([
+  'technical_attributes_json',
   'sku',
   'brand',
   'manufacturer_part_no',
@@ -76,6 +77,7 @@ export function mapProductGrid(grid: unknown[][]) {
       reorderLevel: Number(row.reorderLevel || 5),
       status: 'DRAFT',
       companyMetadata: {
+        ...(text('technical_attributes_json')?{technicalAttributes:JSON.parse(text('technical_attributes_json'))}:{}),
         supplierReference: text('supplier_ref'),
         imageSource: text('image_source'),
         suppliedReviewStatus: {

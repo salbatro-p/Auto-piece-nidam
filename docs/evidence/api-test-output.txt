@@ -13,48 +13,54 @@ Applied 008_vehicle_search.sql
 Applied 009_manufacturer_identity.sql
 Applied 010_catalog_links.sql
 Applied 011_opening_balances.sql
+Applied 012_reviewed_media.sql
+Applied 013_media_release_guards.sql
 Isolated synthetic demo seeded; credentials are read from local environment only
-✔ Localized product export retains identifiers, escapes formulas and hides costs from curators (1501.5319ms)
-✔ Private OpenAPI describes domain bodies, path identifiers and authentication accurately (6.146ms)
-✔ Opening balance requires another approver, posts one immutable ledger and refuses prior movements (217.9572ms)
-✔ Supplier references retain exact identifiers and reject stale edits; replacements require evidence and reject cycles (122.4699ms)
-✔ INV-01: one of 100 simultaneous last-unit reservations wins (535.3461ms)
-✔ INV-02: ten receipt retries and ten sale retries commit once (78.066ms)
-✔ INV-03: sale versus transfer of the last unit is serialized (42.7341ms)
-✔ INV-04: opposite multi-SKU orders lock consistently; failed sale rolls back all lines (104.6201ms)
-✔ INV-05: fulfill/release race and expired reservation release have one terminal state (56.6551ms)
-✔ INV-06: duplicate return stays quarantined and damaged inspection cannot restore availability (85.7039ms)
-✔ INV-07: carton conversion, duplicate bill and invalid quantity are enforced (49.0306ms)
-✔ INV-08: client balance tampering and append-only ledger edits are rejected (23.2614ms)
-✔ Counts require different approver and reject stale balances (44.6957ms)
-✔ SEC-01: costs, privileged routes, branch and tenant boundaries are server enforced (38.8802ms)
-✔ SEC-02: CSRF, SQL injection, brute force, malformed image and public endpoints are defended (371.6866ms)
-✔ MFA: sensitive-role OTP required, replay rejected, session revoked (151.6104ms)
-✔ DATA-01 subset: previews reject duplicate/existing/formula rows; idempotent import and safe revert (64.4015ms)
-✔ DATA-02: variants remain separate and unreviewed fitment is never confirmed (37.3828ms)
-✔ I18N: locale preference is per user; stock and receipt arithmetic do not change (114.9589ms)
-✔ REL-01 bounded failure: thrown transaction rolls back; REL-03 outbox replay is deduplicated (31.8602ms)
-✔ Final reconciliation: every balance equals immutable ledger in every condition (2.8325ms)
-✔ DATA-01 / REL-02 staged import validates errors, resumes checkpoints, protects partial products and respects source revocation (692.122ms)
-✔ Bins conserve physical stock under concurrent sale, transfer, retries and damage (87.8637ms)
-✔ Translation approval records exact content and becomes invalid when content changes (47.9741ms)
-✔ Quotes do not reserve stock; exact tax snapshots survive locale changes and stale cart totals cannot sell (68.9299ms)
-✔ Invitations are one-use, require privileged MFA and disabling access revokes current and future sessions (123.5347ms)
-✔ public projection refuses internal draft even when rights are approved (1.856ms)
-✔ missing Arabic review blocks publication across all locale routes (0.4481ms)
-✔ all AR FR EN messages compile with ICU, key parity and no missing domain errors (78.7358ms)
-✔ locale resolution and RTL honor explicit preference and supported device language (0.4578ms)
-✔ Arabic/French/English decimals map to identical exact MAD minor units (8.1755ms)
-✔ Arabic plurals and missing content stay visible without modifying authoritative identifiers (0.4897ms)
-✔ Opening template preserves counter evidence and parses Arabic integer pieces without inventing approval (1.8622ms)
-✔ Import parser preserves mixed-script exact text and rejects formulas, numeric identifiers and archive expansion abuse (28.0088ms)
-✔ Blueprint product template maps exact MAD prices, category, packaging and identifiers without silently trusting review claims (1.5974ms)
-✔ MAD tax uses exact integer arithmetic, per-line half-up rounding and consistent inclusive/exclusive totals (3.0832ms)
-ℹ tests 36
+✔ IMG-07/10: exact engine/equipment filters, separate diagrams, rights expiry and coverage remain authoritative (9392.0134ms)
+✔ IMG-05: 1,000 Excel/ZIP photo rows remain bounded, reject bad mappings and resume without duplicates (214105.0172ms)
+✔ IMG-01/02/03/04/06: exact images require review and valid rights, retain references, and never create fitment (1667.2117ms)
+✔ Technical specifications retain exact values and require new translation review when changed (591.2806ms)
+✔ Localized product export retains identifiers, escapes formulas and hides costs from curators (220.4795ms)
+✔ Private OpenAPI describes domain bodies, path identifiers and authentication accurately (23.1362ms)
+✔ Opening balance requires another approver, posts one immutable ledger and refuses prior movements (859.7493ms)
+✔ Supplier references retain exact identifiers and reject stale edits; replacements require evidence and reject cycles (500.4164ms)
+✔ INV-01: one of 100 simultaneous last-unit reservations wins (2369.7626ms)
+✔ INV-02: ten receipt retries and ten sale retries commit once (366.448ms)
+✔ INV-03: sale versus transfer of the last unit is serialized (179.4469ms)
+✔ INV-04: opposite multi-SKU orders lock consistently; failed sale rolls back all lines (453.1214ms)
+✔ INV-05: fulfill/release race and expired reservation release have one terminal state (240.5675ms)
+✔ INV-06: duplicate return stays quarantined and damaged inspection cannot restore availability (410.034ms)
+✔ INV-07: carton conversion, duplicate bill and invalid quantity are enforced (76.5262ms)
+✔ INV-08: client balance tampering and append-only ledger edits are rejected (81.0223ms)
+✔ Counts require different approver and reject stale balances (365.754ms)
+✔ SEC-01: costs, privileged routes, branch and tenant boundaries are server enforced (254.1923ms)
+✔ SEC-02: CSRF, SQL injection, brute force, malformed image and public endpoints are defended (1871.6268ms)
+✔ MFA: sensitive-role OTP required, replay rejected, session revoked (717.7734ms)
+✔ DATA-01 subset: previews reject duplicate/existing/formula rows; idempotent import and safe revert (259.4478ms)
+✔ DATA-02: variants remain separate and unreviewed fitment is never confirmed (186.5173ms)
+✔ I18N: locale preference is per user; stock and receipt arithmetic do not change (519.1445ms)
+✔ REL-01 bounded failure: thrown transaction rolls back; REL-03 outbox replay is deduplicated (142.5663ms)
+✔ Final reconciliation: every balance equals immutable ledger in every condition (19.2208ms)
+✔ DATA-01 / REL-02 staged import validates errors, resumes checkpoints, protects partial products and respects source revocation (3307.8583ms)
+✔ Bins conserve physical stock under concurrent sale, transfer, retries and damage (346.5179ms)
+✔ Translation approval records exact content and becomes invalid when content changes (187.6258ms)
+✔ Quotes do not reserve stock; exact tax snapshots survive locale changes and stale cart totals cannot sell (216.8931ms)
+✔ Invitations are one-use, require privileged MFA and disabling access revokes current and future sessions (590.9193ms)
+✔ public projection refuses internal draft even when rights are approved (4.5419ms)
+✔ missing Arabic review blocks publication across all locale routes (1.0968ms)
+✔ all AR FR EN messages compile with ICU, key parity and no missing domain errors (378.7299ms)
+✔ locale resolution and RTL honor explicit preference and supported device language (2.2767ms)
+✔ Arabic/French/English decimals map to identical exact MAD minor units (35.6913ms)
+✔ Arabic plurals and missing content stay visible without modifying authoritative identifiers (1.9091ms)
+✔ Opening template preserves counter evidence and parses Arabic integer pieces without inventing approval (7.241ms)
+✔ Import parser preserves mixed-script exact text and rejects formulas, numeric identifiers and archive expansion abuse (120.8451ms)
+✔ Blueprint product template maps exact MAD prices, category, packaging and identifiers without silently trusting review claims (4.7671ms)
+✔ MAD tax uses exact integer arithmetic, per-line half-up rounding and consistent inclusive/exclusive totals (13.5971ms)
+ℹ tests 40
 ℹ suites 0
-ℹ pass 36
+ℹ pass 40
 ℹ fail 0
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 5713.3322
+ℹ duration_ms 245743.6077

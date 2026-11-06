@@ -3,9 +3,7 @@
     "argv": [
       "D:\\node.exe",
       "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\node_modules\\@playwright\\test\\cli.js",
-      "test",
-      "--grep",
-      "owner phone"
+      "test"
     ],
     "configFile": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\playwright.config.ts",
     "rootDir": "C:/Users/dipoo/Documents/ChatGPT/auto piece nidam/tests/e2e",
@@ -57,6 +55,7 @@
         "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
         "timeout": 90000,
         "use": {
+          "actionTimeout": 15000,
           "baseURL": "http://127.0.0.1:4173",
           "browserName": "chromium",
           "locale": "fr-FR",
@@ -110,12 +109,335 @@
       "line": 0,
       "specs": [
         {
+          "title": "I18N-05 login header, RTL, keyboard and accessibility — phone",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [
+                {
+                  "type": "serial",
+                  "location": {
+                    "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                    "line": 0,
+                    "column": 0
+                  }
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11883,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-06T15:47:13.329Z",
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                        "line": 0,
+                        "column": 0
+                      }
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "phone-login-fr",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-05-login-hea-fff97-d-and-accessibility-—-phone\\attachments\\phone-login-fr-4a7e795e0c0089787bae821113947878403beaf3.png"
+                    },
+                    {
+                      "name": "phone-login-ar",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-05-login-hea-fff97-d-and-accessibility-—-phone\\attachments\\phone-login-ar-b7867736efe3a0cb3493672271dee7de5feb6adc.png"
+                    },
+                    {
+                      "name": "phone-login-en",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-05-login-hea-fff97-d-and-accessibility-—-phone\\attachments\\phone-login-en-18cc11469c360fe5d9cdcd737a1a62c77155f976.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "66346504f81fcdf6f5e9-575f8f4d4c19dd1f1d87",
+          "file": "business.spec.ts",
+          "line": 49,
+          "column": 3
+        },
+        {
+          "title": "I18N-05 login header, RTL, keyboard and accessibility — tablet",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [
+                {
+                  "type": "serial",
+                  "location": {
+                    "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                    "line": 0,
+                    "column": 0
+                  }
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 13156,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-06T15:47:26.062Z",
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                        "line": 0,
+                        "column": 0
+                      }
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "tablet-login-fr",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-05-login-hea-19cd1--and-accessibility-—-tablet\\attachments\\tablet-login-fr-18c924a3bc03e6b910e2bf9a31c91779181e4f5c.png"
+                    },
+                    {
+                      "name": "tablet-login-ar",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-05-login-hea-19cd1--and-accessibility-—-tablet\\attachments\\tablet-login-ar-ff1c1f1e62326e3b98246b5e3ef0c62be937929f.png"
+                    },
+                    {
+                      "name": "tablet-login-en",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-05-login-hea-19cd1--and-accessibility-—-tablet\\attachments\\tablet-login-en-218635cc67b458394291aecf97c1ac009b01ec8f.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "66346504f81fcdf6f5e9-2f261e9586a58d593cdb",
+          "file": "business.spec.ts",
+          "line": 49,
+          "column": 3
+        },
+        {
+          "title": "I18N-01 tablet mid-sale language changes and lost response produce exactly one sale",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [
+                {
+                  "type": "serial",
+                  "location": {
+                    "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                    "line": 0,
+                    "column": 0
+                  }
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9340,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-06T15:47:39.303Z",
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                        "line": 0,
+                        "column": 0
+                      }
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "tablet-pos-draft-fr",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-01-tablet-mi-278d1-se-produce-exactly-one-sale\\attachments\\tablet-pos-draft-fr-6a8e85d770d9f564efe1c4d74686b5408702bb12.png"
+                    },
+                    {
+                      "name": "tablet-pos-draft-ar",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-01-tablet-mi-278d1-se-produce-exactly-one-sale\\attachments\\tablet-pos-draft-ar-facb46b9a57059b71cb53b865e293756e4f6b04e.png"
+                    },
+                    {
+                      "name": "tablet-pos-draft-en",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-01-tablet-mi-278d1-se-produce-exactly-one-sale\\attachments\\tablet-pos-draft-en-b03ba5b977aea3feef1784f7614072fd544a7a1c.png"
+                    },
+                    {
+                      "name": "tablet-receipt-fr",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-01-tablet-mi-278d1-se-produce-exactly-one-sale\\attachments\\tablet-receipt-fr-2e4ac2ee11c07613102510187dff2e09f7e95372.png"
+                    },
+                    {
+                      "name": "tablet-receipt-ar",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-01-tablet-mi-278d1-se-produce-exactly-one-sale\\attachments\\tablet-receipt-ar-4312016ed10c47dc3718c762b084bf3864967a3c.png"
+                    },
+                    {
+                      "name": "tablet-receipt-en",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-01-tablet-mi-278d1-se-produce-exactly-one-sale\\attachments\\tablet-receipt-en-7bace76fb4711c61f46e774a19d977417906ee70.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "66346504f81fcdf6f5e9-18fdb13f53c47dbf5737",
+          "file": "business.spec.ts",
+          "line": 77,
+          "column": 1
+        },
+        {
+          "title": "I18N-03 shared tablet isolates employee preferences and independent sessions",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [
+                {
+                  "type": "serial",
+                  "location": {
+                    "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                    "line": 0,
+                    "column": 0
+                  }
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9766,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-06T15:47:48.744Z",
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                        "line": 0,
+                        "column": 0
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "66346504f81fcdf6f5e9-1d6d20846a2dd400807a",
+          "file": "business.spec.ts",
+          "line": 146,
+          "column": 1
+        },
+        {
+          "title": "SEC-01 anonymous localized routes cannot expose Business data",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [
+                {
+                  "type": "serial",
+                  "location": {
+                    "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                    "line": 0,
+                    "column": 0
+                  }
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 189,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-06T15:47:58.571Z",
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                        "line": 0,
+                        "column": 0
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "66346504f81fcdf6f5e9-724de9dedc792d40ab7d",
+          "file": "business.spec.ts",
+          "line": 192,
+          "column": 1
+        },
+        {
           "title": "I18N-02 owner phone product image and carton receipt preserve drafts; screen matrix",
           "ok": false,
           "tags": [],
           "tests": [
             {
-              "timeout": 240000,
+              "timeout": 600000,
               "annotations": [
                 {
                   "type": "serial",
@@ -134,10 +456,10 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "failed",
-                  "duration": 63796,
+                  "duration": 316466,
                   "error": {
-                    "message": "Error: Accessibility violations: scrollable-region-focusable\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 52\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"description\": \"Ensure elements that have scrollable content are accessible by keyboard in Safari\",\u001b[39m\n\u001b[31m+     \"help\": \"Scrollable region must have keyboard access\",\u001b[39m\n\u001b[31m+     \"helpUrl\": \"https://dequeuniversity.com/rules/axe/4.14/scrollable-region-focusable?application=playwright\",\u001b[39m\n\u001b[31m+     \"id\": \"scrollable-region-focusable\",\u001b[39m\n\u001b[31m+     \"impact\": \"serious\",\u001b[39m\n\u001b[31m+     \"nodes\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": null,\u001b[39m\n\u001b[31m+             \"id\": \"focusable-content\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element should have focusable content\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": null,\u001b[39m\n\u001b[31m+             \"id\": \"focusable-element\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element should be focusable\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element should have focusable content\u001b[39m\n\u001b[31m+   Element should be focusable\",\u001b[39m\n\u001b[31m+         \"html\": \"<section class=\\\"panel table-wrap\\\">\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"section\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"tags\": Array [\u001b[39m\n\u001b[31m+       \"cat.keyboard\",\u001b[39m\n\u001b[31m+       \"wcag2a\",\u001b[39m\n\u001b[31m+       \"wcag211\",\u001b[39m\n\u001b[31m+       \"wcag213\",\u001b[39m\n\u001b[31m+       \"TTv5\",\u001b[39m\n\u001b[31m+       \"TT4.a\",\u001b[39m\n\u001b[31m+       \"EN-301-549\",\u001b[39m\n\u001b[31m+       \"EN-9.2.1.1\",\u001b[39m\n\u001b[31m+       \"EN-9.2.1.3\",\u001b[39m\n\u001b[31m+       \"RGAAv4\",\u001b[39m\n\u001b[31m+       \"RGAA-7.3.2\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m",
-                    "stack": "Error: Accessibility violations: scrollable-region-focusable\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 52\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"description\": \"Ensure elements that have scrollable content are accessible by keyboard in Safari\",\u001b[39m\n\u001b[31m+     \"help\": \"Scrollable region must have keyboard access\",\u001b[39m\n\u001b[31m+     \"helpUrl\": \"https://dequeuniversity.com/rules/axe/4.14/scrollable-region-focusable?application=playwright\",\u001b[39m\n\u001b[31m+     \"id\": \"scrollable-region-focusable\",\u001b[39m\n\u001b[31m+     \"impact\": \"serious\",\u001b[39m\n\u001b[31m+     \"nodes\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": null,\u001b[39m\n\u001b[31m+             \"id\": \"focusable-content\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element should have focusable content\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": null,\u001b[39m\n\u001b[31m+             \"id\": \"focusable-element\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element should be focusable\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element should have focusable content\u001b[39m\n\u001b[31m+   Element should be focusable\",\u001b[39m\n\u001b[31m+         \"html\": \"<section class=\\\"panel table-wrap\\\">\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"section\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"tags\": Array [\u001b[39m\n\u001b[31m+       \"cat.keyboard\",\u001b[39m\n\u001b[31m+       \"wcag2a\",\u001b[39m\n\u001b[31m+       \"wcag211\",\u001b[39m\n\u001b[31m+       \"wcag213\",\u001b[39m\n\u001b[31m+       \"TTv5\",\u001b[39m\n\u001b[31m+       \"TT4.a\",\u001b[39m\n\u001b[31m+       \"EN-301-549\",\u001b[39m\n\u001b[31m+       \"EN-9.2.1.1\",\u001b[39m\n\u001b[31m+       \"EN-9.2.1.3\",\u001b[39m\n\u001b[31m+       \"RGAAv4\",\u001b[39m\n\u001b[31m+       \"RGAA-7.3.2\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n    at axe (C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts:42:5)\n    at C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts:313:9",
+                    "message": "Error: Accessibility violations: target-size\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -   1\u001b[39m\n\u001b[31m+ Received  + 130\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"description\": \"Ensure touch targets have sufficient size and space\",\u001b[39m\n\u001b[31m+     \"help\": \"All touch targets must be 24px large, or leave sufficient space\",\u001b[39m\n\u001b[31m+     \"helpUrl\": \"https://dequeuniversity.com/rules/axe/4.14/target-size?application=playwright\",\u001b[39m\n\u001b[31m+     \"id\": \"target-size\",\u001b[39m\n\u001b[31m+     \"impact\": \"serious\",\u001b[39m\n\u001b[31m+     \"nodes\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"height\": 16.3,\u001b[39m\n\u001b[31m+               \"messageKey\": \"partiallyObscured\",\u001b[39m\n\u001b[31m+               \"minSize\": 24,\u001b[39m\n\u001b[31m+               \"width\": 150,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"target-size\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Target has insufficient size because it is partially obscured (smallest space is 150px by 16.3px, should be at least 24px by 24px)\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<button type=\\\"button\\\" lang=\\\"ar\\\" dir=\\\"rtl\\\" data-testid=\\\"language-ar\\\" aria-pressed=\\\"false\\\">العربية (AR)</button>\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \"button[lang=\\\"ar\\\"]\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<button type=\\\"button\\\" lang=\\\"fr\\\" dir=\\\"ltr\\\" data-testid=\\\"language-fr\\\" aria-pressed=\\\"true\\\">Français (FR)</button>\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \"button[data-testid=\\\"language-fr\\\"]\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"closestOffset\": 23.2,\u001b[39m\n\u001b[31m+               \"minOffset\": 24,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"target-offset\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 23.2px instead of at least 24px.\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<a class=\\\"button secondary\\\" href=\\\"/api/reports/products.csv\\\">Exporter CSV</a>\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \"a[href$=\\\"products.csv\\\"]\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Target has insufficient size because it is partially obscured (smallest space is 150px by 16.3px, should be at least 24px by 24px)\u001b[39m\n\u001b[31m+   Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 23.2px instead of at least 24px.\",\u001b[39m\n\u001b[31m+         \"html\": \"<button class=\\\"button secondary\\\">Collecte des photos</button>\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \".heading-actions > .secondary.button:nth-child(1)\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"height\": 16.3,\u001b[39m\n\u001b[31m+               \"messageKey\": \"partiallyObscured\",\u001b[39m\n\u001b[31m+               \"minSize\": 24,\u001b[39m\n\u001b[31m+               \"width\": 181.3,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"target-size\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Target has insufficient size because it is partially obscured (smallest space is 181.3px by 16.3px, should be at least 24px by 24px)\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<button type=\\\"button\\\" lang=\\\"fr\\\" dir=\\\"ltr\\\" data-testid=\\\"language-fr\\\" aria-pressed=\\\"true\\\">Français (FR)</button>\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \"button[data-testid=\\\"language-fr\\\"]\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<button type=\\\"button\\\" lang=\\\"en\\\" dir=\\\"ltr\\\" data-testid=\\\"language-en\\\" aria-pressed=\\\"false\\\">English (EN)</button>\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \"button[lang=\\\"en\\\"]\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"closestOffset\": 23.2,\u001b[39m\n\u001b[31m+               \"minOffset\": 24,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"target-offset\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 23.2px instead of at least 24px.\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<button class=\\\"button primary\\\" data-testid=\\\"product-create\\\">\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \".primary\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Target has insufficient size because it is partially obscured (smallest space is 181.3px by 16.3px, should be at least 24px by 24px)\u001b[39m\n\u001b[31m+   Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 23.2px instead of at least 24px.\",\u001b[39m\n\u001b[31m+         \"html\": \"<button class=\\\"button secondary\\\">Importer un lot de photos</button>\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \".heading-actions > .secondary.button:nth-child(2)\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"tags\": Array [\u001b[39m\n\u001b[31m+       \"cat.sensory-and-visual-cues\",\u001b[39m\n\u001b[31m+       \"wcag22aa\",\u001b[39m\n\u001b[31m+       \"wcag258\",\u001b[39m\n\u001b[31m+       \"EN-301-549v4\",\u001b[39m\n\u001b[31m+       \"EN-9.2.5.8\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m",
+                    "stack": "Error: Accessibility violations: target-size\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -   1\u001b[39m\n\u001b[31m+ Received  + 130\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"description\": \"Ensure touch targets have sufficient size and space\",\u001b[39m\n\u001b[31m+     \"help\": \"All touch targets must be 24px large, or leave sufficient space\",\u001b[39m\n\u001b[31m+     \"helpUrl\": \"https://dequeuniversity.com/rules/axe/4.14/target-size?application=playwright\",\u001b[39m\n\u001b[31m+     \"id\": \"target-size\",\u001b[39m\n\u001b[31m+     \"impact\": \"serious\",\u001b[39m\n\u001b[31m+     \"nodes\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"height\": 16.3,\u001b[39m\n\u001b[31m+               \"messageKey\": \"partiallyObscured\",\u001b[39m\n\u001b[31m+               \"minSize\": 24,\u001b[39m\n\u001b[31m+               \"width\": 150,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"target-size\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Target has insufficient size because it is partially obscured (smallest space is 150px by 16.3px, should be at least 24px by 24px)\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<button type=\\\"button\\\" lang=\\\"ar\\\" dir=\\\"rtl\\\" data-testid=\\\"language-ar\\\" aria-pressed=\\\"false\\\">العربية (AR)</button>\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \"button[lang=\\\"ar\\\"]\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<button type=\\\"button\\\" lang=\\\"fr\\\" dir=\\\"ltr\\\" data-testid=\\\"language-fr\\\" aria-pressed=\\\"true\\\">Français (FR)</button>\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \"button[data-testid=\\\"language-fr\\\"]\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"closestOffset\": 23.2,\u001b[39m\n\u001b[31m+               \"minOffset\": 24,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"target-offset\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 23.2px instead of at least 24px.\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<a class=\\\"button secondary\\\" href=\\\"/api/reports/products.csv\\\">Exporter CSV</a>\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \"a[href$=\\\"products.csv\\\"]\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Target has insufficient size because it is partially obscured (smallest space is 150px by 16.3px, should be at least 24px by 24px)\u001b[39m\n\u001b[31m+   Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 23.2px instead of at least 24px.\",\u001b[39m\n\u001b[31m+         \"html\": \"<button class=\\\"button secondary\\\">Collecte des photos</button>\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \".heading-actions > .secondary.button:nth-child(1)\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"height\": 16.3,\u001b[39m\n\u001b[31m+               \"messageKey\": \"partiallyObscured\",\u001b[39m\n\u001b[31m+               \"minSize\": 24,\u001b[39m\n\u001b[31m+               \"width\": 181.3,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"target-size\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Target has insufficient size because it is partially obscured (smallest space is 181.3px by 16.3px, should be at least 24px by 24px)\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<button type=\\\"button\\\" lang=\\\"fr\\\" dir=\\\"ltr\\\" data-testid=\\\"language-fr\\\" aria-pressed=\\\"true\\\">Français (FR)</button>\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \"button[data-testid=\\\"language-fr\\\"]\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<button type=\\\"button\\\" lang=\\\"en\\\" dir=\\\"ltr\\\" data-testid=\\\"language-en\\\" aria-pressed=\\\"false\\\">English (EN)</button>\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \"button[lang=\\\"en\\\"]\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"closestOffset\": 23.2,\u001b[39m\n\u001b[31m+               \"minOffset\": 24,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"target-offset\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 23.2px instead of at least 24px.\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<button class=\\\"button primary\\\" data-testid=\\\"product-create\\\">\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \".primary\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Target has insufficient size because it is partially obscured (smallest space is 181.3px by 16.3px, should be at least 24px by 24px)\u001b[39m\n\u001b[31m+   Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 23.2px instead of at least 24px.\",\u001b[39m\n\u001b[31m+         \"html\": \"<button class=\\\"button secondary\\\">Importer un lot de photos</button>\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \".heading-actions > .secondary.button:nth-child(2)\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"tags\": Array [\u001b[39m\n\u001b[31m+       \"cat.sensory-and-visual-cues\",\u001b[39m\n\u001b[31m+       \"wcag22aa\",\u001b[39m\n\u001b[31m+       \"wcag258\",\u001b[39m\n\u001b[31m+       \"EN-301-549v4\",\u001b[39m\n\u001b[31m+       \"EN-9.2.5.8\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n    at axe (C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts:42:5)\n    at C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts:313:9",
                     "location": {
                       "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
                       "column": 5,
@@ -152,53 +474,13 @@
                         "column": 5,
                         "line": 42
                       },
-                      "message": "Error: Accessibility violations: scrollable-region-focusable\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 52\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"description\": \"Ensure elements that have scrollable content are accessible by keyboard in Safari\",\u001b[39m\n\u001b[31m+     \"help\": \"Scrollable region must have keyboard access\",\u001b[39m\n\u001b[31m+     \"helpUrl\": \"https://dequeuniversity.com/rules/axe/4.14/scrollable-region-focusable?application=playwright\",\u001b[39m\n\u001b[31m+     \"id\": \"scrollable-region-focusable\",\u001b[39m\n\u001b[31m+     \"impact\": \"serious\",\u001b[39m\n\u001b[31m+     \"nodes\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": null,\u001b[39m\n\u001b[31m+             \"id\": \"focusable-content\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element should have focusable content\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": null,\u001b[39m\n\u001b[31m+             \"id\": \"focusable-element\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element should be focusable\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element should have focusable content\u001b[39m\n\u001b[31m+   Element should be focusable\",\u001b[39m\n\u001b[31m+         \"html\": \"<section class=\\\"panel table-wrap\\\">\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"section\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"tags\": Array [\u001b[39m\n\u001b[31m+       \"cat.keyboard\",\u001b[39m\n\u001b[31m+       \"wcag2a\",\u001b[39m\n\u001b[31m+       \"wcag211\",\u001b[39m\n\u001b[31m+       \"wcag213\",\u001b[39m\n\u001b[31m+       \"TTv5\",\u001b[39m\n\u001b[31m+       \"TT4.a\",\u001b[39m\n\u001b[31m+       \"EN-301-549\",\u001b[39m\n\u001b[31m+       \"EN-9.2.1.1\",\u001b[39m\n\u001b[31m+       \"EN-9.2.1.3\",\u001b[39m\n\u001b[31m+       \"RGAAv4\",\u001b[39m\n\u001b[31m+       \"RGAA-7.3.2\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n\n  40 |     result.violations,\n  41 |     `Accessibility violations: ${result.violations.map((v) => v.id).join(', ')}`,\n> 42 |   ).toEqual([]);\n     |     ^\n  43 | }\n  44 |\n  45 | for (const viewport of [\n    at axe (C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts:42:5)\n    at C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts:313:9"
-                    },
-                    {
-                      "location": {
-                        "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
-                        "column": 5,
-                        "line": 42
-                      },
-                      "message": "Error: Accessibility violations: scrollable-region-focusable\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 52\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"description\": \"Ensure elements that have scrollable content are accessible by keyboard in Safari\",\u001b[39m\n\u001b[31m+     \"help\": \"Scrollable region must have keyboard access\",\u001b[39m\n\u001b[31m+     \"helpUrl\": \"https://dequeuniversity.com/rules/axe/4.14/scrollable-region-focusable?application=playwright\",\u001b[39m\n\u001b[31m+     \"id\": \"scrollable-region-focusable\",\u001b[39m\n\u001b[31m+     \"impact\": \"serious\",\u001b[39m\n\u001b[31m+     \"nodes\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": null,\u001b[39m\n\u001b[31m+             \"id\": \"focusable-content\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element should have focusable content\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": null,\u001b[39m\n\u001b[31m+             \"id\": \"focusable-element\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element should be focusable\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element should have focusable content\u001b[39m\n\u001b[31m+   Element should be focusable\",\u001b[39m\n\u001b[31m+         \"html\": \"<section class=\\\"panel table-wrap\\\">\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"section\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"tags\": Array [\u001b[39m\n\u001b[31m+       \"cat.keyboard\",\u001b[39m\n\u001b[31m+       \"wcag2a\",\u001b[39m\n\u001b[31m+       \"wcag211\",\u001b[39m\n\u001b[31m+       \"wcag213\",\u001b[39m\n\u001b[31m+       \"TTv5\",\u001b[39m\n\u001b[31m+       \"TT4.a\",\u001b[39m\n\u001b[31m+       \"EN-301-549\",\u001b[39m\n\u001b[31m+       \"EN-9.2.1.1\",\u001b[39m\n\u001b[31m+       \"EN-9.2.1.3\",\u001b[39m\n\u001b[31m+       \"RGAAv4\",\u001b[39m\n\u001b[31m+       \"RGAA-7.3.2\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n\n  40 |     result.violations,\n  41 |     `Accessibility violations: ${result.violations.map((v) => v.id).join(', ')}`,\n> 42 |   ).toEqual([]);\n     |     ^\n  43 | }\n  44 |\n  45 | for (const viewport of [\n    at axe (C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts:42:5)\n    at C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts:313:9"
-                    },
-                    {
-                      "location": {
-                        "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
-                        "column": 5,
-                        "line": 42
-                      },
-                      "message": "Error: Accessibility violations: scrollable-region-focusable\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 52\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"description\": \"Ensure elements that have scrollable content are accessible by keyboard in Safari\",\u001b[39m\n\u001b[31m+     \"help\": \"Scrollable region must have keyboard access\",\u001b[39m\n\u001b[31m+     \"helpUrl\": \"https://dequeuniversity.com/rules/axe/4.14/scrollable-region-focusable?application=playwright\",\u001b[39m\n\u001b[31m+     \"id\": \"scrollable-region-focusable\",\u001b[39m\n\u001b[31m+     \"impact\": \"serious\",\u001b[39m\n\u001b[31m+     \"nodes\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": null,\u001b[39m\n\u001b[31m+             \"id\": \"focusable-content\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element should have focusable content\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": null,\u001b[39m\n\u001b[31m+             \"id\": \"focusable-element\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element should be focusable\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element should have focusable content\u001b[39m\n\u001b[31m+   Element should be focusable\",\u001b[39m\n\u001b[31m+         \"html\": \"<section class=\\\"panel table-wrap\\\">\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"section\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"tags\": Array [\u001b[39m\n\u001b[31m+       \"cat.keyboard\",\u001b[39m\n\u001b[31m+       \"wcag2a\",\u001b[39m\n\u001b[31m+       \"wcag211\",\u001b[39m\n\u001b[31m+       \"wcag213\",\u001b[39m\n\u001b[31m+       \"TTv5\",\u001b[39m\n\u001b[31m+       \"TT4.a\",\u001b[39m\n\u001b[31m+       \"EN-301-549\",\u001b[39m\n\u001b[31m+       \"EN-9.2.1.1\",\u001b[39m\n\u001b[31m+       \"EN-9.2.1.3\",\u001b[39m\n\u001b[31m+       \"RGAAv4\",\u001b[39m\n\u001b[31m+       \"RGAA-7.3.2\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n\n  40 |     result.violations,\n  41 |     `Accessibility violations: ${result.violations.map((v) => v.id).join(', ')}`,\n> 42 |   ).toEqual([]);\n     |     ^\n  43 | }\n  44 |\n  45 | for (const viewport of [\n    at axe (C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts:42:5)\n    at C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts:313:9"
-                    },
-                    {
-                      "location": {
-                        "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
-                        "column": 5,
-                        "line": 42
-                      },
-                      "message": "Error: Accessibility violations: scrollable-region-focusable\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 52\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"description\": \"Ensure elements that have scrollable content are accessible by keyboard in Safari\",\u001b[39m\n\u001b[31m+     \"help\": \"Scrollable region must have keyboard access\",\u001b[39m\n\u001b[31m+     \"helpUrl\": \"https://dequeuniversity.com/rules/axe/4.14/scrollable-region-focusable?application=playwright\",\u001b[39m\n\u001b[31m+     \"id\": \"scrollable-region-focusable\",\u001b[39m\n\u001b[31m+     \"impact\": \"serious\",\u001b[39m\n\u001b[31m+     \"nodes\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": null,\u001b[39m\n\u001b[31m+             \"id\": \"focusable-content\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element should have focusable content\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": null,\u001b[39m\n\u001b[31m+             \"id\": \"focusable-element\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element should be focusable\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element should have focusable content\u001b[39m\n\u001b[31m+   Element should be focusable\",\u001b[39m\n\u001b[31m+         \"html\": \"<section class=\\\"panel table-wrap\\\">\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"section\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"tags\": Array [\u001b[39m\n\u001b[31m+       \"cat.keyboard\",\u001b[39m\n\u001b[31m+       \"wcag2a\",\u001b[39m\n\u001b[31m+       \"wcag211\",\u001b[39m\n\u001b[31m+       \"wcag213\",\u001b[39m\n\u001b[31m+       \"TTv5\",\u001b[39m\n\u001b[31m+       \"TT4.a\",\u001b[39m\n\u001b[31m+       \"EN-301-549\",\u001b[39m\n\u001b[31m+       \"EN-9.2.1.1\",\u001b[39m\n\u001b[31m+       \"EN-9.2.1.3\",\u001b[39m\n\u001b[31m+       \"RGAAv4\",\u001b[39m\n\u001b[31m+       \"RGAA-7.3.2\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n\n  40 |     result.violations,\n  41 |     `Accessibility violations: ${result.violations.map((v) => v.id).join(', ')}`,\n> 42 |   ).toEqual([]);\n     |     ^\n  43 | }\n  44 |\n  45 | for (const viewport of [\n    at axe (C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts:42:5)\n    at C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts:313:9"
-                    },
-                    {
-                      "location": {
-                        "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
-                        "column": 5,
-                        "line": 42
-                      },
-                      "message": "Error: Accessibility violations: scrollable-region-focusable\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 52\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"description\": \"Ensure elements that have scrollable content are accessible by keyboard in Safari\",\u001b[39m\n\u001b[31m+     \"help\": \"Scrollable region must have keyboard access\",\u001b[39m\n\u001b[31m+     \"helpUrl\": \"https://dequeuniversity.com/rules/axe/4.14/scrollable-region-focusable?application=playwright\",\u001b[39m\n\u001b[31m+     \"id\": \"scrollable-region-focusable\",\u001b[39m\n\u001b[31m+     \"impact\": \"serious\",\u001b[39m\n\u001b[31m+     \"nodes\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": null,\u001b[39m\n\u001b[31m+             \"id\": \"focusable-content\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element should have focusable content\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": null,\u001b[39m\n\u001b[31m+             \"id\": \"focusable-element\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element should be focusable\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element should have focusable content\u001b[39m\n\u001b[31m+   Element should be focusable\",\u001b[39m\n\u001b[31m+         \"html\": \"<section class=\\\"panel table-wrap\\\">\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"section\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"tags\": Array [\u001b[39m\n\u001b[31m+       \"cat.keyboard\",\u001b[39m\n\u001b[31m+       \"wcag2a\",\u001b[39m\n\u001b[31m+       \"wcag211\",\u001b[39m\n\u001b[31m+       \"wcag213\",\u001b[39m\n\u001b[31m+       \"TTv5\",\u001b[39m\n\u001b[31m+       \"TT4.a\",\u001b[39m\n\u001b[31m+       \"EN-301-549\",\u001b[39m\n\u001b[31m+       \"EN-9.2.1.1\",\u001b[39m\n\u001b[31m+       \"EN-9.2.1.3\",\u001b[39m\n\u001b[31m+       \"RGAAv4\",\u001b[39m\n\u001b[31m+       \"RGAA-7.3.2\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n\n  40 |     result.violations,\n  41 |     `Accessibility violations: ${result.violations.map((v) => v.id).join(', ')}`,\n> 42 |   ).toEqual([]);\n     |     ^\n  43 | }\n  44 |\n  45 | for (const viewport of [\n    at axe (C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts:42:5)\n    at C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts:313:9"
-                    },
-                    {
-                      "location": {
-                        "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
-                        "column": 5,
-                        "line": 42
-                      },
-                      "message": "Error: Accessibility violations: scrollable-region-focusable\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 52\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"description\": \"Ensure elements that have scrollable content are accessible by keyboard in Safari\",\u001b[39m\n\u001b[31m+     \"help\": \"Scrollable region must have keyboard access\",\u001b[39m\n\u001b[31m+     \"helpUrl\": \"https://dequeuniversity.com/rules/axe/4.14/scrollable-region-focusable?application=playwright\",\u001b[39m\n\u001b[31m+     \"id\": \"scrollable-region-focusable\",\u001b[39m\n\u001b[31m+     \"impact\": \"serious\",\u001b[39m\n\u001b[31m+     \"nodes\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": null,\u001b[39m\n\u001b[31m+             \"id\": \"focusable-content\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element should have focusable content\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": null,\u001b[39m\n\u001b[31m+             \"id\": \"focusable-element\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element should be focusable\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element should have focusable content\u001b[39m\n\u001b[31m+   Element should be focusable\",\u001b[39m\n\u001b[31m+         \"html\": \"<section class=\\\"panel table-wrap\\\">\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"section\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"tags\": Array [\u001b[39m\n\u001b[31m+       \"cat.keyboard\",\u001b[39m\n\u001b[31m+       \"wcag2a\",\u001b[39m\n\u001b[31m+       \"wcag211\",\u001b[39m\n\u001b[31m+       \"wcag213\",\u001b[39m\n\u001b[31m+       \"TTv5\",\u001b[39m\n\u001b[31m+       \"TT4.a\",\u001b[39m\n\u001b[31m+       \"EN-301-549\",\u001b[39m\n\u001b[31m+       \"EN-9.2.1.1\",\u001b[39m\n\u001b[31m+       \"EN-9.2.1.3\",\u001b[39m\n\u001b[31m+       \"RGAAv4\",\u001b[39m\n\u001b[31m+       \"RGAA-7.3.2\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n\n  40 |     result.violations,\n  41 |     `Accessibility violations: ${result.violations.map((v) => v.id).join(', ')}`,\n> 42 |   ).toEqual([]);\n     |     ^\n  43 | }\n  44 |\n  45 | for (const viewport of [\n    at axe (C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts:42:5)\n    at C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts:313:9"
+                      "message": "Error: Accessibility violations: target-size\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -   1\u001b[39m\n\u001b[31m+ Received  + 130\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"description\": \"Ensure touch targets have sufficient size and space\",\u001b[39m\n\u001b[31m+     \"help\": \"All touch targets must be 24px large, or leave sufficient space\",\u001b[39m\n\u001b[31m+     \"helpUrl\": \"https://dequeuniversity.com/rules/axe/4.14/target-size?application=playwright\",\u001b[39m\n\u001b[31m+     \"id\": \"target-size\",\u001b[39m\n\u001b[31m+     \"impact\": \"serious\",\u001b[39m\n\u001b[31m+     \"nodes\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"height\": 16.3,\u001b[39m\n\u001b[31m+               \"messageKey\": \"partiallyObscured\",\u001b[39m\n\u001b[31m+               \"minSize\": 24,\u001b[39m\n\u001b[31m+               \"width\": 150,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"target-size\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Target has insufficient size because it is partially obscured (smallest space is 150px by 16.3px, should be at least 24px by 24px)\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<button type=\\\"button\\\" lang=\\\"ar\\\" dir=\\\"rtl\\\" data-testid=\\\"language-ar\\\" aria-pressed=\\\"false\\\">العربية (AR)</button>\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \"button[lang=\\\"ar\\\"]\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<button type=\\\"button\\\" lang=\\\"fr\\\" dir=\\\"ltr\\\" data-testid=\\\"language-fr\\\" aria-pressed=\\\"true\\\">Français (FR)</button>\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \"button[data-testid=\\\"language-fr\\\"]\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"closestOffset\": 23.2,\u001b[39m\n\u001b[31m+               \"minOffset\": 24,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"target-offset\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 23.2px instead of at least 24px.\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<a class=\\\"button secondary\\\" href=\\\"/api/reports/products.csv\\\">Exporter CSV</a>\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \"a[href$=\\\"products.csv\\\"]\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Target has insufficient size because it is partially obscured (smallest space is 150px by 16.3px, should be at least 24px by 24px)\u001b[39m\n\u001b[31m+   Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 23.2px instead of at least 24px.\",\u001b[39m\n\u001b[31m+         \"html\": \"<button class=\\\"button secondary\\\">Collecte des photos</button>\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \".heading-actions > .secondary.button:nth-child(1)\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"height\": 16.3,\u001b[39m\n\u001b[31m+               \"messageKey\": \"partiallyObscured\",\u001b[39m\n\u001b[31m+               \"minSize\": 24,\u001b[39m\n\u001b[31m+               \"width\": 181.3,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"target-size\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Target has insufficient size because it is partially obscured (smallest space is 181.3px by 16.3px, should be at least 24px by 24px)\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<button type=\\\"button\\\" lang=\\\"fr\\\" dir=\\\"ltr\\\" data-testid=\\\"language-fr\\\" aria-pressed=\\\"true\\\">Français (FR)</button>\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \"button[data-testid=\\\"language-fr\\\"]\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<button type=\\\"button\\\" lang=\\\"en\\\" dir=\\\"ltr\\\" data-testid=\\\"language-en\\\" aria-pressed=\\\"false\\\">English (EN)</button>\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \"button[lang=\\\"en\\\"]\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": Object {\u001b[39m\n\u001b[31m+               \"closestOffset\": 23.2,\u001b[39m\n\u001b[31m+               \"minOffset\": 24,\u001b[39m\n\u001b[31m+             },\u001b[39m\n\u001b[31m+             \"id\": \"target-offset\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 23.2px instead of at least 24px.\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [\u001b[39m\n\u001b[31m+               Object {\u001b[39m\n\u001b[31m+                 \"html\": \"<button class=\\\"button primary\\\" data-testid=\\\"product-create\\\">\",\u001b[39m\n\u001b[31m+                 \"target\": Array [\u001b[39m\n\u001b[31m+                   \".primary\",\u001b[39m\n\u001b[31m+                 ],\u001b[39m\n\u001b[31m+               },\u001b[39m\n\u001b[31m+             ],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Target has insufficient size because it is partially obscured (smallest space is 181.3px by 16.3px, should be at least 24px by 24px)\u001b[39m\n\u001b[31m+   Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 23.2px instead of at least 24px.\",\u001b[39m\n\u001b[31m+         \"html\": \"<button class=\\\"button secondary\\\">Importer un lot de photos</button>\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \".heading-actions > .secondary.button:nth-child(2)\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"tags\": Array [\u001b[39m\n\u001b[31m+       \"cat.sensory-and-visual-cues\",\u001b[39m\n\u001b[31m+       \"wcag22aa\",\u001b[39m\n\u001b[31m+       \"wcag258\",\u001b[39m\n\u001b[31m+       \"EN-301-549v4\",\u001b[39m\n\u001b[31m+       \"EN-9.2.5.8\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n\n  40 |     result.violations,\n  41 |     `Accessibility violations: ${result.violations.map((v) => v.id).join(', ')}`,\n> 42 |   ).toEqual([]);\n     |     ^\n  43 | }\n  44 |\n  45 | for (const viewport of [\n    at axe (C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts:42:5)\n    at C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts:313:9"
                     }
                   ],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-04T21:24:51.579Z",
+                  "startTime": "2026-11-06T15:47:58.810Z",
                   "annotations": [
                     {
                       "type": "serial",
@@ -275,17 +557,230 @@
           "file": "business.spec.ts",
           "line": 212,
           "column": 1
+        },
+        {
+          "title": "Offline and expired sessions preserve the sale draft through trilingual reauthentication",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [
+                {
+                  "type": "serial",
+                  "location": {
+                    "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                    "line": 0,
+                    "column": 0
+                  }
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": -1,
+                  "parallelIndex": -1,
+                  "status": "skipped",
+                  "duration": 0,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-06T15:53:16.803Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "66346504f81fcdf6f5e9-629ec5cc25d0db3d58da",
+          "file": "business.spec.ts",
+          "line": 443,
+          "column": 1
+        },
+        {
+          "title": "Installed offline shell remains trilingual with no cached private records",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [
+                {
+                  "type": "serial",
+                  "location": {
+                    "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                    "line": 0,
+                    "column": 0
+                  }
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": -1,
+                  "parallelIndex": -1,
+                  "status": "skipped",
+                  "duration": 0,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-06T15:53:16.803Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "66346504f81fcdf6f5e9-f8d502f5e9777b2b079f",
+          "file": "business.spec.ts",
+          "line": 457,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "media.spec.ts",
+      "file": "media.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "IMG-06/08: staged upload resumes after response loss; gallery, rights and RTL work on phone/tablet",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 3668,
+                  "error": {
+                    "message": "Error: locator.click: Error: strict mode violation: locator('.catalog-table .product-cell') resolved to 30 elements:\n    1) <button class=\"product-cell\">…</button> aka getByRole('button', { name: 'Image unavailable Air filter' })\n    2) <button class=\"product-cell\">…</button> aka getByRole('button', { name: 'Image unavailable Accessory' })\n    3) <button class=\"product-cell\">…</button> aka getByRole('button', { name: 'Image unavailable Front brake' })\n    4) <button class=\"product-cell\">…</button> aka getByRole('button', { name: 'Image unavailable Oil filter' })\n    5) <button class=\"product-cell\">…</button> aka getByRole('button', { name: 'Image unavailable Spark plug' })\n    6) <button class=\"product-cell\">…</button> aka getByRole('button', { name: 'Image unavailable Wiper blade' })\n    7) <button class=\"product-cell\">…</button> aka getByRole('button', { name: 'Image unavailable Synthetic' }).first()\n    8) <button class=\"product-cell\">…</button> aka getByRole('button', { name: 'Image unavailable Synthetic' }).nth(1)\n    9) <button class=\"product-cell\">…</button> aka getByRole('button', { name: 'Image unavailable Synthetic' }).nth(2)\n    10) <button class=\"product-cell\">…</button> aka getByRole('button', { name: 'Synthetic photographed part SYNTHETIC · Filters', exact: true })\n    ...\n\nCall log:\n\u001b[2m  - waiting for locator('.catalog-table .product-cell')\u001b[22m\n",
+                    "stack": "Error: locator.click: Error: strict mode violation: locator('.catalog-table .product-cell') resolved to 30 elements:\n    1) <button class=\"product-cell\">…</button> aka getByRole('button', { name: 'Image unavailable Air filter' })\n    2) <button class=\"product-cell\">…</button> aka getByRole('button', { name: 'Image unavailable Accessory' })\n    3) <button class=\"product-cell\">…</button> aka getByRole('button', { name: 'Image unavailable Front brake' })\n    4) <button class=\"product-cell\">…</button> aka getByRole('button', { name: 'Image unavailable Oil filter' })\n    5) <button class=\"product-cell\">…</button> aka getByRole('button', { name: 'Image unavailable Spark plug' })\n    6) <button class=\"product-cell\">…</button> aka getByRole('button', { name: 'Image unavailable Wiper blade' })\n    7) <button class=\"product-cell\">…</button> aka getByRole('button', { name: 'Image unavailable Synthetic' }).first()\n    8) <button class=\"product-cell\">…</button> aka getByRole('button', { name: 'Image unavailable Synthetic' }).nth(1)\n    9) <button class=\"product-cell\">…</button> aka getByRole('button', { name: 'Image unavailable Synthetic' }).nth(2)\n    10) <button class=\"product-cell\">…</button> aka getByRole('button', { name: 'Synthetic photographed part SYNTHETIC · Filters', exact: true })\n    ...\n\nCall log:\n\u001b[2m  - waiting for locator('.catalog-table .product-cell')\u001b[22m\n\n    at C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\media.spec.ts:55:54",
+                    "location": {
+                      "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\media.spec.ts",
+                      "column": 54,
+                      "line": 55
+                    },
+                    "snippet": "  53 |   await navigate(page, 'catalog');\n  54 |   await page.getByTestId('product-search').fill(sku);\n> 55 |   await page.locator('.catalog-table .product-cell').click();\n     |                                                      ^\n  56 |   await page.getByRole('button', { name: t('en', 'addPhotos'), exact: true }).click();\n  57 |   const dialog = () => page.locator('dialog[open]').last();\n  58 |   await dialog().getByTestId('media-license').selectOption(license.id);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\media.spec.ts",
+                        "column": 54,
+                        "line": 55
+                      },
+                      "message": "Error: locator.click: Error: strict mode violation: locator('.catalog-table .product-cell') resolved to 30 elements:\n    1) <button class=\"product-cell\">…</button> aka getByRole('button', { name: 'Image unavailable Air filter' })\n    2) <button class=\"product-cell\">…</button> aka getByRole('button', { name: 'Image unavailable Accessory' })\n    3) <button class=\"product-cell\">…</button> aka getByRole('button', { name: 'Image unavailable Front brake' })\n    4) <button class=\"product-cell\">…</button> aka getByRole('button', { name: 'Image unavailable Oil filter' })\n    5) <button class=\"product-cell\">…</button> aka getByRole('button', { name: 'Image unavailable Spark plug' })\n    6) <button class=\"product-cell\">…</button> aka getByRole('button', { name: 'Image unavailable Wiper blade' })\n    7) <button class=\"product-cell\">…</button> aka getByRole('button', { name: 'Image unavailable Synthetic' }).first()\n    8) <button class=\"product-cell\">…</button> aka getByRole('button', { name: 'Image unavailable Synthetic' }).nth(1)\n    9) <button class=\"product-cell\">…</button> aka getByRole('button', { name: 'Image unavailable Synthetic' }).nth(2)\n    10) <button class=\"product-cell\">…</button> aka getByRole('button', { name: 'Synthetic photographed part SYNTHETIC · Filters', exact: true })\n    ...\n\nCall log:\n\u001b[2m  - waiting for locator('.catalog-table .product-cell')\u001b[22m\n\n\n  53 |   await navigate(page, 'catalog');\n  54 |   await page.getByTestId('product-search').fill(sku);\n> 55 |   await page.locator('.catalog-table .product-cell').click();\n     |                                                      ^\n  56 |   await page.getByRole('button', { name: t('en', 'addPhotos'), exact: true }).click();\n  57 |   const dialog = () => page.locator('dialog[open]').last();\n  58 |   await dialog().getByTestId('media-license').selectOption(license.id);\n    at C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\media.spec.ts:55:54"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-06T15:53:20.115Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\media-IMG-06-08-staged-upl-d4de4-nd-RTL-work-on-phone-tablet\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\media-IMG-06-08-staged-upl-d4de4-nd-RTL-work-on-phone-tablet\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\media.spec.ts",
+                    "column": 54,
+                    "line": 55
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "66eff6f10bb92964d9d6-5ed41227c85f949a12cf",
+          "file": "media.spec.ts",
+          "line": 11,
+          "column": 1
+        },
+        {
+          "title": "IMG-05/06: CSV plus ZIP preview and interrupted batch resume preserve exact mapping in every language",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 27754,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-06T15:53:29.461Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "bulk-image-retry-fr",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\media-IMG-05-06-CSV-plus-Z-a77ee-t-mapping-in-every-language\\attachments\\bulk-image-retry-fr-311875cfa1be4a5d1cc40184059737b96883b98b.png"
+                    },
+                    {
+                      "name": "bulk-image-retry-ar",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\media-IMG-05-06-CSV-plus-Z-a77ee-t-mapping-in-every-language\\attachments\\bulk-image-retry-ar-923110f9ddce40ec634db027e342a39bf9e46b70.png"
+                    },
+                    {
+                      "name": "bulk-image-retry-en",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\media-IMG-05-06-CSV-plus-Z-a77ee-t-mapping-in-every-language\\attachments\\bulk-image-retry-en-aafd96add9e3fbf7a5078f30bfdb8b582b732ef8.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "66eff6f10bb92964d9d6-ee99f2e184db79cd9da8",
+          "file": "media.spec.ts",
+          "line": 149,
+          "column": 1
         }
       ]
     }
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-04T21:24:50.638Z",
-    "duration": 65838.307,
-    "expected": 0,
-    "skipped": 0,
-    "unexpected": 1,
+    "startTime": "2026-11-06T15:47:07.705Z",
+    "duration": 411676.934,
+    "expected": 6,
+    "skipped": 2,
+    "unexpected": 2,
     "flaky": 0
   }
 }

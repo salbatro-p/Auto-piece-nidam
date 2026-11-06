@@ -42,7 +42,7 @@ export function Bins() {
           />
           <ProductSelect value={product} onChange={setProduct} />
           <ErrorBanner error={list.error} />
-          <div className="table-wrap">
+          <div className="table-wrap" tabIndex={0} role="region" aria-label={t('scrollableTable')}>
             <table>
               <thead>
                 <tr>

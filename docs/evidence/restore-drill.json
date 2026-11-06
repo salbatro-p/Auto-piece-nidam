@@ -1,31 +1,31 @@
 {
-  "date": "2026-11-04T21:16:40.029Z",
+  "date": "2026-11-06T15:38:42.151Z",
   "environment": "Windows native PostgreSQL18.4, isolated synthetic data. New local recovery database.",
   "sourceDatabase": "autoparts",
-  "restoredDatabase": "autoparts_restore_1793826998163",
-  "backupMilliseconds": 515.3377,
-  "restoreMilliseconds": 747.4715999999999,
-  "backupSha256": "b4a96d1c970bb4a62d4d945ec7d647aa8faffd357b3719704564781ad1c5bc6a",
+  "restoredDatabase": "autoparts_restore_1793979513944",
+  "backupMilliseconds": 2336.4407000000006,
+  "restoreMilliseconds": 3760.7085000000006,
+  "backupSha256": "8c62f8839e9268fb2903f99d67ecf5d9c90747316b7a6c1035cdb10e0ca0d652",
   "checksumsBefore": {
     "products": {
-      "rows": 19,
-      "sha256": "827d9714d6c5f9ac9c7d0d3f54a3a0f9ff2333c834073276ef6d7601c7cd0fe4"
+      "rows": 30,
+      "sha256": "61838bdb6d99d113dec5759861b5e9c2ffc28eae4c2502dc942cd5b93bddd112"
     },
     "product_identifiers": {
-      "rows": 56,
-      "sha256": "f789e0ae87f145f132e36f12fcf09085f254849c932e45866191f17e6792b0b6"
+      "rows": 85,
+      "sha256": "2dfe153647329df29496e34035a7f44589909b87b1324535cad160190bccb533"
     },
     "inventory_balances": {
-      "rows": 16,
-      "sha256": "07a6d7ac761173eda0fdc9a1c07691087b201dd7c1af374903168781c0e6e258"
+      "rows": 23,
+      "sha256": "ee8c6c3d80a896fbd25922bf131792ed531e5ae6a966c72c114ac2b23d940d88"
     },
     "stock_movements": {
-      "rows": 24,
-      "sha256": "820e0bf50e9895cda53156ae55871dcf18940edd3c7ac990b37e1bca120b1362"
+      "rows": 33,
+      "sha256": "45dca2d78820dc0334d6814a09b35e1b706021870539d7e0217f78b4fcfdfa58"
     },
     "business_documents": {
-      "rows": 27,
-      "sha256": "2675d39c9cdb9d3b9004bede96d3d7f4553e28cb74ee70144bedcc17650a98dc"
+      "rows": 42,
+      "sha256": "f8275cddf2fb823666ceb7eac61b4aadea942f084ced0b541974492eb61c80c6"
     },
     "reservations": {
       "rows": 0,
@@ -36,12 +36,12 @@
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     "sales": {
-      "rows": 9,
-      "sha256": "2130632e6e8a22066b51ff0c3b01f1155fdaa513261b154d3d32bb1c34ccbcd8"
+      "rows": 11,
+      "sha256": "19a981aab6a10c933c10660f67ad3def380ed0d9f6b154126d1ca789abe00ee9"
     },
     "sale_lines": {
-      "rows": 9,
-      "sha256": "ae79021f3f58d8ff1fbc8064607add5449562575d995fee139fe58b94dee8973"
+      "rows": 11,
+      "sha256": "fb0b5e697dddb6d711b47838dfa28bfc0ad1550fe702fcc63d4a24bca7c1811e"
     },
     "returns": {
       "rows": 0,
@@ -52,40 +52,60 @@
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     "audit_events": {
-      "rows": 161,
-      "sha256": "0a2e15799bf4a23cb72520c6df417e06d6136028a5b5a7a08215c50c91061078"
+      "rows": 256,
+      "sha256": "ea30dcc775167a7d80f609b4da203802be088bd8d6629f1eaaf502dceb0fdf99"
     },
     "idempotency": {
-      "rows": 57,
-      "sha256": "af117947e63f0541dcc3bf12488974f7cb9cb8fb0576815246a3ac50bf9c4fc4"
+      "rows": 108,
+      "sha256": "ca83af3d73f7fda33602763c35111356613fe6010cc605cc9fc535ed317e4725"
     },
     "outbox_events": {
-      "rows": 24,
-      "sha256": "faebd994dfbbb2fdc70a5905f6e9015171293768114a20d44d72625c1492f772"
+      "rows": 39,
+      "sha256": "7b1c673ee87dfa523bbc5b3869ed54ad7229a09940653aaaaa52cb2d3f107044"
     },
     "product_media": {
-      "rows": 9,
-      "sha256": "51a48939a8d2aca72f9c499b8cc973eb34c35a0c6e6e52e66c850337d5175160"
+      "rows": 14,
+      "sha256": "9078bd8650836454b694d2077137c48f5a372f1bf111c2d1180b66faa834b82d"
+    },
+    "media_source_licenses": {
+      "rows": 1,
+      "sha256": "eec0629c73de61226d6c81ca6544ef03cb43227578f0aa2bc8d56cd13aea2e67"
+    },
+    "media_reviews": {
+      "rows": 1,
+      "sha256": "52018cb978ffa713a36b850ddd4bfe6a33349e7bf407da657203936a61c04fb7"
+    },
+    "fitment_evidence": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "image_ingest_jobs": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "image_ingest_rows": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     "warehouse_bins": {
-      "rows": 5,
-      "sha256": "5d389d1eee55869b607e0fbf777cec0ce47416b752bd5b7e5d4ef0a60fbebeaf"
+      "rows": 8,
+      "sha256": "1a8c1bcbab11d0eed55e93e809ac1b2adfe1fae30edb1a66602f9c0a2cf99e6a"
     },
     "bin_balances": {
-      "rows": 18,
-      "sha256": "f76161247c87e0a5aa2faad577d16e47ee60c62632e1d7b25c9312157f62a2fb"
+      "rows": 28,
+      "sha256": "05e1c33a1c85c12531bd8662304e8c92e22a60f879ee427d7c2a55d3808af9d5"
     },
     "bin_movements": {
-      "rows": 24,
-      "sha256": "fe25c1cd02fe75731c924ba05b19587ea9a5abaea58d4b0e9b07e35d7ec08c84"
+      "rows": 39,
+      "sha256": "5e8d7fd99c4cede037d4251e28a0d86e38c155e623badb57c7845d9e31d9b80e"
     },
     "bulk_import_jobs": {
-      "rows": 3,
-      "sha256": "04451f3ade65d43dd61c820e18cf0a5492b24191888f3666e328a64384506f7c"
+      "rows": 6,
+      "sha256": "391fae7bcaa8b7bd2146eb65edd43f1e53b3b2b5cb89c0832b003469a677f5b5"
     },
     "bulk_import_rows": {
-      "rows": 3,
-      "sha256": "395a9eabe53046eac304308259c1d7ac6d999c8e82d4bfba57cf8f6845b0270d"
+      "rows": 6,
+      "sha256": "3df5ffbc565281e69ddf8f8bc3c0e5b13d11f07cfc3262885551f9031551c4df"
     },
     "translation_reviews": {
       "rows": 0,
@@ -100,12 +120,12 @@
       "sha256": "cada368bc050622427cc37bb2b0e59d107d11307e98a75e6e2d9dfe0ff1b7789"
     },
     "manufacturer_parts": {
-      "rows": 1,
-      "sha256": "f6ae13de9a258f4d5cac65680ed29d7dd482017a2bbb27f13af9b22848d239c1"
+      "rows": 2,
+      "sha256": "934ea544831e166c5fda3b030e13d0324f5e2ccac96ce2b60f11c49f062af2ae"
     },
     "product_replacements": {
-      "rows": 1,
-      "sha256": "d6bb29df2cd69d7d38c444d02c3bf3565e330e1b132b471c9ad33f7cbf862a1e"
+      "rows": 4,
+      "sha256": "75ec75eda49d473e553c993116add9f420a440162c20101dc17a8bc6f24e735f"
     },
     "organizations": {
       "rows": 1,
@@ -117,7 +137,7 @@
     },
     "staff_users": {
       "rows": 8,
-      "sha256": "55d84847fa287cf1c25331f590d79023c348ac4d233a3cfe68322cae5ffde6c6"
+      "sha256": "538df5b343531b319532138af2c46e0e25b125f7991f28b23b1f65b954a2b7a1"
     },
     "invitations": {
       "rows": 0,
@@ -140,8 +160,8 @@
       "sha256": "00ee20380307b3d541e2542b25041cbc58a80c5c0a6e5f09719eeb5d5beeafc8"
     },
     "supplier_items": {
-      "rows": 1,
-      "sha256": "1578de6c6933300c3c72e0922017898705a7031d9ebb679088974bd05eecbdd3"
+      "rows": 4,
+      "sha256": "818aa13fe971fc6d989e4426d8fa1542d635234a64ed289c1cd4066512546135"
     },
     "purchase_orders": {
       "rows": 0,
@@ -154,24 +174,24 @@
   },
   "checksumsAfter": {
     "products": {
-      "rows": 19,
-      "sha256": "827d9714d6c5f9ac9c7d0d3f54a3a0f9ff2333c834073276ef6d7601c7cd0fe4"
+      "rows": 30,
+      "sha256": "61838bdb6d99d113dec5759861b5e9c2ffc28eae4c2502dc942cd5b93bddd112"
     },
     "product_identifiers": {
-      "rows": 56,
-      "sha256": "f789e0ae87f145f132e36f12fcf09085f254849c932e45866191f17e6792b0b6"
+      "rows": 85,
+      "sha256": "2dfe153647329df29496e34035a7f44589909b87b1324535cad160190bccb533"
     },
     "inventory_balances": {
-      "rows": 16,
-      "sha256": "07a6d7ac761173eda0fdc9a1c07691087b201dd7c1af374903168781c0e6e258"
+      "rows": 23,
+      "sha256": "ee8c6c3d80a896fbd25922bf131792ed531e5ae6a966c72c114ac2b23d940d88"
     },
     "stock_movements": {
-      "rows": 24,
-      "sha256": "820e0bf50e9895cda53156ae55871dcf18940edd3c7ac990b37e1bca120b1362"
+      "rows": 33,
+      "sha256": "45dca2d78820dc0334d6814a09b35e1b706021870539d7e0217f78b4fcfdfa58"
     },
     "business_documents": {
-      "rows": 27,
-      "sha256": "2675d39c9cdb9d3b9004bede96d3d7f4553e28cb74ee70144bedcc17650a98dc"
+      "rows": 42,
+      "sha256": "f8275cddf2fb823666ceb7eac61b4aadea942f084ced0b541974492eb61c80c6"
     },
     "reservations": {
       "rows": 0,
@@ -182,12 +202,12 @@
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     "sales": {
-      "rows": 9,
-      "sha256": "2130632e6e8a22066b51ff0c3b01f1155fdaa513261b154d3d32bb1c34ccbcd8"
+      "rows": 11,
+      "sha256": "19a981aab6a10c933c10660f67ad3def380ed0d9f6b154126d1ca789abe00ee9"
     },
     "sale_lines": {
-      "rows": 9,
-      "sha256": "ae79021f3f58d8ff1fbc8064607add5449562575d995fee139fe58b94dee8973"
+      "rows": 11,
+      "sha256": "fb0b5e697dddb6d711b47838dfa28bfc0ad1550fe702fcc63d4a24bca7c1811e"
     },
     "returns": {
       "rows": 0,
@@ -198,40 +218,60 @@
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     "audit_events": {
-      "rows": 161,
-      "sha256": "0a2e15799bf4a23cb72520c6df417e06d6136028a5b5a7a08215c50c91061078"
+      "rows": 256,
+      "sha256": "ea30dcc775167a7d80f609b4da203802be088bd8d6629f1eaaf502dceb0fdf99"
     },
     "idempotency": {
-      "rows": 57,
-      "sha256": "af117947e63f0541dcc3bf12488974f7cb9cb8fb0576815246a3ac50bf9c4fc4"
+      "rows": 108,
+      "sha256": "ca83af3d73f7fda33602763c35111356613fe6010cc605cc9fc535ed317e4725"
     },
     "outbox_events": {
-      "rows": 24,
-      "sha256": "faebd994dfbbb2fdc70a5905f6e9015171293768114a20d44d72625c1492f772"
+      "rows": 39,
+      "sha256": "7b1c673ee87dfa523bbc5b3869ed54ad7229a09940653aaaaa52cb2d3f107044"
     },
     "product_media": {
-      "rows": 9,
-      "sha256": "51a48939a8d2aca72f9c499b8cc973eb34c35a0c6e6e52e66c850337d5175160"
+      "rows": 14,
+      "sha256": "9078bd8650836454b694d2077137c48f5a372f1bf111c2d1180b66faa834b82d"
+    },
+    "media_source_licenses": {
+      "rows": 1,
+      "sha256": "eec0629c73de61226d6c81ca6544ef03cb43227578f0aa2bc8d56cd13aea2e67"
+    },
+    "media_reviews": {
+      "rows": 1,
+      "sha256": "52018cb978ffa713a36b850ddd4bfe6a33349e7bf407da657203936a61c04fb7"
+    },
+    "fitment_evidence": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "image_ingest_jobs": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "image_ingest_rows": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     "warehouse_bins": {
-      "rows": 5,
-      "sha256": "5d389d1eee55869b607e0fbf777cec0ce47416b752bd5b7e5d4ef0a60fbebeaf"
+      "rows": 8,
+      "sha256": "1a8c1bcbab11d0eed55e93e809ac1b2adfe1fae30edb1a66602f9c0a2cf99e6a"
     },
     "bin_balances": {
-      "rows": 18,
-      "sha256": "f76161247c87e0a5aa2faad577d16e47ee60c62632e1d7b25c9312157f62a2fb"
+      "rows": 28,
+      "sha256": "05e1c33a1c85c12531bd8662304e8c92e22a60f879ee427d7c2a55d3808af9d5"
     },
     "bin_movements": {
-      "rows": 24,
-      "sha256": "fe25c1cd02fe75731c924ba05b19587ea9a5abaea58d4b0e9b07e35d7ec08c84"
+      "rows": 39,
+      "sha256": "5e8d7fd99c4cede037d4251e28a0d86e38c155e623badb57c7845d9e31d9b80e"
     },
     "bulk_import_jobs": {
-      "rows": 3,
-      "sha256": "04451f3ade65d43dd61c820e18cf0a5492b24191888f3666e328a64384506f7c"
+      "rows": 6,
+      "sha256": "391fae7bcaa8b7bd2146eb65edd43f1e53b3b2b5cb89c0832b003469a677f5b5"
     },
     "bulk_import_rows": {
-      "rows": 3,
-      "sha256": "395a9eabe53046eac304308259c1d7ac6d999c8e82d4bfba57cf8f6845b0270d"
+      "rows": 6,
+      "sha256": "3df5ffbc565281e69ddf8f8bc3c0e5b13d11f07cfc3262885551f9031551c4df"
     },
     "translation_reviews": {
       "rows": 0,
@@ -246,12 +286,12 @@
       "sha256": "cada368bc050622427cc37bb2b0e59d107d11307e98a75e6e2d9dfe0ff1b7789"
     },
     "manufacturer_parts": {
-      "rows": 1,
-      "sha256": "f6ae13de9a258f4d5cac65680ed29d7dd482017a2bbb27f13af9b22848d239c1"
+      "rows": 2,
+      "sha256": "934ea544831e166c5fda3b030e13d0324f5e2ccac96ce2b60f11c49f062af2ae"
     },
     "product_replacements": {
-      "rows": 1,
-      "sha256": "d6bb29df2cd69d7d38c444d02c3bf3565e330e1b132b471c9ad33f7cbf862a1e"
+      "rows": 4,
+      "sha256": "75ec75eda49d473e553c993116add9f420a440162c20101dc17a8bc6f24e735f"
     },
     "organizations": {
       "rows": 1,
@@ -263,7 +303,7 @@
     },
     "staff_users": {
       "rows": 8,
-      "sha256": "55d84847fa287cf1c25331f590d79023c348ac4d233a3cfe68322cae5ffde6c6"
+      "sha256": "538df5b343531b319532138af2c46e0e25b125f7991f28b23b1f65b954a2b7a1"
     },
     "invitations": {
       "rows": 0,
@@ -286,8 +326,8 @@
       "sha256": "00ee20380307b3d541e2542b25041cbc58a80c5c0a6e5f09719eeb5d5beeafc8"
     },
     "supplier_items": {
-      "rows": 1,
-      "sha256": "1578de6c6933300c3c72e0922017898705a7031d9ebb679088974bd05eecbdd3"
+      "rows": 4,
+      "sha256": "818aa13fe971fc6d989e4426d8fa1542d635234a64ed289c1cd4066512546135"
     },
     "purchase_orders": {
       "rows": 0,
@@ -299,6 +339,26 @@
     }
   },
   "identicalCriticalTables": true,
+  "privateMedia": {
+    "objects": 3,
+    "totalBytes": 912,
+    "allFileHashesMatch": true,
+    "approvedThumbnailAfterRestore": true,
+    "manifest": {
+      "441cda3fe0fc650ca329c9c1105d674bf1a9a473262a1c15983798cbd54863bd/source.webp": {
+        "bytes": 56,
+        "sha256": "441cda3fe0fc650ca329c9c1105d674bf1a9a473262a1c15983798cbd54863bd"
+      },
+      "441cda3fe0fc650ca329c9c1105d674bf1a9a473262a1c15983798cbd54863bd/display.webp": {
+        "bytes": 630,
+        "sha256": "b9af49b2f058eab069dfb54396743586908303022a39c63a4b1daff4b3d938c2"
+      },
+      "441cda3fe0fc650ca329c9c1105d674bf1a9a473262a1c15983798cbd54863bd/thumbnail.webp": {
+        "bytes": 226,
+        "sha256": "cbeb4365a3b004fdcd3cb18974797917eebe62dcaf7a0493629b57deb18dab65"
+      }
+    }
+  },
   "businessFlow": {
     "saleStatus": 200,
     "replayStatus": 200,

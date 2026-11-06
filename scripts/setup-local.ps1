@@ -12,7 +12,7 @@ if (-not (Test-Path -LiteralPath $envFile)) {
   $dbPassword = [Convert]::ToHexString([Security.Cryptography.RandomNumberGenerator]::GetBytes(24))
   $demoPassword = [Convert]::ToHexString([Security.Cryptography.RandomNumberGenerator]::GetBytes(16))
   $totpSecret = -join (1..32 | ForEach-Object { 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567'[[Security.Cryptography.RandomNumberGenerator]::GetInt32(32)] })
-  @("DATABASE_URL=postgresql://autoparts:$dbPassword@127.0.0.1:55432/autoparts",'PORT=4310','HOST=127.0.0.1','APP_ORIGIN=http://localhost:4173','NODE_ENV=development','DEMO_MODE=true',"DEMO_PASSWORD=$demoPassword", "DEMO_TOTP_SECRET=$totpSecret") | Set-Content -LiteralPath $envFile -Encoding utf8
+  @("DATABASE_URL=postgresql://autoparts:$dbPassword@127.0.0.1:55432/autoparts",'API_PORT=4310','API_HOST=127.0.0.1','APP_ORIGIN=http://localhost:4173','NODE_ENV=development','DEMO_MODE=true',"DEMO_PASSWORD=$demoPassword", "DEMO_TOTP_SECRET=$totpSecret") | Set-Content -LiteralPath $envFile -Encoding utf8
   @('# Isolated local demonstration credentials', '', 'Do not use these for production. These are synthetic staff accounts.', '', "Password: $demoPassword", "Owner authenticator setup secret: $totpSecret", '', 'Account names are listed in the seed script. Generate a current owner MFA code with npm run demo:otp.') | Set-Content -LiteralPath (Join-Path $runtimeDir 'DEMO-ACCESS.md') -Encoding utf8
 }
 $envValues = @{}

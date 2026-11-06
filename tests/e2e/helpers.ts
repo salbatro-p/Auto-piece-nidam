@@ -32,7 +32,7 @@ export async function login(page: Page, role = 'sales') {
 export async function switchLanguage(page: Page, locale: Locale) {
   const started = performance.now();
   const dialog = page.locator('dialog[open]');
-  const scope = (await dialog.count()) ? dialog : page;
+  const scope = (await dialog.count()) ? dialog.last() : page;
   await scope.getByTestId(`language-${locale}`).click();
   await expect(page.locator('html')).toHaveAttribute('lang', locale);
   await expect(page.locator('html')).toHaveAttribute('dir', locale === 'ar' ? 'rtl' : 'ltr');

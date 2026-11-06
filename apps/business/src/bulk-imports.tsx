@@ -200,7 +200,7 @@ export function BulkImports() {
               </p>
             ))}
             {preview.rows?.length > 0 && (
-              <div className="table-wrap">
+              <div className="table-wrap" tabIndex={0} role="region" aria-label={t('scrollableTable')}>
                 <table>
                   <thead>
                     <tr>
@@ -246,7 +246,7 @@ export function BulkImports() {
           </div>
         )}
       </section>
-      <section className="panel table-wrap">
+      <section className="panel table-wrap" tabIndex={0} role="region" aria-label={t('scrollableTable')}>
         <table>
           <thead>
             <tr>

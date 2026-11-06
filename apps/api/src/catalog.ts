@@ -4,7 +4,6 @@ import { z } from 'zod';
 import { type Actor, audit, DomainError, hash, normalize, warehouseScope } from './db.js';
 import { type AuthedRequest, requirePermission } from './auth.js';
 import { mutation } from './inventory.js';
-import { sanitizeImage } from './media.js';
 const uuid = z.string().uuid();
 const localized = z
   .object({
@@ -150,11 +149,11 @@ async function decorateProducts(pool: Pool, actor: Actor, rows: any[]) {
       [ids, actor.warehouse_ids],
     ),
     pool.query(
-      'SELECT product_id,vehicle_id AS "vehicleId",status,evidence,qualifiers,source_id AS "sourceId",reviewed_at AS "reviewedAt" FROM fitments WHERE product_id=ANY($1::uuid[])',
+      'SELECT f.product_id,f.vehicle_id AS "vehicleId",v.make,v.model,v.generation,v.year_from AS "yearFrom",v.year_to AS "yearTo",v.market,v.engine,v.equipment,s.name AS "sourceName",CASE WHEN f.status=\'VERIFIED\' AND NOT COALESCE(s.can_store,false) THEN \'REVIEW_REQUIRED\' ELSE f.status END AS status,f.evidence,f.qualifiers,f.source_id AS "sourceId",f.reviewed_at AS "reviewedAt" FROM fitments f JOIN vehicles v ON v.id=f.vehicle_id LEFT JOIN sources s ON s.id=f.source_id WHERE f.product_id=ANY($1::uuid[])',
       [ids],
     ),
     pool.query(
-      'SELECT DISTINCT ON(product_id) id,product_id FROM product_media WHERE product_id=ANY($1::uuid[]) ORDER BY product_id,created_at DESC',
+      "SELECT DISTINCT ON(product_id) id,product_id FROM usable_internal_media WHERE product_id=ANY($1::uuid[]) AND kind IN ('EXACT_PRODUCT_PHOTO','COMPANY_ORIGINAL_PHOTO') ORDER BY product_id,created_at DESC",
       [ids],
     ),
   ]);
@@ -212,10 +211,11 @@ export function registerCatalog(app: FastifyInstance, pool: Pool) {
           page: z.coerce.number().int().min(1).max(100000).default(1),
           warehouseId: uuid.optional(),
           vehicleId: uuid.optional(),
+          category: z.string().max(100).optional(),
         })
         .parse(request.query);
     if (q.warehouseId) warehouseScope(actor, q.warehouseId);
-    const params = [actor.org_id, `%${normalize(q.q)}%`, q.vehicleId ?? null, q.warehouseId ?? null];
+    const params = [actor.org_id, `%${normalize(q.q)}%`, q.vehicleId ?? null, q.warehouseId ?? null,q.category??null];
     const exact = q.q
       ? !!(
           await pool.query(
@@ -227,10 +227,10 @@ export function registerCatalog(app: FastifyInstance, pool: Pool) {
     const matching = exact
       ? "p.id IN (SELECT product_id FROM product_identifiers WHERE normalized_value=trim(both '%' FROM $2))"
       : "($2='%%' OR p.search_text LIKE $2)";
-    const where = `p.org_id=$1 AND p.status<>'ARCHIVED' AND ${matching} AND ($3::uuid IS NULL OR EXISTS(SELECT 1 FROM fitments f WHERE f.product_id=p.id AND f.vehicle_id=$3 AND f.status='VERIFIED')) AND ($4::uuid IS NULL OR EXISTS(SELECT 1 FROM inventory_balances b WHERE b.product_id=p.id AND b.warehouse_id=$4))`;
+    const where = `p.org_id=$1 AND p.status<>'ARCHIVED' AND ${matching} AND ($3::uuid IS NULL OR EXISTS(SELECT 1 FROM fitments f JOIN sources fs ON fs.id=f.source_id WHERE f.product_id=p.id AND f.vehicle_id=$3 AND f.status='VERIFIED' AND fs.can_store)) AND ($4::uuid IS NULL OR EXISTS(SELECT 1 FROM inventory_balances b WHERE b.product_id=p.id AND b.warehouse_id=$4)) AND ($5::text IS NULL OR p.category=$5)`;
     const [items, count] = await Promise.all([
       pool.query(
-        `SELECT p.*,mp.part_number AS manufacturer_part_no FROM products p LEFT JOIN manufacturer_parts mp ON mp.id=p.manufacturer_part_id WHERE ${where} ORDER BY p.sku LIMIT 30 OFFSET $5`,
+        `SELECT p.*,mp.part_number AS manufacturer_part_no FROM products p LEFT JOIN manufacturer_parts mp ON mp.id=p.manufacturer_part_id WHERE ${where} ORDER BY p.sku LIMIT 30 OFFSET $6`,
         [...params, (q.page - 1) * 30],
       ),
       pool.query(`SELECT count(*)::integer AS total FROM products p WHERE ${where}`, params),
@@ -361,47 +361,6 @@ export function registerCatalog(app: FastifyInstance, pool: Pool) {
       return { id, locale: d.locale, status: 'APPROVED' };
     },
   );
-  mutation(
-    app,
-    pool,
-    '/api/products/:id/media',
-    'catalog',
-    z
-      .object({
-        data: z.string().max(6000000),
-        mime: z.enum(['image/jpeg', 'image/png', 'image/webp']),
-        rights: z.string().trim().min(5).max(2000),
-      })
-      .strict(),
-    async (c, actor, d, req) => {
-      const id = uuid.parse((req.params as any).id);
-      if (!(await c.query('SELECT id FROM products WHERE id=$1 AND org_id=$2', [id, actor.org_id])).rowCount)
-        throw new DomainError('NOT_FOUND', 404);
-      const bytes = await sanitizeImage(d.data, d.mime);
-      const row = (
-        await c.query(
-          'INSERT INTO product_media(product_id,mime,bytes,sha256,rights,created_by) VALUES($1,$2,$3,$4,$5,$6) RETURNING id',
-          [id, d.mime, bytes, hash(bytes.toString('base64')), d.rights, actor.id],
-        )
-      ).rows[0];
-      return { id: row.id, mediaId: row.id };
-    },
-  );
-  app.get('/api/media/:id', async (request, reply) => {
-    const actor = (request as AuthedRequest).actor,
-      image = (
-        await pool.query(
-          'SELECT m.mime,m.bytes FROM product_media m JOIN products p ON p.id=m.product_id WHERE m.id=$1 AND p.org_id=$2',
-          [uuid.parse((request.params as any).id), actor.org_id],
-        )
-      ).rows[0];
-    if (!image) throw new DomainError('NOT_FOUND', 404);
-    reply
-      .header('Content-Type', image.mime)
-      .header('Content-Disposition', 'inline')
-      .header('Cache-Control', 'private, no-store');
-    return reply.send(image.bytes);
-  });
   app.get('/api/vehicles', async (request) => {
     const actor = (request as AuthedRequest).actor,
       q = z
@@ -505,6 +464,7 @@ export function registerCatalog(app: FastifyInstance, pool: Pool) {
         )
       ).rows[0];
       await audit(c, actor, 'FITMENT_REVIEWED', row.id, { status: d.status, sourceId: d.sourceId }, req.id);
+      await c.query('INSERT INTO fitment_evidence(fitment_id,source_id,status,evidence,qualifiers,reviewed_by) VALUES($1,$2,$3,$4,$5,$6)',[row.id,d.sourceId,d.status,d.evidence,d.qualifiers,actor.id]);
       return { id: row.id, status: d.status };
     },
   );

@@ -3,6 +3,7 @@ import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 const read=async name=>JSON.parse(await readFile(`docs/evidence/${name}.json`,'utf8'));
 const [api,browser,coverage,performance,imports,restore,restart,audit]=await Promise.all(['api-integration','browser-results','translation-coverage','performance','import-resumption','restore-drill','database-restart','dependency-audit'].map(read));
+const batch=await read('image-batch-1000'),images=await read('image-browser'),bulkBrowser=await read('image-bulk-browser').catch(()=>null);
 async function files(dir){const found=[];for(const entry of await readdir(dir,{withFileTypes:true})){if(['node_modules','dist','.local'].includes(entry.name))continue;const path=`${dir}/${entry.name}`;found.push(...(entry.isDirectory()?await files(path):[path]));}return found;}
 const codeFiles=[...await files('apps'),...await files('packages'),...await files('db'),...await files('tests'),...await files('scripts'),'package.json','package-lock.json','tsconfig.json','playwright.config.ts'].sort();
 const hash=createHash('sha256');for(const path of codeFiles)hash.update(path+'\0').update((await readFile(path,'utf8')).replace(/\r\n/g,'\n'));
@@ -12,20 +13,31 @@ const checksums={};for(const path of evidenceFiles)checksums[path]=createHash('s
 await writeFile('docs/evidence/manifest.json',JSON.stringify({generatedAt:new Date().toISOString(),sourceCommitBase:commit,sourceSha256LfNormalized:sourceHash,sourceFiles:codeFiles,scope:'Local synthetic evidence. Individual artifacts retain their execution dates; older load/recovery runs are not claimed as target-device or staging runs.',evidenceSha256:checksums},null,2));
 const p=performance.scenarios;
 const tests=await readFile('docs/evidence/api-test-output.txt','utf8');const testCount=tests.match(/tests (\d+)/)?.[1]??'see log';
+const passCount=tests.match(/pass (\d+)/)?.[1]??'unknown',failCount=tests.match(/fail (\d+)/)?.[1]??'unknown';
 const report=`# Phase 1 acceptance report — NOT READY FOR RELEASE
 
-Updated 5 November 2026 (user timezone Europe/Istanbul). Run timestamps below and in JSON evidence are UTC; several local runs occurred on 4 November UTC. AutoParts Business runs locally at http://127.0.0.1:4173 with real PostgreSQL persistence and synthetic data. **Phase 1 is not declared complete. No staging or production deployment, real-company import, provider connection or publication has occurred.** Shop remains Phase 2.
+Updated 6 November 2026 (user timezone Europe/Istanbul). Run timestamps in JSON evidence are UTC; retained older import/restart artifacts identify their original execution dates. This continues the existing v1.2 project and integrates v1.3. AutoParts Business runs locally at http://127.0.0.1:4173 with real PostgreSQL persistence and synthetic data. **Phase 1 is not declared complete. No staging or production deployment, real-company import, provider connection or publication has occurred.** Shop remains Phase 2.
 
 ## Observed local results
 
-- Backend, security, domain, localization, pricing and parser tests: **${testCount} passed**, zero failures in the latest log. [Log](evidence/api-test-output.txt), [measured integration cases](evidence/api-integration.json).
+- Backend, security, domain, localization, pricing and parser tests: **${passCount}/${testCount} passed**, ${failCount} failures in the latest log. [Log](evidence/api-test-output.txt), [measured integration cases](evidence/api-integration.json).
 - Built Business application: **${browser.stats.expected} browser tests passed**, ${browser.stats.unexpected} failed, ${browser.stats.skipped} skipped. Chromium on Windows, 390×844 phone and 1280×800 tablet emulation, with additional 320px reflow checks. [Browser results](evidence/browser-results.json).
 - AR/FR/EN: **${coverage.keysPerLocale} keys per locale, 100% technical key coverage**; ${coverage.backendDomainErrorCodes} backend domain errors covered. **Professional approval: 0%**. [Coverage](evidence/translation-coverage.json).
 - INV-01–08 passed: 100-way last-unit contention, ten identical retries, sale/transfer races, multi-SKU ordering, reservation expiry, quarantine/damage and immutable ledger protections. Warehouse and bin ledgers reconciled.
 - New-product image upload + carton receipt produced exactly 10 PCS across language switches; supplier references, replacement evidence and independently approved opening counts passed browser and API tests. [Product/receipt](evidence/owner-product-receipt.json), [import/bins](evidence/browser-import-bins.json), [catalog/opening](evidence/browser-catalog-opening.json).
 - Offline switching and expired-session reauthentication preserved a three-piece cart without changing stock. Offline shell AR/FR/EN works and caches only four static assets. [Draft](evidence/offline-session-draft.json), [cache inspection](evidence/offline-shell.json).
-- Automated axe checks reported no violations on tested login/device/locale combinations and EN/AR owner dashboards. This is **not** a complete WCAG or screen-reader certification. [Screenshots](evidence/screenshots), [example axe result](evidence/axe-owner-dashboard-ar.json).
+- Expanded automated axe coverage includes nine screens × three languages × two device sizes, product/receipt drafts, login and new photo galleries. Read the current browser result for failures; zero observed violations is **not** complete WCAG or physical screen-reader certification. [Screenshots](evidence/screenshots), [gallery checks](evidence/image-browser.json).
 - Dependency audit: **${audit.metadata.vulnerabilities.total} reported vulnerabilities** at scan time. [Audit](evidence/dependency-audit.json). This does not replace a manual application security review.
+
+## v1.3 image-system evidence
+
+Rights-controlled private image files, exact SKU/manufacturer snapshots, five distinct media categories, immutable reviews, independently gated public selection, source/expiry/revocation checks, exact vehicle filtering, responsive galleries, and coverage/review queues are implemented. Changing license terms invalidates the old approval. Product/vehicle applicability is rechecked on reads. Image presence never creates a fitment.
+
+Excel+ZIP batch: **${batch.rows} rows**, ${batch.outcomes.STAGED} staged, ${batch.outcomes.DUPLICATE} duplicates, ${batch.outcomes.ERROR} errors; **${(batch.durationMs/1000).toFixed(1)} s**, **${batch.peakRssMiB.toFixed(1)} MiB** peak combined test-process RSS against a 512 MiB bound. Restart at row 500, same-row replay and unchanged stock passed. No automatic approvals. [Batch evidence](evidence/image-batch-1000.json).
+
+Phone/tablet AR/FR/EN gallery, alt text, RTL, broken-image fallback and lost-upload-response recovery: [browser evidence](evidence/image-browser.json). CSV+ZIP preview/retry evidence: **${bulkBrowser?'executed; see artifact':'NOT TESTED'}**. ${bulkBrowser?'[Bulk browser](evidence/image-bulk-browser.json).':''} The coverage report describes **synthetic fixtures only**, not the company’s real catalogue: [itemized synthetic coverage](evidence/image-coverage-synthetic.json). No real company product photographs, supplier license grants, or worldwide diagram coverage were supplied or claimed.
+
+Protected media restore: **${restore.privateMedia?.objects??0} objects**, matching file hashes **${restore.privateMedia?.allFileHashesMatch??false}**, authenticated restored thumbnail **${restore.privateMedia?.approvedThumbnailAfterRestore??false}**. Legacy BLOB uploads are retained pending explicit matching/migration and review. New imports are private files rather than unbounded database BLOBs.
 
 ## Representative backend measurements
 
@@ -51,8 +63,9 @@ Source base: \`${commit.slice(0,12)}\` plus the exact working source hash in [ma
 
 | Requirement ID | Implementation / revision | Test | Date UTC | Environment | Observed | Target | Status | Evidence | Owner | Remediation | Risk accepted by |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| INV-01–08, SEC-01/02 | inventory/auth/db; source manifest | integration suite | ${api.date??api.startedAt??'see artifact'} | Local PG, synthetic | Latest suite passes | All assertions | PASS (executed scope) | [API](evidence/api-integration.json) | Engineering | Manual ASVS review still required | Nobody |
-| I18N-01/02/03, A09-08 | Business + i18n | Eight browser scenarios | ${browser.stats.startTime} | Built Chromium emulation | ${browser.stats.expected} pass | No lost drafts or stock duplicates | ${browser.stats.unexpected?'FAIL':'PASS'} | [Browser](evidence/browser-results.json) | Engineering | Repeat on physical devices | Nobody |
+| INV-01–08, SEC-01/02 | inventory/auth/db; source manifest | integration suite | ${api.started??api.startedAt??'see artifact'} | Local PG, synthetic | ${passCount} pass, ${failCount} fail | All assertions | ${failCount==='0'?'PASS (executed scope)':'FAIL'} | [API](evidence/api-integration.json) | Engineering | Manual ASVS review still required | Nobody |
+| I18N-01/02/03, A09-08 | Business + i18n | Business and image browser scenarios | ${browser.stats.startTime} | Built Chromium emulation | ${browser.stats.expected} pass | No lost drafts or stock duplicates | ${browser.stats.unexpected?'FAIL':'PASS'} | [Browser](evidence/browser-results.json) | Engineering | Repeat on physical devices | Nobody |
+| IMG-01–10 | media/discovery/import modules + migrations 012–013 | Rights, variants, 1k batch, browser, thumbnail load | ${batch.finishedAt} | Local synthetic fixtures | See individual artifacts | All tests + lawful company pilot coverage | PARTIAL — real content/device gates remain | [Batch](evidence/image-batch-1000.json), [images](evidence/image-browser.json), [load](evidence/performance.json) | Engineering + company | Authorized originals/rights, fitment review, target devices | Nobody |
 | L10-03b, I18N-05 review | dictionaries/product review | Qualified linguistic review | Not run | AR/FR/EN human review | 0% approved | 100% critical text reviewed | NOT TESTED | [Coverage](evidence/translation-coverage.json) | Company linguistic reviewers | Approve exact message revision | Nobody |
 | DATA-01, REL-02 | imports + worker | Kill at 50% | ${imports.date} | Local 100k fixture | 100k distinct, no invalid writes | Resume without duplicate | PASS | [Import](evidence/import-resumption.json) | Engineering | Repeat staging volume and licensed files | Nobody |
 | REL-01 | db/inventory | Immediate PG restart | ${restart.date} | Separate local cluster | Atomic rollback and one retry effect | All or nothing | PASS | [Restart](evidence/database-restart.json) | Engineering | Hosted failover rehearsal | Nobody |
@@ -64,7 +77,7 @@ Source base: \`${commit.slice(0,12)}\` plus the exact working source hash in [ma
 
 ## Release decision and remaining work
 
-Gate 1's local persisted vertical slice is demonstrated. Gate 2 and Gate 3 remain **partial**: the core modules and local hardening exist, while exhaustive role/screen/locale accessibility review, controlled automotive vocabulary and detailed technical attributes, comprehensive import/source adapter coverage and independent security review need further work. Product-master imports deliberately do not trust supplied translation-approval claims. Opening imports are limited to 500 rows per review and require an existing validated product and warehouse/bin code; branch text is source evidence, while authorization uses the warehouse ID.
+Gate 1's local persisted vertical slice is demonstrated. Gate 2 and Gate 3 remain **partial**: core modules, technical attributes, image workflows and local hardening exist, while qualified automotive vocabulary/translation review, licensed business content, actual target-device accessibility/performance and independent security review remain required. Optional supplier/diagram adapters cannot be validated without an authorized provider and licensed data. Product-master imports deliberately do not trust supplied translation-approval claims. Opening imports are limited to 500 rows per review and require an existing validated product and warehouse/bin code; branch text is source evidence, while authorization uses the warehouse ID.
 
 Docker and hosted CI definitions have not been executed here. Real-device screen-reader/scan/print/PWA installation, target-network LCP and long-running pool saturation/soak remain NOT TESTED. External outbox provider effects are unbuilt Phase 2 work; local outbox deduplication is not proof of a real payment/courier effect.
 

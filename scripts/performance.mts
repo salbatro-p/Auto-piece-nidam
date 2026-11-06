@@ -6,6 +6,7 @@ import { migrate } from '../apps/api/src/migrate.js';
 import { seed } from '../apps/api/src/seed.js';
 import { createApp } from '../apps/api/src/app.js';
 import { totp } from '../apps/api/src/auth.js';
+import sharp from 'sharp';
 if (process.env.DEMO_MODE !== 'true') throw new Error('Isolated demo mode required');
 const base = new URL(process.env.DATABASE_URL!);
 if (!['127.0.0.1', 'localhost'].includes(base.hostname))
@@ -121,6 +122,22 @@ const login = await app.inject({
 if (login.statusCode !== 200) throw new Error('Benchmark login failed ' + login.body);
 const csrf = login.json().csrfToken;
 const cookie = String(login.headers['set-cookie']).split(';')[0];
+// Representative generated texture fixtures are explicitly synthetic, never real product/fitment evidence.
+async function post(url:string,payload:any){const r=await app.inject({method:'POST',url,headers:{cookie,'x-csrf-token':csrf,'idempotency-key':randomUUID()},payload});if(r.statusCode!==200)throw new Error('Media benchmark fixture failed '+r.body);return r.json();}
+const license=await post('/api/media/licenses',{name:'Synthetic load image rights',sourceType:'COMPANY',termsVersion:'QA-load-1',proof:'Deterministic texture pixels generated solely for performance tests, not real product photos.',internalDisplayPermitted:true,publicDisplayPermitted:false});
+const mediaSizes:{source:number;thumbnail:number}[]=[];
+for(let n=1;n<=30;n++){
+ const sku='SYN-'+String(n).padStart(6,'0'),p=(await app.inject({url:'/api/products?q='+sku,headers:{cookie}})).json().items[0];
+ const mfr='SYN-MFR-'+String(n).padStart(6,'0');
+ await post('/api/products/'+p.id+'/update',{sku:p.sku,names:p.names,descriptions:p.descriptions,brand:p.brand,manufacturerPartNo:mfr,category:p.category,packSize:p.packSize,priceMinor:p.priceMinor,costMinor:p.costMinor,status:'ACTIVE_INTERNAL',version:p.version});
+ const raw=Buffer.alloc(1280*960*3);let prng=n;for(let i=0;i<raw.length;i++){prng=(Math.imul(prng,1664525)+1013904223)>>>0;raw[i]=((i/3840)%256)*.6+(prng>>>24)*.4;}
+ const photo=await sharp(raw,{raw:{width:1280,height:960,channels:3}}).jpeg({quality:78}).toBuffer();
+ const staged=await post('/api/media/stage',{productId:p.id,kind:'COMPANY_ORIGINAL_PHOTO',sku:p.sku,manufacturerBrand:p.brand,manufacturerPartNumber:mfr,licenseId:license.id,mime:'image/jpeg',data:photo.toString('base64'),viewAngle:'Synthetic load texture'});
+ const m=(await pool.query('SELECT version,file_size FROM product_media WHERE id=$1',[staged.id])).rows[0];
+ await post('/api/media/'+staged.id+'/review',{version:m.version,state:'APPROVED_INTERNAL',note:'Synthetic fixture only, exact test identifiers and company-generated pixels inspected.',physicalMatchConfirmed:true,applicabilityConfirmed:true});
+ const thumbnail=await app.inject({url:'/api/media/'+staged.id+'?size=thumbnail',headers:{cookie}});if(thumbnail.statusCode!==200)throw new Error('Thumbnail fixture inaccessible');mediaSizes.push({source:m.file_size,thumbnail:thumbnail.rawPayload.length});
+}
+report.mediaFixtures={count:mediaSizes.length,inputDimensions:'1280×960',generatedTextures:true,sizes:mediaSizes,maxConcurrentPerList:6};
 async function scenario(
   name: string,
   rate: number,
@@ -138,11 +155,16 @@ async function scenario(
     tasks.push(
       (async () => {
         const t = performance.now();
+        const {loadThumbnails,...options}=request(i);
         const response = await app.inject({
-          ...request(i),
+          ...options,
           remoteAddress: '127.0.1.' + ((i % 10) + 1),
           headers: { cookie, 'x-csrf-token': csrf, 'idempotency-key': randomUUID() },
         });
+        if(loadThumbnails&&response.statusCode===200){
+          const photos=response.json().items.map((p:any)=>p.mediaId).filter(Boolean);
+          for(let start=0;start<photos.length;start+=6)await Promise.all(photos.slice(start,start+6).map(async(id:string)=>{const thumbnail=await app.inject({url:'/api/media/'+id+'?size=thumbnail',remoteAddress:'127.0.2.'+((i%10)+1),headers:{cookie}});if(thumbnail.statusCode!==200)statuses[thumbnail.statusCode]=(statuses[thumbnail.statusCode]??0)+1;}));
+        }
         times.push(performance.now() - t);
         statuses[response.statusCode] = (statuses[response.statusCode] ?? 0) + 1;
       })(),
@@ -203,6 +225,7 @@ await scenario('receipt writes, 20 per second', 20, 20, 800, (i) => ({
   },
 }));
 await scenario('dashboard', 2, 10, 1500, () => ({ method: 'GET', url: '/api/dashboard' }));
+await scenario('catalog list plus bounded thumbnail reads',2,20,900,()=>({method:'GET',url:'/api/products?q=synthetic',loadThumbnails:true}));
 report.reconciliation = (
   await app.inject({ url: '/api/inventory/reconciliation', headers: { cookie } })
 ).json();
