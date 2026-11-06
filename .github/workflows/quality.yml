@@ -29,7 +29,7 @@ jobs:
       - name: Start local preview
         run: |
           npm run dev:api > /tmp/autoparts-api.log 2>&1 &
-          npm run dev:business > /tmp/autoparts-business.log 2>&1 &
+          npm run preview:business > /tmp/autoparts-business.log 2>&1 &
           node --input-type=module -e "for(let i=0;i<60;i++){try{if((await fetch('http://127.0.0.1:4173')).ok)break;}catch{}await new Promise(r=>setTimeout(r,1000));}"
       - run: npm run test:e2e
       - uses: actions/upload-artifact@v4

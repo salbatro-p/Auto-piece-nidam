@@ -1,6 +1,6 @@
 {
-  "date": "2026-11-04T10:16:03.170Z",
-  "database": "autoparts_load_1793787362814",
+  "date": "2026-11-04T19:52:03.761Z",
+  "database": "autoparts_load_1793821634264",
   "environment": {
     "node": "v24.16.0",
     "platform": "win32",
@@ -22,41 +22,43 @@
       "name": "exact SKU search, initially unprimed application cache",
       "requests": 1000,
       "requestedRate": 50,
-      "actualRate": 49.96382444236987,
-      "durationSeconds": 20.0144875,
-      "p50": 40.24,
-      "p95": 178.71,
-      "p99": 1119.44,
+      "actualRate": 50.007748200506185,
+      "durationSeconds": 19.996918299999997,
+      "p50": 6.58,
+      "p95": 10.27,
+      "p99": 15.91,
       "statuses": {
         "200": 1000
       },
       "targetP95": 500,
+      "targetP99": 1500,
       "pass": true
     },
     {
       "name": "exact SKU repeated warm set",
       "requests": 1000,
       "requestedRate": 50,
-      "actualRate": 49.919308682270184,
-      "durationSeconds": 20.032331099999997,
-      "p50": 43.41,
-      "p95": 104.78,
-      "p99": 650.78,
+      "actualRate": 50.025353099077385,
+      "durationSeconds": 19.989868199999997,
+      "p50": 6.93,
+      "p95": 10.58,
+      "p99": 13.24,
       "statuses": {
         "200": 1000
       },
       "targetP95": 500,
+      "targetP99": 1500,
       "pass": true
     },
     {
       "name": "variant verified fitment filter",
       "requests": 500,
       "requestedRate": 25,
-      "actualRate": 25.002249202338234,
-      "durationSeconds": 19.99820150000001,
-      "p50": 29.6,
-      "p95": 50.11,
-      "p99": 54.87,
+      "actualRate": 24.987182075338996,
+      "durationSeconds": 20.010260300000002,
+      "p50": 29.88,
+      "p95": 51.48,
+      "p99": 53.81,
       "statuses": {
         "200": 500
       },
@@ -67,11 +69,11 @@
       "name": "product and stock read",
       "requests": 1000,
       "requestedRate": 50,
-      "actualRate": 50.034976449937545,
-      "durationSeconds": 19.986020099999994,
-      "p50": 4.55,
-      "p95": 7.91,
-      "p99": 9,
+      "actualRate": 49.996540489380834,
+      "durationSeconds": 20.001384900000005,
+      "p50": 5.75,
+      "p95": 8.99,
+      "p99": 9.65,
       "statuses": {
         "200": 1000
       },
@@ -82,11 +84,11 @@
       "name": "receipt writes, 20 per second",
       "requests": 400,
       "requestedRate": 20,
-      "actualRate": 20.028148962522373,
-      "durationSeconds": 19.97189129999999,
-      "p50": 12.85,
-      "p95": 21.41,
-      "p99": 22.88,
+      "actualRate": 20.018010905041642,
+      "durationSeconds": 19.982005600000004,
+      "p50": 13.83,
+      "p95": 26.94,
+      "p99": 28.82,
       "statuses": {
         "200": 400
       },
@@ -97,11 +99,11 @@
       "name": "dashboard",
       "requests": 20,
       "requestedRate": 2,
-      "actualRate": 2.037907587758644,
-      "durationSeconds": 9.813988799999992,
-      "p50": 241.52,
-      "p95": 364.31,
-      "p99": 436.64,
+      "actualRate": 2.0492197585523213,
+      "durationSeconds": 9.759812300000005,
+      "p50": 207.5,
+      "p95": 313.39,
+      "p99": 338.09,
       "statuses": {
         "200": 20
       },
@@ -109,7 +111,7 @@
       "pass": true
     }
   ],
-  "seedMilliseconds": 72282.2377,
+  "seedMilliseconds": 12489.024099999999,
   "actualCounts": {
     "products": 100000,
     "vehicles": 10000,
@@ -120,7 +122,12 @@
     "balanced": true,
     "items": []
   },
-  "peakRSSBytes": 234975232,
+  "binReconciliation": {
+    "balanced": true,
+    "warehouseDifferences": [],
+    "ledgerDifferences": []
+  },
+  "peakRSSBytes": 330461184,
   "queryPlan": [
     {
       "Plan": {
@@ -128,16 +135,16 @@
         "Parallel Aware": false,
         "Async Capable": false,
         "Startup Cost": 51.72,
-        "Total Cost": 90.56,
+        "Total Cost": 90.59,
         "Plan Rows": 10,
-        "Plan Width": 384,
-        "Actual Startup Time": 2.488,
-        "Actual Total Time": 2.53,
+        "Plan Width": 410,
+        "Actual Startup Time": 1.611,
+        "Actual Total Time": 1.908,
         "Actual Rows": 1,
         "Actual Loops": 1,
         "Disabled": false,
-        "Shared Hit Blocks": 47,
-        "Shared Read Blocks": 41,
+        "Shared Hit Blocks": 44,
+        "Shared Read Blocks": 46,
         "Shared Dirtied Blocks": 0,
         "Shared Written Blocks": 0,
         "Local Hit Blocks": 0,
@@ -155,11 +162,11 @@
             "Relation Name": "products",
             "Alias": "products",
             "Startup Cost": 51.72,
-            "Total Cost": 90.56,
+            "Total Cost": 90.59,
             "Plan Rows": 10,
-            "Plan Width": 384,
-            "Actual Startup Time": 2.487,
-            "Actual Total Time": 2.528,
+            "Plan Width": 410,
+            "Actual Startup Time": 1.61,
+            "Actual Total Time": 1.906,
             "Actual Rows": 1,
             "Actual Loops": 1,
             "Disabled": false,
@@ -167,10 +174,10 @@
             "Rows Removed by Index Recheck": 111,
             "Filter": "(org_id = '00000000-0000-4000-8000-000000000001'::uuid)",
             "Rows Removed by Filter": 0,
-            "Exact Heap Blocks": 9,
+            "Exact Heap Blocks": 11,
             "Lossy Heap Blocks": 0,
-            "Shared Hit Blocks": 47,
-            "Shared Read Blocks": 41,
+            "Shared Hit Blocks": 44,
+            "Shared Read Blocks": 46,
             "Shared Dirtied Blocks": 0,
             "Shared Written Blocks": 0,
             "Local Hit Blocks": 0,
@@ -190,8 +197,8 @@
                 "Total Cost": 51.71,
                 "Plan Rows": 10,
                 "Plan Width": 0,
-                "Actual Startup Time": 2.462,
-                "Actual Total Time": 2.462,
+                "Actual Startup Time": 1.59,
+                "Actual Total Time": 1.591,
                 "Actual Rows": 112,
                 "Actual Loops": 1,
                 "Disabled": false,
@@ -213,8 +220,8 @@
         ]
       },
       "Planning": {
-        "Shared Hit Blocks": 69,
-        "Shared Read Blocks": 16,
+        "Shared Hit Blocks": 48,
+        "Shared Read Blocks": 13,
         "Shared Dirtied Blocks": 0,
         "Shared Written Blocks": 0,
         "Local Hit Blocks": 0,
@@ -224,14 +231,15 @@
         "Temp Read Blocks": 0,
         "Temp Written Blocks": 0
       },
-      "Planning Time": 7.626,
+      "Planning Time": 4.021,
       "Triggers": [],
-      "Execution Time": 4.219
+      "Execution Time": 2.601
     }
   ],
   "limits": [
     "No slow network, Android hardware, saturation soak or cold OS disk cache measured.",
     "100k import resumability is a separate acceptance test; SQL fixture generation does not pass it.",
     "Database retained for inspection; no real customer/company data."
-  ]
+  ],
+  "result": "PASS"
 }

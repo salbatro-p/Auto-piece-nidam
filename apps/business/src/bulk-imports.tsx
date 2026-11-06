@@ -1,4 +1,3 @@
-import {mapProductGrid} from './import-mapping';
 import React, { useEffect, useRef, useState } from 'react';
 import { FileUp, RefreshCw } from 'lucide-react';
 import { useApp } from './context';
@@ -7,6 +6,7 @@ import {
   Empty,
   ErrorBanner,
   Field,
+  FilePicker,
   MutationState,
   ProductName,
   Status,
@@ -51,14 +51,27 @@ export function BulkImports() {
           .map((b) => b.toString(16).padStart(2, '0'))
           .join(''),
       );
-      const grid = await new Promise<unknown[][]>((resolve,reject)=>{
-        const worker=new Worker(new URL('./import-file.worker.ts',import.meta.url),{type:'module'});
-        const timeout=setTimeout(()=>{worker.terminate();reject(new ApiError('IMPORT_INVALID'));},60000);
-        worker.onmessage=event=>{clearTimeout(timeout);worker.terminate();event.data.grid?resolve(event.data.grid):reject(new ApiError(messageKey(event.data.code)?event.data.code:'IMPORT_INVALID'));};
-        worker.onerror=()=>{clearTimeout(timeout);worker.terminate();reject(new ApiError('IMPORT_INVALID'));};
-        worker.postMessage({buffer,name:file.name},[buffer]);
+      const mapped = await new Promise<any[]>((resolve, reject) => {
+        const worker = new Worker(new URL('./import-file.worker.ts', import.meta.url), { type: 'module' });
+        const timeout = setTimeout(() => {
+          worker.terminate();
+          reject(new ApiError('IMPORT_INVALID'));
+        }, 60000);
+        worker.onmessage = (event) => {
+          clearTimeout(timeout);
+          worker.terminate();
+          event.data.rows
+            ? resolve(event.data.rows)
+            : reject(new ApiError(messageKey(event.data.code) ? event.data.code : 'IMPORT_INVALID'));
+        };
+        worker.onerror = () => {
+          clearTimeout(timeout);
+          worker.terminate();
+          reject(new ApiError('IMPORT_INVALID'));
+        };
+        worker.postMessage({ buffer, name: file.name }, [buffer]);
       });
-      setRows(mapProductGrid(grid));
+      setRows(mapped);
       setFileName(file.name);
     } catch (e) {
       setError(e);
@@ -126,7 +139,8 @@ export function BulkImports() {
           <FileUp size={32} />
         </div>
         <h2>{t('importFile')}</h2>
-        <p>{t('bulkImportHelp')}</p><p>{t('suppliedReviewNotice')}</p>
+        <p>{t('bulkImportHelp')}</p>
+        <p>{t('suppliedReviewNotice')}</p>
         <div className="form-grid">
           <Field label={t('source')}>
             <select
@@ -148,8 +162,7 @@ export function BulkImports() {
                 ))}
             </select>
           </Field>
-          <Field label={t('importFile')}>
-            <input
+            <FilePicker label={t('importFile')}
               type="file"
               accept=".csv,.xlsx"
               disabled={reading || uploading || !!save.pending}
@@ -157,7 +170,6 @@ export function BulkImports() {
                 if (e.target.files?.[0]) void load(e.target.files[0]);
               }}
             />
-          </Field>
         </div>
         {fileName && (
           <p>

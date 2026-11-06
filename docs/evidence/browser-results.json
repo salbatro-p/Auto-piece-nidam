@@ -3,7 +3,9 @@
     "argv": [
       "D:\\node.exe",
       "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\node_modules\\@playwright\\test\\cli.js",
-      "test"
+      "test",
+      "--grep",
+      "owner phone"
     ],
     "configFile": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\playwright.config.ts",
     "rootDir": "C:/Users/dipoo/Documents/ChatGPT/auto piece nidam/tests/e2e",
@@ -108,331 +110,8 @@
       "line": 0,
       "specs": [
         {
-          "title": "I18N-05 login header, RTL, keyboard and accessibility — phone",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 90000,
-              "annotations": [
-                {
-                  "type": "serial",
-                  "location": {
-                    "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
-                    "line": 0,
-                    "column": 0
-                  }
-                }
-              ],
-              "expectedStatus": "passed",
-              "projectId": "",
-              "projectName": "",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 2960,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-04T11:07:41.886Z",
-                  "annotations": [
-                    {
-                      "type": "serial",
-                      "location": {
-                        "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
-                        "line": 0,
-                        "column": 0
-                      }
-                    }
-                  ],
-                  "attachments": [
-                    {
-                      "name": "phone-login-fr",
-                      "contentType": "image/png",
-                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-05-login-hea-fff97-d-and-accessibility-—-phone\\attachments\\phone-login-fr-4a7e795e0c0089787bae821113947878403beaf3.png"
-                    },
-                    {
-                      "name": "phone-login-ar",
-                      "contentType": "image/png",
-                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-05-login-hea-fff97-d-and-accessibility-—-phone\\attachments\\phone-login-ar-b7867736efe3a0cb3493672271dee7de5feb6adc.png"
-                    },
-                    {
-                      "name": "phone-login-en",
-                      "contentType": "image/png",
-                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-05-login-hea-fff97-d-and-accessibility-—-phone\\attachments\\phone-login-en-18cc11469c360fe5d9cdcd737a1a62c77155f976.png"
-                    }
-                  ]
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "66346504f81fcdf6f5e9-575f8f4d4c19dd1f1d87",
-          "file": "business.spec.ts",
-          "line": 48,
-          "column": 3
-        },
-        {
-          "title": "I18N-05 login header, RTL, keyboard and accessibility — tablet",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 90000,
-              "annotations": [
-                {
-                  "type": "serial",
-                  "location": {
-                    "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
-                    "line": 0,
-                    "column": 0
-                  }
-                }
-              ],
-              "expectedStatus": "passed",
-              "projectId": "",
-              "projectName": "",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 2423,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-04T11:07:44.975Z",
-                  "annotations": [
-                    {
-                      "type": "serial",
-                      "location": {
-                        "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
-                        "line": 0,
-                        "column": 0
-                      }
-                    }
-                  ],
-                  "attachments": [
-                    {
-                      "name": "tablet-login-fr",
-                      "contentType": "image/png",
-                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-05-login-hea-19cd1--and-accessibility-—-tablet\\attachments\\tablet-login-fr-18c924a3bc03e6b910e2bf9a31c91779181e4f5c.png"
-                    },
-                    {
-                      "name": "tablet-login-ar",
-                      "contentType": "image/png",
-                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-05-login-hea-19cd1--and-accessibility-—-tablet\\attachments\\tablet-login-ar-ff1c1f1e62326e3b98246b5e3ef0c62be937929f.png"
-                    },
-                    {
-                      "name": "tablet-login-en",
-                      "contentType": "image/png",
-                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-05-login-hea-19cd1--and-accessibility-—-tablet\\attachments\\tablet-login-en-218635cc67b458394291aecf97c1ac009b01ec8f.png"
-                    }
-                  ]
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "66346504f81fcdf6f5e9-2f261e9586a58d593cdb",
-          "file": "business.spec.ts",
-          "line": 48,
-          "column": 3
-        },
-        {
-          "title": "I18N-01 tablet mid-sale language changes and lost response produce exactly one sale",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 90000,
-              "annotations": [
-                {
-                  "type": "serial",
-                  "location": {
-                    "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
-                    "line": 0,
-                    "column": 0
-                  }
-                }
-              ],
-              "expectedStatus": "passed",
-              "projectId": "",
-              "projectName": "",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 2420,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-04T11:07:47.411Z",
-                  "annotations": [
-                    {
-                      "type": "serial",
-                      "location": {
-                        "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
-                        "line": 0,
-                        "column": 0
-                      }
-                    }
-                  ],
-                  "attachments": [
-                    {
-                      "name": "tablet-pos-draft-fr",
-                      "contentType": "image/png",
-                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-01-tablet-mi-278d1-se-produce-exactly-one-sale\\attachments\\tablet-pos-draft-fr-6a8e85d770d9f564efe1c4d74686b5408702bb12.png"
-                    },
-                    {
-                      "name": "tablet-pos-draft-ar",
-                      "contentType": "image/png",
-                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-01-tablet-mi-278d1-se-produce-exactly-one-sale\\attachments\\tablet-pos-draft-ar-facb46b9a57059b71cb53b865e293756e4f6b04e.png"
-                    },
-                    {
-                      "name": "tablet-pos-draft-en",
-                      "contentType": "image/png",
-                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-01-tablet-mi-278d1-se-produce-exactly-one-sale\\attachments\\tablet-pos-draft-en-b03ba5b977aea3feef1784f7614072fd544a7a1c.png"
-                    },
-                    {
-                      "name": "tablet-receipt-fr",
-                      "contentType": "image/png",
-                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-01-tablet-mi-278d1-se-produce-exactly-one-sale\\attachments\\tablet-receipt-fr-2e4ac2ee11c07613102510187dff2e09f7e95372.png"
-                    },
-                    {
-                      "name": "tablet-receipt-ar",
-                      "contentType": "image/png",
-                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-01-tablet-mi-278d1-se-produce-exactly-one-sale\\attachments\\tablet-receipt-ar-4312016ed10c47dc3718c762b084bf3864967a3c.png"
-                    },
-                    {
-                      "name": "tablet-receipt-en",
-                      "contentType": "image/png",
-                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-01-tablet-mi-278d1-se-produce-exactly-one-sale\\attachments\\tablet-receipt-en-7bace76fb4711c61f46e774a19d977417906ee70.png"
-                    }
-                  ]
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "66346504f81fcdf6f5e9-18fdb13f53c47dbf5737",
-          "file": "business.spec.ts",
-          "line": 76,
-          "column": 1
-        },
-        {
-          "title": "I18N-03 shared tablet isolates employee preferences and independent sessions",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 90000,
-              "annotations": [
-                {
-                  "type": "serial",
-                  "location": {
-                    "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
-                    "line": 0,
-                    "column": 0
-                  }
-                }
-              ],
-              "expectedStatus": "passed",
-              "projectId": "",
-              "projectName": "",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 3085,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-04T11:07:49.845Z",
-                  "annotations": [
-                    {
-                      "type": "serial",
-                      "location": {
-                        "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
-                        "line": 0,
-                        "column": 0
-                      }
-                    }
-                  ],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "66346504f81fcdf6f5e9-1d6d20846a2dd400807a",
-          "file": "business.spec.ts",
-          "line": 145,
-          "column": 1
-        },
-        {
-          "title": "SEC-01 anonymous localized routes cannot expose Business data",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 90000,
-              "annotations": [
-                {
-                  "type": "serial",
-                  "location": {
-                    "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
-                    "line": 0,
-                    "column": 0
-                  }
-                }
-              ],
-              "expectedStatus": "passed",
-              "projectId": "",
-              "projectName": "",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 47,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-04T11:07:52.944Z",
-                  "annotations": [
-                    {
-                      "type": "serial",
-                      "location": {
-                        "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
-                        "line": 0,
-                        "column": 0
-                      }
-                    }
-                  ],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "66346504f81fcdf6f5e9-724de9dedc792d40ab7d",
-          "file": "business.spec.ts",
-          "line": 191,
-          "column": 1
-        },
-        {
           "title": "I18N-02 owner phone product image and carton receipt preserve drafts; screen matrix",
-          "ok": true,
+          "ok": false,
           "tags": [],
           "tests": [
             {
@@ -454,13 +133,72 @@
                 {
                   "workerIndex": 0,
                   "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 15452,
-                  "errors": [],
+                  "status": "failed",
+                  "duration": 63796,
+                  "error": {
+                    "message": "Error: Accessibility violations: scrollable-region-focusable\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 52\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"description\": \"Ensure elements that have scrollable content are accessible by keyboard in Safari\",\u001b[39m\n\u001b[31m+     \"help\": \"Scrollable region must have keyboard access\",\u001b[39m\n\u001b[31m+     \"helpUrl\": \"https://dequeuniversity.com/rules/axe/4.14/scrollable-region-focusable?application=playwright\",\u001b[39m\n\u001b[31m+     \"id\": \"scrollable-region-focusable\",\u001b[39m\n\u001b[31m+     \"impact\": \"serious\",\u001b[39m\n\u001b[31m+     \"nodes\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": null,\u001b[39m\n\u001b[31m+             \"id\": \"focusable-content\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element should have focusable content\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": null,\u001b[39m\n\u001b[31m+             \"id\": \"focusable-element\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element should be focusable\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element should have focusable content\u001b[39m\n\u001b[31m+   Element should be focusable\",\u001b[39m\n\u001b[31m+         \"html\": \"<section class=\\\"panel table-wrap\\\">\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"section\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"tags\": Array [\u001b[39m\n\u001b[31m+       \"cat.keyboard\",\u001b[39m\n\u001b[31m+       \"wcag2a\",\u001b[39m\n\u001b[31m+       \"wcag211\",\u001b[39m\n\u001b[31m+       \"wcag213\",\u001b[39m\n\u001b[31m+       \"TTv5\",\u001b[39m\n\u001b[31m+       \"TT4.a\",\u001b[39m\n\u001b[31m+       \"EN-301-549\",\u001b[39m\n\u001b[31m+       \"EN-9.2.1.1\",\u001b[39m\n\u001b[31m+       \"EN-9.2.1.3\",\u001b[39m\n\u001b[31m+       \"RGAAv4\",\u001b[39m\n\u001b[31m+       \"RGAA-7.3.2\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m",
+                    "stack": "Error: Accessibility violations: scrollable-region-focusable\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 52\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"description\": \"Ensure elements that have scrollable content are accessible by keyboard in Safari\",\u001b[39m\n\u001b[31m+     \"help\": \"Scrollable region must have keyboard access\",\u001b[39m\n\u001b[31m+     \"helpUrl\": \"https://dequeuniversity.com/rules/axe/4.14/scrollable-region-focusable?application=playwright\",\u001b[39m\n\u001b[31m+     \"id\": \"scrollable-region-focusable\",\u001b[39m\n\u001b[31m+     \"impact\": \"serious\",\u001b[39m\n\u001b[31m+     \"nodes\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": null,\u001b[39m\n\u001b[31m+             \"id\": \"focusable-content\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element should have focusable content\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": null,\u001b[39m\n\u001b[31m+             \"id\": \"focusable-element\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element should be focusable\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element should have focusable content\u001b[39m\n\u001b[31m+   Element should be focusable\",\u001b[39m\n\u001b[31m+         \"html\": \"<section class=\\\"panel table-wrap\\\">\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"section\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"tags\": Array [\u001b[39m\n\u001b[31m+       \"cat.keyboard\",\u001b[39m\n\u001b[31m+       \"wcag2a\",\u001b[39m\n\u001b[31m+       \"wcag211\",\u001b[39m\n\u001b[31m+       \"wcag213\",\u001b[39m\n\u001b[31m+       \"TTv5\",\u001b[39m\n\u001b[31m+       \"TT4.a\",\u001b[39m\n\u001b[31m+       \"EN-301-549\",\u001b[39m\n\u001b[31m+       \"EN-9.2.1.1\",\u001b[39m\n\u001b[31m+       \"EN-9.2.1.3\",\u001b[39m\n\u001b[31m+       \"RGAAv4\",\u001b[39m\n\u001b[31m+       \"RGAA-7.3.2\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n    at axe (C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts:42:5)\n    at C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts:313:9",
+                    "location": {
+                      "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                      "column": 5,
+                      "line": 42
+                    },
+                    "snippet": "  40 |     result.violations,\n  41 |     `Accessibility violations: ${result.violations.map((v) => v.id).join(', ')}`,\n> 42 |   ).toEqual([]);\n     |     ^\n  43 | }\n  44 |\n  45 | for (const viewport of ["
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                        "column": 5,
+                        "line": 42
+                      },
+                      "message": "Error: Accessibility violations: scrollable-region-focusable\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 52\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"description\": \"Ensure elements that have scrollable content are accessible by keyboard in Safari\",\u001b[39m\n\u001b[31m+     \"help\": \"Scrollable region must have keyboard access\",\u001b[39m\n\u001b[31m+     \"helpUrl\": \"https://dequeuniversity.com/rules/axe/4.14/scrollable-region-focusable?application=playwright\",\u001b[39m\n\u001b[31m+     \"id\": \"scrollable-region-focusable\",\u001b[39m\n\u001b[31m+     \"impact\": \"serious\",\u001b[39m\n\u001b[31m+     \"nodes\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": null,\u001b[39m\n\u001b[31m+             \"id\": \"focusable-content\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element should have focusable content\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": null,\u001b[39m\n\u001b[31m+             \"id\": \"focusable-element\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element should be focusable\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element should have focusable content\u001b[39m\n\u001b[31m+   Element should be focusable\",\u001b[39m\n\u001b[31m+         \"html\": \"<section class=\\\"panel table-wrap\\\">\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"section\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"tags\": Array [\u001b[39m\n\u001b[31m+       \"cat.keyboard\",\u001b[39m\n\u001b[31m+       \"wcag2a\",\u001b[39m\n\u001b[31m+       \"wcag211\",\u001b[39m\n\u001b[31m+       \"wcag213\",\u001b[39m\n\u001b[31m+       \"TTv5\",\u001b[39m\n\u001b[31m+       \"TT4.a\",\u001b[39m\n\u001b[31m+       \"EN-301-549\",\u001b[39m\n\u001b[31m+       \"EN-9.2.1.1\",\u001b[39m\n\u001b[31m+       \"EN-9.2.1.3\",\u001b[39m\n\u001b[31m+       \"RGAAv4\",\u001b[39m\n\u001b[31m+       \"RGAA-7.3.2\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n\n  40 |     result.violations,\n  41 |     `Accessibility violations: ${result.violations.map((v) => v.id).join(', ')}`,\n> 42 |   ).toEqual([]);\n     |     ^\n  43 | }\n  44 |\n  45 | for (const viewport of [\n    at axe (C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts:42:5)\n    at C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts:313:9"
+                    },
+                    {
+                      "location": {
+                        "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                        "column": 5,
+                        "line": 42
+                      },
+                      "message": "Error: Accessibility violations: scrollable-region-focusable\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 52\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"description\": \"Ensure elements that have scrollable content are accessible by keyboard in Safari\",\u001b[39m\n\u001b[31m+     \"help\": \"Scrollable region must have keyboard access\",\u001b[39m\n\u001b[31m+     \"helpUrl\": \"https://dequeuniversity.com/rules/axe/4.14/scrollable-region-focusable?application=playwright\",\u001b[39m\n\u001b[31m+     \"id\": \"scrollable-region-focusable\",\u001b[39m\n\u001b[31m+     \"impact\": \"serious\",\u001b[39m\n\u001b[31m+     \"nodes\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": null,\u001b[39m\n\u001b[31m+             \"id\": \"focusable-content\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element should have focusable content\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": null,\u001b[39m\n\u001b[31m+             \"id\": \"focusable-element\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element should be focusable\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element should have focusable content\u001b[39m\n\u001b[31m+   Element should be focusable\",\u001b[39m\n\u001b[31m+         \"html\": \"<section class=\\\"panel table-wrap\\\">\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"section\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"tags\": Array [\u001b[39m\n\u001b[31m+       \"cat.keyboard\",\u001b[39m\n\u001b[31m+       \"wcag2a\",\u001b[39m\n\u001b[31m+       \"wcag211\",\u001b[39m\n\u001b[31m+       \"wcag213\",\u001b[39m\n\u001b[31m+       \"TTv5\",\u001b[39m\n\u001b[31m+       \"TT4.a\",\u001b[39m\n\u001b[31m+       \"EN-301-549\",\u001b[39m\n\u001b[31m+       \"EN-9.2.1.1\",\u001b[39m\n\u001b[31m+       \"EN-9.2.1.3\",\u001b[39m\n\u001b[31m+       \"RGAAv4\",\u001b[39m\n\u001b[31m+       \"RGAA-7.3.2\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n\n  40 |     result.violations,\n  41 |     `Accessibility violations: ${result.violations.map((v) => v.id).join(', ')}`,\n> 42 |   ).toEqual([]);\n     |     ^\n  43 | }\n  44 |\n  45 | for (const viewport of [\n    at axe (C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts:42:5)\n    at C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts:313:9"
+                    },
+                    {
+                      "location": {
+                        "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                        "column": 5,
+                        "line": 42
+                      },
+                      "message": "Error: Accessibility violations: scrollable-region-focusable\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 52\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"description\": \"Ensure elements that have scrollable content are accessible by keyboard in Safari\",\u001b[39m\n\u001b[31m+     \"help\": \"Scrollable region must have keyboard access\",\u001b[39m\n\u001b[31m+     \"helpUrl\": \"https://dequeuniversity.com/rules/axe/4.14/scrollable-region-focusable?application=playwright\",\u001b[39m\n\u001b[31m+     \"id\": \"scrollable-region-focusable\",\u001b[39m\n\u001b[31m+     \"impact\": \"serious\",\u001b[39m\n\u001b[31m+     \"nodes\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": null,\u001b[39m\n\u001b[31m+             \"id\": \"focusable-content\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element should have focusable content\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": null,\u001b[39m\n\u001b[31m+             \"id\": \"focusable-element\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element should be focusable\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element should have focusable content\u001b[39m\n\u001b[31m+   Element should be focusable\",\u001b[39m\n\u001b[31m+         \"html\": \"<section class=\\\"panel table-wrap\\\">\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"section\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"tags\": Array [\u001b[39m\n\u001b[31m+       \"cat.keyboard\",\u001b[39m\n\u001b[31m+       \"wcag2a\",\u001b[39m\n\u001b[31m+       \"wcag211\",\u001b[39m\n\u001b[31m+       \"wcag213\",\u001b[39m\n\u001b[31m+       \"TTv5\",\u001b[39m\n\u001b[31m+       \"TT4.a\",\u001b[39m\n\u001b[31m+       \"EN-301-549\",\u001b[39m\n\u001b[31m+       \"EN-9.2.1.1\",\u001b[39m\n\u001b[31m+       \"EN-9.2.1.3\",\u001b[39m\n\u001b[31m+       \"RGAAv4\",\u001b[39m\n\u001b[31m+       \"RGAA-7.3.2\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n\n  40 |     result.violations,\n  41 |     `Accessibility violations: ${result.violations.map((v) => v.id).join(', ')}`,\n> 42 |   ).toEqual([]);\n     |     ^\n  43 | }\n  44 |\n  45 | for (const viewport of [\n    at axe (C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts:42:5)\n    at C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts:313:9"
+                    },
+                    {
+                      "location": {
+                        "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                        "column": 5,
+                        "line": 42
+                      },
+                      "message": "Error: Accessibility violations: scrollable-region-focusable\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 52\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"description\": \"Ensure elements that have scrollable content are accessible by keyboard in Safari\",\u001b[39m\n\u001b[31m+     \"help\": \"Scrollable region must have keyboard access\",\u001b[39m\n\u001b[31m+     \"helpUrl\": \"https://dequeuniversity.com/rules/axe/4.14/scrollable-region-focusable?application=playwright\",\u001b[39m\n\u001b[31m+     \"id\": \"scrollable-region-focusable\",\u001b[39m\n\u001b[31m+     \"impact\": \"serious\",\u001b[39m\n\u001b[31m+     \"nodes\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": null,\u001b[39m\n\u001b[31m+             \"id\": \"focusable-content\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element should have focusable content\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": null,\u001b[39m\n\u001b[31m+             \"id\": \"focusable-element\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element should be focusable\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element should have focusable content\u001b[39m\n\u001b[31m+   Element should be focusable\",\u001b[39m\n\u001b[31m+         \"html\": \"<section class=\\\"panel table-wrap\\\">\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"section\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"tags\": Array [\u001b[39m\n\u001b[31m+       \"cat.keyboard\",\u001b[39m\n\u001b[31m+       \"wcag2a\",\u001b[39m\n\u001b[31m+       \"wcag211\",\u001b[39m\n\u001b[31m+       \"wcag213\",\u001b[39m\n\u001b[31m+       \"TTv5\",\u001b[39m\n\u001b[31m+       \"TT4.a\",\u001b[39m\n\u001b[31m+       \"EN-301-549\",\u001b[39m\n\u001b[31m+       \"EN-9.2.1.1\",\u001b[39m\n\u001b[31m+       \"EN-9.2.1.3\",\u001b[39m\n\u001b[31m+       \"RGAAv4\",\u001b[39m\n\u001b[31m+       \"RGAA-7.3.2\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n\n  40 |     result.violations,\n  41 |     `Accessibility violations: ${result.violations.map((v) => v.id).join(', ')}`,\n> 42 |   ).toEqual([]);\n     |     ^\n  43 | }\n  44 |\n  45 | for (const viewport of [\n    at axe (C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts:42:5)\n    at C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts:313:9"
+                    },
+                    {
+                      "location": {
+                        "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                        "column": 5,
+                        "line": 42
+                      },
+                      "message": "Error: Accessibility violations: scrollable-region-focusable\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 52\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"description\": \"Ensure elements that have scrollable content are accessible by keyboard in Safari\",\u001b[39m\n\u001b[31m+     \"help\": \"Scrollable region must have keyboard access\",\u001b[39m\n\u001b[31m+     \"helpUrl\": \"https://dequeuniversity.com/rules/axe/4.14/scrollable-region-focusable?application=playwright\",\u001b[39m\n\u001b[31m+     \"id\": \"scrollable-region-focusable\",\u001b[39m\n\u001b[31m+     \"impact\": \"serious\",\u001b[39m\n\u001b[31m+     \"nodes\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": null,\u001b[39m\n\u001b[31m+             \"id\": \"focusable-content\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element should have focusable content\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": null,\u001b[39m\n\u001b[31m+             \"id\": \"focusable-element\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element should be focusable\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element should have focusable content\u001b[39m\n\u001b[31m+   Element should be focusable\",\u001b[39m\n\u001b[31m+         \"html\": \"<section class=\\\"panel table-wrap\\\">\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"section\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"tags\": Array [\u001b[39m\n\u001b[31m+       \"cat.keyboard\",\u001b[39m\n\u001b[31m+       \"wcag2a\",\u001b[39m\n\u001b[31m+       \"wcag211\",\u001b[39m\n\u001b[31m+       \"wcag213\",\u001b[39m\n\u001b[31m+       \"TTv5\",\u001b[39m\n\u001b[31m+       \"TT4.a\",\u001b[39m\n\u001b[31m+       \"EN-301-549\",\u001b[39m\n\u001b[31m+       \"EN-9.2.1.1\",\u001b[39m\n\u001b[31m+       \"EN-9.2.1.3\",\u001b[39m\n\u001b[31m+       \"RGAAv4\",\u001b[39m\n\u001b[31m+       \"RGAA-7.3.2\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n\n  40 |     result.violations,\n  41 |     `Accessibility violations: ${result.violations.map((v) => v.id).join(', ')}`,\n> 42 |   ).toEqual([]);\n     |     ^\n  43 | }\n  44 |\n  45 | for (const viewport of [\n    at axe (C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts:42:5)\n    at C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts:313:9"
+                    },
+                    {
+                      "location": {
+                        "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                        "column": 5,
+                        "line": 42
+                      },
+                      "message": "Error: Accessibility violations: scrollable-region-focusable\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 52\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"description\": \"Ensure elements that have scrollable content are accessible by keyboard in Safari\",\u001b[39m\n\u001b[31m+     \"help\": \"Scrollable region must have keyboard access\",\u001b[39m\n\u001b[31m+     \"helpUrl\": \"https://dequeuniversity.com/rules/axe/4.14/scrollable-region-focusable?application=playwright\",\u001b[39m\n\u001b[31m+     \"id\": \"scrollable-region-focusable\",\u001b[39m\n\u001b[31m+     \"impact\": \"serious\",\u001b[39m\n\u001b[31m+     \"nodes\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"all\": Array [],\u001b[39m\n\u001b[31m+         \"any\": Array [\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": null,\u001b[39m\n\u001b[31m+             \"id\": \"focusable-content\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element should have focusable content\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+           Object {\u001b[39m\n\u001b[31m+             \"data\": null,\u001b[39m\n\u001b[31m+             \"id\": \"focusable-element\",\u001b[39m\n\u001b[31m+             \"impact\": \"serious\",\u001b[39m\n\u001b[31m+             \"message\": \"Element should be focusable\",\u001b[39m\n\u001b[31m+             \"relatedNodes\": Array [],\u001b[39m\n\u001b[31m+           },\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+         \"failureSummary\": \"Fix any of the following:\u001b[39m\n\u001b[31m+   Element should have focusable content\u001b[39m\n\u001b[31m+   Element should be focusable\",\u001b[39m\n\u001b[31m+         \"html\": \"<section class=\\\"panel table-wrap\\\">\",\u001b[39m\n\u001b[31m+         \"impact\": \"serious\",\u001b[39m\n\u001b[31m+         \"none\": Array [],\u001b[39m\n\u001b[31m+         \"target\": Array [\u001b[39m\n\u001b[31m+           \"section\",\u001b[39m\n\u001b[31m+         ],\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"tags\": Array [\u001b[39m\n\u001b[31m+       \"cat.keyboard\",\u001b[39m\n\u001b[31m+       \"wcag2a\",\u001b[39m\n\u001b[31m+       \"wcag211\",\u001b[39m\n\u001b[31m+       \"wcag213\",\u001b[39m\n\u001b[31m+       \"TTv5\",\u001b[39m\n\u001b[31m+       \"TT4.a\",\u001b[39m\n\u001b[31m+       \"EN-301-549\",\u001b[39m\n\u001b[31m+       \"EN-9.2.1.1\",\u001b[39m\n\u001b[31m+       \"EN-9.2.1.3\",\u001b[39m\n\u001b[31m+       \"RGAAv4\",\u001b[39m\n\u001b[31m+       \"RGAA-7.3.2\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n\n  40 |     result.violations,\n  41 |     `Accessibility violations: ${result.violations.map((v) => v.id).join(', ')}`,\n> 42 |   ).toEqual([]);\n     |     ^\n  43 | }\n  44 |\n  45 | for (const viewport of [\n    at axe (C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts:42:5)\n    at C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts:313:9"
+                    }
+                  ],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-04T11:07:52.999Z",
+                  "startTime": "2026-11-04T21:24:51.579Z",
                   "annotations": [
                     {
                       "type": "serial",
@@ -501,16 +239,41 @@
                       "name": "phone-receipt-draft-en",
                       "contentType": "image/png",
                       "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-02-owner-pho-d89e0-eserve-drafts-screen-matrix\\attachments\\phone-receipt-draft-en-bca1a52dc2af9c15e89b549aaa5bdc939dc65fa7.png"
+                    },
+                    {
+                      "name": "tablet-import-committed",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-02-owner-pho-d89e0-eserve-drafts-screen-matrix\\attachments\\tablet-import-committed-85df5f7dd3cf74a1875b2c85e001afe9fa2d9f45.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-02-owner-pho-d89e0-eserve-drafts-screen-matrix\\test-failed-1.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-02-owner-pho-d89e0-eserve-drafts-screen-matrix\\test-failed-2.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-02-owner-pho-d89e0-eserve-drafts-screen-matrix\\error-context.md"
                     }
-                  ]
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                    "column": 5,
+                    "line": 42
+                  }
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
           "id": "66346504f81fcdf6f5e9-2ab830fdca8ae69b5b22",
           "file": "business.spec.ts",
-          "line": 211,
+          "line": 212,
           "column": 1
         }
       ]
@@ -518,11 +281,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-04T11:07:41.059Z",
-    "duration": 28358.164,
-    "expected": 6,
+    "startTime": "2026-11-04T21:24:50.638Z",
+    "duration": 65838.307,
+    "expected": 0,
     "skipped": 0,
-    "unexpected": 0,
+    "unexpected": 1,
     "flaky": 0
   }
 }

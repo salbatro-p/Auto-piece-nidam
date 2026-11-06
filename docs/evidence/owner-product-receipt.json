@@ -1,9 +1,9 @@
 {
-  "sku": "QA-a846e144",
+  "sku": "QA-9bea040b",
   "oem": "QA OEM-82 00-768 / أ",
   "barcode": "2000000999999",
   "priceMinor": 8950,
   "packSize": 10,
   "receivedPCS": 10,
-  "imageFixture": "Original synthetic one-pixel PNG"
+  "imageFixture": "Original synthetic 8 × 8 PNG"
 }

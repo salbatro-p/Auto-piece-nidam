@@ -14,10 +14,13 @@ import {
 } from './db.js';
 import { type AuthedRequest, localeSchema, requirePermission } from './auth.js';
 import { postBinDeltas } from './bins.js';
-import {readTax} from './pricing.js';
-import {priceTotals} from '../../../packages/contracts/src/pricing.js';
+import { readTax } from './pricing.js';
+import { priceTotals } from '../../../packages/contracts/src/pricing.js';
 
 const uuid = z.string().uuid();
+declare module 'fastify' {
+  interface FastifyContextConfig { domainMutation?:boolean; requestBodySchema?:Record<string,unknown>; }
+}
 const qty = z.number().int().positive().max(1000000);
 const lineSchema = z.object({ productId: uuid, quantity: qty }).strict();
 const linesSchema = z
@@ -71,7 +74,7 @@ export async function movement(
     'INSERT INTO stock_movements(org_id,document_id,product_id,warehouse_id,kind,on_hand_delta,reserved_delta,quarantine_delta,damaged_delta,actor_id,request_id) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)',
     [actor.org_id, docId, productId, warehouseId, kind, ...d, actor.id, requestId],
   );
-  await postBinDeltas(c,actor,docId,productId,warehouseId,kind,delta);
+  await postBinDeltas(c, actor, docId, productId, warehouseId, kind, delta);
   return result.rows[0];
 }
 export function mutation(
@@ -82,7 +85,7 @@ export function mutation(
   schema: z.ZodTypeAny,
   handler: (c: PoolClient, actor: Actor, data: any, request: FastifyRequest) => Promise<unknown>,
 ) {
-  app.post(path, async (request) => {
+  app.post(path, {config:{domainMutation:true,requestBodySchema:z.toJSONSchema(schema,{unrepresentable:'any'})}}, async (request) => {
     const req = request as AuthedRequest;
     requirePermission(req.actor, permission);
     const data = schema.parse(request.body);
@@ -195,20 +198,14 @@ export function registerInventory(app: FastifyInstance, pool: Pool) {
         );
       }
       const id = await document(c, actor, 'RECEIPT', { ...d, pieces }, d.reference);
-      await movement(
-        c,
-        actor,
-        id,
-        d.productId,
-        d.warehouseId,
-        'RECEIPT',
-        req.id,
-        { binId:d.binId,...(d.condition === 'SELLABLE'
+      await movement(c, actor, id, d.productId, d.warehouseId, 'RECEIPT', req.id, {
+        binId: d.binId,
+        ...(d.condition === 'SELLABLE'
           ? { onHand: pieces }
           : d.condition === 'QUARANTINE'
             ? { quarantine: pieces }
-            : { damaged: pieces })},
-      );
+            : { damaged: pieces }),
+      });
       await outbox(c, actor, 'StockReceived', id, { productId: d.productId, pieces });
       return { id, status: 'COMPLETED', pieces };
     },
@@ -269,7 +266,13 @@ export function registerInventory(app: FastifyInstance, pool: Pool) {
     '/api/sales',
     'sell',
     z
-      .object({ warehouseId: uuid, lines: linesSchema, reservationId: uuid.optional(), locale: localeSchema,expectedTotalMinor:z.number().int().nonnegative().optional() })
+      .object({
+        warehouseId: uuid,
+        lines: linesSchema,
+        reservationId: uuid.optional(),
+        locale: localeSchema,
+        expectedTotalMinor: z.number().int().nonnegative().optional(),
+      })
       .strict(),
     async (c, actor, d, req) => {
       if (d.reservationId) {
@@ -308,12 +311,28 @@ export function registerInventory(app: FastifyInstance, pool: Pool) {
         if (!Number.isSafeInteger(total)) throw new DomainError('VALIDATION_ERROR');
         saleLines.push({ ...line, sku: p.sku, names: p.names, priceMinor: Number(p.price_minor) });
       }
-      const tax=await readTax(c,actor.org_id,true),totals=priceTotals(saleLines,tax);total=totals.totalMinor;
-      if(d.expectedTotalMinor!==undefined&&d.expectedTotalMinor!==total)throw new DomainError('PRICE_CHANGED',409);
+      const tax = await readTax(c, actor.org_id, true),
+        totals = priceTotals(saleLines, tax);
+      total = totals.totalMinor;
+      if (d.expectedTotalMinor !== undefined && d.expectedTotalMinor !== total)
+        throw new DomainError('PRICE_CHANGED', 409);
       const id = randomUUID();
       await c.query(
         'INSERT INTO sales(id,org_id,warehouse_id,actor_id,reservation_id,total_minor,locale,subtotal_minor,tax_minor,tax_rate_bps,tax_inclusive,tax_configured) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)',
-        [id, actor.org_id, d.warehouseId, actor.id, d.reservationId ?? null, total, d.locale,totals.subtotalMinor,totals.taxMinor,tax.rateBps,tax.inclusive,tax.configured],
+        [
+          id,
+          actor.org_id,
+          d.warehouseId,
+          actor.id,
+          d.reservationId ?? null,
+          total,
+          d.locale,
+          totals.subtotalMinor,
+          totals.taxMinor,
+          tax.rateBps,
+          tax.inclusive,
+          tax.configured,
+        ],
       );
       const doc = await document(c, actor, 'SALE', { saleId: id });
       for (const line of saleLines) {
@@ -332,7 +351,11 @@ export function registerInventory(app: FastifyInstance, pool: Pool) {
       return {
         id,
         totalMinor: total,
-        subtotalMinor:totals.subtotalMinor,taxMinor:totals.taxMinor,taxRateBps:tax.rateBps,taxInclusive:tax.inclusive,taxConfigured:tax.configured,
+        subtotalMinor: totals.subtotalMinor,
+        taxMinor: totals.taxMinor,
+        taxRateBps: tax.rateBps,
+        taxInclusive: tax.inclusive,
+        taxConfigured: tax.configured,
         lines: saleLines,
         status: 'COMPLETED',
         locale: d.locale,
@@ -576,7 +599,11 @@ export function registerInventory(app: FastifyInstance, pool: Pool) {
     return {
       id: sale.id,
       totalMinor: Number(sale.total_minor),
-      subtotalMinor:Number(sale.subtotal_minor),taxMinor:Number(sale.tax_minor),taxRateBps:sale.tax_rate_bps,taxInclusive:sale.tax_inclusive,taxConfigured:sale.tax_configured,
+      subtotalMinor: Number(sale.subtotal_minor),
+      taxMinor: Number(sale.tax_minor),
+      taxRateBps: sale.tax_rate_bps,
+      taxInclusive: sale.tax_inclusive,
+      taxConfigured: sale.tax_configured,
       locale: sale.locale,
       status: sale.status,
       createdAt: sale.created_at,

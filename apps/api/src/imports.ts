@@ -4,7 +4,7 @@ import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
 import { type Actor, audit, DomainError, normalize, outbox, transaction } from './db.js';
 import { type AuthedRequest, requirePermission, permissions } from './auth.js';
-import { productSchema } from './catalog.js';
+import { productSchema, bindManufacturer } from './catalog.js';
 import { mutation } from './inventory.js';
 
 const uuid = z.string().uuid();
@@ -284,7 +284,9 @@ export async function processImportChunk(
           oem: d.oem,
           barcode: d.barcode,
           category: d.category,
-          category_names:d.categoryNames??{},
+          category_names: d.categoryNames ?? {},
+          company_metadata: d.companyMetadata ?? {},
+          manufacturerPartNo: d.manufacturerPartNo ?? '',
           pack_size: d.packSize,
           price_minor: d.priceMinor,
           cost_minor: d.costMinor,
@@ -294,16 +296,21 @@ export async function processImportChunk(
           ),
         }));
         await c.query(
-          `INSERT INTO products(id,org_id,sku,names,descriptions,brand,oem,barcode,category,pack_size,price_minor,cost_minor,reorder_level,search_text,source_id,status,category_names)
-    SELECT r.id,$1,r.sku,r.names,r.descriptions,r.brand,r.oem,r.barcode,r.category,r.pack_size,r.price_minor,r.cost_minor,r.reorder_level,r.search_text,$2,'DRAFT',r.category_names
-    FROM jsonb_to_recordset($3::jsonb) r(id uuid,row_number integer,sku text,names jsonb,descriptions jsonb,brand text,oem text,barcode text,category text,pack_size integer,price_minor bigint,cost_minor bigint,reorder_level integer,search_text text,category_names jsonb)`,
+          `INSERT INTO products(id,org_id,sku,names,descriptions,brand,oem,barcode,category,pack_size,price_minor,cost_minor,reorder_level,search_text,source_id,status,category_names,company_metadata)
+    SELECT r.id,$1,r.sku,r.names,r.descriptions,r.brand,r.oem,r.barcode,r.category,r.pack_size,r.price_minor,r.cost_minor,r.reorder_level,r.search_text,$2,'DRAFT',r.category_names,r.company_metadata
+    FROM jsonb_to_recordset($3::jsonb) r(id uuid,row_number integer,sku text,names jsonb,descriptions jsonb,brand text,oem text,barcode text,category text,pack_size integer,price_minor bigint,cost_minor bigint,reorder_level integer,search_text text,category_names jsonb,company_metadata jsonb)`,
           [job.org_id, job.source_id, JSON.stringify(records)],
         );
+        for (const r of records)
+          if (r.manufacturerPartNo)
+            await bindManufacturer(c, actor, r.id, r.brand, r.manufacturerPartNo, r.company_metadata);
         const identifiers = records.flatMap((r) =>
           [
             ['SKU', r.sku],
             ['OEM', r.oem],
             ['BARCODE', r.barcode],
+            ['MANUFACTURER', r.manufacturerPartNo],
+            ['SUPPLIER', r.company_metadata.supplierReference ?? ''],
           ]
             .filter(([, value]) => value)
             .map(([type, value]) => ({

@@ -1,0 +1,10 @@
+import React from 'react';
+import {useApp} from './context';
+import {Field} from './components';
+import {contentValue,languageNames,locales} from '../../../packages/i18n/src/index';
+import type {TechnicalAttribute,Product} from './types';
+export function AttributeEditor({value,onChange}:{value:TechnicalAttribute[];onChange:(next:TechnicalAttribute[])=>void}){
+ const{t}=useApp();const update=(index:number,patch:Partial<TechnicalAttribute>)=>onChange(value.map((row,i)=>i===index?{...row,...patch}:row));
+ return <fieldset><legend>{t('technicalAttributes')}</legend>{value.map((row,index)=><div className="panel" key={index}><div className="form-grid"><Field label={t('attributeCode')}><input dir="ltr" value={row.code} onChange={e=>update(index,{code:e.target.value})}/></Field><Field label={t('attributeValue')}><input dir="auto" value={row.value} onChange={e=>update(index,{value:e.target.value})}/></Field><Field label={t('unit')}><input dir="ltr" value={row.unit} onChange={e=>update(index,{unit:e.target.value})}/></Field>{locales.map(locale=><Field label={languageNames[locale]} key={locale}><input dir={locale==='ar'?'rtl':'ltr'} lang={locale} value={row.labels[locale]??''} onChange={e=>update(index,{labels:{...row.labels,[locale]:e.target.value}})}/></Field>)}</div><button type="button" className="text-button" onClick={()=>onChange(value.filter((_,i)=>i!==index))}>{t('remove')}</button></div>)}<button type="button" className="button secondary" disabled={value.length>=50} onClick={()=>onChange([...value,{code:'',labels:{ar:'',fr:'',en:''},value:'',unit:''}])}>{t('addAttribute')}</button></fieldset>;
+}
+export function Attributes({product}:{product:Product}){const{t,locale}=useApp(),rows=product.companyMetadata?.technicalAttributes??[];if(!rows.length)return null;return <section><h3>{t('technicalAttributes')}</h3><dl className="detail-grid">{rows.map((row,i)=>{const label=contentValue(row.labels,locale,product.translationStatus);return <div key={i}><dt><bdi>{label.value||row.code}</bdi>{label.missing&&<small>{t('translationMissing')}</small>}</dt><dd><bdi>{row.value} {row.unit}</bdi></dd></div>;})}</dl></section>;}

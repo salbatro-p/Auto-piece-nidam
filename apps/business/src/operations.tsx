@@ -1,6 +1,9 @@
 import { TranslationReviewer } from './catalog-admin';
+import {AttributeEditor,Attributes} from './technical-attributes';
+import { Replacements } from './catalog-links';
+import { OpeningBalances } from './opening-balances';
 import { Bins } from './bins';
-import {priceTotals,type TaxSettings} from '../../../packages/contracts/src/pricing';
+import { priceTotals, type TaxSettings } from '../../../packages/contracts/src/pricing';
 import React, { useEffect, useState } from 'react';
 import {
   ArrowDownToLine,
@@ -23,6 +26,7 @@ import {
   Empty,
   ErrorBanner,
   Field,
+  FilePicker,
   Modal,
   MutationState,
   ProductName,
@@ -241,6 +245,7 @@ export function Catalog({ vehicleId, clearVehicle }: { vehicleId: string; clearV
   return (
     <>
       <PageHeading title="catalog" hint="catalogHint">
+        {can('catalog')&&<a className="button secondary" href="/api/reports/products.csv">{t('export')}</a>}
         {can('catalog') && (
           <button className="button primary" data-testid="product-create" onClick={() => setEditing(null)}>
             <Plus size={18} />
@@ -294,7 +299,7 @@ export function Catalog({ vehicleId, clearVehicle }: { vehicleId: string; clearV
                     <span>
                       <ProductName product={p} />
                       <small>
-                        <bdi>{p.brand}</bdi> · <CategoryName product={p}/>
+                        <bdi>{p.brand}</bdi> · <CategoryName product={p} />
                       </small>
                     </span>
                   </button>
@@ -370,7 +375,7 @@ export function Catalog({ vehicleId, clearVehicle }: { vehicleId: string; clearV
 function ProductDetails({ product: p, onClose }: { product: Product; onClose: () => void }) {
   const { t, locale } = useApp();
   return (
-    <Modal title={contentValue(p.names, locale).value} onClose={onClose} wide>
+    <Modal title={contentValue(p.names, locale, p.translationStatus).value || p.sku} onClose={onClose} wide>
       <div className="detail-intro">
         <ProductVisual product={p} />
         <div>
@@ -381,7 +386,10 @@ function ProductDetails({ product: p, onClose }: { product: Product; onClose: ()
           <Amount minor={p.priceMinor} />
         </div>
       </div>
-      <p dir="auto">{contentValue(p.descriptions, locale).value}</p>
+      <p dir="auto">{contentValue(p.descriptions, locale, p.translationStatus).value}</p>
+      {contentValue(p.descriptions, locale, p.translationStatus).missing && (
+        <p className="warning-text">{t('translationMissing')}</p>
+      )}
       <dl className="detail-grid">
         <div>
           <dt>{t('oem')}</dt>
@@ -409,6 +417,8 @@ function ProductDetails({ product: p, onClose }: { product: Product; onClose: ()
         )}
       </dl>
       <div className="notice warning">{t('fitmentWarning')}</div>
+      <Replacements product={p} />
+      <Attributes product={p}/>
       <h3>{t('inventory')}</h3>
       <div className="table-wrap">
         <table>
@@ -463,6 +473,7 @@ export function ProductEditor({
   onSaved: () => void;
 }) {
   const { t, can, notify } = useApp();
+  const [attributes,setAttributes]=useState(product?.companyMetadata?.technicalAttributes??[]);
   const [form, setForm] = useState({
     sku: product?.sku ?? '',
     names: { ar: product?.names.ar ?? '', fr: product?.names.fr ?? '', en: product?.names.en ?? '' },
@@ -475,8 +486,12 @@ export function ProductEditor({
     oem: product?.oem ?? '',
     barcode: product?.barcode ?? '',
     category: product?.category ?? '',
-    manufacturerPartNo:product?.manufacturerPartNo??'',
-    categoryNames:{ar:product?.categoryNames?.ar??'',fr:product?.categoryNames?.fr??'',en:product?.categoryNames?.en??''},
+    manufacturerPartNo: product?.manufacturerPartNo ?? '',
+    categoryNames: {
+      ar: product?.categoryNames?.ar ?? '',
+      fr: product?.categoryNames?.fr ?? '',
+      en: product?.categoryNames?.en ?? '',
+    },
     packSize: String(product?.packSize ?? 1),
     price: String((product?.priceMinor ?? 0) / 100),
     cost: String((product?.costMinor ?? 0) / 100),
@@ -513,8 +528,9 @@ export function ProductEditor({
           oem: form.oem,
           barcode: form.barcode,
           category: form.category,
-          manufacturerPartNo:form.manufacturerPartNo,companyMetadata:product?.companyMetadata??{},
-          categoryNames:form.categoryNames,
+          manufacturerPartNo: form.manufacturerPartNo,
+          companyMetadata: {...product?.companyMetadata,technicalAttributes:attributes},
+          categoryNames: form.categoryNames,
           packSize: whole(form.packSize),
           priceMinor: parseMoney(form.price),
           costMinor: parseMoney(form.cost),
@@ -587,7 +603,29 @@ export function ProductEditor({
               onChange={(e) => change('category', e.target.value)}
             />
           </Field>
-          {(['ar','fr','en'] as const).map(l=><Field key={'category-'+l} label={t(('category'+l[0].toUpperCase()+l.slice(1)) as MessageKey)}><input lang={l} dir={l==='ar'?'rtl':'ltr'} value={form.categoryNames[l]} onChange={e=>setForm(f=>({...f,categoryNames:{...f.categoryNames,[l]:e.target.value}}))}/></Field>)}<Field label={t('oem')}>
+          <Field label={t('manufacturerPartNo')}>
+            <input
+              dir="ltr"
+              value={form.manufacturerPartNo}
+              onChange={(e) => change('manufacturerPartNo', e.target.value)}
+            />
+          </Field>
+          {(['ar', 'fr', 'en'] as const).map((l) => (
+            <Field
+              key={'category-' + l}
+              label={t(('category' + l[0].toUpperCase() + l.slice(1)) as MessageKey)}
+            >
+              <input
+                lang={l}
+                dir={l === 'ar' ? 'rtl' : 'ltr'}
+                value={form.categoryNames[l]}
+                onChange={(e) =>
+                  setForm((f) => ({ ...f, categoryNames: { ...f.categoryNames, [l]: e.target.value } }))
+                }
+              />
+            </Field>
+          ))}
+          <Field label={t('oem')}>
             <input
               data-testid="product-oem"
               dir="ltr"
@@ -665,8 +703,8 @@ export function ProductEditor({
           ))}
         </fieldset>
         <div className="upload-zone">
-          <Field label={t('photo')} hint={t('rightsHelp')}>
-            <input
+          <AttributeEditor value={attributes} onChange={setAttributes}/>
+            <FilePicker label={t('photo')} hint={t('rightsHelp')}
               data-testid="product-image"
               type="file"
               accept="image/png,image/jpeg,image/webp"
@@ -682,7 +720,6 @@ export function ProductEditor({
                 }
               }}
             />
-          </Field>
           {file && (
             <small>
               {t('selectedFile')}: <bdi>{file.name}</bdi>
@@ -733,8 +770,12 @@ export function Receipt({ sale, onClose }: { sale: Sale; onClose: () => void }) 
         <div className="receipt-logo">
           AutoParts <strong>Business</strong>
         </div>
-        <p>{t(sale.kind==='QUOTE'?'quote':'saleConfirmed')}</p>
-        {sale.expiresAt&&<p>{t('expiresAt')}: {dateTime(sale.expiresAt,locale)}</p>}
+        <p>{t(sale.kind === 'QUOTE' ? 'quote' : 'saleConfirmed')}</p>
+        {sale.expiresAt && (
+          <p>
+            {t('expiresAt')}: {dateTime(sale.expiresAt, locale)}
+          </p>
+        )}
         <p>
           <bdi className="mono">{sale.id}</bdi>
         </p>
@@ -746,6 +787,7 @@ export function Receipt({ sale, onClose }: { sale: Sale; onClose: () => void }) 
               <strong>
                 <bdi>{contentValue(line.names, locale).value || line.sku}</bdi>
               </strong>
+              {contentValue(line.names, locale).missing && <small>{t('translationMissing')}</small>}
               <small>
                 <bdi dir="ltr">{line.sku}</bdi> ·{' '}
                 <bdi>
@@ -758,16 +800,24 @@ export function Receipt({ sale, onClose }: { sale: Sale; onClose: () => void }) 
           </div>
         ))}
         <hr />
-        <div className="total-row"><span>{t('subtotal')}</span><Amount minor={sale.subtotalMinor??sale.totalMinor}/></div>
-        <div className="total-row"><span>{t('tax')} · <bdi>{quantity((sale.taxRateBps??0)/100,locale)}%</bdi></span><Amount minor={sale.taxMinor??0}/></div>
+        <div className="total-row">
+          <span>{t('subtotal')}</span>
+          <Amount minor={sale.subtotalMinor ?? sale.totalMinor} />
+        </div>
+        <div className="total-row">
+          <span>
+            {t('tax')} · <bdi>{quantity((sale.taxRateBps ?? 0) / 100, locale)}%</bdi>
+          </span>
+          <Amount minor={sale.taxMinor ?? 0} />
+        </div>
         <div className="receipt-total">
           <strong>{t('total')}</strong>
           <strong data-testid="receipt-total" data-minor={sale.totalMinor}>
             <Amount minor={sale.totalMinor} />
           </strong>
         </div>
-        <p className="small">{t(sale.kind==='QUOTE'?'quoteDisclaimer':'receiptDisclaimer')}</p>
-        {!sale.taxConfigured&&<p className="small">{t('taxNotConfigured')}</p>}
+        <p className="small">{t(sale.kind === 'QUOTE' ? 'quoteDisclaimer' : 'receiptDisclaimer')}</p>
+        {!sale.taxConfigured && <p className="small">{t('taxNotConfigured')}</p>}
         <p className="small">{t('demoNotice')}</p>
       </article>
       <button className="button primary full no-print" onClick={() => window.print()}>
@@ -791,13 +841,26 @@ export function PointOfSale() {
     [wh],
   );
   const sales = useLoad<{ items: Sale[] }>('/sales');
-  const quotes=useLoad<{items:Sale[]}>('/quotes'),tax=useLoad<TaxSettings>('/pricing'),quote=useMutation();
-  const[refreshError,setRefreshError]=useState<unknown>();
+  const quotes = useLoad<{ items: Sale[] }>('/quotes'),
+    tax = useLoad<TaxSettings>('/pricing'),
+    quote = useMutation();
+  const [refreshError, setRefreshError] = useState<unknown>();
   const commit = useMutation(),
     reserve = useMutation(),
     release = useMutation();
-  const blocked = !!reserved || commit.busy || reserve.busy || !!commit.pending || !!reserve.pending||quote.busy||!!quote.pending;
-  const totals=priceTotals(cart.map(l=>({priceMinor:l.product.priceMinor,quantity:l.quantity})),tax.data??{rateBps:0,inclusive:false}),total=totals.totalMinor;
+  const blocked =
+    !!reserved ||
+    commit.busy ||
+    reserve.busy ||
+    !!commit.pending ||
+    !!reserve.pending ||
+    quote.busy ||
+    !!quote.pending;
+  const totals = priceTotals(
+      cart.map((l) => ({ priceMinor: l.product.priceMinor, quantity: l.quantity })),
+      tax.data ?? { rateBps: 0, inclusive: false },
+    ),
+    total = totals.totalMinor;
   function add(p: Product) {
     if (blocked) return;
     setCart((lines) => {
@@ -813,7 +876,7 @@ export function PointOfSale() {
       warehouseId: wh,
       lines,
       locale,
-      expectedTotalMinor:total,
+      expectedTotalMinor: total,
       ...(reserved ? { reservationId: reserved } : {}),
     });
     if (result) {
@@ -828,7 +891,7 @@ export function PointOfSale() {
   return (
     <>
       <PageHeading title="pos" hint="posHint" />
-      <ErrorBanner error={tax.error??refreshError}/>
+      <ErrorBanner error={tax.error ?? refreshError} />
       <div className="pos-grid">
         <section className="pos-products">
           <div className="toolbar">
@@ -891,7 +954,26 @@ export function PointOfSale() {
                 <ChevronRight size={16} />
               </button>
             ))}
-            <h2>{t('quote')}</h2>{quotes.data?.items.slice(0,4).map(q=><div className="list-row" key={q.id}><button className="text-button" onClick={()=>setSale(q)}><bdi>{q.id.slice(0,8)}</bdi> · <Amount minor={q.totalMinor}/></button><Status value={q.status}/>{q.status==='OPEN'&&<button className="text-button" disabled={quote.busy} onClick={async()=>{if(await quote.run(`/quotes/${q.id}/cancel`,{}))quotes.reload();}}>{t('cancel')}</button>}</div>)}
+            <h2>{t('quote')}</h2>
+            {quotes.data?.items.slice(0, 4).map((q) => (
+              <div className="list-row" key={q.id}>
+                <button className="text-button" onClick={() => setSale(q)}>
+                  <bdi>{q.id.slice(0, 8)}</bdi> · <Amount minor={q.totalMinor} />
+                </button>
+                <Status value={q.status} />
+                {q.status === 'OPEN' && (
+                  <button
+                    className="text-button"
+                    disabled={quote.busy}
+                    onClick={async () => {
+                      if (await quote.run(`/quotes/${q.id}/cancel`, {})) quotes.reload();
+                    }}
+                  >
+                    {t('cancel')}
+                  </button>
+                )}
+              </div>
+            ))}
           </section>
         </section>
         <aside className="cart-panel">
@@ -924,7 +1006,13 @@ export function PointOfSale() {
                           setCart((ls) =>
                             ls.map((l) =>
                               l.product.id === line.product.id
-                                ? { ...l, quantity: Math.min(1000000,Math.trunc(Math.max(1, Number(e.target.value) || 1))) }
+                                ? {
+                                    ...l,
+                                    quantity: Math.min(
+                                      1000000,
+                                      Math.trunc(Math.max(1, Number(e.target.value) || 1)),
+                                    ),
+                                  }
                                 : l,
                             ),
                           )
@@ -968,21 +1056,73 @@ export function PointOfSale() {
                 <Amount minor={total} />
               </strong>
             </div>
-            <div className="total-row"><span>{t('tax')}</span><Amount minor={totals.taxMinor}/></div>
+            <div className="total-row">
+              <span>{t('tax')}</span>
+              <Amount minor={totals.taxMinor} />
+            </div>
             <p className="small muted">{t('serverTotal')}</p>
-            {!tax.data?.configured&&<p className="small muted">{t('taxNotConfigured')}</p>}
-            <button className="text-button" disabled={!cart.length||commit.busy||!!commit.pending} onClick={async()=>{setRefreshError(undefined);try{const updated=await Promise.all(cart.map(async l=>({...l,product:await api<Product>(`/products/${l.product.id}`)})));setCart(updated);tax.reload();}catch(e){setRefreshError(e);}}}>{t('refreshPrices')}</button>
+            {!tax.data?.configured && <p className="small muted">{t('taxNotConfigured')}</p>}
+            <button
+              className="text-button"
+              disabled={!cart.length || commit.busy || !!commit.pending}
+              onClick={async () => {
+                setRefreshError(undefined);
+                try {
+                  const updated = await Promise.all(
+                    cart.map(async (l) => ({
+                      ...l,
+                      product: await api<Product>(`/products/${l.product.id}`),
+                    })),
+                  );
+                  setCart(updated);
+                  tax.reload();
+                } catch (e) {
+                  setRefreshError(e);
+                }
+              }}
+            >
+              {t('refreshPrices')}
+            </button>
             <button
               data-testid="sale-submit"
               className="button primary full"
-              disabled={!cart.length || !online || !tax.data || commit.busy || reserve.busy || release.busy||quote.busy||!!quote.pending}
+              disabled={
+                !cart.length ||
+                !online ||
+                !tax.data ||
+                commit.busy ||
+                reserve.busy ||
+                release.busy ||
+                quote.busy ||
+                !!quote.pending
+              }
               onClick={() => void finish()}
             >
               {commit.busy ? t('pending') : t(commit.pending ? 'retry' : 'completeSale')}
               <ArrowUpRight size={18} />
             </button>
-            <MutationState state={quote}/>
-            <button className="button secondary full" disabled={!cart.length||!tax.data||!online||quote.busy||commit.busy||!!commit.pending||!!reserved} onClick={async()=>{const q=await quote.run<Sale>('/quotes',{warehouseId:wh,lines,locale});if(q){setSale(q);quotes.reload();}}}>{t(quote.pending?'retry':'saveQuote')}</button>
+            <MutationState state={quote} />
+            <button
+              className="button secondary full"
+              disabled={
+                !cart.length ||
+                !tax.data ||
+                !online ||
+                quote.busy ||
+                commit.busy ||
+                !!commit.pending ||
+                !!reserved
+              }
+              onClick={async () => {
+                const q = await quote.run<Sale>('/quotes', { warehouseId: wh, lines, locale });
+                if (q) {
+                  setSale(q);
+                  quotes.reload();
+                }
+              }}
+            >
+              {t(quote.pending ? 'retry' : 'saveQuote')}
+            </button>
             {reserved ? (
               <button
                 className="button secondary full"
@@ -1066,7 +1206,7 @@ export function ProductSelect({
           <option value="">— {t('product')} —</option>
           {data?.items.map((p) => (
             <option key={p.id} value={p.id}>
-              {p.sku} · {contentValue(p.names, locale).value}
+              {p.sku} · {contentValue(p.names, locale, p.translationStatus).value || t('translationMissing')}
             </option>
           ))}
         </select>
@@ -1169,7 +1309,10 @@ export function Inventory() {
   }
   return (
     <>
-      <PageHeading title="inventory" hint="inventoryHint"><Bins/></PageHeading>
+      <PageHeading title="inventory" hint="inventoryHint">
+        <OpeningBalances />
+        <Bins />
+      </PageHeading>
       <div className="inventory-layout">
         <section className="panel operation-panel">
           {allowed.length ? (

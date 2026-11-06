@@ -1,0 +1,17 @@
+{
+  "date": "2026-11-04T19:45:35.014Z",
+  "environment": "Separate temporary local PostgreSQL cluster; no restart of the demo or other company databases",
+  "dataDirectory": "D:\\dipoo\\AutoPartsMorocco-local-20261104\\restart-1793821535003",
+  "port": 57756,
+  "phases": [
+    "Confirmed live request paused after balance update, before ledger insertion",
+    "Immediate database stop and crash recovery completed",
+    "All uncommitted changes rolled back; ten identical retries created one receipt and one +10 stock effect"
+  ],
+  "interruptedHttpStatus": 500,
+  "recoveryMs": 1891.3283000000001,
+  "quantityBefore": 4,
+  "quantityAfter": 14,
+  "ledger": 14,
+  "result": "PASS"
+}

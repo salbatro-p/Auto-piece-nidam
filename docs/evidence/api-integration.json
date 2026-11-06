@@ -1,6 +1,6 @@
 {
-  "started": "2026-11-04T11:05:16.063Z",
-  "finished": "2026-11-04T11:05:20.622Z",
+  "started": "2026-11-04T21:21:33.464Z",
+  "finished": "2026-11-04T21:21:38.331Z",
   "environment": {
     "node": "v24.16.0",
     "platform": "win32",
@@ -8,116 +8,136 @@
   },
   "tests": [
     {
+      "id": "CATALOG-EXPORT",
+      "status": "PASS",
+      "durationMs": 42.784999999999854
+    },
+    {
+      "id": "API-CONTRACT",
+      "status": "PASS",
+      "durationMs": 5.966399999999794
+    },
+    {
+      "id": "OPENING-BALANCE",
+      "status": "PASS",
+      "durationMs": 217.69579999999996
+    },
+    {
+      "id": "CATALOG-LINKS",
+      "status": "PASS",
+      "durationMs": 122.19749999999976
+    },
+    {
       "id": "INV-01",
       "status": "PASS",
-      "durationMs": 611.3561999999997
+      "durationMs": 535.1304
     },
     {
       "id": "INV-02",
       "status": "PASS",
-      "durationMs": 67.76559999999972
+      "durationMs": 77.83429999999998
     },
     {
       "id": "INV-03",
       "status": "PASS",
-      "durationMs": 35.088100000000395
+      "durationMs": 42.50120000000015
     },
     {
       "id": "INV-04",
       "status": "PASS",
-      "durationMs": 90.30330000000004
+      "durationMs": 104.36150000000043
     },
     {
       "id": "INV-05",
       "status": "PASS",
-      "durationMs": 66.04010000000017
+      "durationMs": 56.365600000000086
     },
     {
       "id": "INV-06",
       "status": "PASS",
-      "durationMs": 89.64539999999988
+      "durationMs": 85.43460000000005
     },
     {
       "id": "INV-07",
       "status": "PASS",
-      "durationMs": 15.8766999999998
+      "durationMs": 48.86090000000013
     },
     {
       "id": "INV-08",
       "status": "PASS",
-      "durationMs": 21.916299999999865
+      "durationMs": 23.116399999999885
     },
     {
       "id": "COUNT-CONTROLS",
       "status": "PASS",
-      "durationMs": 74.4001000000003
+      "durationMs": 44.51000000000022
     },
     {
       "id": "SEC-01",
       "status": "PASS",
-      "durationMs": 37.19399999999996
+      "durationMs": 38.68780000000015
     },
     {
       "id": "SEC-02",
       "status": "PASS",
-      "durationMs": 367.0362
+      "durationMs": 371.4832999999999
     },
     {
       "id": "MFA-SESSION",
       "status": "PASS",
-      "durationMs": 146.94270000000006
+      "durationMs": 151.44879999999966
     },
     {
       "id": "DATA-01-SMALL",
       "status": "PASS",
-      "durationMs": 55.63639999999987
+      "durationMs": 64.1898000000001
     },
     {
       "id": "DATA-02",
       "status": "PASS",
-      "durationMs": 38.715799999999945
+      "durationMs": 37.19410000000062
     },
     {
       "id": "I18N-API",
       "status": "PASS",
-      "durationMs": 110.72640000000001
+      "durationMs": 114.74229999999989
     },
     {
       "id": "REL-01-ROLLBACK-REL-03",
       "status": "PASS",
-      "durationMs": 29.044800000000123
+      "durationMs": 31.686399999999594
     },
     {
       "id": "LEDGER-RECONCILIATION",
       "status": "PASS",
-      "durationMs": 5.435500000000502
+      "durationMs": 2.662899999999354
     },
     {
       "id": "DATA-01-REL-02-IMPORT",
       "status": "PASS",
-      "durationMs": 682.3016000000007
+      "durationMs": 691.8834999999999
     },
     {
       "id": "INV-BINS",
       "status": "PASS",
-      "durationMs": 83.90369999999984
+      "durationMs": 87.65560000000005
     },
     {
       "id": "I18N-CONTENT-REVIEW",
       "status": "PASS",
-      "durationMs": 49.19430000000011
+      "durationMs": 47.78089999999975
     },
     {
       "id": "QUOTES-TAX",
       "status": "PASS",
-      "durationMs": 76.44700000000012
+      "durationMs": 68.70010000000002
     },
     {
       "id": "SEC-ONBOARDING",
       "status": "PASS",
-      "durationMs": 126.1230000000005
+      "durationMs": 123.31540000000041
     }
   ],
-  "passed": 22,
+  "passed": 26,
   "failed": 0
 }

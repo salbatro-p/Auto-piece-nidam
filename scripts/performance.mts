@@ -11,10 +11,22 @@ const base = new URL(process.env.DATABASE_URL!);
 if (!['127.0.0.1', 'localhost'].includes(base.hostname))
   throw new Error('Benchmark requires local isolated PostgreSQL');
 const admin = new Pool({ connectionString: base.href });
-const database = 'autoparts_load_' + Date.now();
-await admin.query('CREATE DATABASE ' + database);
+const reuse = process.env.BENCHMARK_DATABASE;
+const database = reuse ?? 'autoparts_load_' + Date.now();
+if (!/^autoparts_load_\d+$/.test(database))
+  throw new Error('Only isolated load-test databases may be reused');
+if (!reuse) await admin.query('CREATE DATABASE ' + database);
 base.pathname = '/' + database;
 const pool = new Pool({ connectionString: base.href, max: 40 });
+if (
+  reuse &&
+  !(
+    await pool.query(
+      'SELECT 1 FROM business_documents WHERE data @> \'{"syntheticLoadFixture":true}\'::jsonb LIMIT 1',
+    )
+  ).rowCount
+)
+  throw new Error('Synthetic fixture marker missing');
 await mkdir('docs/evidence', { recursive: true });
 const report: any = {
   date: new Date().toISOString(),
@@ -35,7 +47,7 @@ const started = performance.now();
 await migrate(pool);
 await seed(pool);
 await pool.query(
-  "CREATE FUNCTION load_uuid(text) RETURNS uuid LANGUAGE sql IMMUTABLE AS $$ SELECT overlay(overlay(md5($1) placing '4' from 13) placing '8' from 17)::uuid $$",
+  "CREATE OR REPLACE FUNCTION load_uuid(text) RETURNS uuid LANGUAGE sql IMMUTABLE AS $$ SELECT overlay(overlay(md5($1) placing '4' from 13) placing '8' from 17)::uuid $$",
 );
 const org = '00000000-0000-4000-8000-000000000001';
 const owner = (await pool.query("SELECT id FROM staff_users WHERE role='owner'")).rows[0].id;
@@ -44,34 +56,49 @@ const wh = (await pool.query("SELECT id FROM warehouses WHERE code='CAS'")).rows
 const wh2 = (await pool.query("SELECT id FROM warehouses WHERE code='DEP'")).rows[0].id;
 const wh3 = (await pool.query("SELECT id FROM warehouses WHERE code='RAB'")).rows[0].id;
 console.log('Seeding 100k synthetic SKUs / 10k variants / 1m synthetic fitment links in ' + database);
+if (!reuse) {
+  await pool.query(
+    "INSERT INTO products(id,org_id,sku,names,descriptions,brand,oem,barcode,category,pack_size,price_minor,cost_minor,status,source_id,search_text) SELECT load_uuid('load-product-'||n)::uuid,$1,'SYN-'||lpad(n::text,6,'0'),jsonb_build_object('en','Synthetic part '||n,'fr','Pièce synthétique '||n,'ar','قطعة اصطناعية '||n),'{}','SYNTHETIC','SYN-OE-'||n,'990'||lpad(n::text,10,'0'),'filters',10,8900,4500,'ACTIVE_INTERNAL',$2,'syn'||lpad(n::text,6,'0')||'synoe'||n||'synthetic' FROM generate_series(1,99994) n",
+    [org, source],
+  );
+  await pool.query(
+    "INSERT INTO vehicles(id,org_id,make,model,generation,market,year_from,year_to,engine,fuel,transmission,body,source_id,external_id) SELECT load_uuid('load-vehicle-'||n)::uuid,$1,'SYNTHETIC','Model '||(n%100),'Gen '||(n%10),'SYN',2000,2025,'SYN-ENGINE-'||n,'DIESEL','MANUAL','HATCHBACK',$2,'SYN-'||n FROM generate_series(1,9999) n",
+    [org, source],
+  );
+  await pool.query(
+    "INSERT INTO fitments(product_id,vehicle_id,status,evidence,source_id,qualifiers,reviewed_by,reviewed_at) SELECT p.id,load_uuid('load-vehicle-'||((n*10+j)%9999+1))::uuid,'VERIFIED','Synthetic benchmark relationship only, never real fitment',$1,'Synthetic test fixture only',$2,now() FROM generate_series(1,99994) n CROSS JOIN generate_series(0,9) j JOIN products p ON p.id=load_uuid('load-product-'||n)::uuid",
+    [source, owner],
+  );
+  await pool.query(
+    "INSERT INTO fitments(product_id,vehicle_id,status,evidence,source_id,qualifiers,reviewed_by,reviewed_at) SELECT load_uuid('load-product-'||n)::uuid,load_uuid('load-vehicle-9999')::uuid,'VERIFIED','Synthetic benchmark supplemental link only',$1,'Synthetic only',$2,now() FROM generate_series(1,54) n ON CONFLICT DO NOTHING",
+    [source, owner],
+  );
+  await pool.query(
+    "INSERT INTO inventory_balances(org_id,product_id,warehouse_id,on_hand) SELECT $1,id,CASE WHEN sku LIKE 'SYN-%' AND substring(sku from 5)::integer%3=1 THEN $3::uuid WHEN sku LIKE 'SYN-%' AND substring(sku from 5)::integer%3=2 THEN $4::uuid ELSE $2::uuid END,100 FROM products WHERE sku LIKE 'SYN-%'",
+    [org, wh, wh2, wh3],
+  );
+  const doc = randomUUID();
+  await pool.query(
+    "INSERT INTO business_documents(id,org_id,kind,actor_id,data) VALUES($1,$2,'OPENING_BALANCE',$3,'{\"syntheticLoadFixture\":true}')",
+    [doc, org, owner],
+  );
+  await pool.query(
+    "INSERT INTO stock_movements(org_id,document_id,product_id,warehouse_id,kind,on_hand_delta,actor_id,request_id) SELECT org_id,$1,product_id,warehouse_id,'OPENING_BALANCE',on_hand,$2,'synthetic-benchmark-seed' FROM inventory_balances WHERE product_id IN (SELECT id FROM products WHERE sku LIKE 'SYN-%')",
+    [doc, owner],
+  );
+  await pool.query(
+    "INSERT INTO warehouse_bins(org_id,warehouse_id,code,is_default) SELECT org_id,id,'RECEIVING',true FROM warehouses ON CONFLICT(warehouse_id,code) DO NOTHING",
+  );
+  await pool.query(
+    "INSERT INTO bin_balances(product_id,bin_id,on_hand) SELECT b.product_id,w.id,b.on_hand FROM inventory_balances b JOIN warehouse_bins w ON w.warehouse_id=b.warehouse_id AND w.is_default JOIN products p ON p.id=b.product_id WHERE p.sku LIKE 'SYN-%'",
+  );
+  await pool.query(
+    "INSERT INTO bin_movements(org_id,document_id,product_id,bin_id,kind,on_hand_delta,actor_id) SELECT w.org_id,$1,b.product_id,b.bin_id,'OPENING_BALANCE',b.on_hand,$2 FROM bin_balances b JOIN warehouse_bins w ON w.id=b.bin_id JOIN products p ON p.id=b.product_id WHERE p.sku LIKE 'SYN-%'",
+    [doc, owner],
+  );
+}
 await pool.query(
-  "INSERT INTO products(id,org_id,sku,names,descriptions,brand,oem,barcode,category,pack_size,price_minor,cost_minor,status,source_id,search_text) SELECT load_uuid('load-product-'||n)::uuid,$1,'SYN-'||lpad(n::text,6,'0'),jsonb_build_object('en','Synthetic part '||n,'fr','Pièce synthétique '||n,'ar','قطعة اصطناعية '||n),'{}','SYNTHETIC','SYN-OE-'||n,'990'||lpad(n::text,10,'0'),'filters',10,8900,4500,'ACTIVE_INTERNAL',$2,'syn'||lpad(n::text,6,'0')||'synoe'||n||'synthetic' FROM generate_series(1,99994) n",
-  [org, source],
-);
-await pool.query(
-  "INSERT INTO vehicles(id,org_id,make,model,generation,market,year_from,year_to,engine,fuel,transmission,body,source_id,external_id) SELECT load_uuid('load-vehicle-'||n)::uuid,$1,'SYNTHETIC','Model '||(n%100),'Gen '||(n%10),'SYN',2000,2025,'SYN-ENGINE-'||n,'DIESEL','MANUAL','HATCHBACK',$2,'SYN-'||n FROM generate_series(1,9999) n",
-  [org, source],
-);
-await pool.query(
-  "INSERT INTO fitments(product_id,vehicle_id,status,evidence,source_id,qualifiers,reviewed_by,reviewed_at) SELECT p.id,load_uuid('load-vehicle-'||((n*10+j)%9999+1))::uuid,'VERIFIED','Synthetic benchmark relationship only, never real fitment',$1,'Synthetic test fixture only',$2,now() FROM generate_series(1,99994) n CROSS JOIN generate_series(0,9) j JOIN products p ON p.id=load_uuid('load-product-'||n)::uuid",
-  [source, owner],
-);
-await pool.query(
-  "INSERT INTO fitments(product_id,vehicle_id,status,evidence,source_id,qualifiers,reviewed_by,reviewed_at) SELECT load_uuid('load-product-'||n)::uuid,load_uuid('load-vehicle-9999')::uuid,'VERIFIED','Synthetic benchmark supplemental link only',$1,'Synthetic only',$2,now() FROM generate_series(1,54) n ON CONFLICT DO NOTHING",
-  [source, owner],
-);
-await pool.query(
-  "INSERT INTO inventory_balances(org_id,product_id,warehouse_id,on_hand) SELECT $1,id,CASE WHEN sku LIKE 'SYN-%' AND substring(sku from 5)::integer%3=1 THEN $3::uuid WHEN sku LIKE 'SYN-%' AND substring(sku from 5)::integer%3=2 THEN $4::uuid ELSE $2::uuid END,100 FROM products WHERE sku LIKE 'SYN-%'",
-  [org, wh, wh2, wh3],
-);
-const doc = randomUUID();
-await pool.query(
-  "INSERT INTO business_documents(id,org_id,kind,actor_id,data) VALUES($1,$2,'OPENING_BALANCE',$3,'{\"syntheticLoadFixture\":true}')",
-  [doc, org, owner],
-);
-await pool.query(
-  "INSERT INTO stock_movements(org_id,document_id,product_id,warehouse_id,kind,on_hand_delta,actor_id,request_id) SELECT org_id,$1,product_id,warehouse_id,'OPENING_BALANCE',on_hand,$2,'synthetic-benchmark-seed' FROM inventory_balances WHERE product_id IN (SELECT id FROM products WHERE sku LIKE 'SYN-%')",
-  [doc, owner],
+  "INSERT INTO product_identifiers(product_id,type,raw_value,normalized_value,source_id) SELECT p.id,v.type,v.value,regexp_replace(lower(v.value),'[^[:alnum:]]','','g'),p.source_id FROM products p CROSS JOIN LATERAL (VALUES('SKU',p.sku),('OEM',p.oem),('BARCODE',p.barcode)) v(type,value) WHERE p.sku LIKE 'SYN-%' ON CONFLICT DO NOTHING",
 );
 await pool.query('ANALYZE');
 report.seedMilliseconds = performance.now() - started;
@@ -135,7 +162,11 @@ async function scenario(
     p99: quantile(0.99),
     statuses,
     targetP95: target,
-    pass: quantile(0.95) <= target && Object.keys(statuses).every((s) => s === '200'),
+    ...(name.startsWith('exact SKU') ? { targetP99: 1500 } : {}),
+    pass:
+      quantile(0.95) <= target &&
+      (!name.startsWith('exact SKU') || quantile(0.99) <= 1500) &&
+      Object.keys(statuses).every((s) => s === '200'),
   };
   report.scenarios.push(result);
   console.log(JSON.stringify(result));
@@ -175,6 +206,9 @@ await scenario('dashboard', 2, 10, 1500, () => ({ method: 'GET', url: '/api/dash
 report.reconciliation = (
   await app.inject({ url: '/api/inventory/reconciliation', headers: { cookie } })
 ).json();
+report.binReconciliation = (
+  await app.inject({ url: '/api/bins/reconciliation', headers: { cookie } })
+).json();
 report.peakRSSBytes = process.resourceUsage().maxRSS * 1024;
 report.queryPlan = (
   await pool.query(
@@ -187,6 +221,13 @@ report.limits = [
   '100k import resumability is a separate acceptance test; SQL fixture generation does not pass it.',
   'Database retained for inspection; no real customer/company data.',
 ];
+report.result =
+  report.scenarios.every((s: any) => s.pass) &&
+  report.reconciliation.balanced &&
+  report.binReconciliation.balanced
+    ? 'PASS'
+    : 'FAIL';
+if (report.result !== 'PASS') process.exitCode = 1;
 await writeFile('docs/evidence/performance.json', JSON.stringify(report, null, 2));
 await app.close();
 await pool.end();

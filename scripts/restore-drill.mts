@@ -31,6 +31,27 @@ const tables = [
   'idempotency',
   'outbox_events',
   'product_media',
+  'warehouse_bins',
+  'bin_balances',
+  'bin_movements',
+  'bulk_import_jobs',
+  'bulk_import_rows',
+  'translation_reviews',
+  'quotes',
+  'manufacturers',
+  'manufacturer_parts',
+  'product_replacements',
+  'organizations',
+  'warehouses',
+  'staff_users',
+  'invitations',
+  'sources',
+  'vehicles',
+  'fitments',
+  'suppliers',
+  'supplier_items',
+  'purchase_orders',
+  'purchase_lines',
 ];
 async function checksums(client: any) {
   const results: Record<string, { rows: number; sha256: string }> = {};
@@ -113,6 +134,9 @@ const auditCookie = String(auditAuth.headers['set-cookie']).split(';')[0];
 const reconciliation = (
   await app.inject({ url: '/api/inventory/reconciliation', headers: { cookie: auditCookie } })
 ).json();
+const binReconciliation = (
+  await app.inject({ url: '/api/bins/reconciliation', headers: { cookie: auditCookie } })
+).json();
 const report = {
   date: new Date().toISOString(),
   environment: 'Windows native PostgreSQL18.4, isolated synthetic data. New local recovery database.',
@@ -132,7 +156,8 @@ const report = {
     exactlyOneDeduction: flowPass,
   },
   reconciliation,
-  pass: identical && flowPass && reconciliation.balanced === true,
+  binReconciliation,
+  pass: identical && flowPass && reconciliation.balanced === true && binReconciliation.balanced === true,
   limits: [
     'Local logical snapshot recovery only; remote encrypted storage and WAL/PITR not configured.',
     'This elapsed restore does not establish a hosted RTO or 15-minute RPO.',

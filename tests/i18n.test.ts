@@ -76,7 +76,8 @@ test('Arabic plurals and missing content stay visible without modifying authorit
   assert.equal(translate('ar', 'cartCount', { count: 2 }), 'بندان');
   assert.notEqual(translate('fr', 'cartCount', { count: 1 }), translate('fr', 'cartCount', { count: 3 }));
   const id = 'OEM-82 00 / أ 0012345678905';
-  const fallback = contentValue({ en: id }, 'ar');
+  assert.equal(contentValue({ en: id }, 'ar').value, '');
+  const fallback = contentValue({ en: id }, 'ar', { en: 'APPROVED' });
   assert.equal(fallback.value, id);
   assert.equal(fallback.missing, true);
   assert.equal(fallback.sourceLocale, 'en');

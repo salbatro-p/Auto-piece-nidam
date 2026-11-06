@@ -15,6 +15,7 @@ const localized = z
   .strict();
 const metadata = z
   .object({
+    technicalAttributes:z.array(z.object({code:z.string().regex(/^[a-zA-Z0-9_-]{1,50}$/),labels:localized,value:z.string().min(1).max(200),unit:z.string().max(30).default('')}).strict()).max(50).optional(),
     supplierReference: z.string().max(200).default(''),
     imageSource: z.string().max(1000).default(''),
     suppliedReviewStatus: localized.default({ ar: '', fr: '', en: '' }),
@@ -215,7 +216,18 @@ export function registerCatalog(app: FastifyInstance, pool: Pool) {
         .parse(request.query);
     if (q.warehouseId) warehouseScope(actor, q.warehouseId);
     const params = [actor.org_id, `%${normalize(q.q)}%`, q.vehicleId ?? null, q.warehouseId ?? null];
-    const where = `p.org_id=$1 AND p.status<>'ARCHIVED' AND ($2='%%' OR p.search_text LIKE $2 OR EXISTS(SELECT 1 FROM product_identifiers pi WHERE pi.product_id=p.id AND pi.normalized_value=trim(both '%' FROM $2))) AND ($3::uuid IS NULL OR EXISTS(SELECT 1 FROM fitments f WHERE f.product_id=p.id AND f.vehicle_id=$3 AND f.status='VERIFIED')) AND ($4::uuid IS NULL OR EXISTS(SELECT 1 FROM inventory_balances b WHERE b.product_id=p.id AND b.warehouse_id=$4))`;
+    const exact = q.q
+      ? !!(
+          await pool.query(
+            'SELECT 1 FROM product_identifiers i JOIN products p ON p.id=i.product_id WHERE i.normalized_value=$1 AND p.org_id=$2 LIMIT 1',
+            [normalize(q.q), actor.org_id],
+          )
+        ).rowCount
+      : false;
+    const matching = exact
+      ? "p.id IN (SELECT product_id FROM product_identifiers WHERE normalized_value=trim(both '%' FROM $2))"
+      : "($2='%%' OR p.search_text LIKE $2)";
+    const where = `p.org_id=$1 AND p.status<>'ARCHIVED' AND ${matching} AND ($3::uuid IS NULL OR EXISTS(SELECT 1 FROM fitments f WHERE f.product_id=p.id AND f.vehicle_id=$3 AND f.status='VERIFIED')) AND ($4::uuid IS NULL OR EXISTS(SELECT 1 FROM inventory_balances b WHERE b.product_id=p.id AND b.warehouse_id=$4))`;
     const [items, count] = await Promise.all([
       pool.query(
         `SELECT p.*,mp.part_number AS manufacturer_part_no FROM products p LEFT JOIN manufacturer_parts mp ON mp.id=p.manufacturer_part_id WHERE ${where} ORDER BY p.sku LIMIT 30 OFFSET $5`,
@@ -268,10 +280,11 @@ export function registerCatalog(app: FastifyInstance, pool: Pool) {
         throw new DomainError('FORBIDDEN', 403);
       if (old.sku !== d.sku) throw new DomainError('SKU_IMMUTABLE', 409);
       await sourceAllowed(c, actor, d.sourceId);
+      const technicalChanged=JSON.stringify(old.company_metadata?.technicalAttributes??[])!==JSON.stringify(d.companyMetadata.technicalAttributes??[]);
       await bindManufacturer(c, actor, id, d.brand, d.manufacturerPartNo, d.companyMetadata);
       await identifiers(c, id, d, d.sourceId ?? old.source_id);
       await c.query(
-        'UPDATE products SET names=$2,descriptions=$3,brand=$4,oem=$5,barcode=$6,category=$7,pack_size=$8,price_minor=$9,cost_minor=$10,reorder_level=$11,status=$12,search_text=$13,source_id=$14,translation_status=CASE WHEN names<>$2::jsonb OR descriptions<>$3::jsonb OR category_names<>$16::jsonb THEN $15::jsonb ELSE translation_status END,category_names=$16,version=version+1,updated_at=now() WHERE id=$1',
+        'UPDATE products SET names=$2,descriptions=$3,brand=$4,oem=$5,barcode=$6,category=$7,pack_size=$8,price_minor=$9,cost_minor=$10,reorder_level=$11,status=$12,search_text=$13,source_id=$14,translation_status=CASE WHEN names<>$2::jsonb OR descriptions<>$3::jsonb OR category_names<>$16::jsonb OR $17 THEN $15::jsonb ELSE translation_status END,category_names=$16,version=version+1,updated_at=now() WHERE id=$1',
         [
           id,
           d.names,
@@ -289,6 +302,7 @@ export function registerCatalog(app: FastifyInstance, pool: Pool) {
           d.sourceId ?? old.source_id,
           { ar: 'REVIEW_REQUIRED', fr: 'REVIEW_REQUIRED', en: 'REVIEW_REQUIRED' },
           d.categoryNames,
+          technicalChanged,
         ],
       );
       await audit(
@@ -325,7 +339,9 @@ export function registerCatalog(app: FastifyInstance, pool: Pool) {
       if (p.version !== d.version) throw new DomainError('EDIT_CONFLICT', 409);
       if (!p.names[d.locale]?.trim() || !p.descriptions[d.locale]?.trim())
         throw new DomainError('TRANSLATION_INCOMPLETE', 409);
-      const digest = hash(JSON.stringify({ name: p.names[d.locale], description: p.descriptions[d.locale] }));
+      const attributes=p.company_metadata?.technicalAttributes??[];
+      if(attributes.some((a:any)=>!a.labels[d.locale]?.trim()))throw new DomainError('TRANSLATION_INCOMPLETE',409);
+      const digest = hash(JSON.stringify({ name: p.names[d.locale], description: p.descriptions[d.locale],category:p.category_names[d.locale],attributes:attributes.map((a:any)=>({...a,labels:a.labels[d.locale]})) }));
       await c.query(
         'INSERT INTO translation_reviews(product_id,locale,product_version,reviewer_id,note,content_hash) VALUES($1,$2,$3,$4,$5,$6)',
         [id, d.locale, p.version, actor.id, d.note, digest],

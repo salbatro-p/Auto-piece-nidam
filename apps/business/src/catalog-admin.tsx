@@ -24,7 +24,13 @@ export function SourceManager() {
   if (!can('catalog')) return null;
   return (
     <>
-      <button className="button secondary" onClick={() => setOpen(true)}>
+      <button
+        className="button secondary"
+        onClick={() => {
+          list.reload();
+          setOpen(true);
+        }}
+      >
         {t('sources')}
       </button>
       {open && (
@@ -137,6 +143,7 @@ export function VehicleCreator({ onSaved }: { onSaved: () => void }) {
     sources = useLoad<{ items: Source[] }>(can('catalog') ? '/sources' : '/vehicles'),
     save = useMutation();
   const [open, setOpen] = useState(false);
+  const [aliases, setAliases] = useState({ ar: '', fr: '', en: '' });
   const [form, setForm] = useState({
     make: '',
     model: '',
@@ -155,7 +162,13 @@ export function VehicleCreator({ onSaved }: { onSaved: () => void }) {
   if (!can('catalog')) return null;
   return (
     <>
-      <button className="button primary" onClick={() => setOpen(true)}>
+      <button
+        className="button primary"
+        onClick={() => {
+          sources.reload();
+          setOpen(true);
+        }}
+      >
         {t('newVehicle')}
       </button>
       {open && (
@@ -167,6 +180,7 @@ export function VehicleCreator({ onSaved }: { onSaved: () => void }) {
               if (
                 await save.run('/vehicles', {
                   ...form,
+                  aliases,
                   yearFrom: Number(form.yearFrom),
                   yearTo: Number(form.yearTo),
                 })
@@ -217,6 +231,22 @@ export function VehicleCreator({ onSaved }: { onSaved: () => void }) {
                 </select>
               </Field>
             </div>
+            <fieldset>
+              <legend>{t('aliases')}</legend>
+              {(['ar', 'fr', 'en'] as const).map((language) => (
+                <Field
+                  key={language}
+                  label={{ ar: 'العربية (AR)', fr: 'Français (FR)', en: 'English (EN)' }[language]}
+                >
+                  <input
+                    lang={language}
+                    dir={language === 'ar' ? 'rtl' : 'ltr'}
+                    value={aliases[language]}
+                    onChange={(e) => setAliases({ ...aliases, [language]: e.target.value })}
+                  />
+                </Field>
+              ))}
+            </fieldset>
             <MutationState state={save} />
             <button className="button primary" disabled={save.busy}>
               {t('save')}

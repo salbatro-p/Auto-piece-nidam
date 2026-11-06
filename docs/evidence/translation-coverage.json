@@ -1,12 +1,12 @@
 {
-  "date": "2026-11-04T11:05:15.706Z",
-  "keysPerLocale": 409,
+  "date": "2026-11-04T21:21:33.085Z",
+  "keysPerLocale": 429,
   "technicalCoverage": {
     "ar": 100,
     "fr": 100,
     "en": 100
   },
-  "backendDomainErrorCodes": 35,
+  "backendDomainErrorCodes": 39,
   "missing": [],
   "reviewStatus": {
     "ar": "NOT_REVIEWED",

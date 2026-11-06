@@ -14,6 +14,8 @@ import {
 } from './auth.js';
 import { mutation } from './inventory.js';
 import { insertProduct, productSchema } from './catalog.js';
+import {contentValue} from '../../../packages/i18n/src/index.js';
+import {csvCell} from './catalog-export.js';
 const uuid = z.string().uuid();
 export function registerOperations(app: FastifyInstance, pool: Pool) {
   app.get('/api/suppliers', async (request) => {
@@ -248,7 +250,9 @@ export function registerOperations(app: FastifyInstance, pool: Pool) {
         await c.query('SELECT * FROM import_jobs WHERE id=$1 AND org_id=$2 FOR UPDATE', [id, actor.org_id])
       ).rows[0];
       if (!job || job.status !== 'COMMITTED') throw new DomainError('IMPORT_INVALID', 409);
-      await c.query('SELECT id FROM products WHERE id=ANY($1::uuid[]) ORDER BY id FOR UPDATE',[job.committed_ids]);
+      await c.query('SELECT id FROM products WHERE id=ANY($1::uuid[]) ORDER BY id FOR UPDATE', [
+        job.committed_ids,
+      ]);
       const touched = (
         await c.query('SELECT 1 FROM stock_movements WHERE product_id=ANY($1::uuid[]) LIMIT 1', [
           job.committed_ids,
@@ -338,65 +342,100 @@ export function registerOperations(app: FastifyInstance, pool: Pool) {
       return { id: row.id, token };
     },
   );
-  app.post('/api/auth/invitation-info',{config:{rateLimit:{max:10,timeWindow:'1 minute'}}},async request=>{
-    const d=z.object({token:z.string().length(64)}).strict().parse(request.body);
-    const row=(await pool.query('SELECT email,name,role,expires_at AS "expiresAt" FROM invitations WHERE token_hash=$1 AND expires_at>now() AND accepted_at IS NULL',[hash(d.token)])).rows[0];
-    if(!row)throw new DomainError('INVITATION_INVALID',400);return row;
-  });
-  mutation(app,pool,'/api/staff/:id/access','staff',z.object({active:z.boolean()}).strict(),async(c,actor,d,req)=>{
-    const id=uuid.parse((req.params as any).id);if(id===actor.id)throw new DomainError('FORBIDDEN',403);
-    if(!(await c.query('UPDATE staff_users SET active=$3 WHERE id=$1 AND org_id=$2 RETURNING id',[id,actor.org_id,d.active])).rowCount)throw new DomainError('NOT_FOUND',404);
-    if(!d.active)await c.query('UPDATE sessions SET revoked_at=now() WHERE user_id=$1',[id]);return {id,active:d.active};
-  });
-  app.post('/api/auth/accept-invitation',{config:{rateLimit:{max:10,timeWindow:'1 minute'}}}, async (request) => {
-    const d = z
-      .object({
-        token: z.string().length(64),
-        password: z.string().min(12).max(200),
-        locale: localeSchema,
-        mfaSecret: z
-          .string()
-          .regex(/^[A-Z2-7]{32}$/)
-          .optional(),
-        totp: z
-          .string()
-          .regex(/^\d{6}$/)
-          .optional(),
-      })
-      .strict()
-      .parse(request.body);
-    return transaction(pool, async (c) => {
-      const invitation = (
-        await c.query(
-          'SELECT * FROM invitations WHERE token_hash=$1 AND expires_at>now() AND accepted_at IS NULL FOR UPDATE',
+  app.post(
+    '/api/auth/invitation-info',
+    { config: { rateLimit: { max: 10, timeWindow: '1 minute' } } },
+    async (request) => {
+      const d = z
+        .object({ token: z.string().length(64) })
+        .strict()
+        .parse(request.body);
+      const row = (
+        await pool.query(
+          'SELECT email,name,role,expires_at AS "expiresAt" FROM invitations WHERE token_hash=$1 AND expires_at>now() AND accepted_at IS NULL',
           [hash(d.token)],
         )
       ).rows[0];
-      if (!invitation) throw new DomainError('INVITATION_INVALID', 400);
+      if (!row) throw new DomainError('INVITATION_INVALID', 400);
+      return row;
+    },
+  );
+  mutation(
+    app,
+    pool,
+    '/api/staff/:id/access',
+    'staff',
+    z.object({ active: z.boolean() }).strict(),
+    async (c, actor, d, req) => {
+      const id = uuid.parse((req.params as any).id);
+      if (id === actor.id) throw new DomainError('FORBIDDEN', 403);
       if (
-        ['owner', 'manager'].includes(invitation.role) &&
-        (!d.mfaSecret || !d.totp || totp(d.mfaSecret) !== d.totp)
+        !(
+          await c.query('UPDATE staff_users SET active=$3 WHERE id=$1 AND org_id=$2 RETURNING id', [
+            id,
+            actor.org_id,
+            d.active,
+          ])
+        ).rowCount
       )
-        throw new DomainError('MFA_REQUIRED', 400);
-      const row = (
-        await c.query(
-          'INSERT INTO staff_users(org_id,email,name,role,password_hash,locale,mfa_secret,warehouse_ids) VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id',
-          [
-            invitation.org_id,
-            invitation.email,
-            invitation.name,
-            invitation.role,
-            passwordHash(d.password),
-            d.locale,
-            d.mfaSecret ? protectSecret(d.mfaSecret) : null,
-            invitation.warehouse_ids,
-          ],
+        throw new DomainError('NOT_FOUND', 404);
+      if (!d.active) await c.query('UPDATE sessions SET revoked_at=now() WHERE user_id=$1', [id]);
+      return { id, active: d.active };
+    },
+  );
+  app.post(
+    '/api/auth/accept-invitation',
+    { config: { rateLimit: { max: 10, timeWindow: '1 minute' } } },
+    async (request) => {
+      const d = z
+        .object({
+          token: z.string().length(64),
+          password: z.string().min(12).max(200),
+          locale: localeSchema,
+          mfaSecret: z
+            .string()
+            .regex(/^[A-Z2-7]{32}$/)
+            .optional(),
+          totp: z
+            .string()
+            .regex(/^\d{6}$/)
+            .optional(),
+        })
+        .strict()
+        .parse(request.body);
+      return transaction(pool, async (c) => {
+        const invitation = (
+          await c.query(
+            'SELECT * FROM invitations WHERE token_hash=$1 AND expires_at>now() AND accepted_at IS NULL FOR UPDATE',
+            [hash(d.token)],
+          )
+        ).rows[0];
+        if (!invitation) throw new DomainError('INVITATION_INVALID', 400);
+        if (
+          ['owner', 'manager'].includes(invitation.role) &&
+          (!d.mfaSecret || !d.totp || totp(d.mfaSecret) !== d.totp)
         )
-      ).rows[0];
-      await c.query('UPDATE invitations SET accepted_at=now() WHERE id=$1', [invitation.id]);
-      return { id: row.id };
-    });
-  });
+          throw new DomainError('MFA_REQUIRED', 400);
+        const row = (
+          await c.query(
+            'INSERT INTO staff_users(org_id,email,name,role,password_hash,locale,mfa_secret,warehouse_ids) VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id',
+            [
+              invitation.org_id,
+              invitation.email,
+              invitation.name,
+              invitation.role,
+              passwordHash(d.password),
+              d.locale,
+              d.mfaSecret ? protectSecret(d.mfaSecret) : null,
+              invitation.warehouse_ids,
+            ],
+          )
+        ).rows[0];
+        await c.query('UPDATE invitations SET accepted_at=now() WHERE id=$1', [invitation.id]);
+        return { id: row.id };
+      });
+    },
+  );
   mutation(app, pool, '/api/staff/:id/revoke', 'staff', z.object({}).strict(), async (c, actor, _d, req) => {
     const id = uuid.parse((req.params as any).id);
     if (id === actor.id) throw new DomainError('FORBIDDEN', 403);
@@ -484,33 +523,29 @@ export function registerOperations(app: FastifyInstance, pool: Pool) {
     requirePermission(actor, 'reports');
     const locale = localeSchema.parse((request.query as any).locale ?? actor.locale);
     const labels = {
-      en: ['SKU', 'Name', 'Warehouse', 'On hand', 'Reserved', 'Available'],
-      fr: ['SKU', 'Nom', 'Entrepôt', 'En stock', 'Réservé', 'Disponible'],
-      ar: ['رمز الصنف', 'الاسم', 'المستودع', 'المخزون', 'المحجوز', 'المتاح'],
+      en: ['SKU', 'Name', 'Warehouse', 'On hand', 'Reserved', 'Available','Translation missing'],
+      fr: ['SKU', 'Nom', 'Entrepôt', 'En stock', 'Réservé', 'Disponible','Traduction manquante'],
+      ar: ['رمز الصنف', 'الاسم', 'المستودع', 'المخزون', 'المحجوز', 'المتاح','ترجمة ناقصة'],
     };
     const rows = (
       await pool.query(
-        'SELECT p.sku,p.names,w.name,b.on_hand,b.reserved,b.on_hand-b.reserved AS available FROM inventory_balances b JOIN products p ON p.id=b.product_id JOIN warehouses w ON w.id=b.warehouse_id WHERE b.org_id=$1 AND (cardinality($2::uuid[])=0 OR b.warehouse_id=ANY($2::uuid[])) ORDER BY p.sku,w.name',
+        'SELECT p.sku,p.names,p.translation_status,w.name,b.on_hand,b.reserved,b.on_hand-b.reserved AS available FROM inventory_balances b JOIN products p ON p.id=b.product_id JOIN warehouses w ON w.id=b.warehouse_id WHERE b.org_id=$1 AND (cardinality($2::uuid[])=0 OR b.warehouse_id=ANY($2::uuid[])) ORDER BY p.sku,w.name',
         [actor.org_id, actor.warehouse_ids],
       )
     ).rows;
-    const esc = (v: unknown) => {
-      let s = String(v ?? '');
-      if (/^[=+@\-\t\r]/.test(s)) s = `'${s}`;
-      return `"${s.replace(/"/g, '""')}"`;
-    };
     const csv = [
       labels[locale],
       ...rows.map((r) => [
         r.sku,
-        r.names[locale] || r.names.fr || r.names.en || r.names.ar,
+        contentValue(r.names,locale,r.translation_status).value || r.sku,
         r.name,
         r.on_hand,
         r.reserved,
         r.available,
+        contentValue(r.names,locale,r.translation_status).missing ? 1 : 0,
       ]),
     ]
-      .map((row) => row.map(esc).join(','))
+      .map((row) => row.map(csvCell).join(','))
       .join('\r\n');
     reply
       .header('Content-Type', 'text/csv; charset=utf-8')

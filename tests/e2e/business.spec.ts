@@ -11,6 +11,7 @@ import {
   checkHeader,
   currentSession,
   jsonEvidence,
+  password,
 } from './helpers';
 
 test.describe.configure({ mode: 'serial' });
@@ -35,7 +36,7 @@ async function axe(page: Page, name: string) {
     passes: result.passes.length,
     incomplete: result.incomplete.map((v) => ({ id: v.id, impact: v.impact })),
   });
-  expect(
+  expect.soft(
     result.violations,
     `Accessibility violations: ${result.violations.map((v) => v.id).join(', ')}`,
   ).toEqual([]);
@@ -210,6 +211,7 @@ test('SEC-01 anonymous localized routes cannot expose Business data', async ({ r
 
 test('I18N-02 owner phone product image and carton receipt preserve drafts; screen matrix', async ({
   page,
+  browser,
 }, testInfo) => {
   test.setTimeout(240000);
   await page.setViewportSize({ width: 390, height: 844 });
@@ -247,6 +249,7 @@ test('I18N-02 owner phone product image and carton receipt preserve drafts; scre
       await page.getByTestId('product-image').evaluate((input: HTMLInputElement) => input.files?.[0]?.name),
     ).toBe('original-qa-pixel.png');
     await capture(page, `phone-product-draft-${locale}`, testInfo);
+    await axe(page,`phone-product-draft-${locale}`);
   }
   await page.getByTestId('product-submit').click();
   await expect(page.locator('dialog[open]')).toHaveCount(0);
@@ -266,6 +269,7 @@ test('I18N-02 owner phone product image and carton receipt preserve drafts; scre
     await expect(page.getByTestId('receipt-quantity')).toHaveValue('1');
     await expect(page.getByTestId('receipt-unit')).toHaveValue('CARTON');
     await capture(page, `phone-receipt-draft-${locale}`, testInfo);
+    await axe(page,`phone-receipt-draft-${locale}`);
   }
   await page.getByTestId('receipt-preview').click();
   await page.getByTestId('receipt-submit').click();
@@ -279,7 +283,7 @@ test('I18N-02 owner phone product image and carton receipt preserve drafts; scre
     priceMinor: created.priceMinor,
     packSize: created.packSize,
     receivedPCS: 10,
-    imageFixture: 'Original synthetic one-pixel PNG',
+    imageFixture: 'Original synthetic 8 × 8 PNG',
   });
   for (const viewport of [
     { width: 390, height: 844, name: 'phone' },
@@ -306,6 +310,7 @@ test('I18N-02 owner phone product image and carton receipt preserve drafts; scre
         });
         await checkHeader(page);
         await capture(page, `${viewport.name}-${screen}-${locale}`);
+        await axe(page,`${viewport.name}-${screen}-${locale}`);
       }
     }
   }
@@ -318,4 +323,142 @@ test('I18N-02 owner phone product image and carton receipt preserve drafts; scre
       'Desktop Chromium browser emulation; click-to-lang/dir assertion includes automation round trips; not target hardware render profiling',
     observations: timings,
   });
+  await switchLanguage(page, 'en');
+  await navigate(page, 'imports');
+  const source = (await (await page.request.get('/api/sources')).json()).items.find((s: any) => s.canStore);
+  await page.locator('main select').first().selectOption(source.id);
+  const importedSku = 'QA-IMPORT-' + randomUUID().slice(0, 8);
+  const csv =
+    'sku,brand,manufacturer_part_no,name_ar,name_fr,name_en,category_path,unit,pack_qty,ean_gtin,price_mad,cost_mad\n' +
+    `${importedSku},SYNTHETIC,00-QA-MFR,قطعة تجريبية,Pièce de test,Test part,filters,piece,10,0012345678905,12.50,8.00`;
+  await page
+    .locator('main input[type=file]')
+    .setInputFiles({ name: 'blueprint-template.csv', mimeType: 'text/csv', buffer: Buffer.from(csv) });
+  await expect(page.getByRole('button', { name: 'Validate and preview', exact: true })).toBeEnabled();
+  for (const locale of locales) {
+    await switchLanguage(page, locale);
+    expect(
+      await page
+        .locator('main input[type=file]')
+        .evaluate((input: HTMLInputElement) => input.files?.[0]?.name),
+    ).toBe('blueprint-template.csv');
+  }
+  await page.getByRole('button', { name: 'Validate and preview', exact: true }).click();
+  await expect(page.locator('.operation-preview')).toContainText(importedSku);
+  await page.getByRole('button', { name: 'Approve and commit', exact: true }).click();
+  await expect
+    .poll(async () => {
+      const r = await page.request.get('/api/products?q=' + importedSku);
+      return (await r.json()).items.length;
+    })
+    .toBe(1);
+  const imported = await product(page, importedSku);
+  expect(imported.priceMinor).toBe(1250);
+  expect(imported.packSize).toBe(10);
+  expect(imported.manufacturerPartNo).toBe('00-QA-MFR');
+  expect(imported.barcode).toBe('0012345678905');
+  await capture(page, 'tablet-import-committed', testInfo);
+  await navigate(page, 'inventory');
+  await page.getByRole('button', { name: 'Storage bins', exact: true }).click();
+  const dialog = page.locator('dialog[open]');
+  await dialog.getByRole('textbox', { name: 'Search', exact: true }).fill(sku);
+  await dialog.getByRole('combobox', { name: 'Part', exact: true }).selectOption(created.id);
+  await dialog.getByRole('button', { name: 'Add bin', exact: true }).click();
+  const binCode = 'QA-' + randomUUID().slice(0, 8);
+  await dialog.getByLabel('Bin code', { exact: true }).fill(binCode);
+  await dialog.getByRole('button', { name: 'Save', exact: true }).click();
+  await dialog.getByRole('combobox', { name: 'From bin', exact: true }).selectOption({ label: 'RECEIVING' });
+  await dialog.getByRole('combobox', { name: 'To bin', exact: true }).selectOption({ label: binCode });
+  await dialog.getByLabel('Quantity', { exact: true }).fill('2');
+  await dialog.getByLabel('Reason', { exact: true }).fill('Synthetic bin test');
+  for (const locale of locales) {
+    await switchLanguage(page, locale);
+    await capture(page, `tablet-bin-draft-${locale}`);
+  }
+  await dialog.getByRole('button', { name: 'Confirm operation', exact: true }).click();
+  await expect
+    .poll(async () => {
+      const r = await page.request.get(`/api/bins?productId=${created.id}`);
+      return (await r.json()).items.find((b: any) => b.code === binCode)?.onHand;
+    })
+    .toBe(2);
+  expect((await product(page, sku)).stock.reduce((n: number, s: any) => n + s.onHand, 0)).toBe(10);
+  await dialog.getByRole('button', { name: 'Close', exact: true }).click();
+  await jsonEvidence('browser-import-bins', {
+    date: new Date().toISOString(),
+    importedSku,
+    manufacturerPartNo: imported.manufacturerPartNo,
+    priceMinor: imported.priceMinor,
+    binMoved: 2,
+    warehouseTotal: 10,
+  });
+  await navigate(page,'suppliers');
+  await page.getByRole('button',{name:'Supplier catalog',exact:true}).first().click();
+  await dialog.getByRole('textbox',{name:'Search',exact:true}).fill(sku);
+  await dialog.getByRole('combobox',{name:'Part',exact:true}).selectOption(created.id);
+  await dialog.getByRole('textbox',{name:'Supplier reference',exact:true}).fill('00-SUP/ع-'+sku);
+  await dialog.getByRole('textbox',{name:'Purchase cost (MAD)',exact:true}).fill('8,25');
+  for(const locale of locales){await switchLanguage(page,locale);await capture(page,`supplier-reference-${locale}`);}
+  await dialog.getByRole('button',{name:'Save',exact:true}).click();
+  await expect(dialog.locator('tbody')).toContainText('00-SUP/ع-'+sku);
+  await dialog.getByRole('button',{name:'Close',exact:true}).click();
+  await navigate(page,'catalog');await page.getByTestId('product-search').fill(sku);
+  await page.locator('.product-cell').first().click();
+  await dialog.getByRole('textbox',{name:'Search',exact:true}).fill('AP-FLT-001');
+  const replacement=await product(page,'AP-FLT-001');
+  await dialog.getByRole('combobox',{name:'Part',exact:true}).selectOption(replacement.id);
+  await dialog.getByRole('combobox',{name:'Source',exact:true}).selectOption(source.id);
+  await dialog.getByRole('textbox',{name:'Evidence',exact:true}).fill('Synthetic supplier replacement notice; no vehicle compatibility claim.');
+  for(const locale of locales){await switchLanguage(page,locale);await capture(page,`replacement-reference-${locale}`);}
+  await dialog.getByRole('button',{name:'Save',exact:true}).click();
+  await expect(dialog.getByRole('button',{name:'Withdraw',exact:true})).toBeVisible();
+  await dialog.getByRole('button',{name:'Close',exact:true}).click();
+  const ownerSession=await currentSession(page),openingSku='QA-OPEN-'+randomUUID().slice(0,8);
+  const openingPart=await page.request.post('/api/products',{headers:{'x-csrf-token':ownerSession.csrfToken,'idempotency-key':randomUUID()},data:{sku:openingSku,names:{ar:'قطعة جرد تجريبية',fr:'Pièce inventaire test',en:'Test counted part'},brand:'SYNTHETIC',category:'filters',packSize:1,priceMinor:200,costMinor:100,status:'ACTIVE_INTERNAL'}});
+  expect(openingPart.ok()).toBe(true);
+  const counterContext=await browser.newContext({baseURL:process.env.E2E_BASE_URL??'http://127.0.0.1:4173'});
+  try{
+    const counterPage=await counterContext.newPage();await login(counterPage,'warehouse');await switchLanguage(counterPage,'en');
+    const counterSession=await currentSession(counterPage),wh=(await (await counterPage.request.get('/api/warehouses')).json()).items[0];
+    await navigate(counterPage,'inventory');await counterPage.getByRole('button',{name:'Opening balances',exact:true}).click();
+    const countDialog=counterPage.locator('dialog[open]');
+    const openingCsv=`sku,branch,warehouse,condition,quantity_counted,counted_by,count_date,source_document\n${openingSku},Synthetic Casablanca,${wh.code},SELLABLE,10,${counterSession.user.id},2026-10-29,Synthetic signed count sheet`;
+    await countDialog.locator('input[type=file]').setInputFiles({name:'opening.csv',mimeType:'text/csv',buffer:Buffer.from(openingCsv)});
+    await expect(countDialog.getByRole('button',{name:'Validate and preview',exact:true})).toBeVisible();
+    for(const locale of locales)await switchLanguage(counterPage,locale);
+    await countDialog.getByRole('button',{name:'Validate and preview',exact:true}).click();
+    await expect(countDialog.locator('.operation-preview')).toContainText(openingSku);
+    expect((await product(page,openingSku)).stock.reduce((n:number,s:any)=>n+s.onHand,0)).toBe(0);
+  }finally{await counterContext.close();}
+  await navigate(page,'inventory');await page.getByRole('button',{name:'Opening balances',exact:true}).click();
+  await dialog.getByRole('button',{name:'View',exact:true}).first().click();
+  await expect(dialog.locator('.operation-preview')).toContainText(openingSku);
+  await dialog.getByRole('textbox',{name:'Reviewer notes and qualification',exact:true}).fill('Synthetic count sheet reviewed independently by demo owner.');
+  for(const locale of locales){await switchLanguage(page,locale);await capture(page,`opening-review-${locale}`);}
+  await dialog.getByRole('button',{name:'Approve and commit',exact:true}).click();
+  await expect.poll(async()=>(await product(page,openingSku)).stock.reduce((n:number,s:any)=>n+s.onHand,0)).toBe(10);
+  await jsonEvidence('browser-catalog-opening',{date:new Date().toISOString(),supplierReference:'00-SUP/ع-'+sku,openingSku,countedBy:'warehouse role',approvedBy:'owner role',stockBefore:0,stockAfter:10});
+});
+
+test('Offline and expired sessions preserve the sale draft through trilingual reauthentication',async({page,context})=>{
+ await login(page,'sales');await switchLanguage(page,'en');const sku='AP-SPK-004',before=await product(page,sku);
+ await page.getByTestId('product-search').fill(sku);await page.getByTestId(`add-to-cart-${sku}`).click();await page.getByTestId(`cart-quantity-${sku}`).fill('3');
+ await context.setOffline(true);for(const locale of locales){await switchLanguage(page,locale);await expect(page.getByTestId(`cart-quantity-${sku}`)).toHaveValue('3');}
+ await context.setOffline(false);await expect.poll(async()=>(await currentSession(page)).user.locale).toBe('en');
+ const session=await currentSession(page);expect((await page.request.post('/api/auth/lock',{headers:{'x-csrf-token':session.csrfToken},data:{}})).ok()).toBe(true);
+ await page.getByRole('button',{name:'Refresh cart prices',exact:true}).click();await expect(page.locator('.lock-overlay')).toBeVisible();
+ for(const locale of locales)await switchLanguage(page,locale);
+ await page.getByTestId('login-password').fill(password());await page.getByTestId('login-submit').click();await expect(page.locator('.lock-overlay')).toHaveCount(0);
+ await expect(page.getByTestId(`cart-quantity-${sku}`)).toHaveValue('3');expect((await product(page,sku)).stock).toEqual(before.stock);
+ await page.setViewportSize({width:320,height:720});for(const locale of locales){await switchLanguage(page,locale);await checkHeader(page);}
+ await jsonEvidence('offline-session-draft',{date:new Date().toISOString(),cartQuantity:3,stockUnchanged:true,reauthenticated:true,narrowViewport:320});
+});
+
+test('Installed offline shell remains trilingual with no cached private records',async({page,context})=>{
+ await page.goto('/');await page.evaluate(()=>navigator.serviceWorker.ready.then(()=>true));await page.reload();
+ await context.setOffline(true);await page.reload();
+ for(const locale of locales){await page.locator(`[data-locale="${locale}"]`).click();await expect(page.locator('html')).toHaveAttribute('lang',locale);await expect(page.locator('html')).toHaveAttribute('dir',locale==='ar'?'rtl':'ltr');await expect(page.locator(`[data-content="${locale}"]`)).toBeVisible();}
+ const cached=await page.evaluate(async()=>{const urls=[];for(const key of await caches.keys())for(const request of await(await caches.open(key)).keys())urls.push(new URL(request.url).pathname);return urls;});
+ expect(cached.sort()).toEqual(['/icon.svg','/offline.css','/offline.html','/offline.js'].sort());
+ await capture(page,'offline-en');await jsonEvidence('offline-shell',{date:new Date().toISOString(),locales,cachedPrivateResponses:0,cachedPaths:cached});
 });

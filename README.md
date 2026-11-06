@@ -1,0 +1,68 @@
+# AutoParts Morocco — private Business, shared commerce backend
+
+Working local Phase 1 software based on the supplied v1.2 blueprint. **Development and acceptance testing are in progress; this is not a production release.** Phase 2 Shop has its own application boundary and public contracts, but is not launched.
+
+Business: <http://127.0.0.1:4173/>. API: <http://127.0.0.1:4310/api/health>. Both bind locally. The synthetic demo is isolated from other PostgreSQL installations and from real company inventory.
+
+## Start the local application on Windows
+
+Requires Node 24 and PostgreSQL 18 binaries. This workstation has PostgreSQL at `D:/PostgreSQL/New folder/bin`. The setup script reads `.local/postgres-path.txt` when the isolated data directory has been moved to another drive.
+
+```powershell
+npm ci
+npm run setup:local
+npm run db:migrate
+npm run db:seed
+```
+
+Run these in separate terminals:
+
+```powershell
+npm run dev:api
+npm run build
+npm run preview:business
+```
+
+Read `.local/DEMO-ACCESS.md` for the generated local demonstration credentials. Owner and manager require an authenticator code; `npm run demo:otp` displays the current **local demo** code. Never put credentials in commits, screenshots or chat. Accounts and stock are synthetic. Seeding an existing demo does not reset its transactions.
+
+For editing with automatic reload use `npm run dev:business` instead of the preview. Browser acceptance uses the built preview, including its real service worker and content security policy. On this workstation, if the default temporary directory is inaccessible, set `TEMP` and `TMP` to `D:\dipoo\AutoPartsMorocco-local-20261104\tmp` in the terminal before running Node tools.
+
+## Implemented workflows
+
+- Always-visible Arabic, French and English controls; RTL; per-user language preferences; language changes preserve current drafts, images, carts and sessions. System dialogs have their own accessible language controls.
+- Invited staff, scoped roles, privileged MFA, session locking, access revocation, immutable audit records and server-side authorization.
+- Trilingual catalog, exact SKU/OEM/barcode search, manufacturer identity, translation review records, rights-checked sources, exact vehicle variants and evidence-based fitment review.
+- Receipts in pieces or cartons, reservations, sales, warehouse and bin transfers, quarantined returns, inspection, counts with a different approver and ledger reconciliation.
+- Suppliers, purchase orders, protected cost fields, printable quotations and receipts, exact MAD tax arithmetic and explicit unconfigured-tax state.
+- Supplier references with concurrent-edit protection; source-reviewed replacement chains with cycle prevention and withdrawal. Replacement references do not establish vehicle compatibility.
+- CSV/XLSX opening-count previews, a different authorized approver, and atomic opening ledger entries. Previous movements prevent an opening import. Up to 500 rows per counted file; quantities are pieces.
+- A streamed trilingual product-master CSV export and locale-selected stock exports. Spreadsheet formula prefixes are escaped; import identifier columns as text in spreadsheet software to preserve leading zeros.
+- CSV/XLSX preview and approval, separate localized columns, template mapping, durable 100,000-row imports with restart checkpoints and safe compensation. Claimed imported translation reviews require explicit catalog approval.
+- Private responsive PWA shell. Offline stock writes are not queued. Lost-response recovery uses the authoritative request result before retrying an idempotent mutation.
+
+## Verification
+
+```powershell
+npm run typecheck
+npm run build
+npm test
+npm run test:e2e
+npm audit
+```
+
+The API suite creates and drops its own isolated test database. Browser tests use the synthetic local demo and leave auditable demo transactions. Load and restore drills retain separately named local databases for inspection:
+
+```powershell
+node --env-file=.env --import=tsx scripts/performance.mts
+node --env-file=.env --import=tsx scripts/import-benchmark.mts
+node --env-file=.env --import=tsx scripts/restore-drill.mts
+node --env-file=.env --import=tsx scripts/database-restart-drill.mts
+```
+
+Observed evidence is in [docs/evidence](docs/evidence). Consult [acceptance status](docs/ACCEPTANCE_REPORT.md) and [requirement traceability](docs/TRACEABILITY.md). Browser emulation does not substitute for testing the company's actual tablets, phones, scanners or screen readers. Authored translations have not been professionally approved. Tax settings and real opening stock require company review.
+
+## Application boundaries
+
+`apps/business` is the private staff interface. `apps/api` is the authoritative backend. PostgreSQL stores the ledger, reservations, catalog and financial snapshots. `packages/i18n` is shared localization; `packages/contracts` defines public projection and future payment/shipping boundaries. `apps/shop` is reserved for the separate Phase 2 public application. It must never receive Business bundles or unrestricted product records.
+
+No production deployment, external provider connection, public publication or real-company import has been performed. Docker and CI definitions are supplied; running them in their target environments remains an acceptance task.

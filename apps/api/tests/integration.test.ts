@@ -12,6 +12,7 @@ import { expireReservations } from '../src/inventory.js';
 import { processOutbox } from '../src/worker.js';
 import { processImportChunk } from '../src/imports.js';
 import { ORG_ID, transaction, hash } from '../src/db.js';
+import {parse as parseCsv} from 'csv-parse/sync';
 
 type Session = { cookie: string; csrf: string; id: string };
 let app: FastifyInstance, pool: Pool, maintenance: Pool;
@@ -22,6 +23,67 @@ const observations: { id: string; status: string; durationMs: number }[] = [];
 const started = new Date().toISOString();
 const localUrl = new URL(process.env.DATABASE_URL!);
 const evidencePath = 'docs/evidence/api-integration.json';
+test('Localized product export retains identifiers, escapes formulas and hides costs from curators',()=>measured('CATALOG-EXPORT',async()=>{
+ const p=await product(1,{costMinor:5000,barcode:'0012345678905',names:{en:'  =MALICIOUS()',fr:'Pièce export',ar:'قطعة تصدير'},manufacturerPartNo:'00-OEM/ع'});
+ const exported=await request(owner,'GET','/api/reports/products.csv');assert.equal(exported.statusCode,200);
+ const rows=(parseCsv(exported.body,{columns:true,bom:true}) as Record<string,string>[]);const row=rows.find((r:any)=>r.sku===p.data.sku)!;assert.equal(row.ean_gtin,'0012345678905');assert.equal(row.manufacturer_part_no,'00-OEM/ع');assert.ok(row.name_en.startsWith("'"));assert.equal(row.name_ar,'قطعة تصدير');assert.equal(row.cost_mad,'50.00');
+ const curatorRows=(parseCsv((await request(curator,'GET','/api/reports/products.csv')).body,{columns:true,bom:true}) as Record<string,string>[]);assert.equal(curatorRows.find((r:any)=>r.sku===p.data.sku)?.cost_mad,'');
+ assert.equal((await request(sales,'GET','/api/reports/products.csv')).statusCode,403);
+}));
+test('Private OpenAPI describes domain bodies, path identifiers and authentication accurately',()=>measured('API-CONTRACT',async()=>{
+ const result=await request(owner,'GET','/api/openapi.json');assert.equal(result.statusCode,200);
+ const spec=result.json();assert.equal(spec.openapi,'3.1.0');assert.equal(spec.paths['/api/inventory/receipts'].post.requestBody.content['application/json'].schema.properties.quantity.type,'integer');
+ assert.deepEqual(spec.paths['/api/auth/login'].post.security,[]);
+ assert.ok(spec.paths['/api/products/{id}/update'].parameters.some((p:any)=>p.name==='id'&&p.required));
+ assert.ok(spec.paths['/api/products/{id}/update'].post.parameters.some((p:any)=>p.name==='Idempotency-Key'&&p.required));
+ assert.equal((await app.inject({method:'GET',url:'/api/openapi.json'})).statusCode,401);
+ await writeFile('docs/evidence/openapi.json',JSON.stringify(spec,null,2));
+}));
+
+test('Opening balance requires another approver, posts one immutable ledger and refuses prior movements',()=>measured('OPENING-BALANCE',async()=>{
+ const p=await product(),warehouseCode=(await pool.query('SELECT code FROM warehouses WHERE id=$1',[counter])).rows[0].code;
+ const row={sku:p.data.sku,branch:'Synthetic Casablanca',warehouse:warehouseCode,bin:'',condition:'SELLABLE',quantity_counted:10,counted_by:warehouse.id,count_date:'2026-10-29',source_document:'Synthetic signed count sheet'};
+ const body={fileHash:'b'.repeat(64),rows:[row,{...row,condition:'QUARANTINE',quantity_counted:2}]};
+ assert.equal((await request(sales,'POST','/api/opening-balances/preview',body)).statusCode,403);
+ assert.equal((await request(owner,'POST','/api/opening-balances/preview',body)).json().code,'COUNT_AUTHOR_REQUIRED');
+ const preview=await request(warehouse,'POST','/api/opening-balances/preview',body);assert.equal(preview.statusCode,200,preview.body);assert.equal((await balance(p.id)).on_hand,0);
+ const ownerPreview=await request(owner,'POST','/api/opening-balances/preview',{...body,rows:[{...row,counted_by:owner.id}]});assert.equal(ownerPreview.statusCode,200,ownerPreview.body);
+ assert.equal((await request(owner,'POST',`/api/opening-balances/${ownerPreview.json().id}/approve`,{note:'Synthetic independent review'})).json().code,'SELF_APPROVAL_FORBIDDEN');
+ const path=`/api/opening-balances/${preview.json().id}/approve`,key=randomUUID(),approval={note:'Synthetic counter sheet reviewed by another authorized staff member.'};
+ const responses=await Promise.all(Array.from({length:10},()=>request(owner,'POST',path,approval,key)));assert.ok(responses.every(r=>r.statusCode===200),responses.map(r=>r.body).join('\n'));assert.equal(new Set(responses.map(r=>r.json().id)).size,1);
+ assert.equal((await balance(p.id)).on_hand,10);assert.equal((await balance(p.id)).quarantine,2);assert.equal((await balance(p.id)).reserved,0);
+ assert.equal((await request(owner,'POST',path,approval)).json().code,'DUPLICATE_RECORD');
+ assert.equal((await request(warehouse,'POST','/api/opening-balances/preview',body)).json().code,'OPENING_ALREADY_MOVED');
+ const fresh=await product(),stale=await request(warehouse,'POST','/api/opening-balances/preview',{...body,rows:[{...row,sku:fresh.data.sku}]});assert.equal(stale.statusCode,200,stale.body);
+ await request(owner,'POST','/api/inventory/receipts',{productId:fresh.id,warehouseId:counter,quantity:1,unit:'PCS',condition:'SELLABLE',reference:'AFTER-COUNT-'+randomUUID()});
+ assert.equal((await request(owner,'POST',`/api/opening-balances/${stale.json().id}/approve`,approval)).json().code,'OPENING_ALREADY_MOVED');assert.equal((await balance(fresh.id)).on_hand,1);
+ assert.equal((await request(owner,'GET','/api/inventory/reconciliation')).json().balanced,true);assert.equal((await request(owner,'GET','/api/bins/reconciliation')).json().balanced,true);
+}));
+
+test('Supplier references retain exact identifiers and reject stale edits; replacements require evidence and reject cycles',()=>measured('CATALOG-LINKS',async()=>{
+ const a=await product(),b=await product(),c=await product();
+ const supplier=(await request(owner,'POST','/api/suppliers',{name:'Synthetic reference supplier',contact:'',leadDays:4,notes:''})).json();
+ const path=`/api/suppliers/${supplier.id}/items`,body={productId:a.id,reference:'000-SUP/ع',costMinor:12345,version:0},key=randomUUID();
+ assert.equal((await request(sales,'POST',path,body)).statusCode,403);
+ assert.equal((await request(owner,'POST',path,body,key)).statusCode,200);
+ assert.equal((await request(owner,'POST',path,body,key)).statusCode,200);
+ assert.equal((await request(owner,'POST',path,body)).json().code,'EDIT_CONFLICT');
+ const edits=await Promise.all([request(owner,'POST',path,{...body,reference:'NEXT-01',version:1}),request(owner,'POST',path,{...body,reference:'NEXT-02',version:1})]);
+ assert.deepEqual(edits.map(r=>r.statusCode).sort(),[200,409]);
+ const items=(await request(owner,'GET',path)).json().items;assert.equal(items.length,1);assert.equal(items[0].version,2);assert.equal(items[0].costMinor,12345);
+ assert.equal((await request(owner,'GET','/api/products?q='+encodeURIComponent(body.reference))).json().items[0].id,a.id);
+ const replacement={replacementId:b.id,sourceId,evidence:'Synthetic supplier notice; exact variant still requires independent fitment evidence.'};
+ assert.equal((await request(sales,'POST',`/api/products/${a.id}/replacements`,replacement)).statusCode,403);
+ assert.equal((await request(owner,'POST',`/api/products/${a.id}/replacements`,replacement)).statusCode,200);
+ assert.equal((await request(owner,'POST',`/api/products/${b.id}/replacements`,{...replacement,replacementId:c.id})).statusCode,200);
+ assert.equal((await request(owner,'POST',`/api/products/${c.id}/replacements`,{...replacement,replacementId:a.id})).json().code,'INVALID_REPLACEMENT');
+ assert.equal((await request(owner,'POST',`/api/products/${a.id}/replacements`,{...replacement,replacementId:a.id})).statusCode,409);
+ const records=(await request(sales,'GET',`/api/products/${a.id}/replacements`)).json().items;assert.equal(records[0].sourceAllowed,true);
+ assert.equal((await request(owner,'POST',`/api/products/${a.id}/replacements/withdraw`,{replacementId:b.id,version:1,reason:'Synthetic notice withdrawn after supplier review.'})).statusCode,200);
+ assert.equal((await request(sales,'GET',`/api/products/${a.id}/replacements`)).json().items[0].active,false);
+ assert.equal(Number((await pool.query('SELECT count(*) FROM fitments WHERE product_id=ANY($1::uuid[])',[[a.id,b.id,c.id]])).rows[0].count),0);
+ assert.equal((await request(owner,'POST',`/api/suppliers/${randomUUID()}/items`,body)).statusCode,404);
+}));
 
 async function login(role: string, extra: Record<string, unknown> = {}): Promise<Session> {
   const res = await app.inject({

@@ -1,6 +1,7 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SourceManager, VehicleCreator } from './catalog-admin';
 import { TaxConfiguration } from './tax-settings';
+import { SupplierCatalog } from './catalog-links';
 import { Plus, RefreshCw, ShieldCheck, FileUp, Download } from 'lucide-react';
 import { useApp } from './context';
 import { api, ApiError } from './api';
@@ -53,6 +54,7 @@ export function Suppliers() {
             <p className="muted" dir="auto">
               {s.notes}
             </p>
+            <SupplierCatalog supplier={s} />
           </article>
         ))}
       </div>
@@ -234,9 +236,10 @@ export function Purchases() {
   );
 }
 export function Vehicles({ onSelect }: { onSelect: (id: string) => void }) {
-  const[q,setQ]=useState(''),[page,setPage]=useState(1);
+  const [q, setQ] = useState(''),
+    [page, setPage] = useState(1);
   const { t, can } = useApp(),
-    list = useLoad<{ items: Vehicle[];total:number }>(`/vehicles?q=${encodeURIComponent(q)}&page=${page}`),
+    list = useLoad<{ items: Vehicle[]; total: number }>(`/vehicles?q=${encodeURIComponent(q)}&page=${page}`),
     sources = useLoad<{ items: Source[] }>(can('catalog') ? '/sources' : '/vehicles'),
     save = useMutation();
   const [review, setReview] = useState<Vehicle | null>(null),
@@ -251,14 +254,34 @@ export function Vehicles({ onSelect }: { onSelect: (id: string) => void }) {
         <SourceManager />
         <VehicleCreator onSaved={list.reload} />
       </PageHeading>
-      <div className="toolbar"><SearchBox value={q} onChange={value=>{setQ(value);setPage(1);}}/></div>
+      <div className="toolbar">
+        <SearchBox
+          value={q}
+          onChange={(value) => {
+            setQ(value);
+            setPage(1);
+          }}
+        />
+      </div>
       <div className="notice warning">{t('fitmentWarning')}</div>
       <ErrorBanner error={list.error} />
       <section className="panel table-wrap">
         <table>
           <thead>
             <tr>
-              {(['make', 'model', 'generation', 'years', 'engine','body','transmission', 'market', 'action'] as const).map((k) => (
+              {(
+                [
+                  'make',
+                  'model',
+                  'generation',
+                  'years',
+                  'engine',
+                  'body',
+                  'transmission',
+                  'market',
+                  'action',
+                ] as const
+              ).map((k) => (
                 <th key={k}>{t(k)}</th>
               ))}
             </tr>
@@ -283,7 +306,12 @@ export function Vehicles({ onSelect }: { onSelect: (id: string) => void }) {
                 <td>
                   <bdi dir="ltr">{v.engine}</bdi>
                 </td>
-                <td><bdi>{v.body}</bdi></td><td><bdi>{v.transmission}</bdi></td>
+                <td>
+                  <bdi>{v.body}</bdi>
+                </td>
+                <td>
+                  <bdi>{v.transmission}</bdi>
+                </td>
                 <td>
                   <bdi>{v.market}</bdi>
                 </td>
@@ -303,7 +331,21 @@ export function Vehicles({ onSelect }: { onSelect: (id: string) => void }) {
         </table>
         {!list.data?.items.length && <Empty />}
       </section>
-      <div className="pagination"><button className="button secondary" disabled={page===1} onClick={()=>setPage(p=>p-1)}>{t('previous')}</button><span>{t('page')} {page}</span><button className="button secondary" disabled={page*30>=(list.data?.total??0)} onClick={()=>setPage(p=>p+1)}>{t('next')}</button></div>
+      <div className="pagination">
+        <button className="button secondary" disabled={page === 1} onClick={() => setPage((p) => p - 1)}>
+          {t('previous')}
+        </button>
+        <span>
+          {t('page')} {page}
+        </span>
+        <button
+          className="button secondary"
+          disabled={page * 30 >= (list.data?.total ?? 0)}
+          onClick={() => setPage((p) => p + 1)}
+        >
+          {t('next')}
+        </button>
+      </div>
       {review && (
         <Modal title={t('evidence')} onClose={() => setReview(null)}>
           <p>
@@ -433,7 +475,7 @@ export function Audit() {
 export function Team() {
   const { t, locale, warehouses, notify } = useApp(),
     list = useLoad<{ items: any[] }>('/staff'),
-    config=useLoad<{defaultLocale:Locale}>('/config'),
+    config = useLoad<{ defaultLocale: Locale }>('/config'),
     save = useMutation();
   const [open, setOpen] = useState(false),
     [name, setName] = useState(''),
@@ -442,7 +484,9 @@ export function Team() {
     [warehouseId, setWarehouse] = useState(''),
     [token, setToken] = useState(''),
     [defaultLocale, setDefaultLocale] = useState<Locale>('fr');
-  useEffect(()=>{if(config.data)setDefaultLocale(config.data.defaultLocale);},[config.data]);
+  useEffect(() => {
+    if (config.data) setDefaultLocale(config.data.defaultLocale);
+  }, [config.data]);
   return (
     <>
       <PageHeading title="team" hint="teamHint">
@@ -458,7 +502,7 @@ export function Team() {
         </button>
       </PageHeading>
       <MutationState state={save} />
-      <TaxConfiguration/>
+      <TaxConfiguration />
       <section className="panel settings-panel">
         <Field label={t('defaultLocale')}>
           <select value={defaultLocale} onChange={(e) => setDefaultLocale(e.target.value as Locale)}>
@@ -507,7 +551,17 @@ export function Team() {
                   >
                     {t('revoke')}
                   </button>
-                  <button className="text-button" onClick={async()=>{if(await save.run(`/staff/${u.id}/access`,{active:!u.active})){list.reload();notify('operationSaved');}}}>{t(u.active?'deactivate':'activate')}</button>
+                  <button
+                    className="text-button"
+                    onClick={async () => {
+                      if (await save.run(`/staff/${u.id}/access`, { active: !u.active })) {
+                        list.reload();
+                        notify('operationSaved');
+                      }
+                    }}
+                  >
+                    {t(u.active ? 'deactivate' : 'activate')}
+                  </button>
                 </td>
               </tr>
             ))}

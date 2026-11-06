@@ -4,7 +4,7 @@ import rateLimit from '@fastify/rate-limit';
 import { ZodError } from 'zod';
 import type { Pool } from 'pg';
 import { randomUUID } from 'node:crypto';
-import { audit, DomainError, ORG_ID } from './db.js';
+import { audit, DomainError, ORG_ID, protectPool, databaseConnectionErrors } from './db.js';
 import { type AuthedRequest, installAuth, requirePermission } from './auth.js';
 import { registerInventory } from './inventory.js';
 import { registerCatalog } from './catalog.js';
@@ -12,8 +12,12 @@ import { registerOperations } from './operations.js';
 import { registerImports } from './imports.js';
 import { registerBins } from './bins.js';
 import { registerPricing } from './pricing.js';
+import { registerCatalogLinks } from './catalog-links.js';
+import { registerOpeningBalances } from './opening-balances.js';
+import {registerCatalogExport} from './catalog-export.js';
 
 export async function createApp(pool: Pool, options: { logger?: boolean } = {}) {
+  protectPool(pool);
   const app = Fastify({
     logger: options.logger ?? false,
     bodyLimit: 6000000,
@@ -34,25 +38,29 @@ export async function createApp(pool: Pool, options: { logger?: boolean } = {}) 
     if (route.url.startsWith('/api/')) {
       const path = route.url.replace(/:([\w]+)/g, '{$1}');
       paths[path] ??= {};
+      const parameters=[...path.matchAll(/\{(\w+)\}/g)].map(match=>({in:'path',name:match[1],required:true,schema:{type:'string'}}));
+      if(parameters.length)paths[path].parameters=parameters as unknown as Record<string,unknown>;
+      const publicRoute=['/api/health','/api/config','/api/auth/login','/api/auth/invitation-info','/api/auth/accept-invitation'].includes(route.url);
       for (const m of Array.isArray(route.method) ? route.method : [route.method])
         if (m !== 'HEAD')
           paths[path][m.toLowerCase()] = {
             summary: route.url,
+            ...(route.config?.requestBodySchema ? {requestBody:{required:true,content:{'application/json':{schema:route.config.requestBodySchema}}}} : {}),
             responses: {
               '200': { description: 'Successful response' },
               '400': { description: 'Stable domain error code' },
               '401': { description: 'Authentication required' },
               '403': { description: 'Permission denied' },
             },
-            security: [{ businessSession: [] }],
+            security: publicRoute ? [] : [{ businessSession: [] }],
             ...(['POST', 'PATCH', 'PUT', 'DELETE'].includes(m)
               ? {
                   parameters: [
-                    { in: 'header', name: 'X-CSRF-Token', required: true, schema: { type: 'string' } },
+                    { in: 'header', name: 'X-CSRF-Token', required: !publicRoute, schema: { type: 'string' } },
                     {
                       in: 'header',
                       name: 'Idempotency-Key',
-                      required: !route.url.includes('/auth/'),
+                      required: !!route.config?.domainMutation,
                       schema: { type: 'string' },
                     },
                   ],
@@ -130,8 +138,11 @@ export async function createApp(pool: Pool, options: { logger?: boolean } = {}) 
   registerInventory(app, pool);
   registerOperations(app, pool);
   registerImports(app, pool);
-  registerBins(app,pool);
-  registerPricing(app,pool);
+  registerBins(app, pool);
+  registerPricing(app, pool);
+  registerCatalogLinks(app, pool);
+  registerOpeningBalances(app, pool);
+  registerCatalogExport(app,pool);
   app.get('/api/openapi.json', async (request) => {
     requirePermission((request as AuthedRequest).actor, 'audit');
     return {
@@ -162,6 +173,7 @@ export async function createApp(pool: Pool, options: { logger?: boolean } = {}) 
       dbPool: { total: pool.totalCount, idle: pool.idleCount, waiting: pool.waitingCount },
       uptimeSeconds: process.uptime(),
       memoryBytes: process.memoryUsage().rss,
+      databaseConnectionErrors,
     };
   });
   await app.ready();

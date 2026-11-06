@@ -9,6 +9,7 @@
   "scripts": {
     "dev:api": "node --env-file=.env --import=tsx apps/api/src/server.ts",
     "dev:business": "vite --config apps/business/vite.config.ts",
+    "preview:business": "vite preview --config apps/business/vite.config.ts",
     "typecheck": "tsc --noEmit",
     "build": "vite build --config apps/business/vite.config.ts",
     "test": "node --env-file=.env --import=tsx --test tests/*.test.ts apps/api/tests/*.test.ts",

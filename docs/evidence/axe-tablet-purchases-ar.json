@@ -1,0 +1,20 @@
+{
+  "url": "http://127.0.0.1:4173/",
+  "viewport": {
+    "width": 1280,
+    "height": 800
+  },
+  "locale": "ar",
+  "violations": [],
+  "passes": 22,
+  "incomplete": [
+    {
+      "id": "color-contrast",
+      "impact": "serious"
+    },
+    {
+      "id": "th-has-data-cells",
+      "impact": "serious"
+    }
+  ]
+}

@@ -26,10 +26,13 @@ export const dateTime = (value: string | Date, locale: Locale) =>
     timeZone: 'Africa/Casablanca',
   }).format(new Date(value));
 /** Parse exact minor units; never use binary floating point to calculate stored money. */
-export function parseMoney(value: string): number {
-  const digits = value
+export function normalizeDigits(value: string): string {
+  return value
     .replace(/[٠-٩]/g, (d) => String(d.charCodeAt(0) - 1632))
     .replace(/[۰-۹]/g, (d) => String(d.charCodeAt(0) - 1776));
+}
+export function parseMoney(value: string): number {
+  const digits = normalizeDigits(value);
   const normalized = digits.replace(/[\s\u202f\u00a0\u066c]/g, '').replace(/[\u066b,]/g, '.');
   if (!/^\d+(?:\.\d{1,2})?$/.test(normalized)) throw new Error('INVALID_MONEY');
   const [whole, fraction = ''] = normalized.split('.');
@@ -37,8 +40,16 @@ export function parseMoney(value: string): number {
   if (!Number.isSafeInteger(minor)) throw new Error('INVALID_MONEY');
   return minor;
 }
-export function contentValue(values: Partial<Record<Locale, string>> | undefined, locale: Locale) {
+export function contentValue(
+  values: Partial<Record<Locale, string>> | undefined,
+  locale: Locale,
+  review: Partial<Record<Locale, string>> = {},
+) {
   if (values?.[locale]) return { value: values[locale]!, missing: false, sourceLocale: locale };
-  const sourceLocale = locales.find((lang) => values?.[lang]) ?? 'fr';
-  return { value: values?.[sourceLocale] ?? '', missing: true, sourceLocale };
+  const sourceLocale = locales.find((lang) => values?.[lang] && review[lang] === 'APPROVED');
+  return {
+    value: sourceLocale ? (values?.[sourceLocale] ?? '') : '',
+    missing: true,
+    sourceLocale: sourceLocale ?? locale,
+  };
 }

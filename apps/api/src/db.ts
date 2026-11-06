@@ -1,14 +1,36 @@
 import { Pool, type PoolClient } from 'pg';
 import { createHash, randomUUID } from 'node:crypto';
+const protectedPools = new WeakSet<Pool>(),
+  protectedClients = new WeakSet<PoolClient>();
+export let databaseConnectionErrors = 0;
+/** Queries still reject normally; connection error events must not terminate the API process. */
+export function protectPool(pool: Pool) {
+  if (protectedPools.has(pool)) return pool;
+  protectedPools.add(pool);
+  pool.on('error', () => {
+    databaseConnectionErrors++;
+  });
+  pool.on('acquire', (client) => {
+    if (!protectedClients.has(client)) {
+      protectedClients.add(client);
+      client.on('error', () => {
+        databaseConnectionErrors++;
+      });
+    }
+  });
+  return pool;
+}
 
 export const ORG_ID = '00000000-0000-4000-8000-000000000001';
 export const createPool = () =>
-  new Pool({
-    connectionString: process.env.DATABASE_URL,
-    max: 30,
-    connectionTimeoutMillis: 5000,
-    idleTimeoutMillis: 10000,
-  });
+  protectPool(
+    new Pool({
+      connectionString: process.env.DATABASE_URL,
+      max: 30,
+      connectionTimeoutMillis: 5000,
+      idleTimeoutMillis: 10000,
+    }),
+  );
 export class DomainError extends Error {
   constructor(
     public code: string,

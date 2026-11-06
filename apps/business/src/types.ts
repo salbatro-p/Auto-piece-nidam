@@ -31,18 +31,25 @@ export interface Product {
   oem?: string;
   barcode?: string;
   category: string;
-  categoryNames?: Partial<Record<Locale,string>>;
-  manufacturerPartNo?:string;companyMetadata?:{supplierReference?:string;imageSource?:string;suppliedReviewStatus?:Partial<Record<Locale,string>>};
+  categoryNames?: Partial<Record<Locale, string>>;
+  manufacturerPartNo?: string;
+  companyMetadata?: {
+    technicalAttributes?:TechnicalAttribute[];
+    supplierReference?: string;
+    imageSource?: string;
+    suppliedReviewStatus?: Partial<Record<Locale, string>>;
+  };
   packSize: number;
   priceMinor: number;
   costMinor?: number;
   reorderLevel: number;
   status: string;
-  translationStatus?: unknown;
+  translationStatus?: Partial<Record<Locale, string>>;
   stock: Stock[];
   fitments?: { status: string; vehicleId?: string; sourceId?: string }[];
   mediaId?: string;
 }
+export interface TechnicalAttribute {code:string;labels:Partial<Record<Locale,string>>;value:string;unit:string;}
 export interface SaleLine {
   productId: string;
   quantity: number;
@@ -52,7 +59,14 @@ export interface SaleLine {
   unitPriceMinor?: number;
 }
 export interface Sale {
-  kind?:string;expiresAt?:string;reference?:string;subtotalMinor?:number;taxMinor?:number;taxRateBps?:number;taxInclusive?:boolean;taxConfigured?:boolean;
+  kind?: string;
+  expiresAt?: string;
+  reference?: string;
+  subtotalMinor?: number;
+  taxMinor?: number;
+  taxRateBps?: number;
+  taxInclusive?: boolean;
+  taxConfigured?: boolean;
   id: string;
   totalMinor: number;
   lines: SaleLine[];

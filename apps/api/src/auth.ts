@@ -151,7 +151,15 @@ export function installAuth(app: FastifyInstance, pool: Pool) {
       if (origin && !allowed.includes(origin)) throw new DomainError('CSRF_INVALID', 403);
       if (request.headers['sec-fetch-site'] === 'cross-site') throw new DomainError('CSRF_INVALID', 403);
     }
-    if (['/api/health', '/api/config', '/api/auth/login', '/api/auth/invitation-info','/api/auth/accept-invitation'].includes(path))
+    if (
+      [
+        '/api/health',
+        '/api/config',
+        '/api/auth/login',
+        '/api/auth/invitation-info',
+        '/api/auth/accept-invitation',
+      ].includes(path)
+    )
       return;
     if (!path.startsWith('/api/')) return;
     const token = cookieValue(request);

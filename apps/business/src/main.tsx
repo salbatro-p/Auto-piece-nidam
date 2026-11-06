@@ -29,7 +29,7 @@ import { Dashboard, Catalog, PointOfSale, Inventory } from './operations';
 import { Purchases, Suppliers, Vehicles, Imports, Audit, Team } from './management';
 import './styles.css';
 import './refinements.css';
-import {Invitation} from './invitation';
+import { Invitation } from './invitation';
 
 type Page =
   | 'dashboard'
@@ -290,7 +290,7 @@ function App() {
             <h2>{t('signIn')}</h2>
             <p className="muted">{t('inviteOnly')}</p>
             <LoginForm onSuccess={loginSuccess} />
-            <Invitation/>
+            <Invitation />
             <div className="demo-login">
               <span className="badge neutral">{t('demo')}</span>
               <p>{t('localDemoHelp')}</p>
@@ -404,16 +404,7 @@ function App() {
                     lastActivity.current = Date.now();
                   }}
                 />
-                <button
-                  className="text-button"
-                  onClick={() => {
-                    setUser(null);
-                    setCsrf('');
-                    setLocked(false);
-                    setPage('dashboard');
-                    setLocale(resolveLocale(null, navigator.language));
-                  }}
-                >
+                <button className="text-button" onClick={() => void logout()}>
                   {t('logout')}
                 </button>
               </div>

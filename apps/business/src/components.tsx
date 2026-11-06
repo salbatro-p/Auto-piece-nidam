@@ -15,6 +15,11 @@ export function Field({ label, children, hint }: { label: string; children: Reac
     </label>
   );
 }
+/** Keep the file control in the chosen application language rather than the browser's UI locale. */
+export function FilePicker({label,hint,...props}:React.InputHTMLAttributes<HTMLInputElement>&{label:string;hint?:string}) {
+  const {t}=useApp(),input=useRef<HTMLInputElement>(null),[name,setName]=useState('');
+  return <div className="field"><span>{label}</span><button type="button" className="button secondary" disabled={props.disabled} onClick={()=>input.current?.click()} aria-label={`${label}: ${t('chooseFile')}`}>{t('chooseFile')}</button><input {...props} ref={input} hidden type="file" aria-label={label} onChange={event=>{setName(event.target.files?.[0]?.name??'');props.onChange?.(event);}}/><bdi aria-live="polite">{name||t('noFileSelected')}</bdi>{hint&&<small>{hint}</small>}</div>;
+}
 export function ErrorBanner({ error }: { error: unknown }) {
   const { t } = useApp();
   if (!error) return null;
@@ -56,7 +61,7 @@ export function Status({ value }: { value: string }) {
 }
 export function ProductName({ product }: { product: Product }) {
   const { locale, t } = useApp();
-  const content = contentValue(product.names, locale);
+  const content = contentValue(product.names, locale, product.translationStatus);
   return (
     <span className="product-name">
       <bdi lang={content.sourceLocale}>{content.value || product.sku}</bdi>
@@ -75,11 +80,18 @@ export function ProductVisual({ product }: { product: Product }) {
     </div>
   );
 }
-export function CategoryName({product}:{product:Product}) {
- const{locale,t}=useApp();const custom=contentValue(product.categoryNames,locale),key=messageKey('category_'+product.category);
- if(product.categoryNames?.[locale])return <bdi>{custom.value}</bdi>;
- if(key)return <span>{t(key)}</span>;
- return <span><bdi>{custom.value||product.category}</bdi><small className="warning-text">{t('translationMissing')}</small></span>;
+export function CategoryName({ product }: { product: Product }) {
+  const { locale, t } = useApp();
+  const custom = contentValue(product.categoryNames, locale, product.translationStatus),
+    key = messageKey('category_' + product.category);
+  if (product.categoryNames?.[locale]) return <bdi>{custom.value}</bdi>;
+  if (key) return <span>{t(key)}</span>;
+  return (
+    <span>
+      <bdi>{custom.value || product.category}</bdi>
+      <small className="warning-text">{t('translationMissing')}</small>
+    </span>
+  );
 }
 export function totalStock(product: Product, warehouseId?: string): Stock {
   const stocks = (product.stock ?? []).filter((s) => !warehouseId || s.warehouseId === warehouseId);
@@ -123,7 +135,7 @@ export function Modal({
     return () => dialog?.close();
   }, []);
   return (
-    <dialog ref={ref} className={wide ? 'modal wide' : 'modal'} onCancel={onClose}>
+    <dialog ref={ref} aria-label={title} className={wide ? 'modal wide' : 'modal'} onCancel={onClose}>
       <div className="modal-languages">
         <LanguageSwitcher locale={locale} onChange={changeLocale} label={t('language')} />
       </div>
