@@ -18,7 +18,7 @@ if (!/^autoparts_load_\d+$/.test(database))
   throw new Error('Only isolated load-test databases may be reused');
 if (!reuse) await admin.query('CREATE DATABASE ' + database);
 base.pathname = '/' + database;
-const pool = new Pool({ connectionString: base.href, max: 40 });
+const pool = new Pool({ connectionString: base.href, max: 30,min:8,connectionTimeoutMillis:5000,idleTimeoutMillis:10000 });
 if (
   reuse &&
   !(
@@ -40,6 +40,7 @@ const report: any = {
     memoryBytes: totalmem(),
     transport: 'Fastify inject (real PostgreSQL; no TCP or WAN latency)',
     profiles: 'Host machine, unthrottled. Not Android/device measurements.',
+    databasePool:{max:30,min:8,preparedBeforeReadiness:true},
   },
   fixtures: { products: 100000, vehicles: 10000, fitments: 1000000, warehouses: 3 },
   scenarios: [],
@@ -126,8 +127,11 @@ const cookie = String(login.headers['set-cookie']).split(';')[0];
 async function post(url:string,payload:any){const r=await app.inject({method:'POST',url,headers:{cookie,'x-csrf-token':csrf,'idempotency-key':randomUUID()},payload});if(r.statusCode!==200)throw new Error('Media benchmark fixture failed '+r.body);return r.json();}
 const license=await post('/api/media/licenses',{name:'Synthetic load image rights',sourceType:'COMPANY',termsVersion:'QA-load-1',proof:'Deterministic texture pixels generated solely for performance tests, not real product photos.',internalDisplayPermitted:true,publicDisplayPermitted:false});
 const mediaSizes:{source:number;thumbnail:number}[]=[];
+let reusedMedia=0;
 for(let n=1;n<=30;n++){
  const sku='SYN-'+String(n).padStart(6,'0'),p=(await app.inject({url:'/api/products?q='+sku,headers:{cookie}})).json().items[0];
+ const existing=(await pool.query("SELECT id,file_size FROM usable_internal_media WHERE product_id=$1 AND kind='COMPANY_ORIGINAL_PHOTO' AND view_angle='Synthetic load texture' LIMIT 1",[p.id])).rows[0];
+ if(existing){const thumbnail=await app.inject({url:'/api/media/'+existing.id+'?size=thumbnail',headers:{cookie}});if(thumbnail.statusCode!==200)throw new Error('Retained thumbnail fixture unavailable');mediaSizes.push({source:existing.file_size,thumbnail:thumbnail.rawPayload.length});reusedMedia++;continue;}
  const mfr='SYN-MFR-'+String(n).padStart(6,'0');
  await post('/api/products/'+p.id+'/update',{sku:p.sku,names:p.names,descriptions:p.descriptions,brand:p.brand,manufacturerPartNo:mfr,category:p.category,packSize:p.packSize,priceMinor:p.priceMinor,costMinor:p.costMinor,status:'ACTIVE_INTERNAL',version:p.version});
  const raw=Buffer.alloc(1280*960*3);let prng=n;for(let i=0;i<raw.length;i++){prng=(Math.imul(prng,1664525)+1013904223)>>>0;raw[i]=((i/3840)%256)*.6+(prng>>>24)*.4;}
@@ -137,7 +141,7 @@ for(let n=1;n<=30;n++){
  await post('/api/media/'+staged.id+'/review',{version:m.version,state:'APPROVED_INTERNAL',note:'Synthetic fixture only, exact test identifiers and company-generated pixels inspected.',physicalMatchConfirmed:true,applicabilityConfirmed:true});
  const thumbnail=await app.inject({url:'/api/media/'+staged.id+'?size=thumbnail',headers:{cookie}});if(thumbnail.statusCode!==200)throw new Error('Thumbnail fixture inaccessible');mediaSizes.push({source:m.file_size,thumbnail:thumbnail.rawPayload.length});
 }
-report.mediaFixtures={count:mediaSizes.length,inputDimensions:'1280×960',generatedTextures:true,sizes:mediaSizes,maxConcurrentPerList:6};
+report.mediaFixtures={count:mediaSizes.length,reusedMedia,inputDimensions:'1280×960',generatedTextures:true,sizes:mediaSizes,maxConcurrentPerList:6};
 async function scenario(
   name: string,
   rate: number,

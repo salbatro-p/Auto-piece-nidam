@@ -1,5 +1,5 @@
 {
-  "date": "2026-11-06T15:41:36.212Z",
+  "date": "2026-11-06T21:03:20.114Z",
   "database": "autoparts_load_1793821634264",
   "environment": {
     "node": "v24.16.0",
@@ -9,6 +9,11 @@
     "memoryBytes": 34056257536,
     "transport": "Fastify inject (real PostgreSQL; no TCP or WAN latency)",
     "profiles": "Host machine, unthrottled. Not Android/device measurements.",
+    "databasePool": {
+      "max": 30,
+      "min": 8,
+      "preparedBeforeReadiness": true
+    },
     "postgresql": "PostgreSQL 18.4 on x86_64-windows, compiled by msvc-19.44.35226, 64-bit"
   },
   "fixtures": {
@@ -22,27 +27,27 @@
       "name": "exact SKU search, initially unprimed application cache",
       "requests": 1000,
       "requestedRate": 50,
-      "actualRate": 49.974295471252844,
-      "durationSeconds": 20.0103321,
-      "p50": 31.77,
-      "p95": 230.89,
-      "p99": 3443.07,
+      "actualRate": 49.990980627275235,
+      "durationSeconds": 20.0036379,
+      "p50": 21.25,
+      "p95": 26.93,
+      "p99": 41.92,
       "statuses": {
         "200": 1000
       },
       "targetP95": 500,
       "targetP99": 1500,
-      "pass": false
+      "pass": true
     },
     {
       "name": "exact SKU repeated warm set",
       "requests": 1000,
       "requestedRate": 50,
-      "actualRate": 49.963391323543355,
-      "durationSeconds": 20.014658799999975,
-      "p50": 21.86,
-      "p95": 31.51,
-      "p99": 35.97,
+      "actualRate": 49.96482301582806,
+      "durationSeconds": 20.014090099999994,
+      "p50": 20.63,
+      "p95": 26.48,
+      "p99": 33.06,
       "statuses": {
         "200": 1000
       },
@@ -54,26 +59,26 @@
       "name": "variant verified fitment filter",
       "requests": 500,
       "requestedRate": 25,
-      "actualRate": 20.112066688137777,
-      "durationSeconds": 24.86069920000003,
-      "p50": 4478.46,
-      "p95": 5721.18,
-      "p99": 6982.59,
+      "actualRate": 24.888988639530652,
+      "durationSeconds": 20.08920790000001,
+      "p50": 72.17,
+      "p95": 194.65,
+      "p99": 576.58,
       "statuses": {
         "200": 500
       },
       "targetP95": 900,
-      "pass": false
+      "pass": true
     },
     {
       "name": "product and stock read",
       "requests": 1000,
       "requestedRate": 50,
-      "actualRate": 49.993268656341854,
-      "durationSeconds": 20.002694299999973,
-      "p50": 17.9,
-      "p95": 24.4,
-      "p99": 27.23,
+      "actualRate": 49.993848756848955,
+      "durationSeconds": 20.002462100000006,
+      "p50": 16.94,
+      "p95": 24.41,
+      "p99": 27.85,
       "statuses": {
         "200": 1000
       },
@@ -84,11 +89,11 @@
       "name": "receipt writes, 20 per second",
       "requests": 400,
       "requestedRate": 20,
-      "actualRate": 20.006218132657835,
-      "durationSeconds": 19.993784999999974,
-      "p50": 28.84,
-      "p95": 244.48,
-      "p99": 471.18,
+      "actualRate": 20.01119376151034,
+      "durationSeconds": 19.988813099999998,
+      "p50": 28.25,
+      "p95": 34.92,
+      "p99": 247.67,
       "statuses": {
         "200": 400
       },
@@ -99,26 +104,26 @@
       "name": "dashboard",
       "requests": 20,
       "requestedRate": 2,
-      "actualRate": 1.640096932352854,
-      "durationSeconds": 12.194401899999997,
-      "p50": 7177.27,
-      "p95": 11677.9,
-      "p99": 12189.34,
+      "actualRate": 1.9470278366959215,
+      "durationSeconds": 10.2720674,
+      "p50": 874.92,
+      "p95": 981.22,
+      "p99": 1062.76,
       "statuses": {
         "200": 20
       },
       "targetP95": 1500,
-      "pass": false
+      "pass": true
     },
     {
       "name": "catalog list plus bounded thumbnail reads",
       "requests": 40,
       "requestedRate": 2,
-      "actualRate": 2.006623885512318,
-      "durationSeconds": 19.933980500000004,
-      "p50": 448.99,
-      "p95": 591.69,
-      "p99": 820.63,
+      "actualRate": 2.0104202696120352,
+      "durationSeconds": 19.896338099999994,
+      "p50": 406.5,
+      "p95": 647.9,
+      "p99": 723.06,
       "statuses": {
         "200": 40
       },
@@ -126,7 +131,7 @@
       "pass": true
     }
   ],
-  "seedMilliseconds": 214468.88069999998,
+  "seedMilliseconds": 19605.1806,
   "actualCounts": {
     "products": 100000,
     "vehicles": 10000,
@@ -135,6 +140,7 @@
   },
   "mediaFixtures": {
     "count": 30,
+    "reusedMedia": 30,
     "inputDimensions": "1280×960",
     "generatedTextures": true,
     "sizes": [
@@ -270,7 +276,7 @@
     "warehouseDifferences": [],
     "ledgerDifferences": []
   },
-  "peakRSSBytes": 423211008,
+  "peakRSSBytes": 389500928,
   "queryPlan": [
     {
       "Plan": {
@@ -280,9 +286,9 @@
         "Startup Cost": 68.72,
         "Total Cost": 107.59,
         "Plan Rows": 10,
-        "Plan Width": 411,
-        "Actual Startup Time": 26.588,
-        "Actual Total Time": 26.592,
+        "Plan Width": 410,
+        "Actual Startup Time": 8.548,
+        "Actual Total Time": 8.552,
         "Actual Rows": 1,
         "Actual Loops": 1,
         "Disabled": false,
@@ -307,9 +313,9 @@
             "Startup Cost": 68.72,
             "Total Cost": 107.59,
             "Plan Rows": 10,
-            "Plan Width": 411,
-            "Actual Startup Time": 26.585,
-            "Actual Total Time": 26.587,
+            "Plan Width": 410,
+            "Actual Startup Time": 8.545,
+            "Actual Total Time": 8.548,
             "Actual Rows": 1,
             "Actual Loops": 1,
             "Disabled": false,
@@ -340,8 +346,8 @@
                 "Total Cost": 68.71,
                 "Plan Rows": 10,
                 "Plan Width": 0,
-                "Actual Startup Time": 26.324,
-                "Actual Total Time": 26.325,
+                "Actual Startup Time": 8.328,
+                "Actual Total Time": 8.329,
                 "Actual Rows": 114,
                 "Actual Loops": 1,
                 "Disabled": false,
@@ -376,7 +382,7 @@
       },
       "Planning Time": 0.449,
       "Triggers": [],
-      "Execution Time": 29.737
+      "Execution Time": 11.593
     }
   ],
   "limits": [
@@ -384,5 +390,5 @@
     "100k import resumability is a separate acceptance test; SQL fixture generation does not pass it.",
     "Database retained for inspection; no real customer/company data."
   ],
-  "result": "FAIL"
+  "result": "PASS"
 }

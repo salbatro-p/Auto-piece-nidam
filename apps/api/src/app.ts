@@ -4,7 +4,7 @@ import rateLimit from '@fastify/rate-limit';
 import { ZodError } from 'zod';
 import type { Pool } from 'pg';
 import { randomUUID } from 'node:crypto';
-import { audit, DomainError, ORG_ID, protectPool, databaseConnectionErrors } from './db.js';
+import { audit, DomainError, ORG_ID, protectPool, preparePool, databaseConnectionErrors } from './db.js';
 import { type AuthedRequest, installAuth, requirePermission } from './auth.js';
 import { registerInventory } from './inventory.js';
 import { registerCatalog } from './catalog.js';
@@ -182,6 +182,7 @@ export async function createApp(pool: Pool, options: { logger?: boolean } = {}) 
       databaseConnectionErrors,
     };
   });
+  await preparePool(pool);
   await app.ready();
   return app;
 }

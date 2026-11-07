@@ -1,6 +1,6 @@
 # AutoParts Morocco — private Business, shared commerce backend
 
-Working local Phase 1 software based on the supplied v1.2 blueprint. **Development and acceptance testing are in progress; this is not a production release.** Phase 2 Shop has its own application boundary and public contracts, but is not launched.
+Working local Phase 1 software based on the supplied v1.2 blueprint and v1.3 additions. **Development and acceptance testing are in progress; this is not a production release.** Phase 2 Shop has its own application boundary and public contracts, but is not launched.
 
 Business: <http://127.0.0.1:4173/>. API: <http://127.0.0.1:4310/api/health>. Both bind locally. The synthetic demo is isolated from other PostgreSQL installations and from real company inventory.
 
@@ -62,7 +62,7 @@ node --env-file=.env --import=tsx scripts/restore-drill.mts
 node --env-file=.env --import=tsx scripts/database-restart-drill.mts
 ```
 
-Observed evidence is in [docs/evidence](docs/evidence). Consult [acceptance status](docs/ACCEPTANCE_REPORT.md) and [requirement traceability](docs/TRACEABILITY.md). Browser emulation does not substitute for testing the company's actual tablets, phones, scanners or screen readers. Authored translations have not been professionally approved. Tax settings and real opening stock require company review.
+Observed evidence is in [docs/evidence](docs/evidence). Consult [acceptance status](docs/ACCEPTANCE_REPORT.md), [requirement traceability](docs/TRACEABILITY.md) and the [Arabic image-workflow guide](docs/BUSINESS_MEDIA_GUIDE_AR.md). Browser emulation does not substitute for testing the company's actual tablets, phones, scanners or screen readers. Authored translations have not been professionally approved. Tax settings and real opening stock require company review.
 
 ## Application boundaries
 

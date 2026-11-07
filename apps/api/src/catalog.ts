@@ -215,7 +215,7 @@ export function registerCatalog(app: FastifyInstance, pool: Pool) {
         })
         .parse(request.query);
     if (q.warehouseId) warehouseScope(actor, q.warehouseId);
-    const params = [actor.org_id, `%${normalize(q.q)}%`, q.vehicleId ?? null, q.warehouseId ?? null,q.category??null];
+    const params:unknown[] = [actor.org_id];
     const exact = q.q
       ? !!(
           await pool.query(
@@ -224,13 +224,17 @@ export function registerCatalog(app: FastifyInstance, pool: Pool) {
           )
         ).rowCount
       : false;
-    const matching = exact
-      ? "p.id IN (SELECT product_id FROM product_identifiers WHERE normalized_value=trim(both '%' FROM $2))"
-      : "($2='%%' OR p.search_text LIKE $2)";
-    const where = `p.org_id=$1 AND p.status<>'ARCHIVED' AND ${matching} AND ($3::uuid IS NULL OR EXISTS(SELECT 1 FROM fitments f JOIN sources fs ON fs.id=f.source_id WHERE f.product_id=p.id AND f.vehicle_id=$3 AND f.status='VERIFIED' AND fs.can_store)) AND ($4::uuid IS NULL OR EXISTS(SELECT 1 FROM inventory_balances b WHERE b.product_id=p.id AND b.warehouse_id=$4)) AND ($5::text IS NULL OR p.category=$5)`;
+    const filters=["p.org_id=$1","p.status<>'ARCHIVED'"];
+    if(q.q){params.push(exact?normalize(q.q):`%${normalize(q.q)}%`);filters.push(exact?`p.id IN (SELECT product_id FROM product_identifiers WHERE normalized_value=$${params.length})`:`p.search_text LIKE $${params.length}`);}
+    // Construct only the supplied predicates. An OR-null wrapper around EXISTS prevented
+    // PostgreSQL from using the selective vehicle semijoin and scanned the entire product master.
+    if(q.vehicleId){params.push(q.vehicleId);filters.push(`EXISTS(SELECT 1 FROM fitments f JOIN sources fs ON fs.id=f.source_id WHERE f.product_id=p.id AND f.vehicle_id=$${params.length} AND f.status='VERIFIED' AND fs.org_id=p.org_id AND fs.can_store)`);}
+    if(q.warehouseId){params.push(q.warehouseId);filters.push(`EXISTS(SELECT 1 FROM inventory_balances b WHERE b.product_id=p.id AND b.warehouse_id=$${params.length})`);}
+    if(q.category){params.push(q.category);filters.push(`p.category=$${params.length}`);}
+    const where=filters.join(' AND ');
     const [items, count] = await Promise.all([
       pool.query(
-        `SELECT p.*,mp.part_number AS manufacturer_part_no FROM products p LEFT JOIN manufacturer_parts mp ON mp.id=p.manufacturer_part_id WHERE ${where} ORDER BY p.sku LIMIT 30 OFFSET $6`,
+        `SELECT p.*,mp.part_number AS manufacturer_part_no FROM products p LEFT JOIN manufacturer_parts mp ON mp.id=p.manufacturer_part_id WHERE ${where} ORDER BY p.sku LIMIT 30 OFFSET $${params.length+1}`,
         [...params, (q.page - 1) * 30],
       ),
       pool.query(`SELECT count(*)::integer AS total FROM products p WHERE ${where}`, params),

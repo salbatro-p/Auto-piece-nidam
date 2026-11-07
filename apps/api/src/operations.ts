@@ -478,7 +478,9 @@ export function registerOperations(app: FastifyInstance, pool: Pool) {
     const actor = (request as AuthedRequest).actor;
     const scope = [actor.org_id, actor.warehouse_ids];
     const [summary, sales, imports, fitments, activity] = await Promise.all([
-      pool.query(
+      transaction(pool,async c=>{
+        await c.query("SET LOCAL work_mem='16MB'");
+        return c.query(
         `WITH s AS (SELECT product_id,sum(on_hand) on_hand,sum(reserved) reserved,sum(on_hand-reserved) available,sum(quarantine) quarantine,sum(damaged) damaged FROM inventory_balances WHERE org_id=$1 AND (cardinality($2::uuid[])=0 OR warehouse_id=ANY($2::uuid[])) GROUP BY product_id)
          SELECT count(*) FILTER(WHERE p.status<>'ARCHIVED')::integer AS "productCount",
          count(*) FILTER(WHERE p.status<>'ARCHIVED' AND coalesce(s.available,0)=0)::integer AS "outOfStock",
@@ -487,7 +489,8 @@ export function registerOperations(app: FastifyInstance, pool: Pool) {
          coalesce(sum(s.quarantine),0)::integer quarantine,coalesce(sum(s.damaged),0)::integer damaged,coalesce(sum(s.on_hand*p.cost_minor),0) AS "inventoryValueMinor"
          FROM products p LEFT JOIN s ON s.product_id=p.id WHERE p.org_id=$1`,
         scope,
-      ),
+        );
+      }),
       pool.query(
         'SELECT count(*)::integer AS "salesToday",coalesce(sum(total_minor),0) AS "salesTodayMinor" FROM sales WHERE org_id=$1 AND (created_at AT TIME ZONE \'Africa/Casablanca\')::date=(now() AT TIME ZONE \'Africa/Casablanca\')::date AND (cardinality($2::uuid[])=0 OR warehouse_id=ANY($2::uuid[]))',
         scope,

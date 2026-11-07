@@ -1,19 +1,19 @@
 {
-  "recordedAt": "2026-11-06T15:33:31.281Z",
+  "recordedAt": "2026-11-06T20:52:29.720Z",
   "scope": "Isolated synthetic fixtures only; no company image or real fitment coverage",
   "summary": {
-    "totalStockedSkus": 7,
+    "totalStockedSkus": 8,
     "withApprovedExactPhoto": 0,
     "withVerifiedVehicleFitment": 2,
     "withRightsForPublic": 0,
-    "missingPhoto": 7,
+    "missingPhoto": 8,
     "disputedMatch": 0,
     "poorQuality": 0,
     "reviewRequired": 0
   },
   "items": [
     {
-      "id": "082092dc-6ebb-4e33-9fc6-ad72e120c832",
+      "id": "32786113-4317-454f-bfcd-38ad4b7bd6a2",
       "sku": "AP-SPK-004",
       "names": {
         "ar": "شمعة الإشعال",
@@ -37,7 +37,7 @@
       "sold90Days": 0
     },
     {
-      "id": "ee181e74-e724-4e05-8f74-51c1d79d46bc",
+      "id": "73493550-51dc-46b3-ab78-98af8a939c00",
       "sku": "AP-FLT-001",
       "names": {
         "ar": "فلتر الزيت",
@@ -61,7 +61,7 @@
       "sold90Days": 0
     },
     {
-      "id": "d037f433-618e-4cef-838b-d23aca78c731",
+      "id": "f48ba7ef-8990-4628-8dbf-e7af2025a454",
       "sku": "AP-BRK-002",
       "names": {
         "ar": "وسادات الفرامل الأمامية",
@@ -85,7 +85,31 @@
       "sold90Days": 0
     },
     {
-      "id": "b7a33b9d-e58f-42c9-9a07-0f2917abe176",
+      "id": "db9be9fd-894f-46ab-8946-d0f45c44d79a",
+      "sku": "TEST-503381ac-e174-4c65-a0ab-f0cac5429d79",
+      "names": {
+        "ar": "قطعة اختبار",
+        "en": "Synthetic test part",
+        "fr": "Pièce de test"
+      },
+      "translationStatus": {
+        "ar": "REVIEW_REQUIRED",
+        "en": "REVIEW_REQUIRED",
+        "fr": "REVIEW_REQUIRED"
+      },
+      "brand": "SYNTHETIC",
+      "manufacturerPartNo": "DASH-01",
+      "pieces": 12,
+      "exact": false,
+      "fitment": false,
+      "public": false,
+      "disputed": false,
+      "poorQuality": false,
+      "reviewRequired": false,
+      "sold90Days": 0
+    },
+    {
+      "id": "f903ad08-20eb-4c5e-97de-d54c4f8e4464",
       "sku": "AP-WIP-006",
       "names": {
         "ar": "شفرة المسّاحة",
@@ -109,7 +133,7 @@
       "sold90Days": 0
     },
     {
-      "id": "2ead86bc-e725-4091-ab58-cad972dbf893",
+      "id": "d537b98e-f4ec-442f-989e-fba4e62c1c45",
       "sku": "AP-AIR-003",
       "names": {
         "ar": "فلتر الهواء",
@@ -133,8 +157,8 @@
       "sold90Days": 0
     },
     {
-      "id": "c2be85c2-20e0-4a9f-8c80-34f88d84cc48",
-      "sku": "TEST-00c6767d-8992-44e9-9319-db06aba9c58c",
+      "id": "7ad6f51a-8014-498c-8b76-7bd5d5d880dd",
+      "sku": "TEST-0fbd5233-d529-4991-bb40-08848109ea86",
       "names": {
         "ar": "قطعة اختبار",
         "en": "Synthetic test part",
@@ -157,8 +181,8 @@
       "sold90Days": 0
     },
     {
-      "id": "1fa5c1a0-bc3d-411a-9a55-da92c8c1697f",
-      "sku": "TEST-78427c7c-ba93-4496-b52f-90e7003f4290",
+      "id": "ee373cec-3214-4852-97e8-38bd85a1ab0d",
+      "sku": "TEST-366d4afd-c92d-4c53-bb4b-bba6f5e6dd3d",
       "names": {
         "ar": "قطعة اختبار",
         "en": "Synthetic test part",

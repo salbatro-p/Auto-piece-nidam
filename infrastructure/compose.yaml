@@ -25,6 +25,8 @@ services:
       DEMO_PASSWORD: ${DEMO_PASSWORD:?Set local DEMO_PASSWORD}
       DEMO_TOTP_SECRET: ${DEMO_TOTP_SECRET:?Set local DEMO_TOTP_SECRET}
       MFA_ENCRYPTION_KEY: ${MFA_ENCRYPTION_KEY:?Set local MFA_ENCRYPTION_KEY}
+      MEDIA_STORAGE_DIR: /var/lib/autoparts/media
+    volumes: ["media-data:/var/lib/autoparts/media"]
     depends_on: { db: { condition: service_healthy } }
     command: ["sh","-c","node --import=tsx apps/api/src/migrate.ts && node --import=tsx apps/api/src/seed.ts && node --import=tsx apps/api/src/server.ts"]
     healthcheck:
@@ -38,3 +40,4 @@ services:
     depends_on: { api: { condition: service_healthy } }
 volumes:
   postgres-data:
+  media-data:

@@ -27,10 +27,16 @@ export const createPool = () =>
     new Pool({
       connectionString: process.env.DATABASE_URL,
       max: 30,
+      min: 8,
       connectionTimeoutMillis: 5000,
       idleTimeoutMillis: 10000,
     }),
   );
+/** Open a bounded set of authenticated connections before reporting startup readiness. */
+export async function preparePool(pool:Pool){
+  const count=Math.min(8,pool.options.max??10);
+  await Promise.all(Array.from({length:count},async()=>{const c=await pool.connect();try{await c.query('SELECT 1');}finally{c.release();}}));
+}
 export class DomainError extends Error {
   constructor(
     public code: string,

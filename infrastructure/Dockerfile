@@ -9,7 +9,8 @@ COPY db ./db
 RUN npm run typecheck && npm run build
 
 FROM dependencies AS api
-ENV NODE_ENV=production API_HOST=0.0.0.0 API_PORT=4310
+RUN mkdir -p /var/lib/autoparts/media && chown node:node /var/lib/autoparts/media
+ENV NODE_ENV=production API_HOST=0.0.0.0 API_PORT=4310 MEDIA_STORAGE_DIR=/var/lib/autoparts/media
 USER node
 EXPOSE 4310
 CMD ["node","--import=tsx","apps/api/src/server.ts"]

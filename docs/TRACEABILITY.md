@@ -1,6 +1,6 @@
-# Blueprint v1.2 traceability and acceptance register
+# Blueprint v1.2/v1.3 traceability and acceptance register
 
-Updated 2026-11-05 (Europe/Istanbul). This register maps the supplied blueprint to implementation and verification. **NOT TESTED is not PASS.** A named path indicates responsibility/implementation location, not acceptance. `docs/evidence/` contains observed runs when present. Test results are summarized in `ACCEPTANCE_REPORT.md`; unrun/manual requirements remain release blockers. Issue owner is Engineering unless a company reviewer is explicitly named. No residual risk has been accepted by the owner.
+Updated 2026-11-07 (Europe/Istanbul). This register extends the existing project with the supplied v1.3 image addendum. **NOT TESTED is not PASS.** A named path indicates implementation location, not acceptance. `docs/evidence/` contains observed runs when present. Test results are summarized in `ACCEPTANCE_REPORT.md`; unrun/manual requirements remain release blockers. Issue owner is Engineering unless a company reviewer is explicitly named. No residual risk has been accepted by the owner.
 
 ## Phase 1 outcomes and shared specification
 
@@ -93,16 +93,35 @@ Updated 2026-11-05 (Europe/Istanbul). This register maps the supplied blueprint 
 | PAY-01/02 | Verified duplicate/order/late-payment transitions | Phase 2 sandbox provider tests | NOT TESTED — Phase 2 |
 | SHIP-01/02 | Timeout lookup/reconcile; safe queued courier failure | Phase 2 adapter tests | NOT TESTED — Phase 2 |
 | UX-01 | Android search RTL and mixed labels legible and scannable | browser screenshots + physical-device sign-off | PARTIAL — implemented/local evidence; full release gate pending |
-| I18N-01 | Tablet FR→AR→EN mid-sale including retry retains all values | tests/e2e/business.spec.ts | NOT TESTED |
-| I18N-02 | Phone mid-product upload and receipt retains draft, commits 10PCS | tests/e2e/business.spec.ts | NOT TESTED |
-| I18N-03 | Shared-tablet separate staff preferences/session | tests/e2e/business.spec.ts | NOT TESTED |
+| I18N-01 | Tablet FR→AR→EN mid-sale including retry retains all values | tests/e2e/business.spec.ts; sale-response-loss.json | PASS — local browser and database assertions |
+| I18N-02 | Phone mid-product upload and receipt retains draft, commits 10PCS | tests/e2e/business.spec.ts; owner-product-receipt.json | PASS — local browser and database assertions |
+| I18N-03 | Shared-tablet separate staff preferences/session | tests/e2e/business.spec.ts; browser-results.json | PASS — independent local browser sessions |
 | I18N-04 | Shop guest full commerce locale preservation | Phase 2 only | NOT TESTED — Phase 2 |
-| I18N-05 | Three-locale critical paths/accessibility/receipts reviewed | E2E + coverage + review record | NOT TESTED |
-| I18N-06 | Exact OEM/SKU/VIN/barcodes, currency/date/unit arithmetic | format/unit/E2E | NOT TESTED |
+| I18N-05 | Three-locale critical paths/accessibility/receipts reviewed | E2E + coverage + review record | PARTIAL — automated checks passed; qualified human and physical device review pending |
+| I18N-06 | Exact OEM/SKU/VIN/barcodes, currency/date/unit arithmetic | format/unit/E2E; api-test-output.txt | PASS — local identifier/format/arithmetic assertions |
+
+## Mandatory v1.3 image system
+
+All image fixtures below are generated software-test pixels/textures, not company product photographs. Real company inventory, exact item photography, supplier grants and technical review have not been supplied. The stock-prioritized coverage screen exposes omissions; there is no claim of real pilot or worldwide coverage.
+
+| ID | Requirement and implementation | Executed evidence | Release status |
+|---|---|---|---|
+| IMG-01 | Exact SKU + manufacturer part snapshots; duplicate cross-SKU dispute queue | IMG-EXACT-RIGHTS API case | PASS — local synthetic scope |
+| IMG-02 | Independent side/axle/engine/equipment and fitment evidence checks | IMG-EXACT-RIGHTS, IMG-VARIANTS-COVERAGE | PASS — local synthetic scope |
+| IMG-03 | Private authenticated media; separate usable_public_media projection | API anonymous/staff denial; public/internal rights assertions | PARTIAL — Shop/CDN is Phase 2 and untested |
+| IMG-04 | Expiry/revocation and license version invalidate display and publication | API rights/variant cases | PASS — local source and license gates |
+| IMG-05 | CSV/XLSX + ZIP exact mapping, row diagnostics, bounded processing and restart | image-batch-1000.json; image-bulk-browser.json | PASS — synthetic 1,000-row and browser retry scope |
+| IMG-06 | Multi-angle staged upload, progress, request lookup and safe retry | image-browser.json; image-bulk-browser.json | PARTIAL — response loss passed; physical camera/Android still required |
+| IMG-07 | Make/model/generation/year/market/engine/equipment/category filtering | IMG-VARIANTS-COVERAGE and exact variant API fixtures | PASS — synthetic evidence, real technical review pending |
+| IMG-08 | AR/FR/EN galleries, alt text, identifiers, RTL, broken-image fallback | six gallery axe reports/screenshots; 10/10 complete browser suite | PARTIAL — emulation passed; actual device/linguistic review pending |
+| IMG-09 | Private 320px thumbnails, lazy loading, at most six concurrent benchmark image reads | performance.json: 30 textures, combined list+thumbnail p95 647.90 ms ≤900 ms; all seven backend scenarios pass | PARTIAL — representative backend passed; physical device/network LCP remains untested |
+| IMG-10 | Separate licensed diagram view, exact applicability and truthful unavailable state | IMG-VARIANTS-COVERAGE; vehicle gallery implementation | PASS — local synthetic gate; real provider coverage absent |
+
+Media schema migrations 012–014 are additive; legacy bytes remain review-required until explicitly matched and converted. New media uses protected files. The restore drill includes rights, review/evidence and ingest checkpoint tables plus referenced private files. Current server storage retention does not automatically garbage-collect orphaned files.
 
 ## Performance and operations targets
 
-Observed local load results are in [performance.json](evidence/performance.json); all recorded backend latency targets passed. Transport is Fastify injection with real PostgreSQL, without network or target-device timing. Initial search p99 failure and the corrective retest are retained. See [ACCEPTANCE_REPORT.md](ACCEPTANCE_REPORT.md) for the complete 12-column evidence register, recovery/import measurements, actual limitations and remaining gates.
+Observed local load results are in [performance.json](evidence/performance.json); use its actual PASS/FAIL rather than older measurements. Transport is Fastify injection with real PostgreSQL, without network or target-device timing. Initial search and v1.3 load failures are retained. See [ACCEPTANCE_REPORT.md](ACCEPTANCE_REPORT.md) for the complete evidence register, recovery/import measurements, actual limitations and remaining gates.
 
 Representative seed: 100,000 SKUs, 1,000,000 fitments, 10,000 variants, 3 warehouses. Record cold/warm runs, machine/network, duration, rates, indexes/plans, p50/p95/p99 and errors. Exact reference search p95≤500ms at 50rps (p99≤1.5s); compatible vehicle search p95≤900ms at 25rps; stock reads p95≤300ms at 50rps; distributed stock writes p95≤800ms at 20rps; dashboard p95≤1.5s. Main-screen LCP p75≤2.5s on agreed device/network. Record 100k import duration/max RSS/restart behavior. Pool saturation and hotspot contention must preserve integrity regardless of latency. None of these targets is passed by a small fixture smoke test.
 

@@ -6,7 +6,7 @@
   },
   "locale": "ar",
   "violations": [],
-  "passes": 22,
+  "passes": 21,
   "incomplete": [
     {
       "id": "color-contrast",
