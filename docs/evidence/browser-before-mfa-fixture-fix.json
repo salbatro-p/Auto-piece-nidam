@@ -1,0 +1,795 @@
+{
+  "config": {
+    "argv": [
+      "D:\\node.exe",
+      "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\node_modules\\@playwright\\test\\cli.js",
+      "test"
+    ],
+    "configFile": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\playwright.config.ts",
+    "rootDir": "C:/Users/dipoo/Documents/ChatGPT/auto piece nidam/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/dipoo/Documents/ChatGPT/auto piece nidam/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/dipoo/Documents/ChatGPT/auto piece nidam/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 90000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e",
+        "snapshotDir": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 90000,
+        "use": {
+          "actionTimeout": 15000,
+          "baseURL": "http://127.0.0.1:4173",
+          "browserName": "chromium",
+          "locale": "fr-FR",
+          "timezoneId": "Africa/Casablanca",
+          "screenshot": "only-on-failure",
+          "trace": "off",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "docs/evidence/browser-results.json"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "playwright-report",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "business.spec.ts",
+      "file": "business.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "I18N-05 login header, RTL, keyboard and accessibility — phone",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [
+                {
+                  "type": "serial",
+                  "location": {
+                    "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                    "line": 0,
+                    "column": 0
+                  }
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3254,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T14:41:03.849Z",
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                        "line": 0,
+                        "column": 0
+                      }
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "phone-login-fr",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-05-login-hea-fff97-d-and-accessibility-—-phone\\attachments\\phone-login-fr-4a7e795e0c0089787bae821113947878403beaf3.png"
+                    },
+                    {
+                      "name": "phone-login-ar",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-05-login-hea-fff97-d-and-accessibility-—-phone\\attachments\\phone-login-ar-b7867736efe3a0cb3493672271dee7de5feb6adc.png"
+                    },
+                    {
+                      "name": "phone-login-en",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-05-login-hea-fff97-d-and-accessibility-—-phone\\attachments\\phone-login-en-18cc11469c360fe5d9cdcd737a1a62c77155f976.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "66346504f81fcdf6f5e9-575f8f4d4c19dd1f1d87",
+          "file": "business.spec.ts",
+          "line": 50,
+          "column": 3
+        },
+        {
+          "title": "I18N-05 login header, RTL, keyboard and accessibility — tablet",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [
+                {
+                  "type": "serial",
+                  "location": {
+                    "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                    "line": 0,
+                    "column": 0
+                  }
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2338,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T14:41:08.134Z",
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                        "line": 0,
+                        "column": 0
+                      }
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "tablet-login-fr",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-05-login-hea-19cd1--and-accessibility-—-tablet\\attachments\\tablet-login-fr-18c924a3bc03e6b910e2bf9a31c91779181e4f5c.png"
+                    },
+                    {
+                      "name": "tablet-login-ar",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-05-login-hea-19cd1--and-accessibility-—-tablet\\attachments\\tablet-login-ar-ff1c1f1e62326e3b98246b5e3ef0c62be937929f.png"
+                    },
+                    {
+                      "name": "tablet-login-en",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-05-login-hea-19cd1--and-accessibility-—-tablet\\attachments\\tablet-login-en-218635cc67b458394291aecf97c1ac009b01ec8f.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "66346504f81fcdf6f5e9-2f261e9586a58d593cdb",
+          "file": "business.spec.ts",
+          "line": 50,
+          "column": 3
+        },
+        {
+          "title": "I18N-01 tablet mid-sale language changes and lost response produce exactly one sale",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [
+                {
+                  "type": "serial",
+                  "location": {
+                    "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                    "line": 0,
+                    "column": 0
+                  }
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2088,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T14:41:10.490Z",
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                        "line": 0,
+                        "column": 0
+                      }
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "tablet-pos-draft-fr",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-01-tablet-mi-278d1-se-produce-exactly-one-sale\\attachments\\tablet-pos-draft-fr-6a8e85d770d9f564efe1c4d74686b5408702bb12.png"
+                    },
+                    {
+                      "name": "tablet-pos-draft-ar",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-01-tablet-mi-278d1-se-produce-exactly-one-sale\\attachments\\tablet-pos-draft-ar-facb46b9a57059b71cb53b865e293756e4f6b04e.png"
+                    },
+                    {
+                      "name": "tablet-pos-draft-en",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-01-tablet-mi-278d1-se-produce-exactly-one-sale\\attachments\\tablet-pos-draft-en-b03ba5b977aea3feef1784f7614072fd544a7a1c.png"
+                    },
+                    {
+                      "name": "tablet-receipt-fr",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-01-tablet-mi-278d1-se-produce-exactly-one-sale\\attachments\\tablet-receipt-fr-2e4ac2ee11c07613102510187dff2e09f7e95372.png"
+                    },
+                    {
+                      "name": "tablet-receipt-ar",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-01-tablet-mi-278d1-se-produce-exactly-one-sale\\attachments\\tablet-receipt-ar-4312016ed10c47dc3718c762b084bf3864967a3c.png"
+                    },
+                    {
+                      "name": "tablet-receipt-en",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-01-tablet-mi-278d1-se-produce-exactly-one-sale\\attachments\\tablet-receipt-en-7bace76fb4711c61f46e774a19d977417906ee70.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "66346504f81fcdf6f5e9-18fdb13f53c47dbf5737",
+          "file": "business.spec.ts",
+          "line": 78,
+          "column": 1
+        },
+        {
+          "title": "I18N-03 shared tablet isolates employee preferences and independent sessions",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [
+                {
+                  "type": "serial",
+                  "location": {
+                    "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                    "line": 0,
+                    "column": 0
+                  }
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2318,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T14:41:12.598Z",
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                        "line": 0,
+                        "column": 0
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "66346504f81fcdf6f5e9-1d6d20846a2dd400807a",
+          "file": "business.spec.ts",
+          "line": 159,
+          "column": 1
+        },
+        {
+          "title": "SEC-01 anonymous localized routes cannot expose Business data",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [
+                {
+                  "type": "serial",
+                  "location": {
+                    "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                    "line": 0,
+                    "column": 0
+                  }
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 47,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T14:41:14.929Z",
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                        "line": 0,
+                        "column": 0
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "66346504f81fcdf6f5e9-724de9dedc792d40ab7d",
+          "file": "business.spec.ts",
+          "line": 205,
+          "column": 1
+        },
+        {
+          "title": "I18N-02 owner phone product image and carton receipt preserve drafts; screen matrix",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 600000,
+              "annotations": [
+                {
+                  "type": "serial",
+                  "location": {
+                    "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                    "line": 0,
+                    "column": 0
+                  }
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 64859,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T14:41:14.984Z",
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                        "line": 0,
+                        "column": 0
+                      }
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "phone-product-draft-fr",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-02-owner-pho-d89e0-eserve-drafts-screen-matrix\\attachments\\phone-product-draft-fr-26deca3766414c6853041f33899328dbf4620bda.png"
+                    },
+                    {
+                      "name": "phone-product-draft-ar",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-02-owner-pho-d89e0-eserve-drafts-screen-matrix\\attachments\\phone-product-draft-ar-0cbf0f29740ea654d5fa04c5dc8ebc59633709f6.png"
+                    },
+                    {
+                      "name": "phone-product-draft-en",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-02-owner-pho-d89e0-eserve-drafts-screen-matrix\\attachments\\phone-product-draft-en-92b9b4469cdd4b18f18c208f0fa656b1d1e550ac.png"
+                    },
+                    {
+                      "name": "phone-receipt-draft-fr",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-02-owner-pho-d89e0-eserve-drafts-screen-matrix\\attachments\\phone-receipt-draft-fr-89fbe177516ec845a4373e2dffaa7458ae81f696.png"
+                    },
+                    {
+                      "name": "phone-receipt-draft-ar",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-02-owner-pho-d89e0-eserve-drafts-screen-matrix\\attachments\\phone-receipt-draft-ar-cdf0fa6f0197208ab442c9947456eb28beea737a.png"
+                    },
+                    {
+                      "name": "phone-receipt-draft-en",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-02-owner-pho-d89e0-eserve-drafts-screen-matrix\\attachments\\phone-receipt-draft-en-bca1a52dc2af9c15e89b549aaa5bdc939dc65fa7.png"
+                    },
+                    {
+                      "name": "tablet-import-committed",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\business-I18N-02-owner-pho-d89e0-eserve-drafts-screen-matrix\\attachments\\tablet-import-committed-85df5f7dd3cf74a1875b2c85e001afe9fa2d9f45.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "66346504f81fcdf6f5e9-2ab830fdca8ae69b5b22",
+          "file": "business.spec.ts",
+          "line": 225,
+          "column": 1
+        },
+        {
+          "title": "Offline and expired sessions preserve the sale draft through trilingual reauthentication",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [
+                {
+                  "type": "serial",
+                  "location": {
+                    "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                    "line": 0,
+                    "column": 0
+                  }
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1458,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T14:42:19.854Z",
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                        "line": 0,
+                        "column": 0
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "66346504f81fcdf6f5e9-629ec5cc25d0db3d58da",
+          "file": "business.spec.ts",
+          "line": 456,
+          "column": 1
+        },
+        {
+          "title": "Installed offline shell remains trilingual with no cached private records",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [
+                {
+                  "type": "serial",
+                  "location": {
+                    "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                    "line": 0,
+                    "column": 0
+                  }
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 464,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T14:42:21.323Z",
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\business.spec.ts",
+                        "line": 0,
+                        "column": 0
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "66346504f81fcdf6f5e9-f8d502f5e9777b2b079f",
+          "file": "business.spec.ts",
+          "line": 470,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "media.spec.ts",
+      "file": "media.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "IMG-06/08: staged upload resumes after response loss; gallery, rights and RTL work on phone/tablet",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7368,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T14:42:21.829Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "upload-retry-fr",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\media-IMG-06-08-staged-upl-d4de4-nd-RTL-work-on-phone-tablet\\attachments\\upload-retry-fr-957427f4efbddc3fba1ab38068112e212e198ba9.png"
+                    },
+                    {
+                      "name": "upload-retry-ar",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\media-IMG-06-08-staged-upl-d4de4-nd-RTL-work-on-phone-tablet\\attachments\\upload-retry-ar-b402cf6b02f9daff5a8558728787a0d6cf0c934b.png"
+                    },
+                    {
+                      "name": "upload-retry-en",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\media-IMG-06-08-staged-upl-d4de4-nd-RTL-work-on-phone-tablet\\attachments\\upload-retry-en-c66618e2f5d1428bfc29b313872c9b6dc65d8963.png"
+                    },
+                    {
+                      "name": "gallery-phone-fr",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\media-IMG-06-08-staged-upl-d4de4-nd-RTL-work-on-phone-tablet\\attachments\\gallery-phone-fr-b379c02e9b25e6f1ce8ff9254d62498482718bd7.png"
+                    },
+                    {
+                      "name": "gallery-phone-ar",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\media-IMG-06-08-staged-upl-d4de4-nd-RTL-work-on-phone-tablet\\attachments\\gallery-phone-ar-444dfac02b3b3da9c2e9f6e9e43f2d46299d4f25.png"
+                    },
+                    {
+                      "name": "gallery-phone-en",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\media-IMG-06-08-staged-upl-d4de4-nd-RTL-work-on-phone-tablet\\attachments\\gallery-phone-en-91f175d9e7855860b6cd48d2ce1140b267dff4cf.png"
+                    },
+                    {
+                      "name": "gallery-tablet-fr",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\media-IMG-06-08-staged-upl-d4de4-nd-RTL-work-on-phone-tablet\\attachments\\gallery-tablet-fr-69fd4e99637425758cb9a420149f41c7814a08b0.png"
+                    },
+                    {
+                      "name": "gallery-tablet-ar",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\media-IMG-06-08-staged-upl-d4de4-nd-RTL-work-on-phone-tablet\\attachments\\gallery-tablet-ar-d2d32906ab164223c5ffe6b450b815ad774ddf23.png"
+                    },
+                    {
+                      "name": "gallery-tablet-en",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\media-IMG-06-08-staged-upl-d4de4-nd-RTL-work-on-phone-tablet\\attachments\\gallery-tablet-en-617b257cb58a63b405571d7289d83be572b3adc1.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "66eff6f10bb92964d9d6-5ed41227c85f949a12cf",
+          "file": "media.spec.ts",
+          "line": 11,
+          "column": 1
+        },
+        {
+          "title": "IMG-05/06: CSV plus ZIP preview and interrupted batch resume preserve exact mapping in every language",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 15395,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeAttached\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('logout')\nExpected: attached\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeAttached\" getByTestId('logout') with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('logout')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeAttached\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('logout')\nExpected: attached\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeAttached\" getByTestId('logout') with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('logout')\u001b[22m\n\n    at login (C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\helpers.ts:30:44)\n    at C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\media.spec.ts:153:3",
+                    "location": {
+                      "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\helpers.ts",
+                      "column": 44,
+                      "line": 30
+                    },
+                    "snippet": "\u001b[90m   at \u001b[39mhelpers.ts:30\n\n  28 |   if (['owner', 'manager'].includes(role)) await page.getByTestId('login-totp').fill(otp());\n  29 |   await page.getByTestId('login-submit').click();\n> 30 |   await expect(page.getByTestId('logout')).toBeAttached();\n     |                                            ^\n  31 | }\n  32 | export async function switchLanguage(page: Page, locale: Locale) {\n  33 |   const started = performance.now();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\helpers.ts",
+                        "column": 44,
+                        "line": 30
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeAttached\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('logout')\nExpected: attached\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeAttached\" getByTestId('logout') with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('logout')\u001b[22m\n\n\n   at helpers.ts:30\n\n  28 |   if (['owner', 'manager'].includes(role)) await page.getByTestId('login-totp').fill(otp());\n  29 |   await page.getByTestId('login-submit').click();\n> 30 |   await expect(page.getByTestId('logout')).toBeAttached();\n     |                                            ^\n  31 | }\n  32 | export async function switchLanguage(page: Page, locale: Locale) {\n  33 |   const started = performance.now();\n    at login (C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\helpers.ts:30:44)\n    at C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\media.spec.ts:153:3"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T14:42:29.212Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\media-IMG-05-06-CSV-plus-Z-a77ee-t-mapping-in-every-language\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\test-results\\media-IMG-05-06-CSV-plus-Z-a77ee-t-mapping-in-every-language\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\dipoo\\Documents\\ChatGPT\\auto piece nidam\\tests\\e2e\\helpers.ts",
+                    "column": 44,
+                    "line": 30
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "66eff6f10bb92964d9d6-ee99f2e184db79cd9da8",
+          "file": "media.spec.ts",
+          "line": 149,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-11T14:41:02.376Z",
+    "duration": 103178.66500000001,
+    "expected": 9,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

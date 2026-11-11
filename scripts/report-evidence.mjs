@@ -4,6 +4,8 @@ import {execFileSync} from 'node:child_process';
 const read=async name=>JSON.parse(await readFile(`docs/evidence/${name}.json`,'utf8'));
 const [api,browser,coverage,performance,imports,restore,restart,audit]=await Promise.all(['api-integration','browser-results','translation-coverage','performance','import-resumption','restore-drill','database-restart','dependency-audit'].map(read));
 const batch=await read('image-batch-1000'),images=await read('image-browser'),bulkBrowser=await read('image-bulk-browser').catch(()=>null);
+const soak=await read('pool-soak').catch(()=>null);
+const timezone=await read('business-timezone').catch(()=>null),resume=await read('runtime-resume').catch(()=>null);
 async function files(dir){const found=[];for(const entry of await readdir(dir,{withFileTypes:true})){if(['node_modules','dist','.local'].includes(entry.name))continue;const path=`${dir}/${entry.name}`;found.push(...(entry.isDirectory()?await files(path):[path]));}return found;}
 const codeFiles=[...await files('apps'),...await files('packages'),...await files('db'),...await files('tests'),...await files('scripts'),...await files('infrastructure'),...await files('.github'),'package.json','package-lock.json','tsconfig.json','playwright.config.ts'].sort();
 const hash=createHash('sha256');for(const path of codeFiles)hash.update(path+'\0').update((await readFile(path,'utf8')).replace(/\r\n/g,'\n'));
@@ -14,7 +16,7 @@ await writeFile('docs/evidence/manifest.json',JSON.stringify({generatedAt:new Da
 const p=performance.scenarios;
 const tests=await readFile('docs/evidence/api-test-output.txt','utf8');const testCount=tests.match(/tests (\d+)/)?.[1]??'see log';
 const passCount=tests.match(/pass (\d+)/)?.[1]??'unknown',failCount=tests.match(/fail (\d+)/)?.[1]??'unknown';
-const backendLoadPassed=p.every(s=>s.pass),browserPassed=browser.stats.unexpected===0&&browser.stats.skipped===0;
+const backendLoadPassed=performance.result==='PASS'&&p.length===7&&p.every(s=>s.pass),browserPassed=browser.stats.expected>=10&&browser.stats.unexpected===0&&browser.stats.skipped===0;
 const reportDate=new Intl.DateTimeFormat('en-GB',{dateStyle:'long',timeZone:'Europe/Istanbul'}).format(new Date());
 const report=`# Phase 1 acceptance report — NOT READY FOR RELEASE
 
@@ -30,6 +32,11 @@ Updated ${reportDate} (user timezone Europe/Istanbul). Run timestamps in JSON ev
 - Offline switching and expired-session reauthentication preserved a three-piece cart without changing stock. Offline shell AR/FR/EN works and caches only four static assets. [Draft](evidence/offline-session-draft.json), [cache inspection](evidence/offline-shell.json).
 - Expanded automated axe coverage includes nine screens × three languages × two device sizes, product/receipt drafts, login and new photo galleries. Read the current browser result for failures; zero observed violations is **not** complete WCAG or physical screen-reader certification. [Screenshots](evidence/screenshots), [gallery checks](evidence/image-browser.json).
 - Dependency audit: **${audit.metadata.vulnerabilities.total} reported vulnerabilities** at scan time. [Audit](evidence/dependency-audit.json). This does not replace a manual application security review.
+- Saved-runtime resume check: **${resume?.result??'NOT TESTED'}**, ${resume?.finishedAt??'not executed'}. Existing migration checksums/record counts, authenticated reconciliation and AR/FR/EN phone header checked without reseeding. [Resume evidence](evidence/runtime-resume.json).
+
+## Moroccan business dates
+
+Pinned Casablanca timezone data: **${timezone?.pinnedTzdb??'not recorded'}**; transition/day-boundary checks **${timezone?.result??'NOT TESTED'}** across ${timezone?.transitionsCompared??0} transitions. The installed Node and PostgreSQL timezone data lagged the current Moroccan rule. The shared formatter and dashboard now use the same bundled rules, with UTC timestamps preserved and the saved sale timestamp returned on initial receipt and replay. Browser receipt assertions compare AR/FR/EN against that instant. [Timezone policy and primary sources](BUSINESS_TIMEZONE.md), [boundary evidence](evidence/business-timezone.json), [receipt assertions](evidence/sale-response-loss.json).
 
 ## v1.3 image-system evidence
 
@@ -53,6 +60,8 @@ The earlier exact-search p99 miss is retained in [the pre-fix measurement](evide
 
 The initial v1.3 [load run](evidence/performance-v13-before-query-review.json) and [intermediate run](evidence/performance-v13-before-selective-filters.json) are also retained. Query plans identified optional-filter predicates that prevented selective vehicle lookup, repeated dashboard work and connection startup costs. The revised queries, pending-review index, bounded dashboard memory and eight prepared connections now have **${backendLoadPassed?'PASS':'FAIL'}** for the latest measured backend scenarios above. These are local service timings, not page-load or physical-device measurements.
 
+Local pool-pressure drill: **${soak?.result??'NOT TESTED'}**. ${soak?.result==='PASS'?`${soak.requests} requests in ${(soak.durationMs/1000).toFixed(1)} seconds, ${soak.profile.requestsPerRound} simultaneous requests per burst. Observed ${soak.pool.maxConnections} connections and up to ${soak.pool.maxWaiting} queued acquisitions; the queue drained after every burst. ${soak.distinctReceipts} distinct receipts from ${soak.profile.rounds*soak.profile.writeRequestsPerRound} concurrent write/retry requests had exactly ${soak.expectedStockIncrease} pieces of stock effect. Peak test-process RSS ${soak.memory.peakRssMiB} MiB, zero unexpected database disconnects and reconciled warehouse/bin ledgers.`:'Read the artifact for the current incomplete or failed assertions.'} [Pressure evidence](evidence/pool-soak.json). This five-minute burst profile does not establish multi-hour staging stability or hosted availability.
+
 ## Recovery and import evidence
 
 100,000 valid imported rows produced exactly 100,000 distinct products after forcibly killing the worker at the committed 50% checkpoint and starting a fresh process. Commit including restart: **${(imports.commitWithRestartMs/1000).toFixed(2)} s**; full run including invalid-file validation: **${(imports.totalMs/1000).toFixed(2)} s**. Peak worker RSS **${(imports.workerPeakRssBytes/1048576).toFixed(1)} MiB**; API RSS **${(imports.apiPeakRssBytes/1048576).toFixed(1)} MiB**. Separate 100,000-row invalid file: three injected errors detected, no products committed. [Import drill](evidence/import-resumption.json).
@@ -74,6 +83,7 @@ Source base: \`${commit.slice(0,12)}\` plus the exact working source hash in [ma
 | DATA-01, REL-02 | imports + worker | Kill at 50% | ${imports.date} | Local 100k fixture | 100k distinct, no invalid writes | Resume without duplicate | PASS | [Import](evidence/import-resumption.json) | Engineering | Repeat staging volume and licensed files | Nobody |
 | REL-01 | db/inventory | Immediate PG restart | ${restart.date} | Separate local cluster | Atomic rollback and one retry effect | All or nothing | ${restart.result==='PASS'?'PASS':'FAIL'} | [Restart](evidence/database-restart.json) | Engineering | Hosted failover rehearsal | Nobody |
 | REL-04 | restore script | Snapshot restore + sale | ${restore.date??'see artifact'} | Separate local database | Hashes/counts match | Local restore integrity | ${restore.pass?'PASS (local only)':'FAIL'} | [Restore](evidence/restore-drill.json) | Engineering | Encrypted off-host backup/WAL and staging RPO/RTO | Nobody |
+| OPS-01 / pool pressure | pool-soak script + API | Five-minute concurrent bursts and duplicate receipts | ${soak?.finishedAt??'Not completed'} | Local 100k/1m synthetic database | ${soak?.requests??0} requests; see queue/memory/integrity assertions | Bounded pool and exactly-once effects | ${soak?.result==='PASS'?'PASS (local bounded drill)':'NOT PASSED'} | [Pressure](evidence/pool-soak.json) | Engineering | Extended staging soak and target-host sizing | Nobody |
 | OPS-01/02, A09-10 | infrastructure/runbooks | Staging rollback and monitoring | Not run | Hosting not provisioned | None | Verified alerts, backup, rollback | NOT TESTED | [Operations](OPERATIONS.md) | Company + Engineering | Choose authorized hosting; then rehearse | Nobody |
 | L10-04c/06b, UX-01 | Business | Physical device/scanner/screen reader | Not run | Target devices unavailable | Emulation only | Actual devices and network profile | NOT TESTED | [Screenshots](evidence/screenshots) | Company QA | Tablet/Android/scan/zoom/assistive review | Nobody |
 | LEGAL-01 | policies, sources, tax configuration | Legal/accountant/data rights review | Not run | Real company scope | No real data or assumed tax rate | Named company approvals | NOT TESTED | [Source register](SOURCE_LICENSE_REGISTER.md) | Company reviewers | Validate tax/privacy/rights and opening count | Nobody |
@@ -83,7 +93,7 @@ Source base: \`${commit.slice(0,12)}\` plus the exact working source hash in [ma
 
 Gate 1's local persisted vertical slice is demonstrated. Gate 2 and Gate 3 remain **partial**: core modules, technical attributes, image workflows and local hardening exist, while qualified automotive vocabulary/translation review, licensed business content, actual target-device accessibility/performance and independent security review remain required. Optional supplier/diagram adapters cannot be validated without an authorized provider and licensed data. Product-master imports deliberately do not trust supplied translation-approval claims. Opening imports are limited to 500 rows per review and require an existing validated product and warehouse/bin code; branch text is source evidence, while authorization uses the warehouse ID.
 
-Docker and hosted CI definitions have not been executed here. Real-device screen-reader/scan/print/PWA installation, target-network LCP and long-running pool saturation/soak remain NOT TESTED. External outbox provider effects are unbuilt Phase 2 work; local outbox deduplication is not proof of a real payment/courier effect.
+Docker and hosted CI definitions have not been executed here. Real-device screen-reader/scan/print/PWA installation, target-network LCP and extended multi-hour staging saturation/soak remain NOT TESTED. External outbox provider effects are unbuilt Phase 2 work; local outbox deduplication is not proof of a real payment/courier effect.
 
 Gate 4 requires a separately approved staging/pilot, licensed company records, physically counted and signed opening inventory and trained staff. Gate 5 requires all release gates, named reviewers, monitored backups and **explicit production approval**. No residual risk is marked accepted. This report must not be used as a production go-live approval.
 `;

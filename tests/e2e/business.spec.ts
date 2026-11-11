@@ -2,6 +2,7 @@ import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { randomUUID } from 'node:crypto';
 import sharp from 'sharp';
+import moment from 'moment-timezone';
 import {
   locales,
   login,
@@ -118,6 +119,8 @@ test('I18N-01 tablet mid-sale language changes and lost response produce exactly
   await expect(page.getByTestId('receipt')).toBeVisible();
   expect(writes).toBe(1);
   expect(committed).toBeTruthy();
+  const savedSale = await (await page.request.get(`/api/sales/${committed!.id}`)).json();
+  expect(committed!.createdAt).toBe(savedSale.createdAt);
   await expect(page.getByTestId('receipt')).toHaveAttribute('data-sale-id', committed!.id);
   const after = await product(page, sku),
     warehouse = sessionBefore.user.warehouseIds[0];
@@ -129,6 +132,13 @@ test('I18N-01 tablet mid-sale language changes and lost response produce exactly
     await switchLanguage(page, locale);
     await expect(page.getByTestId('receipt-total')).toHaveAttribute('data-minor', String(expectedMinor));
     await expect(page.getByTestId('receipt')).toContainText(sku);
+    const utc = Date.parse(savedSale.createdAt);
+    const wallClock = utc - moment.tz.zone('Africa/Casablanca')!.utcOffset(utc) * 60000;
+    const expectedDate = new Intl.DateTimeFormat({ ar:'ar-MA', fr:'fr-MA', en:'en-GB' }[locale], {
+      dateStyle:'medium', timeStyle:'short', timeZone:'UTC', calendar:'gregory',
+    }).format(new Date(wallClock));
+    await expect(page.getByTestId('receipt-date')).toHaveText(expectedDate);
+    await expect(page.getByTestId('receipt-date')).toHaveAttribute('datetime', savedSale.createdAt);
     await capture(page, `tablet-receipt-${locale}`, testInfo);
   }
   await jsonEvidence('sale-response-loss', {
@@ -139,6 +149,9 @@ test('I18N-01 tablet mid-sale language changes and lost response produce exactly
     stockBefore: priorStock,
     stockAfter: nextStock,
     userIdUnchanged: true,
+    persistedCreatedAt: savedSale.createdAt,
+    receiptTimeZoneData: moment.tz.dataVersion,
+    receiptDatesMatchInAllLocales: true,
     requestResult: 'one sale after lost response and recovery lookup',
   });
 });
@@ -259,6 +272,8 @@ test('I18N-02 owner phone product image and carton receipt preserve drafts; scre
   expect(created.packSize).toBe(10);
   expect(created.priceMinor).toBe(8950);
   await navigate(page, 'inventory');
+  await page.locator('.product-picker').filter({ has: page.getByTestId('receipt-product') })
+    .getByRole('textbox').fill(sku);
   await page.getByTestId('receipt-product').selectOption(created.id);
   await page.getByTestId('receipt-quantity').fill('1');
   await page.getByTestId('receipt-unit').selectOption('CARTON');

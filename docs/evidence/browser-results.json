@@ -133,12 +133,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 12354,
+                  "duration": 2949,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-06T20:52:42.935Z",
+                  "startTime": "2026-11-11T14:47:02.613Z",
                   "annotations": [
                     {
                       "type": "serial",
@@ -173,7 +173,7 @@
           ],
           "id": "66346504f81fcdf6f5e9-575f8f4d4c19dd1f1d87",
           "file": "business.spec.ts",
-          "line": 49,
+          "line": 50,
           "column": 3
         },
         {
@@ -201,12 +201,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 12607,
+                  "duration": 2241,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-06T20:52:56.141Z",
+                  "startTime": "2026-11-11T14:47:05.683Z",
                   "annotations": [
                     {
                       "type": "serial",
@@ -241,7 +241,7 @@
           ],
           "id": "66346504f81fcdf6f5e9-2f261e9586a58d593cdb",
           "file": "business.spec.ts",
-          "line": 49,
+          "line": 50,
           "column": 3
         },
         {
@@ -269,12 +269,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 9052,
+                  "duration": 1919,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-06T20:53:08.833Z",
+                  "startTime": "2026-11-11T14:47:07.937Z",
                   "annotations": [
                     {
                       "type": "serial",
@@ -324,7 +324,7 @@
           ],
           "id": "66346504f81fcdf6f5e9-18fdb13f53c47dbf5737",
           "file": "business.spec.ts",
-          "line": 77,
+          "line": 78,
           "column": 1
         },
         {
@@ -352,12 +352,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 10557,
+                  "duration": 2217,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-06T20:53:17.975Z",
+                  "startTime": "2026-11-11T14:47:09.872Z",
                   "annotations": [
                     {
                       "type": "serial",
@@ -376,7 +376,7 @@
           ],
           "id": "66346504f81fcdf6f5e9-1d6d20846a2dd400807a",
           "file": "business.spec.ts",
-          "line": 146,
+          "line": 159,
           "column": 1
         },
         {
@@ -404,12 +404,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 227,
+                  "duration": 40,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-06T20:53:28.600Z",
+                  "startTime": "2026-11-11T14:47:12.099Z",
                   "annotations": [
                     {
                       "type": "serial",
@@ -428,7 +428,7 @@
           ],
           "id": "66346504f81fcdf6f5e9-724de9dedc792d40ab7d",
           "file": "business.spec.ts",
-          "line": 192,
+          "line": 205,
           "column": 1
         },
         {
@@ -456,12 +456,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 322449,
+                  "duration": 63356,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-06T20:53:28.871Z",
+                  "startTime": "2026-11-11T14:47:12.147Z",
                   "annotations": [
                     {
                       "type": "serial",
@@ -516,7 +516,7 @@
           ],
           "id": "66346504f81fcdf6f5e9-2ab830fdca8ae69b5b22",
           "file": "business.spec.ts",
-          "line": 212,
+          "line": 225,
           "column": 1
         },
         {
@@ -544,12 +544,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 4794,
+                  "duration": 1430,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-06T20:58:51.386Z",
+                  "startTime": "2026-11-11T14:48:15.517Z",
                   "annotations": [
                     {
                       "type": "serial",
@@ -568,7 +568,7 @@
           ],
           "id": "66346504f81fcdf6f5e9-629ec5cc25d0db3d58da",
           "file": "business.spec.ts",
-          "line": 443,
+          "line": 458,
           "column": 1
         },
         {
@@ -596,12 +596,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1710,
+                  "duration": 448,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-06T20:58:56.235Z",
+                  "startTime": "2026-11-11T14:48:16.957Z",
                   "annotations": [
                     {
                       "type": "serial",
@@ -620,7 +620,7 @@
           ],
           "id": "66346504f81fcdf6f5e9-f8d502f5e9777b2b079f",
           "file": "business.spec.ts",
-          "line": 457,
+          "line": 472,
           "column": 1
         }
       ]
@@ -647,12 +647,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 25777,
+                  "duration": 5881,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-06T20:58:58.160Z",
+                  "startTime": "2026-11-11T14:48:17.459Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -727,12 +727,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 14197,
+                  "duration": 10310,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-06T20:59:23.993Z",
+                  "startTime": "2026-11-11T14:48:23.353Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -766,8 +766,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-06T20:52:36.703Z",
-    "duration": 423093.171,
+    "startTime": "2026-11-11T14:47:01.640Z",
+    "duration": 93001.578,
     "expected": 10,
     "skipped": 0,
     "unexpected": 0,

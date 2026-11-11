@@ -1,26 +1,29 @@
 {
-  "saleId": "9cd1297a-f030-49c5-9100-d8db624f8bc6",
+  "saleId": "27b55500-a3ec-4680-a573-74fbc69a3377",
   "sku": "AP-SPK-004",
   "attempts": 1,
   "expectedMinor": 13000,
   "stockBefore": {
     "warehouseId": "25857fa7-d248-4700-89ac-96e0af14e772",
     "warehouseName": "Casablanca · Counter",
-    "onHand": 24,
+    "onHand": 18,
     "reserved": 0,
-    "available": 24,
+    "available": 18,
     "quarantine": 0,
     "damaged": 0
   },
   "stockAfter": {
     "warehouseId": "25857fa7-d248-4700-89ac-96e0af14e772",
     "warehouseName": "Casablanca · Counter",
-    "onHand": 22,
+    "onHand": 16,
     "reserved": 0,
-    "available": 22,
+    "available": 16,
     "quarantine": 0,
     "damaged": 0
   },
   "userIdUnchanged": true,
+  "persistedCreatedAt": "2026-11-11T14:47:09.106Z",
+  "receiptTimeZoneData": "2026f",
+  "receiptDatesMatchInAllLocales": true,
   "requestResult": "one sale after lost response and recovery lookup"
 }

@@ -15,6 +15,7 @@ import {
 import { mutation } from './inventory.js';
 import { insertProduct, productSchema } from './catalog.js';
 import {contentValue} from '../../../packages/i18n/src/index.js';
+import { businessDayBounds } from '../../../packages/i18n/src/date-time.js';
 import {csvCell} from './catalog-export.js';
 const uuid = z.string().uuid();
 export function registerOperations(app: FastifyInstance, pool: Pool) {
@@ -477,6 +478,7 @@ export function registerOperations(app: FastifyInstance, pool: Pool) {
   app.get('/api/dashboard', async (request) => {
     const actor = (request as AuthedRequest).actor;
     const scope = [actor.org_id, actor.warehouse_ids];
+    const businessDay = businessDayBounds();
     const [summary, sales, imports, fitments, activity] = await Promise.all([
       transaction(pool,async c=>{
         await c.query("SET LOCAL work_mem='16MB'");
@@ -492,8 +494,8 @@ export function registerOperations(app: FastifyInstance, pool: Pool) {
         );
       }),
       pool.query(
-        'SELECT count(*)::integer AS "salesToday",coalesce(sum(total_minor),0) AS "salesTodayMinor" FROM sales WHERE org_id=$1 AND (created_at AT TIME ZONE \'Africa/Casablanca\')::date=(now() AT TIME ZONE \'Africa/Casablanca\')::date AND (cardinality($2::uuid[])=0 OR warehouse_id=ANY($2::uuid[]))',
-        scope,
+        'SELECT count(*)::integer AS "salesToday",coalesce(sum(total_minor),0) AS "salesTodayMinor" FROM sales WHERE org_id=$1 AND created_at >= $3::timestamptz AND created_at < $4::timestamptz AND (cardinality($2::uuid[])=0 OR warehouse_id=ANY($2::uuid[]))',
+        [...scope, businessDay.start, businessDay.end],
       ),
       pool.query(
         "SELECT count(*)::integer AS pending FROM import_jobs WHERE org_id=$1 AND status='PREVIEW'",

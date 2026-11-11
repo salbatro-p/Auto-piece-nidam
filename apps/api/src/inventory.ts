@@ -317,8 +317,8 @@ export function registerInventory(app: FastifyInstance, pool: Pool) {
       if (d.expectedTotalMinor !== undefined && d.expectedTotalMinor !== total)
         throw new DomainError('PRICE_CHANGED', 409);
       const id = randomUUID();
-      await c.query(
-        'INSERT INTO sales(id,org_id,warehouse_id,actor_id,reservation_id,total_minor,locale,subtotal_minor,tax_minor,tax_rate_bps,tax_inclusive,tax_configured) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)',
+      const postedSale = await c.query(
+        'INSERT INTO sales(id,org_id,warehouse_id,actor_id,reservation_id,total_minor,locale,subtotal_minor,tax_minor,tax_rate_bps,tax_inclusive,tax_configured) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING created_at',
         [
           id,
           actor.org_id,
@@ -359,7 +359,7 @@ export function registerInventory(app: FastifyInstance, pool: Pool) {
         lines: saleLines,
         status: 'COMPLETED',
         locale: d.locale,
-        createdAt: new Date().toISOString(),
+        createdAt: postedSale.rows[0].created_at.toISOString(),
       };
     },
   );

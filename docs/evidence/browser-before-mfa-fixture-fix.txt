@@ -1,0 +1,56 @@
+
+> autoparts-morocco@0.1.0 test:e2e
+> playwright test
+
+
+Running 10 tests using 1 worker
+
+(node:5180) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\e2e\business.spec.ts:50:3 › I18N-05 login header, RTL, keyboard and accessibility — phone (3.3s)
+  ok  2 tests\e2e\business.spec.ts:50:3 › I18N-05 login header, RTL, keyboard and accessibility — tablet (2.3s)
+  ok  3 tests\e2e\business.spec.ts:78:1 › I18N-01 tablet mid-sale language changes and lost response produce exactly one sale (2.1s)
+  ok  4 tests\e2e\business.spec.ts:159:1 › I18N-03 shared tablet isolates employee preferences and independent sessions (2.3s)
+  ok  5 tests\e2e\business.spec.ts:205:1 › SEC-01 anonymous localized routes cannot expose Business data (47ms)
+  ok  6 tests\e2e\business.spec.ts:225:1 › I18N-02 owner phone product image and carton receipt preserve drafts; screen matrix (1.1m)
+  ok  7 tests\e2e\business.spec.ts:456:1 › Offline and expired sessions preserve the sale draft through trilingual reauthentication (1.5s)
+  ok  8 tests\e2e\business.spec.ts:470:1 › Installed offline shell remains trilingual with no cached private records (464ms)
+  ok  9 tests\e2e\media.spec.ts:11:1 › IMG-06/08: staged upload resumes after response loss; gallery, rights and RTL work on phone/tablet (7.4s)
+  x  10 tests\e2e\media.spec.ts:149:1 › IMG-05/06: CSV plus ZIP preview and interrupted batch resume preserve exact mapping in every language (15.4s)
+
+
+  1) tests\e2e\media.spec.ts:149:1 › IMG-05/06: CSV plus ZIP preview and interrupted batch resume preserve exact mapping in every language
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: getByTestId('logout')
+    Expected: attached
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" getByTestId('logout') with timeout 15000ms
+      - waiting for getByTestId('logout')
+
+
+       at helpers.ts:30
+
+      28 |   if (['owner', 'manager'].includes(role)) await page.getByTestId('login-totp').fill(otp());
+      29 |   await page.getByTestId('login-submit').click();
+    > 30 |   await expect(page.getByTestId('logout')).toBeAttached();
+         |                                            ^
+      31 | }
+      32 | export async function switchLanguage(page: Page, locale: Locale) {
+      33 |   const started = performance.now();
+        at login (C:\Users\dipoo\Documents\ChatGPT\auto piece nidam\tests\e2e\helpers.ts:30:44)
+        at C:\Users\dipoo\Documents\ChatGPT\auto piece nidam\tests\e2e\media.spec.ts:153:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\media-IMG-05-06-CSV-plus-Z-a77ee-t-mapping-in-every-language\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\media-IMG-05-06-CSV-plus-Z-a77ee-t-mapping-in-every-language\error-context.md
+
+  1 failed
+    tests\e2e\media.spec.ts:149:1 › IMG-05/06: CSV plus ZIP preview and interrupted batch resume preserve exact mapping in every language
+  9 passed (1.7m)

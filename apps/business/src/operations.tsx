@@ -771,6 +771,7 @@ export function ProductEditor({
 
 export function Receipt({ sale, onClose }: { sale: Sale; onClose: () => void }) {
   const { t, locale } = useApp();
+  const createdAt = sale.createdAt ?? sale.created_at;
   return (
     <Modal title={t('receipt')} onClose={onClose}>
       <article
@@ -792,7 +793,7 @@ export function Receipt({ sale, onClose }: { sale: Sale; onClose: () => void }) 
         <p>
           <bdi className="mono">{sale.id}</bdi>
         </p>
-        <p>{dateTime(sale.createdAt ?? sale.created_at ?? new Date(), locale)}</p>
+        {createdAt && <p><time data-testid="receipt-date" dateTime={createdAt}>{dateTime(createdAt, locale)}</time></p>}
         <hr />
         {sale.lines.map((line) => (
           <div className="receipt-line" key={line.productId}>

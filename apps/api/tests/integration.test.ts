@@ -16,6 +16,7 @@ import {parse as parseCsv} from 'csv-parse/sync';
 import sharp from 'sharp';
 import {zipSync,strToU8} from 'fflate';
 import {ImageArchive} from '../../business/src/image-manifest.js';
+import moment from 'moment-timezone';
 
 type Session = { cookie: string; csrf: string; id: string };
 let app: FastifyInstance, pool: Pool, maintenance: Pool;
@@ -30,10 +31,16 @@ const evidencePath = 'docs/evidence/api-integration.json';
 test('Dashboard totals equal scoped physical balances and protect cost information',()=>measured('DASHBOARD-SCOPE',async()=>{
  const p=await product(5,{manufacturerPartNo:'DASH-01'});await request(owner,'POST','/api/inventory/receipts',{productId:p.id,warehouseId:depot,quantity:7,unit:'PCS',reference:'DASH-'+randomUUID()});
  await request(sales,'POST','/api/inventory/reservations',{warehouseId:counter,lines:[{productId:p.id,quantity:2}]});
+ const posted=await request(owner,'POST','/api/sales',{warehouseId:depot,lines:[{productId:p.id,quantity:1}],locale:'en'});assert.equal(posted.statusCode,200,posted.body);
+ const saved=(await request(owner,'GET','/api/sales/'+posted.json().id)).json();assert.equal(posted.json().createdAt,saved.createdAt);
+ const saleRows=(await pool.query('SELECT warehouse_id,total_minor,created_at FROM sales WHERE org_id=$1',[ORG_ID])).rows;
+ const day=moment().tz('Africa/Casablanca').format('YYYY-MM-DD');
  const rows=(await pool.query('SELECT b.*,p.cost_minor FROM inventory_balances b JOIN products p ON p.id=b.product_id WHERE b.org_id=$1',[ORG_ID])).rows;
  for(const [actor,scope] of [[owner,null],[sales,counter]] as const){const response=await request(actor,'GET','/api/dashboard');assert.equal(response.statusCode,200,response.body);const result=response.json(),filtered=rows.filter(r=>scope===null||r.warehouse_id===scope);
   for(const [field,column] of [['onHand','on_hand'],['reserved','reserved'],['quarantine','quarantine'],['damaged','damaged']])assert.equal(result[field],filtered.reduce((sum,r)=>sum+Number(r[column]),0));
   assert.equal(result.available,result.onHand-result.reserved);if(actor===sales)assert.equal(result.inventoryValueMinor,undefined);else assert.equal(result.inventoryValueMinor,filtered.reduce((sum,r)=>sum+Number(r.on_hand)*Number(r.cost_minor),0));
+  const todaysSales=saleRows.filter(r=>(scope===null||r.warehouse_id===scope)&&moment(r.created_at).tz('Africa/Casablanca').format('YYYY-MM-DD')===day);
+  assert.equal(result.salesToday,todaysSales.length);assert.equal(result.salesTodayMinor,todaysSales.reduce((sum,r)=>sum+Number(r.total_minor),0));
  }
 }));
 

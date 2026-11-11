@@ -1,6 +1,6 @@
 # Blueprint v1.2/v1.3 traceability and acceptance register
 
-Updated 2026-11-07 (Europe/Istanbul). This register extends the existing project with the supplied v1.3 image addendum. **NOT TESTED is not PASS.** A named path indicates implementation location, not acceptance. `docs/evidence/` contains observed runs when present. Test results are summarized in `ACCEPTANCE_REPORT.md`; unrun/manual requirements remain release blockers. Issue owner is Engineering unless a company reviewer is explicitly named. No residual risk has been accepted by the owner.
+Updated 2026-11-11 (Europe/Istanbul). This register extends the existing project with the supplied v1.3 image addendum. **NOT TESTED is not PASS.** A named path indicates implementation location, not acceptance. `docs/evidence/` contains observed runs when present. Test results are summarized in `ACCEPTANCE_REPORT.md`; unrun/manual requirements remain release blockers. Issue owner is Engineering unless a company reviewer is explicitly named. No residual risk has been accepted by the owner.
 
 ## Phase 1 outcomes and shared specification
 
@@ -62,7 +62,7 @@ Updated 2026-11-07 (Europe/Istanbul). This register extends the existing project
 | L10-04b | Bidi isolation identifiers/names/prices/quantities; images/barcodes not mirrored | identifier controls + receipt | I18N-06 exact byte/copy/search checks | PASS — local executed scope; see acceptance evidence |
 | L10-04c | WCAG 2.2 AA controls, contrast/focus, zoom/large text, touch/screen reader | Business UI | axe + keyboard/zoom screenshots; manual screen-reader/device | PARTIAL — implemented/local evidence; full release gate pending |
 | L10-05a | Locale cannot alter price/stock/tenant/warehouse/permissions/fitment | API ignores UI locale for domain semantics | same-key request locale replay, invariant assertions | PASS — local executed scope; see acceptance evidence |
-| L10-05b | Exact money/units, decimal parsing AR/FR, UTC→Casablanca formatting | format/parse + inventory | numeric tests and receipt equality | PASS — local executed scope; see acceptance evidence |
+| L10-05b | Exact money/units, decimal parsing AR/FR, UTC→Casablanca formatting | format/parse + inventory + pinned IANA 2026f dates | business-timezone.json: 71 transitions/day bounds; persisted receipt timestamp in AR/FR/EN | PASS — local executed scope; see acceptance evidence |
 | L10-05c | Explicit localized receipts/exports/drafts, numeric consistency; legal text reviewed | receipt/export renderer | AR/FR/EN receipt totals/date assertions; accountant review | PARTIAL — implemented/local evidence; full release gate pending |
 | L10-05d | Shop locale SEO/route/cart/customer state preserved; no fallback leak | Phase 2 only | I18N-04 + SEO/publication tests at Phase 2 | NOT TESTED — not released |
 | L10-06a | Shared typed package, public/private bundle separation, coverage tooling | packages/i18n and contracts | typecheck, dictionary coverage and bundle review | PASS — local executed scope; see acceptance evidence |
@@ -114,7 +114,7 @@ All image fixtures below are generated software-test pixels/textures, not compan
 | IMG-06 | Multi-angle staged upload, progress, request lookup and safe retry | image-browser.json; image-bulk-browser.json | PARTIAL — response loss passed; physical camera/Android still required |
 | IMG-07 | Make/model/generation/year/market/engine/equipment/category filtering | IMG-VARIANTS-COVERAGE and exact variant API fixtures | PASS — synthetic evidence, real technical review pending |
 | IMG-08 | AR/FR/EN galleries, alt text, identifiers, RTL, broken-image fallback | six gallery axe reports/screenshots; 10/10 complete browser suite | PARTIAL — emulation passed; actual device/linguistic review pending |
-| IMG-09 | Private 320px thumbnails, lazy loading, at most six concurrent benchmark image reads | performance.json: 30 textures, combined list+thumbnail p95 647.90 ms ≤900 ms; all seven backend scenarios pass | PARTIAL — representative backend passed; physical device/network LCP remains untested |
+| IMG-09 | Private 320px thumbnails, lazy loading, at most six concurrent benchmark image reads | performance.json: 30 textures, combined list+thumbnail p95 198.45 ms ≤900 ms; all seven backend scenarios pass | PARTIAL — representative backend passed; physical device/network LCP remains untested |
 | IMG-10 | Separate licensed diagram view, exact applicability and truthful unavailable state | IMG-VARIANTS-COVERAGE; vehicle gallery implementation | PASS — local synthetic gate; real provider coverage absent |
 
 Media schema migrations 012–014 are additive; legacy bytes remain review-required until explicitly matched and converted. New media uses protected files. The restore drill includes rights, review/evidence and ingest checkpoint tables plus referenced private files. Current server storage retention does not automatically garbage-collect orphaned files.
@@ -122,6 +122,8 @@ Media schema migrations 012–014 are additive; legacy bytes remain review-requi
 ## Performance and operations targets
 
 Observed local load results are in [performance.json](evidence/performance.json); use its actual PASS/FAIL rather than older measurements. Transport is Fastify injection with real PostgreSQL, without network or target-device timing. Initial search and v1.3 load failures are retained. See [ACCEPTANCE_REPORT.md](ACCEPTANCE_REPORT.md) for the complete evidence register, recovery/import measurements, actual limitations and remaining gates.
+
+The [five-minute pool-pressure drill](evidence/pool-soak.json) passed 3,000 requests in 30 bursts of 100, observed the thirty-connection limit and queued demand, drained the queue after each burst, and applied 150 logical receipts once under duplicate submission. Peak RSS was 245.43 MiB; warehouse/bin reconciliation passed. This covers a bounded local pressure profile, not an extended hosted soak.
 
 Representative seed: 100,000 SKUs, 1,000,000 fitments, 10,000 variants, 3 warehouses. Record cold/warm runs, machine/network, duration, rates, indexes/plans, p50/p95/p99 and errors. Exact reference search p95≤500ms at 50rps (p99≤1.5s); compatible vehicle search p95≤900ms at 25rps; stock reads p95≤300ms at 50rps; distributed stock writes p95≤800ms at 20rps; dashboard p95≤1.5s. Main-screen LCP p75≤2.5s on agreed device/network. Record 100k import duration/max RSS/restart behavior. Pool saturation and hotspot contention must preserve integrity regardless of latency. None of these targets is passed by a small fixture smoke test.
 

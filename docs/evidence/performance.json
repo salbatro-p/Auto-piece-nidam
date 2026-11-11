@@ -1,5 +1,5 @@
 {
-  "date": "2026-11-06T21:03:20.114Z",
+  "date": "2026-11-11T14:49:02.082Z",
   "database": "autoparts_load_1793821634264",
   "environment": {
     "node": "v24.16.0",
@@ -27,11 +27,11 @@
       "name": "exact SKU search, initially unprimed application cache",
       "requests": 1000,
       "requestedRate": 50,
-      "actualRate": 49.990980627275235,
-      "durationSeconds": 20.0036379,
-      "p50": 21.25,
-      "p95": 26.93,
-      "p99": 41.92,
+      "actualRate": 50.021193229253335,
+      "durationSeconds": 19.9915376,
+      "p50": 7.39,
+      "p95": 10.78,
+      "p99": 16.56,
       "statuses": {
         "200": 1000
       },
@@ -43,11 +43,11 @@
       "name": "exact SKU repeated warm set",
       "requests": 1000,
       "requestedRate": 50,
-      "actualRate": 49.96482301582806,
-      "durationSeconds": 20.014090099999994,
-      "p50": 20.63,
-      "p95": 26.48,
-      "p99": 33.06,
+      "actualRate": 50.039019676958794,
+      "durationSeconds": 19.9844056,
+      "p50": 8.29,
+      "p95": 12.34,
+      "p99": 14.42,
       "statuses": {
         "200": 1000
       },
@@ -59,11 +59,11 @@
       "name": "variant verified fitment filter",
       "requests": 500,
       "requestedRate": 25,
-      "actualRate": 24.888988639530652,
-      "durationSeconds": 20.08920790000001,
-      "p50": 72.17,
-      "p95": 194.65,
-      "p99": 576.58,
+      "actualRate": 25.011732378365387,
+      "durationSeconds": 19.9906195,
+      "p50": 14.23,
+      "p95": 19.86,
+      "p99": 23.8,
       "statuses": {
         "200": 500
       },
@@ -74,11 +74,11 @@
       "name": "product and stock read",
       "requests": 1000,
       "requestedRate": 50,
-      "actualRate": 49.993848756848955,
-      "durationSeconds": 20.002462100000006,
-      "p50": 16.94,
-      "p95": 24.41,
-      "p99": 27.85,
+      "actualRate": 50.02167864519962,
+      "durationSeconds": 19.991332699999997,
+      "p50": 6.48,
+      "p95": 11.74,
+      "p99": 15.23,
       "statuses": {
         "200": 1000
       },
@@ -89,11 +89,11 @@
       "name": "receipt writes, 20 per second",
       "requests": 400,
       "requestedRate": 20,
-      "actualRate": 20.01119376151034,
-      "durationSeconds": 19.988813099999998,
-      "p50": 28.25,
-      "p95": 34.92,
-      "p99": 247.67,
+      "actualRate": 20.028730613202725,
+      "durationSeconds": 19.9713107,
+      "p50": 16.26,
+      "p95": 24.89,
+      "p99": 28.78,
       "statuses": {
         "200": 400
       },
@@ -104,11 +104,11 @@
       "name": "dashboard",
       "requests": 20,
       "requestedRate": 2,
-      "actualRate": 1.9470278366959215,
-      "durationSeconds": 10.2720674,
-      "p50": 874.92,
-      "p95": 981.22,
-      "p99": 1062.76,
+      "actualRate": 2.0700221207738885,
+      "durationSeconds": 9.661732600000002,
+      "p50": 171.69,
+      "p95": 180.19,
+      "p99": 244.92,
       "statuses": {
         "200": 20
       },
@@ -119,11 +119,11 @@
       "name": "catalog list plus bounded thumbnail reads",
       "requests": 40,
       "requestedRate": 2,
-      "actualRate": 2.0104202696120352,
-      "durationSeconds": 19.896338099999994,
-      "p50": 406.5,
-      "p95": 647.9,
-      "p99": 723.06,
+      "actualRate": 2.0412411129720187,
+      "durationSeconds": 19.59592139999999,
+      "p50": 100.64,
+      "p95": 198.45,
+      "p99": 226.53,
       "statuses": {
         "200": 40
       },
@@ -131,7 +131,7 @@
       "pass": true
     }
   ],
-  "seedMilliseconds": 19605.1806,
+  "seedMilliseconds": 5083.353,
   "actualCounts": {
     "products": 100000,
     "vehicles": 10000,
@@ -276,7 +276,7 @@
     "warehouseDifferences": [],
     "ledgerDifferences": []
   },
-  "peakRSSBytes": 389500928,
+  "peakRSSBytes": 269881344,
   "queryPlan": [
     {
       "Plan": {
@@ -287,15 +287,15 @@
         "Total Cost": 107.59,
         "Plan Rows": 10,
         "Plan Width": 410,
-        "Actual Startup Time": 8.548,
-        "Actual Total Time": 8.552,
+        "Actual Startup Time": 9.078,
+        "Actual Total Time": 9.079,
         "Actual Rows": 1,
         "Actual Loops": 1,
         "Disabled": false,
         "Shared Hit Blocks": 50,
         "Shared Read Blocks": 45,
         "Shared Dirtied Blocks": 0,
-        "Shared Written Blocks": 0,
+        "Shared Written Blocks": 45,
         "Local Hit Blocks": 0,
         "Local Read Blocks": 0,
         "Local Dirtied Blocks": 0,
@@ -314,8 +314,8 @@
             "Total Cost": 107.59,
             "Plan Rows": 10,
             "Plan Width": 410,
-            "Actual Startup Time": 8.545,
-            "Actual Total Time": 8.548,
+            "Actual Startup Time": 9.077,
+            "Actual Total Time": 9.077,
             "Actual Rows": 1,
             "Actual Loops": 1,
             "Disabled": false,
@@ -328,7 +328,7 @@
             "Shared Hit Blocks": 50,
             "Shared Read Blocks": 45,
             "Shared Dirtied Blocks": 0,
-            "Shared Written Blocks": 0,
+            "Shared Written Blocks": 45,
             "Local Hit Blocks": 0,
             "Local Read Blocks": 0,
             "Local Dirtied Blocks": 0,
@@ -346,8 +346,8 @@
                 "Total Cost": 68.71,
                 "Plan Rows": 10,
                 "Plan Width": 0,
-                "Actual Startup Time": 8.328,
-                "Actual Total Time": 8.329,
+                "Actual Startup Time": 9.014,
+                "Actual Total Time": 9.014,
                 "Actual Rows": 114,
                 "Actual Loops": 1,
                 "Disabled": false,
@@ -356,7 +356,7 @@
                 "Shared Hit Blocks": 38,
                 "Shared Read Blocks": 45,
                 "Shared Dirtied Blocks": 0,
-                "Shared Written Blocks": 0,
+                "Shared Written Blocks": 45,
                 "Local Hit Blocks": 0,
                 "Local Read Blocks": 0,
                 "Local Dirtied Blocks": 0,
@@ -380,9 +380,9 @@
         "Temp Read Blocks": 0,
         "Temp Written Blocks": 0
       },
-      "Planning Time": 0.449,
+      "Planning Time": 0.119,
       "Triggers": [],
-      "Execution Time": 11.593
+      "Execution Time": 9.777
     }
   ],
   "limits": [

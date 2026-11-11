@@ -17,6 +17,7 @@
     "db:migrate": "node --env-file=.env --import=tsx apps/api/src/migrate.ts",
     "db:seed": "node --env-file=.env --import=tsx apps/api/src/seed.ts",
     "demo:otp": "node --env-file=.env scripts/demo-otp.mjs",
+    "tzdata:generate": "node scripts/generate-business-timezone.mjs",
     "setup:local": "pwsh -NoProfile -File scripts/setup-local.ps1"
   },
   "dependencies": {
@@ -43,6 +44,7 @@
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "@vitejs/plugin-react": "6.1.2",
+    "moment-timezone": "0.6.6",
     "prettier": "3.9.10",
     "tsx": "4.23.15",
     "typescript": "5.9.3",

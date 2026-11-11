@@ -23,10 +23,26 @@ export function otp() {
 }
 export async function login(page: Page, role = 'sales') {
   await page.goto('/');
-  await page.getByTestId('login-email').fill(`${role}@demo.local`);
-  await page.getByTestId('login-password').fill(password());
-  if (['owner', 'manager'].includes(role)) await page.getByTestId('login-totp').fill(otp());
-  await page.getByTestId('login-submit').click();
+  const privileged = ['owner', 'manager'].includes(role);
+  for (let attempt = 0; attempt < 2; attempt++) {
+    await page.getByTestId('login-email').fill(`${role}@demo.local`);
+    await page.getByTestId('login-password').fill(password());
+    if (privileged) await page.getByTestId('login-totp').fill(otp());
+    const responsePromise = page.waitForResponse(r => r.url().endsWith('/api/auth/login') && r.request().method() === 'POST');
+    await page.getByTestId('login-submit').click();
+    const response = await responsePromise;
+    if (response.ok()) break;
+    const code = (await response.json()).code;
+    // Clear secrets before an assertion can create a failure screenshot/DOM artifact.
+    await page.getByTestId('login-password').fill('');
+    if (privileged) await page.getByTestId('login-totp').fill('');
+    if (privileged && code === 'MFA_INVALID' && attempt === 0) {
+      // Adjacent fast tests may consume the same one-time code. Keep replay protection enabled.
+      await new Promise(resolve => setTimeout(resolve, 30000 - Date.now() % 30000 + 150));
+      continue;
+    }
+    expect(response.status(), `Synthetic login failed: ${code}`).toBe(200);
+  }
   await expect(page.getByTestId('logout')).toBeAttached();
 }
 export async function switchLanguage(page: Page, locale: Locale) {

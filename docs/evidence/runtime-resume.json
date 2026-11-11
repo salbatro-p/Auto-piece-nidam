@@ -1,0 +1,83 @@
+{
+  "startedAt": "2026-11-11T14:52:17.654Z",
+  "result": "PASS",
+  "scope": "Post-interruption local startup/read-only business smoke; does not replace the dated acceptance suites.",
+  "mutations": "Synthetic owner authentication and language preference only; no inventory/catalog writes or reseeding.",
+  "localeChecks": [
+    {
+      "locale": "fr",
+      "direction": "ltr",
+      "selectorVisible": true
+    },
+    {
+      "locale": "en",
+      "direction": "ltr",
+      "selectorVisible": true
+    },
+    {
+      "locale": "ar",
+      "direction": "rtl",
+      "selectorVisible": true
+    }
+  ],
+  "health": {
+    "status": "ok",
+    "application": "AutoParts Business",
+    "mode": "isolated-demo"
+  },
+  "appliedMigrations": [
+    "001_initial.sql",
+    "002_query_indexes.sql",
+    "003_resumable_imports.sql",
+    "004_catalog_reviews.sql",
+    "005_bins.sql",
+    "006_category_translations.sql",
+    "007_pricing_and_quotes.sql",
+    "008_vehicle_search.sql",
+    "009_manufacturer_identity.sql",
+    "010_catalog_links.sql",
+    "011_opening_balances.sql",
+    "012_reviewed_media.sql",
+    "013_media_release_guards.sql",
+    "014_dashboard_review_index.sql"
+  ],
+  "backupSnapshotDate": "2026-11-11T14:52:16.894Z",
+  "retainedRecords": {
+    "products": {
+      "current": 55,
+      "backedUp": 55
+    },
+    "product_media": {
+      "current": 29,
+      "backedUp": 29
+    },
+    "business_documents": {
+      "current": 63,
+      "backedUp": 63
+    },
+    "sales": {
+      "current": 16,
+      "backedUp": 16
+    },
+    "stock_movements": {
+      "current": 46,
+      "backedUp": 46
+    },
+    "bin_movements": {
+      "current": 60,
+      "backedUp": 60
+    }
+  },
+  "anonymousBusinessDataDenied": true,
+  "reconciliation": {
+    "balanced": true,
+    "items": []
+  },
+  "binReconciliation": {
+    "balanced": true,
+    "warehouseDifferences": [],
+    "ledgerDifferences": []
+  },
+  "browserErrors": [],
+  "finishedAt": "2026-11-11T14:52:19.969Z"
+}

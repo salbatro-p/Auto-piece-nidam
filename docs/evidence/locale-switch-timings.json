@@ -4,317 +4,317 @@
     {
       "screen": "login-phone",
       "locale": "fr",
-      "durationMs": 920.4574000000002
+      "durationMs": 831.7272
     },
     {
       "screen": "login-phone",
       "locale": "ar",
-      "durationMs": 298.7646999999997
+      "durationMs": 81.51260000000002
     },
     {
       "screen": "login-phone",
       "locale": "en",
-      "durationMs": 158.4434000000001
+      "durationMs": 55.12480000000005
     },
     {
       "screen": "login-tablet",
       "locale": "fr",
-      "durationMs": 148.39830000000075
+      "durationMs": 40.47519999999986
     },
     {
       "screen": "login-tablet",
       "locale": "ar",
-      "durationMs": 437.0839999999989
+      "durationMs": 69.4426999999996
     },
     {
       "screen": "login-tablet",
       "locale": "en",
-      "durationMs": 172.85759999999937
+      "durationMs": 36.47479999999996
     },
     {
       "screen": "pos-cart-tablet",
       "locale": "fr",
-      "durationMs": 343.04669999999896
+      "durationMs": 75.54809999999998
     },
     {
       "screen": "pos-cart-tablet",
       "locale": "ar",
-      "durationMs": 169.08510000000388
+      "durationMs": 64.98160000000007
     },
     {
       "screen": "pos-cart-tablet",
       "locale": "en",
-      "durationMs": 240.9473999999973
+      "durationMs": 49.97769999999946
     },
     {
       "screen": "dashboard-phone",
       "locale": "fr",
-      "durationMs": 194.3793000000005
+      "durationMs": 60.612600000000384
     },
     {
       "screen": "dashboard-phone",
       "locale": "ar",
-      "durationMs": 246.42869999998948
+      "durationMs": 51.16449999999895
     },
     {
       "screen": "dashboard-phone",
       "locale": "en",
-      "durationMs": 173.92380000000412
+      "durationMs": 34.56759999999849
     },
     {
       "screen": "catalog-phone",
       "locale": "fr",
-      "durationMs": 456.6896999999881
+      "durationMs": 80.34119999999893
     },
     {
       "screen": "catalog-phone",
       "locale": "ar",
-      "durationMs": 246.18590000001132
+      "durationMs": 64.9519999999975
     },
     {
       "screen": "catalog-phone",
       "locale": "en",
-      "durationMs": 278.48480000000563
+      "durationMs": 62.81039999999848
     },
     {
       "screen": "inventory-phone",
       "locale": "fr",
-      "durationMs": 177.36609999999928
+      "durationMs": 72.4989999999998
     },
     {
       "screen": "inventory-phone",
       "locale": "ar",
-      "durationMs": 202.32170000000042
+      "durationMs": 60.0656999999992
     },
     {
       "screen": "inventory-phone",
       "locale": "en",
-      "durationMs": 181.33110000001034
+      "durationMs": 61.8695000000007
     },
     {
       "screen": "purchases-phone",
       "locale": "fr",
-      "durationMs": 131.210699999996
+      "durationMs": 53.67039999999906
     },
     {
       "screen": "purchases-phone",
       "locale": "ar",
-      "durationMs": 127.9661999999953
+      "durationMs": 38.482099999997445
     },
     {
       "screen": "purchases-phone",
       "locale": "en",
-      "durationMs": 153.38319999998203
+      "durationMs": 42.920900000000984
     },
     {
       "screen": "suppliers-phone",
       "locale": "fr",
-      "durationMs": 148.0458000000217
+      "durationMs": 59.9890000000014
     },
     {
       "screen": "suppliers-phone",
       "locale": "ar",
-      "durationMs": 170.74640000000363
+      "durationMs": 26.409999999999854
     },
     {
       "screen": "suppliers-phone",
       "locale": "en",
-      "durationMs": 120.99549999998999
+      "durationMs": 35.25639999999839
     },
     {
       "screen": "vehicles-phone",
       "locale": "fr",
-      "durationMs": 156.89380000001984
+      "durationMs": 51.04449999999997
     },
     {
       "screen": "vehicles-phone",
       "locale": "ar",
-      "durationMs": 192.19550000000163
+      "durationMs": 50.29160000000047
     },
     {
       "screen": "vehicles-phone",
       "locale": "en",
-      "durationMs": 134.34930000000168
+      "durationMs": 40.12159999999858
     },
     {
       "screen": "imports-phone",
       "locale": "fr",
-      "durationMs": 167.1756999999925
+      "durationMs": 70.0010000000002
     },
     {
       "screen": "imports-phone",
       "locale": "ar",
-      "durationMs": 171.2957999999926
+      "durationMs": 33.330799999999726
     },
     {
       "screen": "imports-phone",
       "locale": "en",
-      "durationMs": 151.36410000000615
+      "durationMs": 25.33820000000196
     },
     {
       "screen": "audit-phone",
       "locale": "fr",
-      "durationMs": 828.0066999999981
+      "durationMs": 108.42789999999877
     },
     {
       "screen": "audit-phone",
       "locale": "ar",
-      "durationMs": 642.825600000011
+      "durationMs": 118.04239999999845
     },
     {
       "screen": "audit-phone",
       "locale": "en",
-      "durationMs": 569.9782999999879
+      "durationMs": 69.51860000000306
     },
     {
       "screen": "team-phone",
       "locale": "fr",
-      "durationMs": 343.558400000009
+      "durationMs": 52.88829999999871
     },
     {
       "screen": "team-phone",
       "locale": "ar",
-      "durationMs": 173.09500000000116
+      "durationMs": 53.30229999999574
     },
     {
       "screen": "team-phone",
       "locale": "en",
-      "durationMs": 148.24800000002142
+      "durationMs": 27.061699999998382
     },
     {
       "screen": "dashboard-tablet",
       "locale": "fr",
-      "durationMs": 185.85800000000745
+      "durationMs": 52.828499999995984
     },
     {
       "screen": "dashboard-tablet",
       "locale": "ar",
-      "durationMs": 197.4882000000216
+      "durationMs": 67.89540000000125
     },
     {
       "screen": "dashboard-tablet",
       "locale": "en",
-      "durationMs": 125.03299999999581
+      "durationMs": 50.340799999998126
     },
     {
       "screen": "catalog-tablet",
       "locale": "fr",
-      "durationMs": 260.703600000008
+      "durationMs": 92.88059999999678
     },
     {
       "screen": "catalog-tablet",
       "locale": "ar",
-      "durationMs": 231.69680000000517
+      "durationMs": 84.70449999999983
     },
     {
       "screen": "catalog-tablet",
       "locale": "en",
-      "durationMs": 200.95230000000447
+      "durationMs": 55.76559999999881
     },
     {
       "screen": "inventory-tablet",
       "locale": "fr",
-      "durationMs": 230.17360000000917
+      "durationMs": 62.78740000000107
     },
     {
       "screen": "inventory-tablet",
       "locale": "ar",
-      "durationMs": 131.0516999999527
+      "durationMs": 46.69499999999971
     },
     {
       "screen": "inventory-tablet",
       "locale": "en",
-      "durationMs": 127.90300000004936
+      "durationMs": 47.12859999999637
     },
     {
       "screen": "purchases-tablet",
       "locale": "fr",
-      "durationMs": 132.40540000004694
+      "durationMs": 62.31120000000374
     },
     {
       "screen": "purchases-tablet",
       "locale": "ar",
-      "durationMs": 151.82000000000698
+      "durationMs": 41.04000000000087
     },
     {
       "screen": "purchases-tablet",
       "locale": "en",
-      "durationMs": 113.78709999995772
+      "durationMs": 44.478299999995215
     },
     {
       "screen": "suppliers-tablet",
       "locale": "fr",
-      "durationMs": 122.39989999996033
+      "durationMs": 63.55569999999716
     },
     {
       "screen": "suppliers-tablet",
       "locale": "ar",
-      "durationMs": 100.35600000002887
+      "durationMs": 47.775500000003376
     },
     {
       "screen": "suppliers-tablet",
       "locale": "en",
-      "durationMs": 108.47490000003017
+      "durationMs": 39.627800000002026
     },
     {
       "screen": "vehicles-tablet",
       "locale": "fr",
-      "durationMs": 134.08689999999478
+      "durationMs": 67.39930000000459
     },
     {
       "screen": "vehicles-tablet",
       "locale": "ar",
-      "durationMs": 131.00420000002487
+      "durationMs": 49.99870000000374
     },
     {
       "screen": "vehicles-tablet",
       "locale": "en",
-      "durationMs": 103.52010000002338
+      "durationMs": 44.94949999999517
     },
     {
       "screen": "imports-tablet",
       "locale": "fr",
-      "durationMs": 141.32529999996768
+      "durationMs": 62.2786000000051
     },
     {
       "screen": "imports-tablet",
       "locale": "ar",
-      "durationMs": 120.73369999998249
+      "durationMs": 45.570999999996275
     },
     {
       "screen": "imports-tablet",
       "locale": "en",
-      "durationMs": 121.5407000000123
+      "durationMs": 44.95599999999831
     },
     {
       "screen": "audit-tablet",
       "locale": "fr",
-      "durationMs": 725.2601000000141
+      "durationMs": 108.47060000000056
     },
     {
       "screen": "audit-tablet",
       "locale": "ar",
-      "durationMs": 396.2485999999917
+      "durationMs": 71.67429999999877
     },
     {
       "screen": "audit-tablet",
       "locale": "en",
-      "durationMs": 415.92420000000857
+      "durationMs": 80.19989999999962
     },
     {
       "screen": "team-tablet",
       "locale": "fr",
-      "durationMs": 153.6361999999499
+      "durationMs": 74.73240000000078
     },
     {
       "screen": "team-tablet",
       "locale": "ar",
-      "durationMs": 122.29259999998612
+      "durationMs": 53.59539999999106
     },
     {
       "screen": "team-tablet",
       "locale": "en",
-      "durationMs": 118.8574999999837
+      "durationMs": 47.58299999999872
     }
   ]
 }

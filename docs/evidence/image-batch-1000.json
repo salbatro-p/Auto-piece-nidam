@@ -1,15 +1,15 @@
 {
-  "startedAt": "2026-11-06T20:52:29.727Z",
-  "finishedAt": "2026-11-06T20:56:11.406Z",
-  "durationMs": 221678.739,
+  "startedAt": "2026-11-11T14:41:04.902Z",
+  "finishedAt": "2026-11-11T14:43:36.571Z",
+  "durationMs": 151668.9057,
   "rows": 1000,
   "outcomes": {
     "STAGED": 900,
     "DUPLICATE": 50,
     "ERROR": 50
   },
-  "archiveBytes": 239270,
-  "peakRssMiB": 307.9296875,
+  "archiveBytes": 239192,
+  "peakRssMiB": 252.140625,
   "memoryCeilingMiB": 512,
   "apiRestartAfter": 500,
   "replaySameRow": true,

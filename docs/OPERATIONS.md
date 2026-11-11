@@ -8,6 +8,10 @@ Local runtime uses an isolated PostgreSQL cluster on loopback and synthetic reco
 
 Use the root README and package scripts as the executable setup contract. The database migration precedes seed and server startup. Verify readiness, login, stock read and a demo receipt/sale, then run reconciliation. Persist only authorized synthetic evidence in `docs/evidence/`; keep credentials and raw backups under ignored local runtime paths. Logs use request IDs. An unresolved client timeout must remain unresolved until request-status lookup or idempotent retry confirms the committed document.
 
+After a workstation interruption, `scripts/resume-check.mts` checks the saved demo's migration checksums, retained record counts, authenticated reconciliation and all three visible language selectors. It changes only synthetic authentication/language preferences. See `runtime-resume.json` for the dated outcome.
+
+Business date formatting and daily-sales UTC bounds share pinned IANA Casablanca data. Review [BUSINESS_TIMEZONE.md](BUSINESS_TIMEZONE.md) when updating timezone rules; older Node/PostgreSQL timezone packages can disagree with current browsers. Do not rewrite saved UTC instants to repair a display offset.
+
 ## Backup and restore policy
 
 Before a schema change or approved import: pause destructive administrative work, create a consistent PostgreSQL backup, record UTC timestamp, hash and critical table counts, and restrict access. Production backups require encryption, off-host copies and retention approved for the chosen region. A local unencrypted development dump is not a production backup policy.
@@ -25,6 +29,8 @@ The container definition uses a dedicated `media-data` volume at `/var/lib/autop
 Schema migrations use a dedicated bounded ten-minute statement timeout and thirty-second lock timeout for large evidence backfills. API transactions retain their fifteen-second statement/five-second lock limits. A failed migration rolls back its transaction; successful migration messages are emitted only after commit. Rehearse on the actual staging volume before any approved upgrade. Orphaned private objects from rolled-back uploads are retained safely; automated garbage collection is not enabled.
 
 The Business process prepares eight authenticated database connections before startup readiness and retains a minimum of eight in its thirty-connection pool. This avoids a new authentication burst on the first busy counter search. Dashboard aggregation has a transaction-local 16 MB `work_mem` budget; it does not alter other pooled queries. Include concurrent report memory, pool limits and source/warehouse volume in staging sizing.
+
+`scripts/pool-soak.mts` exercises the retained synthetic 100k-product/1m-fitment fixture for five minutes, with 100 concurrent requests per burst. Its assertions require observed queueing at the thirty-connection limit, drained queues after each burst, successful reads, identical concurrent receipt retries, exactly one stock effect per logical receipt, bounded test-process memory and both ledger reconciliations. Use `docs/evidence/pool-soak.json` for the actual result. This is a local pressure drill; an extended mixed-user soak, other-service connection exhaustion and target-host sizing still require staging.
 
 For a suspected ledger discrepancy, stop writes to affected locations, retain request IDs, run reconciliation, compare immutable movements and documents, and involve the owner. Never fix a balance directly with SQL. Apply an approved compensating correction only after the cause is understood. For duplicate requests, look up the original idempotency result; do not invent a fresh key. For lost connection, retry with the same key and payload. For auth compromise, revoke sessions, reset affected credentials/MFA through a controlled recovery flow, and inspect redacted audit events.
 

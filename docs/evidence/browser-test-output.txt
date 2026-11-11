@@ -5,19 +5,17 @@
 
 Running 10 tests using 1 worker
 
-(node:28316) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(node:3788) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
 (Use `node --trace-warnings ...` to show where the warning was created)
-  ok  1 tests\e2e\business.spec.ts:49:3 › I18N-05 login header, RTL, keyboard and accessibility — phone (12.4s)
-  ok  2 tests\e2e\business.spec.ts:49:3 › I18N-05 login header, RTL, keyboard and accessibility — tablet (12.6s)
-  ok  3 tests\e2e\business.spec.ts:77:1 › I18N-01 tablet mid-sale language changes and lost response produce exactly one sale (9.1s)
-  ok  4 tests\e2e\business.spec.ts:146:1 › I18N-03 shared tablet isolates employee preferences and independent sessions (10.6s)
-  ok  5 tests\e2e\business.spec.ts:192:1 › SEC-01 anonymous localized routes cannot expose Business data (227ms)
-  ok  6 tests\e2e\business.spec.ts:212:1 › I18N-02 owner phone product image and carton receipt preserve drafts; screen matrix (5.4m)
-  ok  7 tests\e2e\business.spec.ts:443:1 › Offline and expired sessions preserve the sale draft through trilingual reauthentication (4.8s)
-  ok  8 tests\e2e\business.spec.ts:457:1 › Installed offline shell remains trilingual with no cached private records (1.7s)
-  ok  9 tests\e2e\media.spec.ts:11:1 › IMG-06/08: staged upload resumes after response loss; gallery, rights and RTL work on phone/tablet (25.8s)
-  ok 10 tests\e2e\media.spec.ts:149:1 › IMG-05/06: CSV plus ZIP preview and interrupted batch resume preserve exact mapping in every language (14.2s)
+  ok  1 tests\e2e\business.spec.ts:50:3 › I18N-05 login header, RTL, keyboard and accessibility — phone (2.9s)
+  ok  2 tests\e2e\business.spec.ts:50:3 › I18N-05 login header, RTL, keyboard and accessibility — tablet (2.2s)
+  ok  3 tests\e2e\business.spec.ts:78:1 › I18N-01 tablet mid-sale language changes and lost response produce exactly one sale (1.9s)
+  ok  4 tests\e2e\business.spec.ts:159:1 › I18N-03 shared tablet isolates employee preferences and independent sessions (2.2s)
+  ok  5 tests\e2e\business.spec.ts:205:1 › SEC-01 anonymous localized routes cannot expose Business data (40ms)
+  ok  6 tests\e2e\business.spec.ts:225:1 › I18N-02 owner phone product image and carton receipt preserve drafts; screen matrix (1.1m)
+  ok  7 tests\e2e\business.spec.ts:458:1 › Offline and expired sessions preserve the sale draft through trilingual reauthentication (1.4s)
+  ok  8 tests\e2e\business.spec.ts:472:1 › Installed offline shell remains trilingual with no cached private records (448ms)
+  ok  9 tests\e2e\media.spec.ts:11:1 › IMG-06/08: staged upload resumes after response loss; gallery, rights and RTL work on phone/tablet (5.9s)
+  ok 10 tests\e2e\media.spec.ts:149:1 › IMG-05/06: CSV plus ZIP preview and interrupted batch resume preserve exact mapping in every language (10.3s)
 
-  Slow test file: tests\e2e\business.spec.ts (6.2m)
-  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
-  10 passed (7.1m)
+  10 passed (1.6m)

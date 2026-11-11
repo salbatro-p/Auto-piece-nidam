@@ -1,0 +1,394 @@
+{
+  "date": "2026-11-06T21:03:20.114Z",
+  "database": "autoparts_load_1793821634264",
+  "environment": {
+    "node": "v24.16.0",
+    "platform": "win32",
+    "cpu": "Intel(R) Core(TM) i7-8850H CPU @ 2.60GHz",
+    "logicalCpus": 12,
+    "memoryBytes": 34056257536,
+    "transport": "Fastify inject (real PostgreSQL; no TCP or WAN latency)",
+    "profiles": "Host machine, unthrottled. Not Android/device measurements.",
+    "databasePool": {
+      "max": 30,
+      "min": 8,
+      "preparedBeforeReadiness": true
+    },
+    "postgresql": "PostgreSQL 18.4 on x86_64-windows, compiled by msvc-19.44.35226, 64-bit"
+  },
+  "fixtures": {
+    "products": 100000,
+    "vehicles": 10000,
+    "fitments": 1000000,
+    "warehouses": 3
+  },
+  "scenarios": [
+    {
+      "name": "exact SKU search, initially unprimed application cache",
+      "requests": 1000,
+      "requestedRate": 50,
+      "actualRate": 49.990980627275235,
+      "durationSeconds": 20.0036379,
+      "p50": 21.25,
+      "p95": 26.93,
+      "p99": 41.92,
+      "statuses": {
+        "200": 1000
+      },
+      "targetP95": 500,
+      "targetP99": 1500,
+      "pass": true
+    },
+    {
+      "name": "exact SKU repeated warm set",
+      "requests": 1000,
+      "requestedRate": 50,
+      "actualRate": 49.96482301582806,
+      "durationSeconds": 20.014090099999994,
+      "p50": 20.63,
+      "p95": 26.48,
+      "p99": 33.06,
+      "statuses": {
+        "200": 1000
+      },
+      "targetP95": 500,
+      "targetP99": 1500,
+      "pass": true
+    },
+    {
+      "name": "variant verified fitment filter",
+      "requests": 500,
+      "requestedRate": 25,
+      "actualRate": 24.888988639530652,
+      "durationSeconds": 20.08920790000001,
+      "p50": 72.17,
+      "p95": 194.65,
+      "p99": 576.58,
+      "statuses": {
+        "200": 500
+      },
+      "targetP95": 900,
+      "pass": true
+    },
+    {
+      "name": "product and stock read",
+      "requests": 1000,
+      "requestedRate": 50,
+      "actualRate": 49.993848756848955,
+      "durationSeconds": 20.002462100000006,
+      "p50": 16.94,
+      "p95": 24.41,
+      "p99": 27.85,
+      "statuses": {
+        "200": 1000
+      },
+      "targetP95": 300,
+      "pass": true
+    },
+    {
+      "name": "receipt writes, 20 per second",
+      "requests": 400,
+      "requestedRate": 20,
+      "actualRate": 20.01119376151034,
+      "durationSeconds": 19.988813099999998,
+      "p50": 28.25,
+      "p95": 34.92,
+      "p99": 247.67,
+      "statuses": {
+        "200": 400
+      },
+      "targetP95": 800,
+      "pass": true
+    },
+    {
+      "name": "dashboard",
+      "requests": 20,
+      "requestedRate": 2,
+      "actualRate": 1.9470278366959215,
+      "durationSeconds": 10.2720674,
+      "p50": 874.92,
+      "p95": 981.22,
+      "p99": 1062.76,
+      "statuses": {
+        "200": 20
+      },
+      "targetP95": 1500,
+      "pass": true
+    },
+    {
+      "name": "catalog list plus bounded thumbnail reads",
+      "requests": 40,
+      "requestedRate": 2,
+      "actualRate": 2.0104202696120352,
+      "durationSeconds": 19.896338099999994,
+      "p50": 406.5,
+      "p95": 647.9,
+      "p99": 723.06,
+      "statuses": {
+        "200": 40
+      },
+      "targetP95": 900,
+      "pass": true
+    }
+  ],
+  "seedMilliseconds": 19605.1806,
+  "actualCounts": {
+    "products": 100000,
+    "vehicles": 10000,
+    "fitments": 1000000,
+    "warehouses": 3
+  },
+  "mediaFixtures": {
+    "count": 30,
+    "reusedMedia": 30,
+    "inputDimensions": "1280×960",
+    "generatedTextures": true,
+    "sizes": [
+      {
+        "source": 2435424,
+        "thumbnail": 10116
+      },
+      {
+        "source": 2434084,
+        "thumbnail": 10184
+      },
+      {
+        "source": 2433280,
+        "thumbnail": 9986
+      },
+      {
+        "source": 2433106,
+        "thumbnail": 10314
+      },
+      {
+        "source": 2435610,
+        "thumbnail": 10816
+      },
+      {
+        "source": 2436980,
+        "thumbnail": 10750
+      },
+      {
+        "source": 2435678,
+        "thumbnail": 10208
+      },
+      {
+        "source": 2433964,
+        "thumbnail": 10252
+      },
+      {
+        "source": 2435204,
+        "thumbnail": 10084
+      },
+      {
+        "source": 2434174,
+        "thumbnail": 10910
+      },
+      {
+        "source": 2434904,
+        "thumbnail": 10026
+      },
+      {
+        "source": 2432002,
+        "thumbnail": 10082
+      },
+      {
+        "source": 2432912,
+        "thumbnail": 10082
+      },
+      {
+        "source": 2437026,
+        "thumbnail": 9986
+      },
+      {
+        "source": 2430034,
+        "thumbnail": 10178
+      },
+      {
+        "source": 2429038,
+        "thumbnail": 9978
+      },
+      {
+        "source": 2436226,
+        "thumbnail": 10022
+      },
+      {
+        "source": 2435256,
+        "thumbnail": 9992
+      },
+      {
+        "source": 2431492,
+        "thumbnail": 10762
+      },
+      {
+        "source": 2430086,
+        "thumbnail": 10024
+      },
+      {
+        "source": 2434174,
+        "thumbnail": 10250
+      },
+      {
+        "source": 2433014,
+        "thumbnail": 10140
+      },
+      {
+        "source": 2432128,
+        "thumbnail": 10008
+      },
+      {
+        "source": 2429456,
+        "thumbnail": 10816
+      },
+      {
+        "source": 2435276,
+        "thumbnail": 9954
+      },
+      {
+        "source": 2433960,
+        "thumbnail": 10158
+      },
+      {
+        "source": 2433194,
+        "thumbnail": 10930
+      },
+      {
+        "source": 2432962,
+        "thumbnail": 10006
+      },
+      {
+        "source": 2432000,
+        "thumbnail": 10774
+      },
+      {
+        "source": 2429930,
+        "thumbnail": 10772
+      }
+    ],
+    "maxConcurrentPerList": 6
+  },
+  "reconciliation": {
+    "balanced": true,
+    "items": []
+  },
+  "binReconciliation": {
+    "balanced": true,
+    "warehouseDifferences": [],
+    "ledgerDifferences": []
+  },
+  "peakRSSBytes": 389500928,
+  "queryPlan": [
+    {
+      "Plan": {
+        "Node Type": "Limit",
+        "Parallel Aware": false,
+        "Async Capable": false,
+        "Startup Cost": 68.72,
+        "Total Cost": 107.59,
+        "Plan Rows": 10,
+        "Plan Width": 410,
+        "Actual Startup Time": 8.548,
+        "Actual Total Time": 8.552,
+        "Actual Rows": 1,
+        "Actual Loops": 1,
+        "Disabled": false,
+        "Shared Hit Blocks": 50,
+        "Shared Read Blocks": 45,
+        "Shared Dirtied Blocks": 0,
+        "Shared Written Blocks": 0,
+        "Local Hit Blocks": 0,
+        "Local Read Blocks": 0,
+        "Local Dirtied Blocks": 0,
+        "Local Written Blocks": 0,
+        "Temp Read Blocks": 0,
+        "Temp Written Blocks": 0,
+        "Plans": [
+          {
+            "Node Type": "Bitmap Heap Scan",
+            "Parent Relationship": "Outer",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Relation Name": "products",
+            "Alias": "products",
+            "Startup Cost": 68.72,
+            "Total Cost": 107.59,
+            "Plan Rows": 10,
+            "Plan Width": 410,
+            "Actual Startup Time": 8.545,
+            "Actual Total Time": 8.548,
+            "Actual Rows": 1,
+            "Actual Loops": 1,
+            "Disabled": false,
+            "Recheck Cond": "(search_text ~~ '%syn000003%'::text)",
+            "Rows Removed by Index Recheck": 111,
+            "Filter": "(org_id = '00000000-0000-4000-8000-000000000001'::uuid)",
+            "Rows Removed by Filter": 0,
+            "Exact Heap Blocks": 12,
+            "Lossy Heap Blocks": 0,
+            "Shared Hit Blocks": 50,
+            "Shared Read Blocks": 45,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0,
+            "Plans": [
+              {
+                "Node Type": "Bitmap Index Scan",
+                "Parent Relationship": "Outer",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Index Name": "products_search_trgm",
+                "Startup Cost": 0,
+                "Total Cost": 68.71,
+                "Plan Rows": 10,
+                "Plan Width": 0,
+                "Actual Startup Time": 8.328,
+                "Actual Total Time": 8.329,
+                "Actual Rows": 114,
+                "Actual Loops": 1,
+                "Disabled": false,
+                "Index Cond": "(search_text ~~ '%syn000003%'::text)",
+                "Index Searches": 1,
+                "Shared Hit Blocks": 38,
+                "Shared Read Blocks": 45,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              }
+            ]
+          }
+        ]
+      },
+      "Planning": {
+        "Shared Hit Blocks": 1,
+        "Shared Read Blocks": 0,
+        "Shared Dirtied Blocks": 0,
+        "Shared Written Blocks": 0,
+        "Local Hit Blocks": 0,
+        "Local Read Blocks": 0,
+        "Local Dirtied Blocks": 0,
+        "Local Written Blocks": 0,
+        "Temp Read Blocks": 0,
+        "Temp Written Blocks": 0
+      },
+      "Planning Time": 0.449,
+      "Triggers": [],
+      "Execution Time": 11.593
+    }
+  ],
+  "limits": [
+    "No slow network, Android hardware, saturation soak or cold OS disk cache measured.",
+    "100k import resumability is a separate acceptance test; SQL fixture generation does not pass it.",
+    "Database retained for inspection; no real customer/company data."
+  ],
+  "result": "PASS"
+}

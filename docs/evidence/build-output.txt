@@ -1,0 +1,20 @@
+
+> autoparts-morocco@0.1.0 build
+> vite build --config apps/business/vite.config.ts
+
+vite v8.3.5 building client environment for production...
+transforming...
+✓ 2057 modules transformed.
+rendering chunks...
+computing gzip size...
+apps/business/dist/index.html                               0.61 kB │ gzip:   0.37 kB
+apps/business/dist/assets/image-file.worker-BePAyqb_.js    68.40 kB
+apps/business/dist/assets/import-file.worker-CA7-ZZDT.js   69.39 kB
+apps/business/dist/assets/index-BHqWrQCn.css               25.97 kB │ gzip:   6.35 kB
+apps/business/dist/assets/index-rHb2-s3i.js               452.40 kB │ gzip: 135.43 kB │ map: 1,718.26 kB
+
+✓ built in 5.89s
+[PLUGIN_TIMINGS] JavaScript callbacks ran for 5.7s of this 5.9s build (97%).
+1 callback is listed without a time. Its calls overlapped, so the time inside one call includes work from other calls. To find its cost, profile the build with `node --cpu-prof`:
+  - plugin vite:worker-import-meta-url transform (3 calls)
+See https://rolldown.rs/reference/InputOptions.checks#bundlertimings for more details.

@@ -1,5 +1,5 @@
 {
-  "recordedAt": "2026-11-06T20:52:29.720Z",
+  "recordedAt": "2026-11-11T14:41:04.900Z",
   "scope": "Isolated synthetic fixtures only; no company image or real fitment coverage",
   "summary": {
     "totalStockedSkus": 8,
@@ -13,7 +13,31 @@
   },
   "items": [
     {
-      "id": "32786113-4317-454f-bfcd-38ad4b7bd6a2",
+      "id": "45445856-cdc3-4801-a1f3-c7b187675d77",
+      "sku": "TEST-44aa80e1-8987-4bad-b215-0a835e42b255",
+      "names": {
+        "ar": "قطعة اختبار",
+        "en": "Synthetic test part",
+        "fr": "Pièce de test"
+      },
+      "translationStatus": {
+        "ar": "REVIEW_REQUIRED",
+        "en": "REVIEW_REQUIRED",
+        "fr": "REVIEW_REQUIRED"
+      },
+      "brand": "SYNTHETIC",
+      "manufacturerPartNo": "DASH-01",
+      "pieces": 11,
+      "exact": false,
+      "fitment": false,
+      "public": false,
+      "disputed": false,
+      "poorQuality": false,
+      "reviewRequired": false,
+      "sold90Days": 1
+    },
+    {
+      "id": "61e988f2-990a-4cd7-816d-bb360670d7b6",
       "sku": "AP-SPK-004",
       "names": {
         "ar": "شمعة الإشعال",
@@ -37,7 +61,7 @@
       "sold90Days": 0
     },
     {
-      "id": "73493550-51dc-46b3-ab78-98af8a939c00",
+      "id": "831f20eb-0419-4bf6-9e97-411932c4a9c2",
       "sku": "AP-FLT-001",
       "names": {
         "ar": "فلتر الزيت",
@@ -61,7 +85,7 @@
       "sold90Days": 0
     },
     {
-      "id": "f48ba7ef-8990-4628-8dbf-e7af2025a454",
+      "id": "9d83e792-b262-4d15-b7f8-2720ac4ca6ba",
       "sku": "AP-BRK-002",
       "names": {
         "ar": "وسادات الفرامل الأمامية",
@@ -85,31 +109,7 @@
       "sold90Days": 0
     },
     {
-      "id": "db9be9fd-894f-46ab-8946-d0f45c44d79a",
-      "sku": "TEST-503381ac-e174-4c65-a0ab-f0cac5429d79",
-      "names": {
-        "ar": "قطعة اختبار",
-        "en": "Synthetic test part",
-        "fr": "Pièce de test"
-      },
-      "translationStatus": {
-        "ar": "REVIEW_REQUIRED",
-        "en": "REVIEW_REQUIRED",
-        "fr": "REVIEW_REQUIRED"
-      },
-      "brand": "SYNTHETIC",
-      "manufacturerPartNo": "DASH-01",
-      "pieces": 12,
-      "exact": false,
-      "fitment": false,
-      "public": false,
-      "disputed": false,
-      "poorQuality": false,
-      "reviewRequired": false,
-      "sold90Days": 0
-    },
-    {
-      "id": "f903ad08-20eb-4c5e-97de-d54c4f8e4464",
+      "id": "188f6866-db03-4e3f-9dd4-72826de06c60",
       "sku": "AP-WIP-006",
       "names": {
         "ar": "شفرة المسّاحة",
@@ -133,7 +133,7 @@
       "sold90Days": 0
     },
     {
-      "id": "d537b98e-f4ec-442f-989e-fba4e62c1c45",
+      "id": "f3cfdb27-b68e-4e0d-a21b-3eb8e6601632",
       "sku": "AP-AIR-003",
       "names": {
         "ar": "فلتر الهواء",
@@ -157,8 +157,8 @@
       "sold90Days": 0
     },
     {
-      "id": "7ad6f51a-8014-498c-8b76-7bd5d5d880dd",
-      "sku": "TEST-0fbd5233-d529-4991-bb40-08848109ea86",
+      "id": "cc4fa4d8-92cc-4e49-988e-e3bc001cf8c0",
+      "sku": "TEST-f46111d0-e104-4d7c-a4f0-4e831b6f7e4d",
       "names": {
         "ar": "قطعة اختبار",
         "en": "Synthetic test part",
@@ -181,8 +181,8 @@
       "sold90Days": 0
     },
     {
-      "id": "ee373cec-3214-4852-97e8-38bd85a1ab0d",
-      "sku": "TEST-366d4afd-c92d-4c53-bb4b-bba6f5e6dd3d",
+      "id": "5c91d411-9658-4b5e-829a-9b51d8f9ace8",
+      "sku": "TEST-7faf18fb-5562-4ca0-8703-9819db464b9c",
       "names": {
         "ar": "قطعة اختبار",
         "en": "Synthetic test part",

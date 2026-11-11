@@ -1,0 +1,313 @@
+{
+  "startedAt": "2026-11-07T01:47:37.225Z",
+  "database": "autoparts_load_1793821634264",
+  "result": "PASS",
+  "environment": {
+    "node": "v24.16.0",
+    "platform": "win32",
+    "transport": "Fastify injection with real PostgreSQL; no TCP/WAN/device timing"
+  },
+  "profile": {
+    "rounds": 30,
+    "intervalMs": 10000,
+    "requestsPerRound": 100,
+    "durationTargetMs": 300000,
+    "readRequestsPerRound": 90,
+    "writeRequestsPerRound": 10,
+    "distinctReceiptsPerRound": 5,
+    "poolMax": 30,
+    "poolMin": 8,
+    "memoryGuardMiB": 512
+  },
+  "bursts": [
+    {
+      "round": 1,
+      "requests": 100,
+      "durationMs": 2525.85,
+      "connections": 30,
+      "waitingAfter": 0,
+      "rssMiB": 124.69
+    },
+    {
+      "round": 2,
+      "requests": 100,
+      "durationMs": 1382.93,
+      "connections": 30,
+      "waitingAfter": 0,
+      "rssMiB": 132.07
+    },
+    {
+      "round": 3,
+      "requests": 100,
+      "durationMs": 1186.41,
+      "connections": 30,
+      "waitingAfter": 0,
+      "rssMiB": 149.93
+    },
+    {
+      "round": 4,
+      "requests": 100,
+      "durationMs": 1123.46,
+      "connections": 30,
+      "waitingAfter": 0,
+      "rssMiB": 174.2
+    },
+    {
+      "round": 5,
+      "requests": 100,
+      "durationMs": 991.56,
+      "connections": 30,
+      "waitingAfter": 0,
+      "rssMiB": 165.58
+    },
+    {
+      "round": 6,
+      "requests": 100,
+      "durationMs": 1070.32,
+      "connections": 30,
+      "waitingAfter": 0,
+      "rssMiB": 170.05
+    },
+    {
+      "round": 7,
+      "requests": 100,
+      "durationMs": 1425.49,
+      "connections": 30,
+      "waitingAfter": 0,
+      "rssMiB": 203.72
+    },
+    {
+      "round": 8,
+      "requests": 100,
+      "durationMs": 975.09,
+      "connections": 30,
+      "waitingAfter": 0,
+      "rssMiB": 210.32
+    },
+    {
+      "round": 9,
+      "requests": 100,
+      "durationMs": 1037.75,
+      "connections": 30,
+      "waitingAfter": 0,
+      "rssMiB": 209.93
+    },
+    {
+      "round": 10,
+      "requests": 100,
+      "durationMs": 870.89,
+      "connections": 30,
+      "waitingAfter": 0,
+      "rssMiB": 200.02
+    },
+    {
+      "round": 11,
+      "requests": 100,
+      "durationMs": 930.87,
+      "connections": 30,
+      "waitingAfter": 0,
+      "rssMiB": 217.17
+    },
+    {
+      "round": 12,
+      "requests": 100,
+      "durationMs": 861.23,
+      "connections": 30,
+      "waitingAfter": 0,
+      "rssMiB": 211.29
+    },
+    {
+      "round": 13,
+      "requests": 100,
+      "durationMs": 877.89,
+      "connections": 30,
+      "waitingAfter": 0,
+      "rssMiB": 211.18
+    },
+    {
+      "round": 14,
+      "requests": 100,
+      "durationMs": 1019.78,
+      "connections": 30,
+      "waitingAfter": 0,
+      "rssMiB": 211.53
+    },
+    {
+      "round": 15,
+      "requests": 100,
+      "durationMs": 892.87,
+      "connections": 30,
+      "waitingAfter": 0,
+      "rssMiB": 201.84
+    },
+    {
+      "round": 16,
+      "requests": 100,
+      "durationMs": 806.63,
+      "connections": 30,
+      "waitingAfter": 0,
+      "rssMiB": 221.21
+    },
+    {
+      "round": 17,
+      "requests": 100,
+      "durationMs": 1119.88,
+      "connections": 30,
+      "waitingAfter": 0,
+      "rssMiB": 230.93
+    },
+    {
+      "round": 18,
+      "requests": 100,
+      "durationMs": 897.23,
+      "connections": 30,
+      "waitingAfter": 0,
+      "rssMiB": 228.52
+    },
+    {
+      "round": 19,
+      "requests": 100,
+      "durationMs": 832.74,
+      "connections": 30,
+      "waitingAfter": 0,
+      "rssMiB": 219.48
+    },
+    {
+      "round": 20,
+      "requests": 100,
+      "durationMs": 956.27,
+      "connections": 30,
+      "waitingAfter": 0,
+      "rssMiB": 236.5
+    },
+    {
+      "round": 21,
+      "requests": 100,
+      "durationMs": 1037.3,
+      "connections": 30,
+      "waitingAfter": 0,
+      "rssMiB": 231.5
+    },
+    {
+      "round": 22,
+      "requests": 100,
+      "durationMs": 828.49,
+      "connections": 30,
+      "waitingAfter": 0,
+      "rssMiB": 231.58
+    },
+    {
+      "round": 23,
+      "requests": 100,
+      "durationMs": 857.05,
+      "connections": 30,
+      "waitingAfter": 0,
+      "rssMiB": 231.2
+    },
+    {
+      "round": 24,
+      "requests": 100,
+      "durationMs": 826.46,
+      "connections": 30,
+      "waitingAfter": 0,
+      "rssMiB": 220.64
+    },
+    {
+      "round": 25,
+      "requests": 100,
+      "durationMs": 802.47,
+      "connections": 30,
+      "waitingAfter": 0,
+      "rssMiB": 237.92
+    },
+    {
+      "round": 26,
+      "requests": 100,
+      "durationMs": 825.72,
+      "connections": 30,
+      "waitingAfter": 0,
+      "rssMiB": 234.64
+    },
+    {
+      "round": 27,
+      "requests": 100,
+      "durationMs": 838.31,
+      "connections": 30,
+      "waitingAfter": 0,
+      "rssMiB": 234.83
+    },
+    {
+      "round": 28,
+      "requests": 100,
+      "durationMs": 839.27,
+      "connections": 30,
+      "waitingAfter": 0,
+      "rssMiB": 224.79
+    },
+    {
+      "round": 29,
+      "requests": 100,
+      "durationMs": 782.6,
+      "connections": 30,
+      "waitingAfter": 0,
+      "rssMiB": 241.75
+    },
+    {
+      "round": 30,
+      "requests": 100,
+      "durationMs": 1023.74,
+      "connections": 30,
+      "waitingAfter": 0,
+      "rssMiB": 237.5
+    }
+  ],
+  "statuses": {
+    "200": 3000
+  },
+  "samples": [],
+  "limits": [
+    "Five-minute burst soak, not a multi-hour soak or hosted availability measurement.",
+    "Synthetic local load fixture only; no company transactions or production pool.",
+    "Measures recovery from queued demand, not PostgreSQL connection exhaustion by other services."
+  ],
+  "fixtures": {
+    "products": 100000,
+    "fitments": 1000000,
+    "vehicles": 10000
+  },
+  "stockBefore": 2100,
+  "rssBeforeMiB": 93.23046875,
+  "durationMs": 300013.94,
+  "stockAfter": 2250,
+  "expectedStockIncrease": 150,
+  "distinctReceipts": 150,
+  "postedReceiptMovements": 150,
+  "reconciliation": {
+    "balanced": true,
+    "items": []
+  },
+  "binReconciliation": {
+    "balanced": true,
+    "warehouseDifferences": [],
+    "ledgerDifferences": []
+  },
+  "requests": 3000,
+  "latencyMs": {
+    "p50": 484.56,
+    "p95": 1055.69,
+    "p99": 2152.04,
+    "max": 2522.5276000000013
+  },
+  "pool": {
+    "maxConnections": 30,
+    "maxWaiting": 227,
+    "waitingAtEnd": 0
+  },
+  "memory": {
+    "peakRssMiB": 245.43,
+    "finalRssMiB": 238.81
+  },
+  "eventLoopP99Ms": 53.54,
+  "databaseConnectionErrors": 0,
+  "finishedAt": "2026-11-07T01:52:53.299Z"
+}

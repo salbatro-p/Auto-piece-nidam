@@ -1,3 +1,5 @@
+import { formatBusinessDateTime } from './date-time';
+
 export const locales = ['ar', 'fr', 'en'] as const;
 export type Locale = (typeof locales)[number];
 export const languageNames: Record<Locale, string> = {
@@ -20,11 +22,7 @@ export const money = (minor: number, locale: Locale) =>
 export const quantity = (value: number, locale: Locale) =>
   new Intl.NumberFormat(numberLocale(locale)).format(value);
 export const dateTime = (value: string | Date, locale: Locale) =>
-  new Intl.DateTimeFormat(numberLocale(locale), {
-    dateStyle: 'medium',
-    timeStyle: 'short',
-    timeZone: 'Africa/Casablanca',
-  }).format(new Date(value));
+  formatBusinessDateTime(value, numberLocale(locale));
 /** Parse exact minor units; never use binary floating point to calculate stored money. */
 export function normalizeDigits(value: string): string {
   return value
