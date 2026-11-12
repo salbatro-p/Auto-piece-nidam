@@ -733,8 +733,48 @@ test('SEC-02: CSRF, SQL injection, brute force, malformed image and public endpo
     assert.equal(fake.statusCode, 400);
     const config = await app.inject({ url: '/api/config' });
     assert.equal(config.statusCode, 200);
-    assert.deepEqual(Object.keys(config.json()), ['defaultLocale']);
+    assert.deepEqual(Object.keys(config.json()), ['defaultLocale', 'passwordOnlyLogin']);
+    assert.equal(config.json().passwordOnlyLogin, false);
   }));
+test('Local password login preserves enrolled MFA and requires MFA again outside the local preview', () =>
+  measured('LOCAL-PASSWORD-LOGIN', async () => {
+    const saved = { flag: process.env.LOCAL_PREVIEW_PASSWORD_ONLY, mode: process.env.NODE_ENV, host: process.env.API_HOST };
+    const fingerprints = async () => (await pool.query("SELECT id,md5(password_hash||coalesce(mfa_secret,'')||coalesce(mfa_last_step::text,'')) AS fingerprint FROM staff_users ORDER BY id")).rows;
+    const before = await fingerprints();
+    try {
+      process.env.LOCAL_PREVIEW_PASSWORD_ONLY = 'true';
+      process.env.NODE_ENV = 'development';
+      process.env.API_HOST = '127.0.0.1';
+      assert.equal((await app.inject({ url: '/api/config' })).json().passwordOnlyLogin, true);
+      const attempt = (extra: Record<string, unknown> = {}, password = process.env.DEMO_PASSWORD) => app.inject({
+        method: 'POST', url: '/api/auth/login', ...extra,
+        payload: { email: 'owner@demo.local', password },
+      });
+      assert.equal((await attempt({}, 'deliberately-incorrect-password')).json().code, 'INVALID_CREDENTIALS');
+      for (const role of ['owner', 'manager']) {
+        const session = await login(role);
+        assert.equal((await request(session, 'GET', '/api/dashboard')).statusCode, 200);
+        assert.equal((await request(session, 'POST', '/api/auth/logout', {})).statusCode, 200);
+        assert.equal((await request(session, 'GET', '/api/me')).statusCode, 401);
+      }
+      assert.deepEqual(await fingerprints(), before);
+      for (const extra of [{ remoteAddress: '203.0.113.8' }, { headers: { host: 'business.example.com' } }]) {
+        assert.equal((await attempt(extra)).json().code, 'MFA_REQUIRED');
+        assert.equal((await app.inject({ url: '/api/config', ...extra })).json().passwordOnlyLogin, false);
+      }
+      process.env.NODE_ENV = 'production';
+      assert.equal((await attempt()).json().code, 'MFA_REQUIRED');
+      assert.equal((await app.inject({ url: '/api/config' })).json().passwordOnlyLogin, false);
+      process.env.NODE_ENV = 'development';
+      process.env.LOCAL_PREVIEW_PASSWORD_ONLY = 'false';
+      assert.equal((await attempt()).json().code, 'MFA_REQUIRED');
+    } finally {
+      for (const [key, value] of Object.entries({ LOCAL_PREVIEW_PASSWORD_ONLY: saved.flag, NODE_ENV: saved.mode, API_HOST: saved.host })) {
+        if (value === undefined) delete process.env[key]; else process.env[key] = value;
+      }
+    }
+  }));
+
 test('MFA: sensitive-role OTP required, replay rejected, session revoked', () =>
   measured('MFA-SESSION', async () => {
     const absent = await app.inject({

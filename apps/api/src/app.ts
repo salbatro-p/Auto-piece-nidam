@@ -6,6 +6,7 @@ import type { Pool } from 'pg';
 import { randomUUID } from 'node:crypto';
 import { audit, DomainError, ORG_ID, protectPool, preparePool, databaseConnectionErrors } from './db.js';
 import { type AuthedRequest, installAuth, requirePermission } from './auth.js';
+import { localPasswordLogin } from './login-policy.js';
 import { registerInventory } from './inventory.js';
 import { registerCatalog } from './catalog.js';
 import { registerOperations } from './operations.js';
@@ -132,10 +133,11 @@ export async function createApp(pool: Pool, options: { logger?: boolean } = {}) 
       return { status: 'unavailable', code: 'DATABASE_UNAVAILABLE' };
     }
   });
-  app.get('/api/config', async () => ({
+  app.get('/api/config', async (request) => ({
     defaultLocale:
       (await pool.query('SELECT default_locale FROM organizations WHERE id=$1', [ORG_ID])).rows[0]
         ?.default_locale ?? 'fr',
+    passwordOnlyLogin: localPasswordLogin(request),
   }));
   registerCatalog(app, pool);
   registerInventory(app, pool);

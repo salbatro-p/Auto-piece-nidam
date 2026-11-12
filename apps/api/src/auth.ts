@@ -10,6 +10,7 @@ import type { Pool } from 'pg';
 import type { FastifyInstance, FastifyRequest } from 'fastify';
 import { z } from 'zod';
 import { audit, DomainError, hash, transaction, type Actor } from './db.js';
+import { localPasswordLogin } from './login-policy.js';
 
 export const permissions: Record<string, string[]> = {
   owner: [
@@ -214,7 +215,7 @@ export function installAuth(app: FastifyInstance, pool: Pool) {
           'dummy:00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000',
       );
       if (!row || !valid) throw new DomainError('INVALID_CREDENTIALS', 401);
-      if (['owner', 'manager'].includes(row.role)) {
+      if (['owner', 'manager'].includes(row.role) && !localPasswordLogin(request)) {
         if (!row.mfa_secret) throw new DomainError('MFA_SETUP_REQUIRED', 403);
         if (!data.totp) throw new DomainError('MFA_REQUIRED', 401);
         const step = Math.floor(Date.now() / 30000);

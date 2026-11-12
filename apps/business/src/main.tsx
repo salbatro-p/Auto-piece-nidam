@@ -59,6 +59,7 @@ const visitor: User = { id: '', name: '', email: '', role: '', locale: 'fr', per
 function App() {
   const [locale, setLocale] = useState<Locale>(() => resolveLocale(null, navigator.language));
   const [user, setUser] = useState<User | null>(null),
+    [passwordOnlyLogin, setPasswordOnlyLogin] = useState(false),
     [starting, setStarting] = useState(true),
     [warehouses, setWarehouses] = useState<Warehouse[]>([]);
   const [page, setPage] = useState<Page>('dashboard'),
@@ -92,9 +93,10 @@ function App() {
   useEffect(() => {
     Promise.all([
       api<{ user: User; csrfToken: string }>('/me').catch(() => null),
-      api<{ defaultLocale: Locale }>('/config').catch(() => ({ defaultLocale: 'fr' as Locale })),
+      api<{ defaultLocale: Locale; passwordOnlyLogin: boolean }>('/config').catch(() => ({ defaultLocale: 'fr' as Locale, passwordOnlyLogin: false })),
     ])
       .then(([session, config]) => {
+        setPasswordOnlyLogin(config.passwordOnlyLogin === true);
         if (session) {
           setUser(session.user);
           setCsrf(session.csrfToken);
@@ -290,11 +292,11 @@ function App() {
             <div className="eyebrow">{t('privateWorkspace')}</div>
             <h2>{t('signIn')}</h2>
             <p className="muted">{t('inviteOnly')}</p>
-            <LoginForm onSuccess={loginSuccess} />
+            <LoginForm onSuccess={loginSuccess} passwordOnlyLogin={passwordOnlyLogin} />
             <Invitation />
             <div className="demo-login">
               <span className="badge neutral">{t('demo')}</span>
-              <p>{t('localDemoHelp')}</p>
+              <p>{t(passwordOnlyLogin ? 'localPasswordHelp' : 'localDemoHelp')}</p>
             </div>
           </section>
         </main>
@@ -396,6 +398,7 @@ function App() {
                 <h2 id="lock-title">{t('locked')}</h2>
                 <p>{t('lockHint')}</p>
                 <LoginForm
+                  passwordOnlyLogin={passwordOnlyLogin}
                   email={user.email}
                   expectedId={user.id}
                   onSuccess={(session) => {
@@ -423,10 +426,12 @@ function App() {
 }
 function LoginForm({
   onSuccess,
+  passwordOnlyLogin = false,
   email: initialEmail = '',
   expectedId,
 }: {
   onSuccess: (session: { user: User; csrfToken: string }) => void;
+  passwordOnlyLogin?: boolean;
   email?: string;
   expectedId?: string;
 }) {
@@ -451,7 +456,7 @@ function LoginForm({
         setError(undefined);
         void api<{ user: User; csrfToken: string }>('/auth/login', {
           method: 'POST',
-          body: { email, password, ...(totp ? { totp } : {}) },
+          body: { email, password, ...(!passwordOnlyLogin && totp ? { totp } : {}) },
         })
           .then(async (session) => {
             if (expectedId && session.user.id !== expectedId) {
@@ -491,7 +496,7 @@ function LoginForm({
           required
         />
       </Field>
-      <Field label={t('totp')} hint={t('totpHelp')}>
+      {!passwordOnlyLogin && <Field label={t('totp')} hint={t('totpHelp')}>
         <input
           data-testid="login-totp"
           autoComplete="one-time-code"
@@ -501,7 +506,7 @@ function LoginForm({
           value={totp}
           onChange={(e) => setTotp(e.target.value)}
         />
-      </Field>
+      </Field>}
       <ErrorBanner error={error} />
       <button type="submit" data-testid="login-submit" className="button primary full" disabled={busy}>
         {busy ? t('loading') : t(expectedId ? 'unlock' : 'login')}

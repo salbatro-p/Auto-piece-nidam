@@ -250,6 +250,7 @@ fieldset {
   position: sticky;
   top: 88px;
   height: calc(100dvh - 88px);
+  overflow-y: auto;
 }
 .workspace-label {
   display: flex;

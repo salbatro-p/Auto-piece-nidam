@@ -104,6 +104,11 @@ const messages = {
     'Utilisez les identifiants de démonstration créés par le script de préparation.',
     'استخدم بيانات الدخول التجريبية التي أنشأها برنامج الإعداد.',
   ],
+  localPasswordHelp: [
+    'Sign in with your email and password. No authenticator code is needed in this local preview.',
+    'Connectez-vous avec votre e-mail et votre mot de passe. Aucun code d’authentification n’est nécessaire dans cet aperçu local.',
+    'سجّل الدخول ببريدك الإلكتروني وكلمة المرور. لا تحتاج إلى رمز المصادقة في هذه المعاينة المحلية.',
+  ],
   goodDay: ['Your working day', 'Votre journée de travail', 'يوم عملك'],
   today: ['Today', 'Aujourd’hui', 'اليوم'],
   refresh: ['Refresh', 'Actualiser', 'تحديث'],

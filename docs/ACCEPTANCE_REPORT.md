@@ -1,5 +1,10 @@
 # Phase 1 acceptance report — NOT READY FOR RELEASE
 
+## 12 November 2026 — requested local login change
+
+The owner requested email/password-only access in the loopback development preview. Production MFA and the existing enrollment remain intact. This change passed 46 core/API tests, 11 local browser tests, one additional standard-MFA browser test, type checking and build. All 45 original database tables and 2,832 media files remained unchanged. The first browser run exposed a short-viewport logout overflow; the corrected sidebar passed the full rerun. [Policy and rollback](LOCAL_PREVIEW_LOGIN.md); [dated evidence](evidence/local-password-login.json). Earlier measurements below retain their original scope and dates.
+
+
 Updated 11 November 2026 (user timezone Europe/Istanbul). Run timestamps in JSON evidence are UTC; retained older import/restart artifacts identify their original execution dates. This continues the existing v1.2 project and integrates v1.3. AutoParts Business runs locally at http://127.0.0.1:4173 with real PostgreSQL persistence and synthetic data. **Phase 1 is not declared complete. No staging or production deployment, real-company import, provider connection or publication has occurred.** Shop remains Phase 2.
 
 ## Observed local results

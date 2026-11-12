@@ -4,6 +4,8 @@ Updated 11 November 2026 (Europe/Istanbul). Same repository, same `codex/phase1`
 
 ## Inspected checkpoint
 
+12 November login preference: the owner explicitly requested password-only access for the local Web Preview. Work continues on the separate `codex/local-password-login` branch from `ebe8838`, after a verified source/database/media backup. Preserve enrolled MFA and enforce it outside the explicitly enabled loopback development preview. See [local login policy and evidence](LOCAL_PREVIEW_LOGIN.md). This user-directed local exception supersedes the earlier requirement to leave local MFA mandatory; production approval and security gates remain unchanged.
+
 Original base `faa238e`; preserved continuation checkpoints `1cce7b0`, `7ef7f59` and `1e2121a`. Native PostgreSQL uses the isolated 55432 cluster, not the user's other databases. Local Business/API addresses remain 4173/4310. Both services were recovered without resetting existing records.
 
 - Implemented: invited staff/MFA/RBAC; trilingual POS/catalog/inventory/procurement/admin; exact MAD tax snapshots; quotes/receipts; stock ledger, bins, reservations, returns/count approval; resumable product imports; supplier references and replacement chains; independently approved opening inventory; protected CSV exports; shared Phase 2 contracts.
