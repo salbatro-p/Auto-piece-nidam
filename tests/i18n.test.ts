@@ -23,7 +23,11 @@ test('all AR FR EN messages compile with ICU, key parity and no missing domain e
     for (const key of keys) {
       assert.ok(dictionaries[locale][key].trim(), key);
       assert.doesNotThrow(
-        () => translate(locale, key, { done: 2, total: 3, count: 3, quantity: 1, pack: 10, pieces: 10,kind:'صورة',sku:'00-TEST/ع',angle:'Front',percent:50 }),
+        () => translate(locale, key, {
+          done: 2, current: 2, total: 3, count: 3, quantity: 1, pack: 10, pieces: 10,
+          kind: 'صورة', sku: '00-TEST/ع', angle: 'Front', percent: 50,
+          accepted: 2, duplicate: 1, conflict: 1, rejected: 0,
+        }),
         locale + ':' + key,
       );
     }

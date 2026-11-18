@@ -58,6 +58,10 @@ const tables = [
   'supplier_items',
   'purchase_orders',
   'purchase_lines',
+  'catalog_feed_jobs',
+  'catalog_feed_rows',
+  'catalog_feed_references',
+  'original_visual_jobs',
 ];
 async function checksums(client: any) {
   const results: Record<string, { rows: number; sha256: string }> = {};
@@ -82,7 +86,10 @@ await snapshot.query('BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY');
 const snapshotId = (await snapshot.query('SELECT pg_export_snapshot() AS id')).rows[0].id;
 const before = await checksums(snapshot);
 const mediaRoot=file+'.media';
-const mediaObjects=(await snapshot.query('SELECT object_key,display_key,thumbnail_key FROM product_media WHERE object_key IS NOT NULL')).rows;
+const mediaObjects=(await snapshot.query(`
+  SELECT object_key,display_key,thumbnail_key FROM product_media WHERE object_key IS NOT NULL
+  UNION SELECT object_key,display_key,thumbnail_key FROM original_visual_jobs WHERE object_key IS NOT NULL
+`)).rows;
 const mediaFiles:Record<string,{bytes:number;sha256:string}>={};
 for(const key of new Set<string>(mediaObjects.flatMap(row=>[row.object_key,row.display_key,row.thumbnail_key]).filter(Boolean))){
  if(!/^[a-f0-9]{64}\/(source|display|thumbnail)\.webp$/.test(key))throw new Error('Invalid private media key in backup');
@@ -152,6 +159,15 @@ const auditCookie = String(auditAuth.headers['set-cookie']).split(';')[0];
 const approvedPhoto=(await restored.query('SELECT id FROM usable_internal_media LIMIT 1')).rows[0];
 const restoredMediaResponse=approvedPhoto?await app.inject({url:'/api/media/'+approvedPhoto.id+'?size=thumbnail',headers:{cookie}}):undefined;
 const restoredMediaPass=!!restoredMediaResponse&&restoredMediaResponse.statusCode===200&&restoredMediaResponse.headers['content-type']==='image/webp';
+const originalVisual = (await restored.query(
+  "SELECT id FROM original_visual_jobs WHERE state='APPROVED_INTERNAL' AND thumbnail_key IS NOT NULL ORDER BY reviewed_at DESC LIMIT 1",
+)).rows[0];
+const originalResponse = originalVisual
+  ? await app.inject({ url: '/api/visuals/' + originalVisual.id + '/image', headers: { cookie } })
+  : undefined;
+const originalVisualReadable = originalResponse
+  ? originalResponse.statusCode === 200 && originalResponse.headers['content-type'] === 'image/webp'
+  : null;
 const reconciliation = (
   await app.inject({ url: '/api/inventory/reconciliation', headers: { cookie: auditCookie } })
 ).json();
@@ -172,6 +188,7 @@ const report = {
   checksumsAfter: after,
   identicalCriticalTables: identical,
   privateMedia:{objects:Object.keys(mediaFiles).length,totalBytes:Object.values(mediaFiles).reduce((sum,v)=>sum+v.bytes,0),allFileHashesMatch:mediaFilesIdentical,approvedThumbnailAfterRestore:restoredMediaPass,manifest:mediaFiles},
+  originalVisualReadable,
   businessFlow: {
     saleStatus: sale.statusCode,
     replayStatus: replay.statusCode,
@@ -179,7 +196,7 @@ const report = {
   },
   reconciliation,
   binReconciliation,
-  pass: identical && flowPass && mediaFilesIdentical && restoredMediaPass && reconciliation.balanced === true && binReconciliation.balanced === true,
+  pass: identical && flowPass && mediaFilesIdentical && restoredMediaPass && originalVisualReadable !== false && reconciliation.balanced === true && binReconciliation.balanced === true,
   limits: [
     'Local logical snapshot recovery only; remote encrypted storage and WAL/PITR not configured.',
     'This elapsed restore does not establish a hosted RTO or 15-minute RPO.',

@@ -1,0 +1,56 @@
+{
+  "datasetVersion": "vPIC model-year 2020 · b660738df15877a8",
+  "retrievedAt": "2026-11-18T22:01:06.158Z",
+  "endpoint": "https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMakeYear/make/Honda/modelyear/2020/vehicletype/passenger%20car?format=json",
+  "rawSha256": "b660738df15877a8d3223c4ef46d69bb56919c1a3146319a6adc2502b9d9ddd1",
+  "rows": [
+    {
+      "kind": "MODEL_YEAR",
+      "externalId": "vPIC:474:14249:2020",
+      "make": "HONDA",
+      "model": "Clarity",
+      "market": "US",
+      "year": 2020
+    },
+    {
+      "kind": "MODEL_YEAR",
+      "externalId": "vPIC:474:1861:2020",
+      "make": "HONDA",
+      "model": "Accord",
+      "market": "US",
+      "year": 2020
+    },
+    {
+      "kind": "MODEL_YEAR",
+      "externalId": "vPIC:474:1863:2020",
+      "make": "HONDA",
+      "model": "Civic",
+      "market": "US",
+      "year": 2020
+    },
+    {
+      "kind": "MODEL_YEAR",
+      "externalId": "vPIC:474:1870:2020",
+      "make": "HONDA",
+      "model": "Insight",
+      "market": "US",
+      "year": 2020
+    },
+    {
+      "kind": "MODEL_YEAR",
+      "externalId": "vPIC:474:2127:2020",
+      "make": "HONDA",
+      "model": "Fit",
+      "market": "US",
+      "year": 2020
+    },
+    {
+      "kind": "MODEL_YEAR",
+      "externalId": "vPIC:474:31535:2020",
+      "make": "HONDA",
+      "model": "Civic Type R",
+      "market": "US",
+      "year": 2020
+    }
+  ]
+}

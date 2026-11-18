@@ -19,6 +19,8 @@ import {registerCatalogExport} from './catalog-export.js';
 import {registerMediaCatalog} from './media-catalog.js';
 import {registerCatalogDiscovery} from './catalog-discovery.js';
 import {registerMediaImports} from './media-imports.js';
+import { registerCatalogFeeds } from './catalog-feeds.js';
+import { registerOriginalVisuals } from './original-visuals.js';
 
 export async function createApp(pool: Pool, options: { logger?: boolean } = {}) {
   protectPool(pool);
@@ -151,6 +153,8 @@ export async function createApp(pool: Pool, options: { logger?: boolean } = {}) 
   registerMediaCatalog(app,pool);
   registerCatalogDiscovery(app,pool);
   registerMediaImports(app,pool);
+  registerCatalogFeeds(app,pool);
+  registerOriginalVisuals(app,pool);
   app.get('/api/openapi.json', async (request) => {
     requirePermission((request as AuthedRequest).actor, 'audit');
     return {

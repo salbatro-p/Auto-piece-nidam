@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { SourceManager, VehicleCreator } from './catalog-admin';
+import { CatalogReferencesButton } from './catalog-feeds';
 import { TaxConfiguration } from './tax-settings';
 import { SupplierCatalog } from './catalog-links';
 import { Plus, RefreshCw, ShieldCheck, FileUp, Download } from 'lucide-react';
@@ -251,6 +252,7 @@ export function Vehicles({ onSelect }: { onSelect: (id: string) => void }) {
   return (
     <>
       <PageHeading title="vehicles" hint="vehicleHint">
+        <CatalogReferencesButton />
         <SourceManager />
         <VehicleCreator onSaved={list.reload} />
       </PageHeading>

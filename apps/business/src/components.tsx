@@ -151,12 +151,16 @@ export function Modal({
     </dialog>
   );
 }
-export function useLoad<T>(path: string, dependencies: unknown[] = []) {
+export function useLoad<T>(path: string | null, dependencies: unknown[] = []) {
   const [data, setData] = useState<T>();
   const [error, setError] = useState<unknown>();
   const [loading, setLoading] = useState(true);
   const [version, setVersion] = useState(0);
   useEffect(() => {
+    if (path === null) {
+      setLoading(false);
+      return;
+    }
     let active = true;
     setLoading(true);
     api<T>(path)

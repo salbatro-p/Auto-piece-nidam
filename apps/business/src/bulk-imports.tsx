@@ -17,6 +17,7 @@ import { PageHeading } from './operations';
 import { dateTime, quantity } from '../../../packages/i18n/src/index';
 import { messageKey } from '../../../packages/i18n/src/business';
 import type { Source } from './types';
+import { CatalogFeedButton } from './catalog-feeds';
 
 export function BulkImports() {
   const { t, locale } = useApp(),
@@ -130,6 +131,7 @@ export function BulkImports() {
   return (
     <>
       <PageHeading title="imports" hint="importHint">
+        <CatalogFeedButton />
         <button className="icon-button" aria-label={t('refresh')} onClick={list.reload}>
           <RefreshCw size={20} />
         </button>

@@ -2,6 +2,17 @@
 
 Reviewed 2026-10-29. This register records discovery and approval requirements; it grants no license. No live third-party dataset has been imported.
 
+## 19 November 2026 reference connector
+
+| Source | Access, cost and updates | Coverage and accuracy | Storage and redistribution boundary |
+|---|---|---|---|
+| [NHTSA vPIC](https://vpic.nhtsa.dot.gov/api/) · [FAQ](https://vpic.nhtsa.dot.gov/api/Home/Index/FAQ) · [standalone downloads](https://vpic.nhtsa.dot.gov/Downloads) | Free public API with automated traffic controls. This connector makes one bounded request for a model year and stores the returned facts, endpoint, retrieval time and response checksum. Future refreshes can use dated snapshots. | US reporting scope, manufacturer-reported names and identifiers. A model-year row gives no generation, engine configuration, Moroccan applicability, interchange or fitment evidence. | Internal factual model-year reference observations with attribution. No VINs or images collected. This connector does not enable Shop syndication or assume a blanket license for third-party media. |
+| [TecAlliance TecDoc](https://www.tecalliance.net/products?family=tecdoc&solution=catalogue-ecommerce) | Commercial catalogue/API. Quote, grant, refresh/renewal and quotas must come from the distributor agreement. | Parts, vehicles and linkages. Confirm exact Moroccan coverage, fields, markets, engine and side qualifiers contractually. | BLOCKED. Require written data, cache, internal/public display, attribution and media grants. No copied catalogue or downloaded provider images. |
+| [Auto Care ACES/PIES](https://www.autocare.org/data-standards/subscriptions) · [license](https://www.autocare.org/docs/default-source/data-standards/technology-license-agreement_02282025.pdf) | Annual paid supporting databases; region, package and pricing vary. | Exchange standards and reference data. Coverage varies by subscription, especially markets outside the Americas. | BLOCKED. Data redistribution and images need specific rights. No subscription or credential assumed. |
+| Authorized supplier or company file | Use the existing reviewed ZIP/image and product import workflows or the new bounded JSON reference intake. Require version, intended use and provider/capture evidence for each source. | Exact SKU and fitment are only as strong as the document and its qualifications. | BLOCKED for actual supplier/company records until material is provided. |
+
+The historical statement above applies to the October baseline. See the dated global catalog delivery evidence for the isolated vPIC import and its genuine count.
+
 | Source | Purpose and verified observation | Store internally | Public display/syndication | Current decision |
 |---|---|---|---|---|
 | Owner's company records | Actual assortment, counts, purchase documents; none supplied | Owner authorization and minimum data needed | Separate product/media rights review | Not supplied; no fabricated stock |

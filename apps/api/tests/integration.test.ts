@@ -17,6 +17,8 @@ import sharp from 'sharp';
 import {zipSync,strToU8} from 'fflate';
 import {ImageArchive} from '../../business/src/image-manifest.js';
 import moment from 'moment-timezone';
+import { processCatalogFeed } from '../src/catalog-feeds.js';
+import { processOriginalVisual } from '../src/original-visuals.js';
 
 type Session = { cookie: string; csrf: string; id: string };
 let app: FastifyInstance, pool: Pool, maintenance: Pool;
@@ -222,6 +224,93 @@ function request(
     ...(payload !== undefined ? { payload } : {}),
   });
 }
+
+test('Catalog feed checkpoints, duplicates, conflicts and rights do not write stock, fitment or offers', () =>
+  measured('CATALOG-FEED-SAFETY', async () => {
+    const source = {
+      name: 'Synthetic reference feed', origin: 'https://example.invalid/feed',
+      license: 'Test authorization for reference data', canStore: true, canDisplay: true, canSyndicate: false,
+    };
+    const registration = await request(owner,'POST','/api/sources',source);
+    assert.equal(registration.statusCode,200);
+    const sourceId = registration.json().id;
+    const model = { kind: 'MODEL_YEAR',externalId: 'a',make: 'Synthetic',model: 'M',market: 'MA',year: 2022 };
+    const part = { kind: 'PART_REFERENCE',externalId: 'b',manufacturer: 'Synthetic',partNumber: '000B',category: 'filters' };
+    const input = { sourceId,datasetVersion: 'test revision one',rows: [model,part,{ ...model },{ ...model,model: 'Other' },{ ...part,status: 'VERIFIED' }] };
+    const tables = ['vehicles','products','fitments','inventory_balances','stock_movements','sales'];
+    const counts = async () => Promise.all(tables.map(async table => (await pool.query(`SELECT count(*)::int AS value FROM ${table}`)).rows[0].value));
+    const before = await counts();
+    assert.equal((await request(sales,'POST','/api/catalog/feeds',input)).statusCode,403);
+    const initial = await request(owner,'POST','/api/catalog/feeds',input);
+    assert.equal(initial.statusCode,200,initial.body);
+    const id = initial.json().id;
+    assert.equal((await request(owner,'POST','/api/catalog/feeds',input)).json().id,id);
+    const detail = () => request(owner,'GET',`/api/catalog/feeds/${id}`);
+    assert.equal((await detail()).json().rejected,1);
+    assert.equal((await request(owner,'POST',`/api/catalog/feeds/${id}/run`,{})).statusCode,200);
+    assert.deepEqual(await processCatalogFeed(pool,1),{id,checkpoint:1,done:false});
+    await pool.query('UPDATE sources SET can_store=false WHERE id=$1',[sourceId]);
+    assert.deepEqual(await processCatalogFeed(pool,1),{id,paused:true});
+    assert.equal((await detail()).json().checkpoint,1);
+    assert.equal((await request(owner,'POST',`/api/catalog/feeds/${id}/run`,{})).statusCode,409);
+    await pool.query('UPDATE sources SET can_store=true WHERE id=$1',[sourceId]);
+    assert.equal((await request(owner,'POST',`/api/catalog/feeds/${id}/run`,{})).statusCode,200);
+    await Promise.all([processCatalogFeed(pool,1),processCatalogFeed(pool,1)]);
+    await processCatalogFeed(pool);
+    const finished = (await detail()).json();
+    assert.equal(finished.state,'COMPLETE');
+    assert.deepEqual([finished.checkpoint,finished.accepted,finished.duplicate,finished.conflict,finished.rejected],[5,2,1,1,1]);
+    assert.equal((await pool.query('SELECT contents FROM catalog_feed_references WHERE source_id=$1 AND external_id=$2',[sourceId,'a'])).rows[0].contents.model,'M');
+    const references = '/api/catalog/references?kind=MODEL_YEAR&query=Synthetic';
+    assert.equal((await app.inject({url:references})).statusCode,401);
+    assert.equal((await request(sales,'GET',references)).json().items.length,1);
+    await pool.query('UPDATE sources SET can_display=false WHERE id=$1',[sourceId]);
+    assert.equal((await request(sales,'GET',references)).json().items.length,0);
+    assert.deepEqual(await counts(),before);
+  }));
+
+test('Original visual jobs are cached, review-gated and isolated from concurrent sales', () =>
+  measured('ORIGINAL-VISUAL-SAFETY', async () => {
+    const p = await product(3);
+    const licenseBody = {
+      name: 'Original local template rights',sourceType: 'COMPANY',termsVersion: 'test',
+      proof: 'Independent original educational test render.',internalDisplayPermitted: true,
+      publicDisplayPermitted: false,
+    };
+    const license = await request(owner,'POST','/api/media/licenses',licenseBody);
+    assert.equal(license.statusCode,200,license.body);
+    const input = { category: 'filters',kind: 'CATEGORY_3D',template: 'OIL_FILTER',licenseId: license.json().id };
+    assert.equal((await request(sales,'POST','/api/visuals',input)).statusCode,403);
+    assert.equal((await request(sales,'GET','/api/visuals')).statusCode,403);
+    const queued = await request(owner,'POST','/api/visuals',input);
+    assert.equal(queued.statusCode,200,queued.body);
+    const id = queued.json().id;
+    assert.equal((await request(owner,'POST','/api/visuals',input)).json().id,id);
+    const image = `/api/visuals/${id}/image`;
+    const review = (decision: string) => request(owner,'POST',`/api/visuals/${id}/review`,{ decision,note: 'Independent generic category view only.' });
+    assert.equal((await app.inject({url:image})).statusCode,401);
+    assert.equal((await review('APPROVED_INTERNAL')).statusCode,409);
+    const failure = await processOriginalVisual(pool,{ 'local-procedural': { async render() { throw Error('synthetic provider interruption'); } } });
+    assert.equal(failure?.state,'FAILED');
+    assert.equal((await review('QUEUED')).statusCode,200);
+    const [rendered,sale] = await Promise.all([
+      processOriginalVisual(pool),
+      request(sales,'POST','/api/sales',{ warehouseId: counter,lines: [{ productId: p.id,quantity: 1 }],locale:'fr' }),
+    ]);
+    assert.equal(rendered?.state,'REVIEW_REQUIRED');
+    assert.equal(sale.statusCode,200,sale.body);
+    assert.equal((await balance(p.id)).on_hand,2);
+    assert.equal((await request(sales,'GET',image)).statusCode,404);
+    assert.equal((await request(owner,'GET',image)).headers['content-type'],'image/webp');
+    assert.equal((await review('APPROVED_INTERNAL')).statusCode,200);
+    const visible = (await request(sales,'GET','/api/visuals?category=filters')).json().items;
+    assert.deepEqual(visible.find((v: {id:string}) => v.id === id),{ id,kind:'CATEGORY_3D',template:'OIL_FILTER',attribution:'' });
+    assert.equal((await request(sales,'GET',image)).statusCode,200);
+    assert.equal((await pool.query('SELECT count(*)::int AS value FROM fitments WHERE product_id=$1',[p.id])).rows[0].value,0);
+    assert.equal((await request(owner,'POST',`/api/media/licenses/${input.licenseId}/update`,{...licenseBody,version:1,revoked:true})).statusCode,200);
+    assert.equal((await request(owner,'GET',image)).statusCode,404);
+    assert.equal((await request(sales,'GET','/api/visuals?category=filters')).json().items.some((v: {id:string}) => v.id === id),false);
+  }));
 async function product(stock = 0, extras: Record<string, unknown> = {}) {
   const data = {
     sku: `TEST-${randomUUID()}`,

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { readFile, mkdir, writeFile } from 'node:fs/promises';
+import { readFile, readdir, mkdir, writeFile } from 'node:fs/promises';
 import { Pool } from 'pg';
 import { chromium } from '@playwright/test';
 import { login, switchLanguage, checkHeader } from '../tests/e2e/helpers.js';
@@ -24,7 +24,8 @@ try {
   report.health = await health.json();
   assert.equal(report.health.mode, 'isolated-demo');
   const migrations = (await pool.query('SELECT name,checksum FROM schema_migrations ORDER BY name')).rows;
-  assert.equal(migrations.length, 14);
+  const expectedMigrations = (await readdir('db/migrations')).filter(name => name.endsWith('.sql')).sort();
+  assert.deepEqual(migrations.map(migration => migration.name), expectedMigrations);
   for (const migration of migrations) {
     const sql = await readFile('db/migrations/' + migration.name, 'utf8');
     assert.equal(createHash('sha256').update(sql).digest('hex'), migration.checksum,

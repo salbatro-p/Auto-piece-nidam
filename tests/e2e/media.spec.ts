@@ -100,7 +100,8 @@ test('IMG-06/08: staged upload resumes after response loss; gallery, rights and 
   await dialog()
     .getByRole('button', { name: t('en', 'approveInternal'), exact: true })
     .click();
-  await expect(page.locator('.media-card')).toHaveCount(1);
+  const productGallery = () => page.getByRole('region',{ name: t('en','gallery'), exact: true });
+  await expect(productGallery().locator('.media-card')).toHaveCount(1);
   const gallery = await (await page.request.get(`/api/products/${product.id}/gallery`)).json();
   expect(gallery.items).toHaveLength(1);
   expect(gallery.items[0].state).toBe('APPROVED_INTERNAL');
@@ -114,7 +115,7 @@ test('IMG-06/08: staged upload resumes after response loss; gallery, rights and 
     await page.setViewportSize(viewport);
     for (const locale of locales) {
       await switchLanguage(page, locale);
-      const img = page.locator('.media-card img');
+      const img = page.getByRole('region',{ name: t(locale,'gallery'), exact: true }).locator('.media-card img');
       await expect(img).toHaveAttribute('alt', /00|Synthetic|IMG-/);
       await expect(img).toHaveAttribute('src', /size=thumbnail$/);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
@@ -132,7 +133,7 @@ test('IMG-06/08: staged upload resumes after response loss; gallery, rights and 
   }
   await page.route('**/api/media/*?size=display', (route) => route.abort('failed'));
   await switchLanguage(page, 'en');
-  await page.getByRole('button', { name: new RegExp(t('en', 'zoomPhoto')) }).click();
+  await productGallery().getByRole('button', { name: new RegExp(t('en', 'zoomPhoto')) }).click();
   await expect(dialog().getByText(t('en', 'IMAGE_UNAVAILABLE'), { exact: true })).toBeVisible();
   await jsonEvidence('image-browser', {
     recordedAt: new Date().toISOString(),

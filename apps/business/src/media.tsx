@@ -17,6 +17,7 @@ import {
 import { contentValue, quantity } from '../../../packages/i18n/src/index';
 import { messageKey } from '../../../packages/i18n/src/business';
 import type { Product, Source, Vehicle } from './types';
+import { CategoryOriginals } from './original-visuals';
 const kinds = [
   'EXACT_PRODUCT_PHOTO',
   'COMPANY_ORIGINAL_PHOTO',
@@ -128,7 +129,7 @@ export function MediaGallery({
           hint={t(diagrams ? 'diagramUnavailable' : 'MEDIA_REVIEW_REQUIRED')}
         />
       )}
-      <div className="media-grid">
+      <div className="media-grid" role="region" aria-label={t(diagrams ? 'EXPLODED_DIAGRAM' : 'gallery')}>
         {items.map((m) => (
           <article key={m.id} className="media-card">
             <button
@@ -159,6 +160,10 @@ export function MediaGallery({
           </article>
         ))}
       </div>
+      {product && list.data && <CategoryOriginals
+        product={product}
+        showCategoryDrawing={!items.some(item => item.displayApproved && ['EXACT_PRODUCT_PHOTO','COMPANY_ORIGINAL_PHOTO'].includes(item.kind))}
+      />}
       {zoom && (
         <Modal title={t('zoomPhoto')} onClose={() => setZoom(undefined)} wide>
           <MediaImage media={zoom} large />

@@ -4,6 +4,8 @@ Working local Phase 1 software based on the supplied v1.2 blueprint and v1.3 add
 
 Business: <http://127.0.0.1:4173/>. API: <http://127.0.0.1:4310/api/health>. Both bind locally. The synthetic demo is isolated from other PostgreSQL installations and from real company inventory.
 
+Catalog reference imports, internally reviewed illustrations, and the initial real model-year sample are documented in the [catalog operator guide](docs/GLOBAL_CATALOG_GUIDE.md) and [requirement matrix](docs/GLOBAL_CATALOG_TRACEABILITY.md).
+
 ## Start the local application on Windows
 
 Requires Node 24 and PostgreSQL 18 binaries. This workstation has PostgreSQL at `D:/PostgreSQL/New folder/bin`. The setup script reads `.local/postgres-path.txt` when the isolated data directory has been moved to another drive.

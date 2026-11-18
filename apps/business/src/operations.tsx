@@ -1,5 +1,6 @@
 import { TranslationReviewer } from './catalog-admin';
 import {MediaGallery,MediaCoverage} from './media';
+import { VisualLibraryButton } from './original-visuals';
 import {VehicleFilter} from './vehicle-filter';
 import {MediaBulk} from './media-bulk';
 import {AttributeEditor,Attributes} from './technical-attributes';
@@ -251,6 +252,7 @@ export function Catalog({ vehicleId, clearVehicle }: { vehicleId: string; clearV
   return (
     <>
       <PageHeading title="catalog" hint="catalogHint">
+        <VisualLibraryButton />
         <MediaCoverage onSelect={setSelected}/>
         <MediaBulk/>
         {can('catalog')&&<a className="button secondary" href="/api/reports/products.csv">{t('export')}</a>}
@@ -430,8 +432,8 @@ function ProductDetails({ product: p, onClose }: { product: Product; onClose: ()
         )}
       </dl>
       <div className="notice warning">{t('fitmentWarning')}</div>
-      <Replacements product={p} />
       <MediaGallery product={p}/>
+      <Replacements product={p} />
       <Attributes product={p}/>
       <h3>{t('inventory')}</h3>
       <div className="table-wrap" tabIndex={0} role="region" aria-label={t('scrollableTable')}>

@@ -4,6 +4,8 @@ Updated 11 November 2026 (Europe/Istanbul). Same repository, same `codex/phase1`
 
 ## Inspected checkpoint
 
+19 November continuation: the existing project history was transferred to `salbatro-p/Auto-piece-nidam` at `2a6f64c`. The catalog work follows the new [requirement matrix](GLOBAL_CATALOG_TRACEABILITY.md), with separate source observations, Phase 1 review workflows and additive migration 015. The first real dataset is a bounded NHTSA US model-year sample. Licensed parts and fitment files, real SKU photography and authorized exact geometry remain dependencies. See the [operator guide](GLOBAL_CATALOG_GUIDE.md).
+
 12 November login preference: the owner explicitly requested password-only access for the local Web Preview. Work continues on the separate `codex/local-password-login` branch from `ebe8838`, after a verified source/database/media backup. Preserve enrolled MFA and enforce it outside the explicitly enabled loopback development preview. See [local login policy and evidence](LOCAL_PREVIEW_LOGIN.md). This user-directed local exception supersedes the earlier requirement to leave local MFA mandatory; production approval and security gates remain unchanged.
 
 Original base `faa238e`; preserved continuation checkpoints `1cce7b0`, `7ef7f59` and `1e2121a`. Native PostgreSQL uses the isolated 55432 cluster, not the user's other databases. Local Business/API addresses remain 4173/4310. Both services were recovered without resetting existing records.
