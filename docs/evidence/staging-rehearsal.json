@@ -1,0 +1,43 @@
+{
+  "date": "2026-11-18T23:56:40.016Z",
+  "revision": "39a4197",
+  "scope": "Fastify production-mode injection with separate native PostgreSQL, not hosted HTTPS.",
+  "checks": [
+    "Privileged MFA, secure cookies and staff permission boundaries",
+    "Warehouse scope, receipt and sale replay, and one stock deduction",
+    "Count approval and both inventory reconciliations",
+    "Protected photo upload, review and thumbnail, and public rights denial"
+  ],
+  "passed": true,
+  "clientDate": "2026-11-19",
+  "database": {
+    "separateNativeCluster": true,
+    "localPort": 55434,
+    "reusedBusinessDatabase": false,
+    "appRoleNonSuperuser": true,
+    "migrationsApplied": 15,
+    "syntheticSeed": true
+  },
+  "build": "PASS",
+  "typecheck": "PASS",
+  "gateway": {
+    "runtime": "Caddy v2.11.9 on loopback HTTP",
+    "anonymousStatus": 401,
+    "authorizedStatus": 200,
+    "cacheControl": "no-store",
+    "stoppedAfterCheck": true
+  },
+  "publicStaging": {
+    "ownerApproved": true,
+    "result": "BLOCKED",
+    "reason": "Execution policy rejected starting a public tunnel and no hosting access was available.",
+    "publishedUrl": null
+  },
+  "actualDeviceValidation": "NOT TESTED",
+  "trustedPublicTLS": "NOT TESTED",
+  "workingPreview": {
+    "http": 200,
+    "api": "ok",
+    "existingLocalAccounts": true
+  }
+}

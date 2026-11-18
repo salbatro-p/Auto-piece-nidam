@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-11-18T23:39:05.202Z",
-  "sourceCommitBase": "be12ee63802dc2af3ff42707b8b1df4c052890d2",
-  "sourceSha256LfNormalized": "2092f4c0439360ccb6a3755da6db2f7fe18f52c8c3a502327d83108df31bfac7",
+  "generatedAt": "2026-11-18T23:57:57.858Z",
+  "sourceCommitBase": "39a4197a77640178b65488f446df24747938cd57",
+  "sourceSha256LfNormalized": "5fbb7e06f5d289456ec838c60d6f74d765a11d1711502bb96e2254966142c4c8",
   "sourceFiles": [
     ".github/workflows/quality.yml",
     "apps/api/src/app.ts",
@@ -118,6 +118,7 @@
     "scripts/inspect-ui.mjs",
     "scripts/performance.mts",
     "scripts/pool-soak.mts",
+    "scripts/rehearse-staging.mts",
     "scripts/report-evidence.mjs",
     "scripts/restore-drill.mts",
     "scripts/resume-check.mts",
@@ -365,6 +366,7 @@
     "docs/evidence/translation-coverage.json": "a3ef8fbbef8e4e19be050e09c8a7a5c789883f4eb47cd52b793c5d39bb930d1d",
     "docs/evidence/typecheck-output.txt": "c2da1391b6f2de64715a3fda6543a1763362bb3e3037b5e636d7eb3348484d2b",
     "docs/evidence/ui-inspection.png": "8f2d557688ad23b385dc6a7e3fc0fbcb86eb764fe9cf2ad7c1686914579ee89f",
-    "docs/evidence/workspace-delivery.json": "56e15ca5fc0f5e70921b393186be1e49477db4b08727254f52d5ace8c3ee7695"
+    "docs/evidence/workspace-delivery.json": "56e15ca5fc0f5e70921b393186be1e49477db4b08727254f52d5ace8c3ee7695",
+    "docs/evidence/staging-rehearsal.json": "d262ce02b0d11107c032030b3d5211c0d3cad04aef8e5688391f8cccafda1471"
   }
 }
