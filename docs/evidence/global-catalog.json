@@ -1,0 +1,274 @@
+{
+  "clientDate": "2026-11-19",
+  "recordedAt": "2026-11-18T22:17:29.712Z",
+  "sourceCommit": "92aafae6b5c8e293eebfcd3e49de8489cc78a1ac",
+  "migratedCheckpoint": "2a6f64c7a711567c39d502fb90e1d2218df67329",
+  "preservation": {
+    "beforeCommit": "2e837fe192676c5f591599cf5103a9ccb8baffdf",
+    "gitBundleCloneAndFsck": true,
+    "sourceFiles": 468,
+    "databaseTables": 45,
+    "allTablesAndSequencesIdentical": true,
+    "originalMediaFiles": 2832,
+    "privateConfigVerified": true,
+    "afterInstallTablesUnchanged": 38,
+    "mediaHashesMatch": true,
+    "counts": {
+      "products": 55,
+      "mediaRecords": 29,
+      "sales": 16,
+      "stockMovements": 46,
+      "demoVerifiedFitments": 0,
+      "skusWithApprovedDemoPhoto": 5,
+      "activeOrDraftDemoSkusWithoutApprovedPhoto": 50
+    }
+  },
+  "realImport": {
+    "datasetVersion": "vPIC model-year 2020 · b660738df15877a8",
+    "rowsImported": 6,
+    "rowsVisible": 6,
+    "endpoint": "https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMakeYear/make/Honda/modelyear/2020/vehicletype/passenger%20car?format=json",
+    "rawSha256": "b660738df15877a8d3223c4ef46d69bb56919c1a3146319a6adc2502b9d9ddd1"
+  },
+  "verifiedRealProductPhotos": 0,
+  "licensedExternalImages": 0,
+  "verifiedRealFitments": 0,
+  "originalIllustrations": [
+    {
+      "kind": "CATEGORY_3D",
+      "category": "filters",
+      "template": "OIL_FILTER",
+      "checksum": "2f18e819c0fa43c07a62c67b7bac2b85ae78b75aa5a7f83b96fae1b33476ac8b"
+    },
+    {
+      "kind": "SYSTEM_DIAGRAM",
+      "category": "filters",
+      "template": "OIL_FILTER",
+      "checksum": "b2a117f2f4f534be695a0eb0e9d30b59a4cdf5ae96d52ff90c6d9fbec0c449f0"
+    },
+    {
+      "kind": "CATEGORY_3D",
+      "category": "brakes",
+      "template": "DISC_BRAKE",
+      "checksum": "1ac8370c71893ed414c148a839e906cd02ff49d0a7f188d69fa35a2882a921f3"
+    },
+    {
+      "kind": "SYSTEM_DIAGRAM",
+      "category": "brakes",
+      "template": "DISC_BRAKE",
+      "checksum": "df2e0ca841d4ff42f444f8fa1e2d9ab037ecb37c5a80326c28663ab64cc196e9"
+    }
+  ],
+  "tests": {
+    "baseline": {
+      "tests": 46,
+      "pass": 46,
+      "fail": 0,
+      "skipped": 0,
+      "duration_ms": 175874.0249
+    },
+    "core": {
+      "tests": 48,
+      "pass": 48,
+      "fail": 0,
+      "skipped": 0,
+      "duration_ms": 159369.136
+    },
+    "fullBrowser": {
+      "startTime": "2026-11-18T22:10:26.250Z",
+      "duration": 88874.84300000001,
+      "expected": 12,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "finalGalleryBrowser": {
+      "startTime": "2026-11-18T22:14:02.399Z",
+      "duration": 15686.837000000001,
+      "expected": 3,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "typecheck": "PASS",
+    "build": "PASS",
+    "cases": [
+      {
+        "id": "CATALOG-FEED-SAFETY",
+        "status": "PASS",
+        "durationMs": 102.50029999998515
+      },
+      {
+        "id": "ORIGINAL-VISUAL-SAFETY",
+        "status": "PASS",
+        "durationMs": 464.9703000000154
+      }
+    ],
+    "i18n": {
+      "date": "2026-11-18T22:06:37.982Z",
+      "keysPerLocale": 556,
+      "technicalCoverage": {
+        "ar": 100,
+        "fr": 100,
+        "en": 100
+      },
+      "backendDomainErrorCodes": 46,
+      "missing": [],
+      "reviewStatus": {
+        "ar": "NOT_REVIEWED",
+        "fr": "NOT_REVIEWED",
+        "en": "NOT_REVIEWED"
+      },
+      "professionallyApprovedPercent": 0
+    }
+  },
+  "recovery": {
+    "date": "2026-11-18T22:12:06.010Z",
+    "pass": true,
+    "criticalTables": 45,
+    "restoreMilliseconds": 837.3281999999999,
+    "referencedMediaFiles": 57,
+    "mediaHashMatch": true,
+    "originalVisualReadable": true,
+    "inventoryAndBinsReconciled": true
+  },
+  "performance": {
+    "date": "2026-11-18T22:12:16.810Z",
+    "environment": {
+      "node": "v24.16.0",
+      "platform": "win32",
+      "cpu": "Intel(R) Core(TM) i7-8850H CPU @ 2.60GHz",
+      "logicalCpus": 12,
+      "memoryBytes": 34056257536,
+      "transport": "Fastify inject (real PostgreSQL; no TCP or WAN latency)",
+      "profiles": "Host machine, unthrottled. Not Android/device measurements.",
+      "databasePool": {
+        "max": 30,
+        "min": 8,
+        "preparedBeforeReadiness": true
+      },
+      "postgresql": "PostgreSQL 18.4 on x86_64-windows, compiled by msvc-19.44.35226, 64-bit"
+    },
+    "fixtures": {
+      "products": 100000,
+      "vehicles": 10000,
+      "fitments": 1000000,
+      "warehouses": 3
+    },
+    "scenarios": [
+      {
+        "name": "exact SKU search, initially unprimed application cache",
+        "requests": 1000,
+        "requestedRate": 50,
+        "actualRate": 50.00060175724216,
+        "durationSeconds": 19.9997681,
+        "p50": 5.95,
+        "p95": 7.69,
+        "p99": 12.66,
+        "statuses": {
+          "200": 1000
+        },
+        "targetP95": 500,
+        "targetP99": 1500,
+        "pass": true
+      },
+      {
+        "name": "exact SKU repeated warm set",
+        "requests": 1000,
+        "requestedRate": 50,
+        "actualRate": 50.002881166012784,
+        "durationSeconds": 19.998848700000003,
+        "p50": 5.9,
+        "p95": 7.89,
+        "p99": 12.8,
+        "statuses": {
+          "200": 1000
+        },
+        "targetP95": 500,
+        "targetP99": 1500,
+        "pass": true
+      },
+      {
+        "name": "variant verified fitment filter",
+        "requests": 500,
+        "requestedRate": 25,
+        "actualRate": 25.031080090905675,
+        "durationSeconds": 19.9751674,
+        "p50": 11.95,
+        "p95": 15.08,
+        "p99": 19.45,
+        "statuses": {
+          "200": 500
+        },
+        "targetP95": 900,
+        "pass": true
+      },
+      {
+        "name": "product and stock read",
+        "requests": 1000,
+        "requestedRate": 50,
+        "actualRate": 50.01473609176839,
+        "durationSeconds": 19.9941075,
+        "p50": 4.81,
+        "p95": 7.2,
+        "p99": 36.67,
+        "statuses": {
+          "200": 1000
+        },
+        "targetP95": 300,
+        "pass": true
+      },
+      {
+        "name": "receipt writes, 20 per second",
+        "requests": 400,
+        "requestedRate": 20,
+        "actualRate": 20.037184204960194,
+        "durationSeconds": 19.96288489999999,
+        "p50": 8.94,
+        "p95": 13.34,
+        "p99": 20.66,
+        "statuses": {
+          "200": 400
+        },
+        "targetP95": 800,
+        "pass": true
+      },
+      {
+        "name": "dashboard",
+        "requests": 20,
+        "requestedRate": 2,
+        "actualRate": 2.063626857633045,
+        "durationSeconds": 9.691674700000004,
+        "p50": 232.83,
+        "p95": 281.91,
+        "p99": 303.66,
+        "statuses": {
+          "200": 20
+        },
+        "targetP95": 1500,
+        "pass": true
+      },
+      {
+        "name": "catalog list plus bounded thumbnail reads",
+        "requests": 40,
+        "requestedRate": 2,
+        "actualRate": 2.039018338885062,
+        "durationSeconds": 19.617283299999983,
+        "p50": 133.74,
+        "p95": 221.15,
+        "p99": 237.06,
+        "statuses": {
+          "200": 40
+        },
+        "targetP95": 900,
+        "pass": true
+      }
+    ]
+  },
+  "limitations": [
+    "Procedural 3D-style art and general schematics. Exact model geometry and external AI provider not tested.",
+    "No licensed supplier data, exact photos or company fitment dataset supplied.",
+    "No production, Phase 2 storefront, physical-device or hosted tests.",
+    "The performance suite represents existing catalog and inventory loads. A large new reference browser workload remains unmeasured."
+  ]
+}
