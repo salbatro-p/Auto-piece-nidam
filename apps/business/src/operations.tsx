@@ -7,6 +7,7 @@ import {AttributeEditor,Attributes} from './technical-attributes';
 import { Replacements } from './catalog-links';
 import { OpeningBalances } from './opening-balances';
 import { Bins } from './bins';
+import { PartSuppliers,ShelfLocator } from './workspace';
 import { priceTotals, type TaxSettings } from '../../../packages/contracts/src/pricing';
 import React, { useEffect, useState } from 'react';
 import {
@@ -113,11 +114,18 @@ export function whole(value: string, zero = false) {
 }
 export function Dashboard({
   navigate,
+  shortcuts,
+  openMissingPhotos,
+  openCounts,
 }: {
-  navigate: (page: 'pos' | 'inventory' | 'catalog' | 'imports') => void;
+  navigate: (page: 'pos' | 'inventory' | 'catalog' | 'imports'|'purchases'|'vehicles') => void;
+  shortcuts?: React.ReactNode;
+  openMissingPhotos?: () => void;
+  openCounts?: () => void;
 }) {
-  const { t, locale, can } = useApp();
-  const { data, error, reload } = useLoad<Record<string, any>>('/dashboard');
+  const { t, locale, can,user } = useApp();
+  const { data, error, reload,loading } = useLoad<Record<string, any>>('/dashboard');
+  const signals = useLoad<Record<string,number|null>>('/workspace/attention');
   const metrics: [MessageKey, string, boolean?][] = [
     ['onHand', 'onHand'],
     ['available', 'available'],
@@ -126,27 +134,15 @@ export function Dashboard({
   ];
   return (
     <>
-      <PageHeading title="goodDay" hint="overviewHint">
-        <button className="button secondary" onClick={reload}>
+      <PageHeading title={user.role==='owner'||user.role==='manager' ? 'ownerWorkspace' : user.role==='warehouse' ? 'warehouseWorkspace' : user.role==='sales' ? 'counterWorkspace' : 'dashboard'} hint="overviewHint">
+        <button className="button secondary" onClick={() => { reload(); signals.reload(); }}>
           <RefreshCw size={17} />
           {t('refresh')}
         </button>
       </PageHeading>
-      <section className="hero-strip">
-        <div>
-          <span className="eyebrow">{t('today')}</span>
-          <h2>{t('welcome')}</h2>
-          <p>{dateTime(new Date(), locale)}</p>
-        </div>
-        <div className="hero-symbol">
-          <Boxes size={72} strokeWidth={1} />
-        </div>
-        <span className="hero-tag">
-          <span className="dot" />
-          {t('online')}
-        </span>
-      </section>
+      {shortcuts}
       <ErrorBanner error={error} />
+      {loading && !data && <p role="status">{t('loading')}</p>}
       <div className="metric-grid">
         {metrics.map(([label, key, currency]) => (
           <article className="metric" key={key}>
@@ -158,7 +154,7 @@ export function Dashboard({
           </article>
         ))}
       </div>
-      <div className="dashboard-grid">
+      <div className="dashboard-grid workspace-dashboard">
         <section className="panel">
           <div className="panel-heading">
             <h2>{t('recentMovements')}</h2>
@@ -189,62 +185,54 @@ export function Dashboard({
           ) : (
             <Empty />
           )}
-          <p className="panel-note">{t('historyUnavailable')}</p>
         </section>
         <section className="panel">
           <div className="panel-heading">
-            <h2>{t('attention')}</h2>
-            <span className="attention-dot" />
+            <h2>{t('workingQueue')}</h2>
           </div>
-          {(['lowStock', 'outOfStock', 'pendingFitments', 'pendingImports'] as const).map((key) => (
-            <div className="attention-row" key={key}>
+          <ErrorBanner error={signals.error} />
+          {([
+            ['lowStock',data?.lowStock,'inventory'],
+            ['outOfStock',data?.outOfStock,'inventory'],
+            ['pendingDeliveries',signals.data?.pendingDeliveries,'purchases'],
+            ['pendingCounts',signals.data?.pendingCounts,'inventory'],
+            ['missingPhoto',signals.data?.missingPhoto,'catalog'],
+            ['pendingFitments',can('catalog') ? data?.pendingFitments : null,'vehicles'],
+            ['pendingImports',signals.data?.pendingImports,'imports'],
+          ] as const).filter(([,count]) => typeof count==='number').map(([key,count,destination]) => (
+            <button type="button" className="attention-row attention-action" key={key}
+              onClick={() => key==='missingPhoto' && openMissingPhotos ? openMissingPhotos() : key==='pendingCounts' && openCounts ? openCounts() : navigate(destination)}>
               <span>{t(key)}</span>
-              <strong>{quantity(data?.[key] ?? 0, locale)}</strong>
-            </div>
+              <strong>{quantity(count!, locale)}</strong>
+            </button>
           ))}
           {can('costs') && (
             <div className="attention-row">
               <span>{t('stockValue')}</span>
               <strong>
-                <Amount minor={data?.inventoryValueMinor ?? 0} />
+                {data && typeof data.inventoryValueMinor==='number' ? <Amount minor={data.inventoryValueMinor} /> : '—'}
               </strong>
             </div>
           )}
-          <div className="quick-actions">
-            <h3>{t('quickActions')}</h3>
-            {can('sell') && (
-              <button className="button primary full" onClick={() => navigate('pos')}>
-                <ShoppingCart size={18} />
-                {t('newSale')}
-              </button>
-            )}
-            {can('receive') && (
-              <button className="button secondary full" onClick={() => navigate('inventory')}>
-                <ArrowDownToLine size={18} />
-                {t('receiveStock')}
-              </button>
-            )}
-            {can('catalog') && (
-              <button className="text-button" onClick={() => navigate('catalog')}>
-                {t('newProduct')}
-                <ChevronRight size={16} />
-              </button>
-            )}
-          </div>
         </section>
       </div>
     </>
   );
 }
 
-export function Catalog({ vehicleId, clearVehicle }: { vehicleId: string; clearVehicle: () => void }) {
+export function Catalog({ vehicleId, clearVehicle, categoryEntry, onIntake,coverageEntry }: {
+  vehicleId: string; clearVehicle: () => void; categoryEntry?: { category: string }; onIntake?: (product: Product) => void;
+  coverageEntry?: {queue:'missing'};
+}) {
   const { t, can, locale } = useApp();
   const [exactVehicle,setExactVehicle]=useState(vehicleId),[category,setCategory]=useState('');
+  useEffect(() => { if (categoryEntry) { setCategory(categoryEntry.category); setPage(1); } }, [categoryEntry]);
   useEffect(()=>{setExactVehicle(vehicleId);setPage(1);},[vehicleId]);
   const categories=useLoad<{items:{category:string;names:Record<string,string>}[]}>('/catalog/categories');
   const [q, setQ] = useState(''),
     [page, setPage] = useState(1),
     [editing, setEditing] = useState<Product | null | undefined>(),
+    [guided,setGuided] = useState(false),
     [selected, setSelected] = useState<Product | null>(null);
   const { data, error, loading, reload } = useLoad<{ items: Product[]; total: number }>(
     `/products?q=${encodeURIComponent(q)}&page=${page}${exactVehicle ? `&vehicleId=${exactVehicle}` : ''}${category?`&category=${encodeURIComponent(category)}`:''}`,
@@ -253,7 +241,7 @@ export function Catalog({ vehicleId, clearVehicle }: { vehicleId: string; clearV
     <>
       <PageHeading title="catalog" hint="catalogHint">
         <VisualLibraryButton />
-        <MediaCoverage onSelect={setSelected}/>
+        <MediaCoverage onSelect={setSelected} entry={coverageEntry}/>
         <MediaBulk/>
         {can('catalog')&&<a className="button secondary" href="/api/reports/products.csv">{t('export')}</a>}
         {can('catalog') && (
@@ -262,6 +250,7 @@ export function Catalog({ vehicleId, clearVehicle }: { vehicleId: string; clearV
             {t('newProduct')}
           </button>
         )}
+        {can('catalog') && <button className="button secondary" data-testid="guided-create" onClick={() => setGuided(true)}>{t('guidedProduct')}</button>}
       </PageHeading>
       <div className="toolbar">
         <SearchBox
@@ -383,11 +372,16 @@ export function Catalog({ vehicleId, clearVehicle }: { vehicleId: string; clearV
         />
       )}
       {selected && <ProductDetails product={selected} onClose={() => setSelected(null)} />}
+      {guided && <ProductEditor product={null} guided onClose={() => setGuided(false)}
+        onSaved={() => { setGuided(false); reload(); }} onIntake={onIntake} />}
     </>
   );
 }
-function ProductDetails({ product: p, onClose }: { product: Product; onClose: () => void }) {
+export function ProductDetails({ product: p, onClose, onSell, onReceive, startUpload }: {
+  product: Product; onClose: () => void; onSell?: () => void; onReceive?: () => void; startUpload?: boolean;
+}) {
   const { t, locale } = useApp();
+  const totals = totalStock(p);
   return (
     <Modal title={contentValue(p.names, locale, p.translationStatus).value || p.sku} onClose={onClose} wide>
       <div className="detail-intro">
@@ -432,8 +426,18 @@ function ProductDetails({ product: p, onClose }: { product: Product; onClose: ()
         )}
       </dl>
       <div className="notice warning">{t('fitmentWarning')}</div>
-      <MediaGallery product={p}/>
+      <dl className="part-stock-summary">
+        {(['available','reserved','onHand'] as const).map(metric=><div key={metric}><dt>{t(metric)}</dt>
+          <dd><bdi>{quantity(totals[metric],locale)}</bdi> <small>{t('PCS')}</small></dd></div>)}
+      </dl>
+      {(onSell || onReceive) && <div className="toolbar">
+        {onSell && <button className="button primary" type="button" onClick={onSell}><ShoppingCart size={18}/>{t('openInPos')}</button>}
+        {onReceive && <button className="button secondary" type="button" onClick={onReceive}>{t('receiveStock')}</button>}
+      </div>}
+      <ShelfLocator productId={p.id} />
+      <MediaGallery product={p} startUpload={startUpload}/>
       <Replacements product={p} />
+      <PartSuppliers productId={p.id}/>
       <Attributes product={p}/>
       <h3>{t('inventory')}</h3>
       <div className="table-wrap" tabIndex={0} role="region" aria-label={t('scrollableTable')}>
@@ -482,12 +486,16 @@ export function ProductEditor({
   product,
   onClose,
   onSaved,
+  guided = false,
+  onIntake,
 }: {
   product: Product | null;
   onClose: () => void;
   onSaved: () => void;
+  guided?: boolean;
+  onIntake?: (product: Product) => void;
 }) {
-  const { t, can, notify } = useApp();
+  const { t, can, notify,user } = useApp();
   const [attributes,setAttributes]=useState(product?.companyMetadata?.technicalAttributes??[]);
   const [form, setForm] = useState({
     sku: product?.sku ?? '',
@@ -518,12 +526,63 @@ export function ProductEditor({
     [rights, setRights] = useState(''),
     [savedId, setSavedId] = useState<string>(),
     [error, setError] = useState<unknown>();
+  const [step,setStep] = useState(0);
+  const [keepDraft,setKeepDraft] = useState(false);
+  const [receiveAfter,setReceiveAfter] = useState(false);
+  const stages = ['partIdentity','technicalAttributes','photo','oem','receiveStock','stageReview'] as const;
+  const draftKey = 'autoparts:registration:'+user.id;
+  const [restorable,setRestorable] = useState(() => {
+    try { return guided && !!sessionStorage.getItem(draftKey); } catch { return false; }
+  });
+  useEffect(() => {
+    if (!guided || !keepDraft || savedId) return;
+    try { sessionStorage.setItem(draftKey,JSON.stringify({form,attributes,rights,step,receiveAfter})); } catch {}
+  },[guided,keepDraft,savedId,form,attributes,rights,step,receiveAfter,draftKey]);
+  function dropDraft() {
+    try { sessionStorage.removeItem(draftKey); } catch {}
+    setRestorable(false);
+  }
+  function restoreDraft() {
+    try {
+      const draft = JSON.parse(sessionStorage.getItem(draftKey) ?? 'null');
+      if (!draft || typeof draft.form?.sku !== 'string' || !draft.form.names || !Array.isArray(draft.attributes)) return;
+      setForm(draft.form);
+      setAttributes(draft.attributes);
+      setRights(typeof draft.rights==='string' ? draft.rights : '');
+      setReceiveAfter(draft.receiveAfter===true);
+      setStep(Number.isInteger(draft.step) && draft.step>=0 && draft.step<stages.length ? draft.step : 0);
+      setKeepDraft(true);
+    } catch {} finally { setRestorable(false); }
+  }
+  const checking = guided && step===5;
+  const ids = [form.sku,form.oem,form.barcode,form.manufacturerPartNo];
+  const query = new URLSearchParams(ids.map(id => ['id',id.trim()]).filter(([,id]) => id.length>=2));
+  const matches = useLoad<{items: {sku:string}[]}>(checking && query.size ? '/workspace/identifiers?'+query : null);
+  const duplicate = checking && !matches.loading && !!matches.data?.items.length;
+  function stepForward() {
+    setError(undefined);
+    try {
+      if (step===0 && (!form.sku.trim() || !form.brand.trim() || !form.category.trim() || !Object.values(form.names).some(n=>n.trim())))
+        throw new ApiError('VALIDATION_ERROR');
+      if (step===1) {
+        whole(form.packSize);
+        parseMoney(form.price);
+        parseMoney(form.cost);
+        whole(form.reorderLevel,true);
+      }
+      if (step===2 && file && (file.size>3*1024*1024 || !['image/png','image/jpeg','image/webp'].includes(file.type) || rights.trim().length<10))
+        throw new ApiError('INVALID_FILE');
+      setKeepDraft(true);
+      setStep(n=>Math.min(stages.length-1,n+1));
+    } catch (error) { setError(error); }
+  }
   const save = useMutation(),
     upload = useMutation();
   const change = (key: string, value: string) => setForm((f) => ({ ...f, [key]: value }));
   const busy = save.busy || upload.busy;
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+    if (guided && step<stages.length-1 && !savedId) { stepForward(); return; }
     setError(undefined);
     try {
       if (
@@ -570,18 +629,30 @@ export function ProductEditor({
         if (!result) return;
       }
       notify('productSaved');
+      if (guided) dropDraft();
+      if (guided && receiveAfter && onIntake && can('receive')) {
+        try { onIntake(await api<Product>('/products/'+id)); } catch { notify('productSaved'); }
+      }
       onSaved();
     } catch (err) {
       setError(err);
     }
   }
   return (
-    <Modal title={t(product ? 'edit' : 'newProduct')} onClose={onClose} wide>
+    <Modal title={t(guided ? 'guidedProduct' : product ? 'edit' : 'newProduct')} onClose={onClose} wide>
       <p className="muted">{t('draftHint')}</p>
       <p className="draft-hint">{t('unsaved')}</p>
-      <form onSubmit={submit} noValidate>
+      {guided && <><ol className="guided-progress" aria-label={t('guidedProduct')}>{stages.map((label,index) =>
+        <li key={label} aria-current={index===step?'step':undefined}>{index+1}. {t(label)}</li>)}</ol>
+        <p className="muted">{t('localDraftHint')}</p>
+        {restorable && <div className="toolbar">
+          <button className="button secondary" onClick={restoreDraft}>{t('restoreDraft')}</button>
+          <button className="text-button" onClick={dropDraft}>{t('discardDraft')}</button>
+        </div>}
+      </>}
+      <form onChange={() => { if (guided) setKeepDraft(true); }} onSubmit={submit} noValidate>
         {savedId && <div className="notice success">{t('productCreatedUploadPending')}</div>}
-        <fieldset disabled={busy || !!savedId} className="form-grid">
+        <fieldset hidden={guided && step!==0} disabled={busy || !!savedId} className="form-grid">
           <Field label={t('sku')}>
             <input
               data-testid="product-sku"
@@ -618,13 +689,6 @@ export function ProductEditor({
               onChange={(e) => change('category', e.target.value)}
             />
           </Field>
-          <Field label={t('manufacturerPartNo')}>
-            <input
-              dir="ltr"
-              value={form.manufacturerPartNo}
-              onChange={(e) => change('manufacturerPartNo', e.target.value)}
-            />
-          </Field>
           {(['ar', 'fr', 'en'] as const).map((l) => (
             <Field
               key={'category-' + l}
@@ -640,6 +704,11 @@ export function ProductEditor({
               />
             </Field>
           ))}
+        </fieldset>
+        <fieldset hidden={guided && step!==3} disabled={busy || !!savedId} className="form-grid">
+          <Field label={t('manufacturerPartNo')}>
+            <input dir="ltr" value={form.manufacturerPartNo} onChange={e => change('manufacturerPartNo',e.target.value)} />
+          </Field>
           <Field label={t('oem')}>
             <input
               data-testid="product-oem"
@@ -656,6 +725,8 @@ export function ProductEditor({
               onChange={(e) => change('barcode', e.target.value)}
             />
           </Field>
+        </fieldset>
+        <fieldset hidden={guided && step!==1} disabled={busy || !!savedId} className="form-grid">
           <Field label={t('packSize')}>
             <input
               data-testid="product-pack-size"
@@ -717,8 +788,8 @@ export function ProductEditor({
             </Field>
           ))}
         </fieldset>
-        <div className="upload-zone">
-          <AttributeEditor value={attributes} onChange={setAttributes}/>
+        <div hidden={guided && step!==1}><AttributeEditor value={attributes} onChange={setAttributes}/></div>
+        <div className="upload-zone" hidden={guided && step!==2}>
             <FilePicker label={t('photo')} hint={t('rightsHelp')}
               data-testid="product-image"
               type="file"
@@ -750,6 +821,20 @@ export function ProductEditor({
             />
           </Field>
         </div>
+        {guided && step===4 && <div className="panel">
+          <p>{t('stockAfterSave')}</p>
+          {can('receive') && onIntake && <label><input type="checkbox" checked={receiveAfter} onChange={event=>setReceiveAfter(event.target.checked)} /> {t('receiveStock')}</label>}
+        </div>}
+        {guided && step===5 && <div className="panel">
+          <h3>{t('stageReview')}</h3>
+          <p><bdi>{ids.filter(Boolean).join(' · ')}</bdi></p>
+          <p><bdi>{Object.values(form.names).filter(Boolean).join(' · ')}</bdi></p>
+          <p>{t('category')} <bdi>{form.category}</bdi> · {t('packSize')} <bdi>{form.packSize}</bdi></p>
+          {file && <p>{t('photo')} <bdi>{file.name}</bdi></p>}
+          {duplicate && <><p className="notice warning" role="status">{t('duplicateReview')}</p>
+            <ul>{matches.data?.items.map(part=><li key={part.sku}><bdi>{part.sku}</bdi></li>)}</ul></>}
+          <ErrorBanner error={matches.error} />
+        </div>}
         <ErrorBanner error={error} />
         <MutationState state={save} />
         <MutationState state={upload} />
@@ -757,13 +842,14 @@ export function ProductEditor({
           <button type="button" className="button secondary" onClick={onClose} disabled={busy}>
             {t('cancel')}
           </button>
+          {guided && step>0 && !savedId && <button type="button" className="button secondary" onClick={() => {setError(undefined);setStep(n=>n-1);}}>{t('previous')}</button>}
           <button
             data-testid="product-submit"
             type="submit"
             className="button primary"
             disabled={busy || (!!file && !photo)}
           >
-            {busy ? t('loading') : t(savedId ? 'upload' : 'save')}
+            {busy ? t('loading') : t(savedId ? 'upload' : guided && step<stages.length-1 ? 'next' : 'save')}
           </button>
         </div>
       </form>
@@ -844,13 +930,14 @@ export function Receipt({ sale, onClose }: { sale: Sale; onClose: () => void }) 
   );
 }
 
-export function PointOfSale() {
+export function PointOfSale({ entry,active=true }: { entry?: { sku: string }; active?:boolean } = {}) {
   const { t, warehouses, notify, online, locale } = useApp();
   const [q, setQ] = useState(''),
     [warehouseId, setWarehouse] = useState(''),
     [cart, setCart] = useState<{ product: Product; quantity: number }[]>([]),
     [reserved, setReserved] = useState<string>(),
     [sale, setSale] = useState<Sale | null>(null);
+  useEffect(() => { if (entry) setQ(entry.sku); }, [entry]);
   const wh = warehouseId || warehouses[0]?.id || '';
   const products = useLoad<{ items: Product[]; total: number }>(
     `/products?q=${encodeURIComponent(q)}&warehouseId=${wh}`,
@@ -878,7 +965,7 @@ export function PointOfSale() {
     ),
     total = totals.totalMinor;
   function add(p: Product) {
-    if (blocked) return;
+    if (blocked || p.status !== 'ACTIVE_INTERNAL' || totalStock(p, wh).available <= 0) return;
     setCart((lines) => {
       const old = lines.find((l) => l.product.id === p.id);
       return old
@@ -907,15 +994,26 @@ export function PointOfSale() {
   return (
     <>
       <PageHeading title="pos" hint="posHint" />
+      {cart.length>0 && <button className="button primary phone-cart-jump" onClick={() => {
+        const cartPanel = document.getElementById('active-cart');
+        cartPanel?.focus({preventScroll:true});
+        cartPanel?.scrollIntoView({block:'start'});
+      }}><ShoppingCart size={18} />{t('jumpToCart')} <bdi>{quantity(cart.reduce((sum,line) => sum + line.quantity,0),locale)}</bdi></button>}
       <ErrorBanner error={tax.error ?? refreshError} />
       <div className="pos-grid">
         <section className="pos-products">
           <div className="toolbar">
             <SearchBox
+              testId={active ? 'product-search' : 'inactive-pos-search'}
               value={q}
               onChange={setQ}
               onEnter={() => {
-                if (products.data?.items.length === 1) add(products.data.items[0]);
+                if (!products.loading && products.data?.items.length === 1 && q.trim()) {
+                  const selected = products.data.items[0];
+                  const fold = (value: string) => value.normalize('NFD').toLowerCase().replace(/[^\p{L}\p{N}]/gu,'');
+                  if ([selected.sku,selected.oem,selected.barcode,selected.manufacturerPartNo].some(value => value && fold(value)===fold(q)))
+                    add(selected);
+                }
               }}
             />
             <WarehouseSelect
@@ -992,7 +1090,7 @@ export function PointOfSale() {
             ))}
           </section>
         </section>
-        <aside className="cart-panel">
+        <aside className="cart-panel" id="active-cart" tabIndex={-1} aria-label={t('cart')}>
           <div className="cart-heading">
             <ShoppingCart size={22} />
             <h2>{t('cart')}</h2>
@@ -1189,14 +1287,18 @@ export function ProductSelect({
   value,
   onChange,
   testId,
+  selectedProduct,
 }: {
   value: string;
   onChange: (id: string, p?: Product) => void;
   testId?: string;
+  selectedProduct?: Product;
 }) {
   const { t, locale } = useApp();
   const [q, setQ] = useState('');
   const { data } = useLoad<{ items: Product[] }>(`/products?q=${encodeURIComponent(q)}`);
+  const items = data?.items ?? [];
+  const options = selectedProduct?.id===value && !items.some(item=>item.id===value) ? [selectedProduct,...items] : items;
   return (
     <div className="product-picker">
       <Field label={t('search')}>
@@ -1215,12 +1317,12 @@ export function ProductSelect({
           onChange={(e) =>
             onChange(
               e.target.value,
-              data?.items.find((p) => p.id === e.target.value),
+              options.find((p) => p.id === e.target.value),
             )
           }
         >
           <option value="">— {t('product')} —</option>
-          {data?.items.map((p) => (
+          {options.map((p) => (
             <option key={p.id} value={p.id}>
               {p.sku} · {contentValue(p.names, locale, p.translationStatus).value || t('translationMissing')}
             </option>
@@ -1231,7 +1333,7 @@ export function ProductSelect({
   );
 }
 type Operation = 'receiptOperation' | 'transfer' | 'return' | 'count' | 'inspection' | 'approveCount';
-export function Inventory() {
+export function Inventory({ entry }: { entry?: { product?: Product; warehouseId?: string; bin?: string; receipt?: boolean; reviewCounts?:boolean } } = {}) {
   const { t, can, warehouses, locale, notify, online } = useApp();
   const [operation, setOperation] = useState<Operation>(
     can('receive') ? 'receiptOperation' : can('returns') ? 'return' : 'count',
@@ -1252,6 +1354,16 @@ export function Inventory() {
     [error, setError] = useState<unknown>(),
     [result, setResult] = useState<any>();
   const mutation = useMutation();
+  useEffect(() => {
+    if (!entry) return;
+    if (entry.receipt && can('receive')) setOperation('receiptOperation');
+    if (entry.reviewCounts && (can('approve') || can('counts'))) setOperation(can('approve') ? 'approveCount' : 'count');
+    if (entry.warehouseId) setWarehouse(entry.warehouseId);
+    if (entry.product) {
+      setProduct(entry.product.id);
+      setProductDetails(entry.product);
+    }
+  },[entry]);
   const wh = warehouseId || warehouses[0]?.id || '';
   const stock = useLoad<{ items: Product[] }>('/products');
   const returnList = useLoad<{ items: any[] }>('/inventory/returns');
@@ -1327,7 +1439,7 @@ export function Inventory() {
     <>
       <PageHeading title="inventory" hint="inventoryHint">
         <OpeningBalances />
-        <Bins />
+        <Bins entry={entry?.bin || entry?.warehouseId ? entry : undefined} />
       </PageHeading>
       <div className="inventory-layout">
         <section className="panel operation-panel">
@@ -1357,7 +1469,8 @@ export function Inventory() {
                     <>
                       <div className="span-2">
                         <ProductSelect
-                          testId="receipt-product"
+                        testId="receipt-product"
+                        selectedProduct={product}
                           value={productId}
                           onChange={(id, p) => {
                             setProduct(id);

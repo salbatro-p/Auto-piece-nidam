@@ -13,14 +13,14 @@ export class ApiError extends Error {
 }
 export async function api<T>(
   path: string,
-  options: { method?: string; body?: unknown; key?: string; onUploadProgress?:(percent:number)=>void } = {},
+  options: { method?: string; body?: unknown; key?: string; signal?: AbortSignal; onUploadProgress?:(percent:number)=>void } = {},
 ): Promise<T> {
   let response: Response;
   try {
     const init={
       method: options.method ?? 'GET',
       credentials: 'same-origin',
-      signal: AbortSignal.timeout(15000),
+      signal: options.signal ? AbortSignal.any([options.signal, AbortSignal.timeout(15000)]) : AbortSignal.timeout(15000),
       headers: {
         ...(options.body !== undefined ? { 'Content-Type': 'application/json' } : {}),
         ...(csrfToken ? { 'X-CSRF-Token': csrfToken } : {}),

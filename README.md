@@ -6,6 +6,8 @@ Business: <http://127.0.0.1:4173/>. API: <http://127.0.0.1:4310/api/health>. Bot
 
 Catalog reference imports, internally reviewed illustrations, and the initial real model-year sample are documented in the [catalog operator guide](docs/GLOBAL_CATALOG_GUIDE.md) and [requirement matrix](docs/GLOBAL_CATALOG_TRACEABILITY.md).
 
+Use the top-bar search or Ctrl+K / Cmd+K to find parts, vehicles, suppliers and bins. The owner overview provides task shortcuts, and guided registration is in the catalog. See the [workspace guide and acceptance record](docs/WORKSPACE_ACCEPTANCE.md) and the [isolated HTTPS staging guide](docs/STAGING_PILOT.md).
+
 ## Start the local application on Windows
 
 Requires Node 24 and PostgreSQL 18 binaries. This workstation has PostgreSQL at `D:/PostgreSQL/New folder/bin`. The setup script reads `.local/postgres-path.txt` when the isolated data directory has been moved to another drive.

@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useApp } from './context';
 import { Field, ErrorBanner, Modal, MutationState, useLoad, useMutation } from './components';
 import { ProductSelect, WarehouseSelect, whole } from './operations';
 import { quantity } from '../../../packages/i18n/src/index';
 import type { MessageKey } from '../../../packages/i18n/src/business';
 
-export function Bins() {
+export function Bins({ entry }: { entry?: { warehouseId?: string; bin?: string } } = {}) {
   const { t, locale, warehouses, can, notify } = useApp();
   const [warehouse, setWarehouse] = useState(''),
     [product, setProduct] = useState(''),
@@ -18,12 +18,16 @@ export function Bins() {
     [condition, setCondition] = useState('SELLABLE'),
     [reason, setReason] = useState(''),
     [error, setError] = useState<unknown>();
+  useEffect(() => {
+    if (!entry) return;
+    if (entry.warehouseId) setWarehouse(entry.warehouseId);
+    setOpen(true);
+  },[entry]);
   const wh = warehouse || warehouses[0]?.id || '',
     list = useLoad<{ items: any[] }>(
-      `/bins?${new URLSearchParams({ ...(wh ? { warehouseId: wh } : {}), ...(product ? { productId: product } : {}) })}`,
+      open ? `/bins?${new URLSearchParams({ ...(wh ? { warehouseId: wh } : {}), ...(product ? { productId: product } : {}) })}` : null,
     ),
     save = useMutation();
-  if (!can('transfer')) return null;
   return (
     <>
       <button className="button secondary" onClick={() => setOpen(true)}>
@@ -54,7 +58,7 @@ export function Bins() {
               </thead>
               <tbody>
                 {list.data?.items.map((bin) => (
-                  <tr key={bin.id}>
+                  <tr key={bin.id} className={entry?.bin===bin.code ? 'matched-bin' : undefined}>
                     <td>
                       <bdi>{bin.code}</bdi>
                     </td>
@@ -66,7 +70,7 @@ export function Bins() {
               </tbody>
             </table>
           </div>
-          <button className="text-button" onClick={() => setAdding(!adding)}>
+          {can('transfer') && <><button className="text-button" onClick={() => setAdding(!adding)}>
             {t('newBin')}
           </button>
           {adding && (
@@ -159,7 +163,7 @@ export function Bins() {
             <button className="button primary" disabled={!product || save.busy}>
               {t('confirmOperation')}
             </button>
-          </form>
+          </form></>}
         </Modal>
       )}
     </>

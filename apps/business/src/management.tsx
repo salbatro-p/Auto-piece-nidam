@@ -23,7 +23,7 @@ import { dateTime, parseMoney, quantity, type Locale } from '../../../packages/i
 import { messageKey, type MessageKey } from '../../../packages/i18n/src/business';
 import type { Supplier, Vehicle, Source } from './types';
 
-export function Suppliers() {
+export function Suppliers({ entry }: { entry?: { id: string } } = {}) {
   const { t, notify } = useApp(),
     list = useLoad<{ items: Supplier[] }>('/suppliers'),
     save = useMutation();
@@ -32,6 +32,8 @@ export function Suppliers() {
     [contact, setContact] = useState(''),
     [lead, setLead] = useState('3'),
     [notes, setNotes] = useState('');
+  const [focused,setFocused] = useState(entry?.id);
+  useEffect(() => { if (entry) setFocused(entry.id); },[entry]);
   return (
     <>
       <PageHeading title="suppliers" hint="supplierHint">
@@ -42,7 +44,8 @@ export function Suppliers() {
       </PageHeading>
       <ErrorBanner error={list.error} />
       <div className="supplier-grid">
-        {list.data?.items.map((s) => (
+        {focused && <button className="button secondary" onClick={() => setFocused(undefined)}>{t('clear')}</button>}
+        {list.data?.items.filter(s => !focused || s.id===focused).map((s) => (
           <article className="panel supplier-card" key={s.id}>
             <div className="workspace-avatar">{s.name.slice(0, 2)}</div>
             <h2>

@@ -94,7 +94,8 @@ test('Official model-year snapshot and reviewed original category visuals work i
   }
   await dialog.getByRole('button',{name:'Close',exact:true}).click();
   await page.getByTestId('product-search').fill('AP-FLT-001');
-  await page.locator('.catalog-table tr').filter({has:page.getByText('AP-FLT-001',{exact:true})}).locator('.product-cell').click();
+  const sku = page.locator('bdi.mono').filter({hasText:/^AP-FLT-001$/});
+  await page.locator('.catalog-table tr').filter({has:sku}).locator('.product-cell').click();
   dialog = page.getByRole('dialog').last();
   const disclaimer = dialog.getByText('Original illustration. It does not depict the exact SKU, fitment or installation location.');
   await expect(disclaimer).toBeVisible();

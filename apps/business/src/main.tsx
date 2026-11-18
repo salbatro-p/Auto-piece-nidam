@@ -11,6 +11,7 @@ import {
   LogOut,
   Menu,
   Package,
+  Search,
   ScanLine,
   ShieldCheck,
   ShoppingBag,
@@ -23,12 +24,14 @@ import { direction, resolveLocale, type Locale } from '../../../packages/i18n/sr
 import { translate, messageKey, type MessageKey } from '../../../packages/i18n/src/business';
 import { api, ApiError, setCsrf } from './api';
 import { AppContext } from './context';
-import { ErrorBanner, Field } from './components';
-import type { User, Warehouse } from './types';
-import { Dashboard, Catalog, PointOfSale, Inventory } from './operations';
+import { ErrorBanner, Field, Modal } from './components';
+import type { Product, User, Warehouse } from './types';
+import { Dashboard, Catalog, PointOfSale, Inventory, ProductDetails } from './operations';
+import { WorkspaceSearch, WorkspaceShortcuts, type WorkspaceTarget } from './workspace';
 import { Purchases, Suppliers, Vehicles, Imports, Audit, Team } from './management';
 import './styles.css';
 import './refinements.css';
+import './workspace.css';
 import { Invitation } from './invitation';
 
 type Page =
@@ -42,16 +45,17 @@ type Page =
   | 'imports'
   | 'audit'
   | 'team';
-const navItems: { id: Page; icon: typeof Gauge; permission?: string; group: 'operations' | 'management' }[] =
+const navGroups = ['operations','catalogAndVehicles','management'] as const;
+const navItems: { id: Page; icon: typeof Gauge; permission?: string; group: typeof navGroups[number] }[] =
   [
     { id: 'dashboard', icon: Gauge, group: 'operations' },
     { id: 'pos', icon: ScanLine, permission: 'sell', group: 'operations' },
-    { id: 'catalog', icon: Package, group: 'operations' },
+    { id: 'catalog', icon: Package, group: 'catalogAndVehicles' },
     { id: 'inventory', icon: Boxes, group: 'operations' },
-    { id: 'purchases', icon: ShoppingBag, permission: 'purchases', group: 'operations' },
+    { id: 'purchases', icon: ShoppingBag, permission: 'purchases', group: 'management' },
     { id: 'suppliers', icon: Truck, permission: 'suppliers', group: 'management' },
-    { id: 'vehicles', icon: CarFront, group: 'management' },
-    { id: 'imports', icon: FileUp, permission: 'imports', group: 'management' },
+    { id: 'vehicles', icon: CarFront, group: 'catalogAndVehicles' },
+    { id: 'imports', icon: FileUp, permission: 'imports', group: 'catalogAndVehicles' },
     { id: 'audit', icon: ShieldCheck, permission: 'audit', group: 'management' },
     { id: 'team', icon: UsersRound, permission: 'staff', group: 'management' },
   ];
@@ -69,6 +73,15 @@ function App() {
     [error, setError] = useState<unknown>(),
     [locked, setLocked] = useState(false);
   const [vehicle, setVehicle] = useState<string>('');
+  const [search,setSearch] = useState<'all'|'photos'>();
+  const [details,setDetails] = useState<{ product?: Product; error?: unknown; photos?: boolean }>();
+  const [posLoaded,setPosLoaded] = useState(false);
+  const [posEntry,setPosEntry] = useState<{sku:string}>();
+  const [inventoryEntry,setInventoryEntry] = useState<{product?:Product;warehouseId?:string;bin?:string;receipt?:boolean;reviewCounts?:boolean}>();
+  const [categoryEntry,setCategoryEntry] = useState<{category:string}>();
+  const [coverageEntry,setCoverageEntry] = useState<{queue:'missing'}>();
+  const [supplierEntry,setSupplierEntry] = useState<{id:string}>();
+  const detailRequest = useRef<AbortController | undefined>(undefined);
   const lastActivity = useRef(Date.now());
   const localeSave = useRef(Promise.resolve());
   const localeChosen = useRef(false);
@@ -77,6 +90,17 @@ function App() {
     [locale],
   );
   const can = useCallback((permission: string) => !!user?.permissions.includes(permission), [user]);
+  useEffect(() => {
+    if (!user || locked) return;
+    const onKey = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k' && !document.querySelector('dialog[open]')) {
+        event.preventDefault();
+        setSearch('all');
+      }
+    };
+    window.addEventListener('keydown',onKey);
+    return () => window.removeEventListener('keydown',onKey);
+  },[user,locked]);
   useEffect(()=>{window.scrollTo({top:0,left:0,behavior:'instant'});},[page]);
   useEffect(() => {
     const expired = () => {
@@ -170,11 +194,21 @@ function App() {
       }
     }
     setUser(null);
+    try { if (user) sessionStorage.removeItem('autoparts:registration:'+user.id); } catch {}
     setCsrf('');
     setLocked(false);
     setWarehouses([]);
     setPage('dashboard');
     setVehicle('');
+    setSearch(undefined);
+    detailRequest.current?.abort();
+    setDetails(undefined);
+    setPosLoaded(false);
+    setPosEntry(undefined);
+    setInventoryEntry(undefined);
+    setCategoryEntry(undefined);
+    setCoverageEntry(undefined);
+    setSupplierEntry(undefined);
     setLocale(resolveLocale(null, navigator.language));
     setError(undefined);
   }
@@ -184,7 +218,7 @@ function App() {
     setLocale(session.user.locale);
     setLocked(false);
     setError(undefined);
-    setPage(session.user.role === 'sales' ? 'pos' : 'dashboard');
+    setPage(session.user.role === 'sales' ? 'pos' : session.user.role === 'warehouse' ? 'inventory' : 'dashboard');
     lastActivity.current = Date.now();
   }
   const context = {
@@ -198,9 +232,45 @@ function App() {
     notify: setNotice,
   };
   const navigate = (next: Page) => {
+    if (next === 'pos' && !can('sell')) return;
+    if (next !== 'catalog') setCoverageEntry(undefined);
     setPage(next);
     setMenu(false);
   };
+  useEffect(() => { if (page === 'pos') setPosLoaded(true); },[page]);
+  function closeDetails() {
+    detailRequest.current?.abort();
+    setDetails(undefined);
+  }
+  function choose(target: WorkspaceTarget) {
+    setSearch(undefined);
+    if (target.kind === 'part') {
+      const photos = search === 'photos' && can('catalog');
+      detailRequest.current?.abort();
+      const controller = new AbortController();
+      detailRequest.current = controller;
+      setDetails({ photos });
+      void api<Product>('/products/'+target.id,{signal:controller.signal})
+        .then(product => { if (!controller.signal.aborted) setDetails({ product,photos }); })
+        .catch(error => { if (!controller.signal.aborted) setDetails({ error,photos }); });
+      return;
+    }
+    if (target.kind === 'vehicle') {
+      setCategoryEntry(undefined);
+      setVehicle(target.id);
+      navigate('catalog');
+    } else if (target.kind === 'category') {
+      setVehicle('');
+      setCategoryEntry({category:target.category});
+      navigate('catalog');
+    } else if (target.kind === 'supplier' && can('suppliers')) {
+      setSupplierEntry({id:target.id});
+      navigate('suppliers');
+    } else if (target.kind === 'location') {
+      setInventoryEntry({ warehouseId: target.id,bin:target.label });
+      navigate('inventory');
+    } else if (target.kind === 'nav') navigate(target.page);
+  }
   return (
     <AppContext.Provider value={context}>
       <a className="skip-link" href="#main">
@@ -226,6 +296,9 @@ function App() {
         />
         {user && (
           <div className="header-actions">
+            <button type="button" className="icon-button workspace-header-search" data-testid="workspace-search"
+              aria-label={t('workspaceSearch')} aria-keyshortcuts="Control+K Meta+K" title={t('workspaceSearch')}
+              disabled={locked} onClick={() => setSearch('all')}><Search size={20} aria-hidden="true" /></button>
             <span className="connection">
               <i className={online ? 'online' : 'offline'} />
               {t(online ? 'online' : 'offline')}
@@ -314,7 +387,7 @@ function App() {
                 </div>
               </div>
               <nav aria-label={t('workspace')}>
-                {(['operations', 'management'] as const).map((group) => (
+                {navGroups.filter(group=>navItems.some(item=>item.group===group&&(!item.permission||can(item.permission)))).map((group) => (
                   <div className="nav-group" key={group}>
                     <div className="nav-label">{t(group)}</div>
                     {navItems
@@ -363,14 +436,22 @@ function App() {
               </div>
               {!!error && <ErrorBanner error={error} />}
               <div key={user.id}>
-                {page === 'dashboard' && <Dashboard navigate={navigate} />}
-                {page === 'pos' && <PointOfSale />}
+                {page === 'dashboard' && <Dashboard navigate={navigate}
+                  openMissingPhotos={() => {setCoverageEntry({queue:'missing'});navigate('catalog');}}
+                  openCounts={() => {setInventoryEntry({reviewCounts:true});navigate('inventory');}}
+                  shortcuts={<WorkspaceShortcuts
+                  onSearch={() => setSearch('all')} onNavigate={navigate}
+                  onReceive={() => { setInventoryEntry({receipt:true}); navigate('inventory'); }}
+                  onPhotos={() => setSearch('photos')}
+                />} />}
+                {can('sell') && (posLoaded || page === 'pos') && <div hidden={page !== 'pos'}><PointOfSale entry={posEntry} active={page==='pos'} /></div>}
                 {page === 'catalog' && (
-                  <Catalog vehicleId={vehicle} clearVehicle={() => setVehicle('')} />
+                  <Catalog vehicleId={vehicle} clearVehicle={() => setVehicle('')} categoryEntry={categoryEntry} coverageEntry={coverageEntry}
+                    onIntake={product => { setInventoryEntry({product,receipt:true}); navigate('inventory'); }} />
                 )}{' '}
-                {page === 'inventory' && <Inventory />}
+                {page === 'inventory' && <Inventory entry={inventoryEntry} />}
                 {page === 'purchases' && <Purchases />}
-                {page === 'suppliers' && <Suppliers />}
+                {page === 'suppliers' && <Suppliers entry={supplierEntry} />}
                 {page === 'vehicles' && (
                   <Vehicles
                     onSelect={(id) => {
@@ -391,6 +472,11 @@ function App() {
               </footer>
             </main>
           </div>
+          {!locked && search && <WorkspaceSearch close={() => setSearch(undefined)} choose={choose} photoOnly={search==='photos'} />}
+          {!locked && details && (details.product ? <ProductDetails product={details.product} onClose={closeDetails} startUpload={details.photos}
+            onSell={can('sell') ? () => { setPosEntry({sku:details.product!.sku}); closeDetails(); navigate('pos'); } : undefined}
+            onReceive={can('receive') ? () => { setInventoryEntry({product:details.product,receipt:true}); closeDetails(); navigate('inventory'); } : undefined}
+          /> : <Modal title={t('catalog')} onClose={closeDetails}><ErrorBanner error={details.error} />{!details.error && <p role="status">{t('loading')}</p>}</Modal>)}
           {locked && (
             <section role="dialog" aria-modal="true" aria-labelledby="lock-title" className="lock-overlay">
               <div className="lock-panel">

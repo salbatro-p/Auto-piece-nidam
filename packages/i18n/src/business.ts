@@ -3,11 +3,13 @@ import type { Locale } from './index';
 import { extraMessages } from './extra';
 import { mediaMessages } from './media';
 import { globalCatalogMessages } from './global-catalog';
+import { workspaceMessages } from './workspace';
 // Human linguistic and accounting review is a release gate; these authored strings are NOT represented as professionally approved.
 const messages = {
   ...extraMessages,
   ...mediaMessages,
   ...globalCatalogMessages,
+  ...workspaceMessages,
   language: ['Language', 'Langue', 'اللغة'],
   privateWorkspace: ['Private workspace', 'Espace privé', 'مساحة عمل خاصة'],
   demo: ['ISOLATED DEMO', 'DÉMONSTRATION ISOLÉE', 'بيئة تجريبية معزولة'],

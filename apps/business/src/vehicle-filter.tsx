@@ -50,7 +50,7 @@ export function VehicleFilter({ value, onChange }: { value: string; onChange: (i
           <select data-testid="exact-vehicle" value={value} onChange={(e) => onChange(e.target.value)}>
             <option value="">—</option>
             {value && !list.data?.items.some((v) => v.id === value) && (
-              <option value={value}>{t('VERIFIED')}</option>
+              <option value={value}>{t('selectExactVariant')}</option>
             )}
             {list.data?.items.map((v) => (
               <option key={v.id} value={v.id}>

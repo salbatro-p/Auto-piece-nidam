@@ -1,0 +1,74 @@
+name: autoparts-staging
+x-api-image: &api-image
+  build: { context: .., dockerfile: infrastructure/Dockerfile, target: api }
+x-database-url: &database-url postgresql://autoparts_staging:${STAGING_DB_PASSWORD:?Set unique staging database password}@db:5432/autoparts_staging
+services:
+  db:
+    image: postgres:18.6
+    environment:
+      POSTGRES_DB: autoparts_staging
+      POSTGRES_USER: autoparts_staging
+      POSTGRES_PASSWORD: ${STAGING_DB_PASSWORD:?Set unique staging database password}
+    volumes: ["postgres-staging:/var/lib/postgresql"]
+    networks: [data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U autoparts_staging -d autoparts_staging"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+  init:
+    <<: *api-image
+    environment:
+      DATABASE_URL: *database-url
+      NODE_ENV: development
+      DEMO_MODE: "true"
+      DEMO_PASSWORD: ${STAGING_DEMO_PASSWORD:?Set unique staging login password}
+      DEMO_TOTP_SECRET: ${STAGING_DEMO_TOTP_SECRET:?Set staging Base32 authenticator secret}
+      MFA_ENCRYPTION_KEY: ${STAGING_MFA_KEY:?Set staging encryption key}
+    networks: [data]
+    depends_on: { db: { condition: service_healthy } }
+    command: ["sh", "-c", "node --import=tsx apps/api/src/migrate.ts && node --import=tsx apps/api/src/seed.ts"]
+    restart: "no"
+  api:
+    <<: *api-image
+    environment:
+      DATABASE_URL: *database-url
+      NODE_ENV: production
+      DEMO_MODE: "false"
+      LOCAL_PREVIEW_PASSWORD_ONLY: "false"
+      APP_ORIGINS: https://${STAGING_DOMAIN:?Set approved DNS name}
+      MFA_ENCRYPTION_KEY: ${STAGING_MFA_KEY:?Set staging encryption key}
+    volumes: ["media-staging:/var/lib/autoparts/media"]
+    networks: [data, application]
+    depends_on: { init: { condition: service_completed_successfully } }
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:4310/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+  business:
+    build: { context: .., dockerfile: infrastructure/Dockerfile, target: business }
+    networks: [application, edge]
+    depends_on: { api: { condition: service_healthy } }
+    restart: unless-stopped
+  gateway:
+    image: caddy:2.10-alpine
+    environment:
+      STAGING_DOMAIN: ${STAGING_DOMAIN:?Set approved DNS name}
+      STAGING_GATE_USER: ${STAGING_GATE_USER:?Set gateway username}
+      STAGING_GATE_HASH: ${STAGING_GATE_HASH:?Set bcrypt gateway password hash}
+    ports: ["80:80", "443:443"]
+    volumes: ["./staging.Caddyfile:/etc/caddy/Caddyfile:ro", "tls-data:/data", "tls-config:/config"]
+    networks: [edge]
+    depends_on: [business]
+    restart: unless-stopped
+networks:
+  data: { internal: true }
+  application: { internal: true }
+  edge: {}
+volumes:
+  postgres-staging:
+  media-staging:
+  tls-data:
+  tls-config:

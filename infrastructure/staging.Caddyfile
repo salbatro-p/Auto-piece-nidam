@@ -1,0 +1,10 @@
+{$STAGING_DOMAIN} {
+	encode zstd gzip
+	basic_auth {
+		{$STAGING_GATE_USER} {$STAGING_GATE_HASH}
+	}
+	header Strict-Transport-Security "max-age=86400"
+	reverse_proxy business:80 {
+		header_up -Authorization
+	}
+}

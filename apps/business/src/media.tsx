@@ -95,10 +95,12 @@ export function MediaGallery({
   product,
   vehicle,
   diagrams = false,
+  startUpload = false,
 }: {
   product?: Product;
   vehicle?: Vehicle;
   diagrams?: boolean;
+  startUpload?: boolean;
 }) {
   const { t, can } = useApp(),
     list = useLoad<{ items: Media[] }>(
@@ -106,7 +108,7 @@ export function MediaGallery({
     );
   const [zoom, setZoom] = useState<Media>(),
     [review, setReview] = useState<Media>(),
-    [upload, setUpload] = useState(false);
+    [upload, setUpload] = useState(startUpload);
   const items =
     list.data?.items.filter(
       (m) => !vehicle || (diagrams ? m.kind === 'EXPLODED_DIAGRAM' : m.kind === 'VEHICLE_PHOTO'),
@@ -741,14 +743,17 @@ type CoverageItem = Product & {
   sold90Days: number;
   pieces: number;
 };
-export function MediaCoverage({ onSelect }: { onSelect: (p: Product) => void }) {
+export function MediaCoverage({ onSelect, entry }: { onSelect: (p: Product) => void; entry?: { queue: 'missing' } }) {
   const { t, can, locale } = useApp(),
-    [open, setOpen] = useState(false),
-    [queue, setQueue] = useState('all'),
+    [open, setOpen] = useState(!!entry),
+    [queue, setQueue] = useState<string>(entry?.queue ?? 'all'),
     [page, setPage] = useState(1),
     [error, setError] = useState<unknown>();
+  useEffect(() => {
+    if (entry) { setQueue(entry.queue); setPage(1); setOpen(true); }
+  },[entry]);
   const list = useLoad<{ summary: Record<string, number>; items: CoverageItem[] }>(
-    can('catalog') ? `/media/coverage?queue=${queue}&page=${page}` : '/catalog/categories',
+    can('catalog') && open ? `/media/coverage?queue=${queue}&page=${page}` : null,
   );
   if (!can('catalog')) return null;
   return (

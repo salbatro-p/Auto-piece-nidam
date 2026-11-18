@@ -1,0 +1,121 @@
+import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+import { randomUUID } from 'node:crypto';
+import sharp from 'sharp';
+import { translate as t } from '../../packages/i18n/src/business';
+import { checkHeader, login, navigate, switchLanguage, locales } from './helpers';
+import type { Product } from '../../apps/business/src/types';
+
+test('Command search, stock and shelf inspection, vehicle handoff and a two-action sale retain the cart', async ({page}) => {
+  await page.setViewportSize({width:1280,height:800});
+  await login(page,'owner');
+  await switchLanguage(page,'en');
+  const sku='AP-FLT-001';
+  const product = (await (await page.request.get('/api/products?q='+sku)).json()).items[0] as Product;
+  expect(product.sku).toBe(sku);
+  await page.keyboard.press('Control+k');
+  const dialog=()=>page.getByRole('dialog').last();
+  await expect(dialog().getByTestId('workspace-query')).toBeFocused();
+  await dialog().getByTestId('workspace-query').fill(product.barcode!);
+  await expect(dialog().getByRole('heading',{name:t('en','exactIdentifier')})).toBeVisible();
+  await dialog().getByTestId('workspace-query').press('Enter');
+  await expect(dialog().getByText(sku,{exact:true})).toBeVisible();
+  await dialog().getByText(t('en','shelfLocations'),{exact:true}).click();
+  await expect(dialog().getByText('RECEIVING',{exact:true}).first()).toBeVisible();
+  for(const locale of locales) {
+    await switchLanguage(page,locale);
+    await expect(dialog().getByText(sku,{exact:true})).toBeVisible();
+  }
+  await dialog().getByRole('button',{name:t('en','openInPos')}).click();
+  await expect(page.getByTestId('product-search')).toHaveValue(sku);
+  const add=page.getByTestId('add-to-cart-'+sku);
+  await add.click();
+  await navigate(page,'dashboard');
+  await navigate(page,'pos');
+  await expect(page.locator('#active-cart').getByText('Oil filter',{exact:true})).toBeVisible();
+  const posted=page.waitForResponse(r=>r.url().endsWith('/api/sales')&&r.request().method()==='POST');
+  await page.getByTestId('sale-submit').click();
+  expect((await posted).status()).toBe(200);
+  await expect(page.getByTestId('receipt')).toBeVisible();
+  await dialog().getByRole('button',{name:t('en','close'),exact:true}).click();
+
+  await page.getByTestId('workspace-search').click();
+  await dialog().getByTestId('workspace-query').fill('DEMO MAKE');
+  await dialog().getByRole('button',{name:/DEMO MAKE.*City/}).first().click();
+  await expect(page.getByTestId('exact-vehicle')).not.toHaveValue('');
+  await page.setViewportSize({width:320,height:720});
+  await page.emulateMedia({reducedMotion:'reduce'});
+  for(const locale of locales) { await switchLanguage(page,locale); await checkHeader(page); }
+  await page.getByTestId('workspace-search').click();
+  const issues=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();
+  expect(issues.violations.map(v=>v.id)).toEqual([]);
+  await dialog().getByRole('button',{name:t('en','close'),exact:true}).click();
+  await navigate(page,'dashboard');
+  await page.getByRole('button',{name:new RegExp(t('en','missingPhoto'))}).click();
+  await expect(dialog().locator('select').filter({has:page.getByRole('option',{name:t('en','missingPhoto'),exact:true})})).toHaveValue('missing');
+});
+
+test('Guided intake keeps draft fields and uploaded photo across languages, flags duplicate references and hands off a receipt',async ({page})=>{
+  await page.setViewportSize({width:390,height:844});
+  await login(page,'owner');
+  await switchLanguage(page,'en');
+  await navigate(page,'catalog');
+  const sku='GUIDE-'+randomUUID().slice(0,8);
+  const dialog=()=>page.getByRole('dialog').last();
+  await page.getByTestId('guided-create').click();
+  const next=()=>dialog().getByTestId('product-submit').click();
+  await next();
+  await expect(dialog().getByRole('alert')).toBeVisible();
+  await dialog().getByTestId('product-sku').fill(sku);
+  await dialog().getByTestId('product-brand').fill('SYNTHETIC');
+  await dialog().getByTestId('product-category').fill('filters');
+  await dialog().getByTestId('product-name-en').fill('Synthetic guided intake part');
+  await next();
+  await dialog().getByRole('button',{name:t('en','close'),exact:true}).click();
+  await page.getByTestId('guided-create').click();
+  await dialog().getByRole('button',{name:t('en','restoreDraft')}).click();
+  await expect(dialog().locator('[aria-current=step]')).toContainText(t('en','technicalAttributes'));
+  await dialog().getByTestId('product-price').fill('12.50');
+  await dialog().getByTestId('product-status').selectOption('ACTIVE_INTERNAL');
+  await next();
+  const fixture=await sharp({create:{width:100,height:100,channels:3,background:'#17354a'}}).png().toBuffer();
+  await dialog().getByTestId('product-image').setInputFiles({name:'guide.png',mimeType:'image/png',buffer:fixture});
+  await dialog().getByTestId('product-rights').fill('Locally generated synthetic browser test image.');
+  for(const locale of locales)await switchLanguage(page,locale);
+  await expect.poll(() => dialog().getByTestId('product-image').evaluate((input: HTMLInputElement) => input.files?.[0]?.name)).toBe('guide.png');
+  await next();
+  await dialog().getByTestId('product-oem').fill('DEMO 82 00 768 927');
+  await next();
+  await dialog().getByRole('checkbox',{name:t('en','receiveStock')}).check();
+  await next();
+  await expect(dialog().getByText(t('en','duplicateReview'))).toBeVisible();
+  await next();
+  await expect(page.getByTestId('receipt-product')).toBeVisible();
+  const part=(await (await page.request.get('/api/products?q='+sku)).json()).items[0] as Product;
+  await expect(page.getByTestId('receipt-product')).toHaveValue(part.id);
+  await page.getByTestId('receipt-quantity').fill('2');
+  await page.getByTestId('receipt-reference').fill('GUIDE-'+randomUUID());
+  await page.getByTestId('receipt-preview').click();
+  await page.getByTestId('receipt-submit').click();
+  await expect.poll(async()=>{
+    const p=await (await page.request.get('/api/products/'+part.id)).json() as Product;
+    return p.stock.reduce((sum,bin)=>sum+Number(bin.onHand),0);
+  }).toBe(2);
+});
+
+test('Workspace searches and operational attention respect authentication and staff scope',async ({page,request})=>{
+  expect((await request.get('/api/workspace/search?q=RECEIVING')).status()).toBe(401);
+  await login(page,'sales');
+  const me=await (await page.request.get('/api/me')).json();
+  const result=await (await page.request.get('/api/workspace/search?q=RECEIVING')).json();
+  expect(result.suppliers).toEqual([]);
+  expect(result.locations.length).toBeGreaterThan(0);
+  expect(result.locations.every((row:{id:string})=>me.user.warehouseIds.includes(row.id))).toBe(true);
+  const attention=await (await page.request.get('/api/workspace/attention')).json();
+  expect(attention).toEqual({pendingDeliveries:null,pendingCounts:null,missingPhoto:null,pendingImports:null});
+  const product=(await (await page.request.get('/api/products?q=AP-FLT-001')).json()).items[0];
+  const locations=await (await page.request.get('/api/workspace/products/'+product.id+'/locations')).json();
+  expect(locations.items.every((row:{warehouseId:string})=>me.user.warehouseIds.includes(row.warehouseId))).toBe(true);
+  expect((await page.request.get('/api/workspace/products/'+product.id+'/suppliers')).status()).toBe(403);
+  expect((await page.request.get('/api/workspace/identifiers?id=AP-FLT-001')).status()).toBe(403);
+});

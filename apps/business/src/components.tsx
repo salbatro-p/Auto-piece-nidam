@@ -240,10 +240,16 @@ export function SearchBox({
   value,
   onChange,
   onEnter,
+  label,
+  testId = 'product-search',
+  autoFocus = false,
 }: {
   value: string;
   onChange: (value: string) => void;
   onEnter?: () => void;
+  label?: string;
+  testId?: string;
+  autoFocus?: boolean;
 }) {
   const { t } = useApp();
   const [scan, setScan] = useState(false);
@@ -253,11 +259,14 @@ export function SearchBox({
       <div className="search-box">
         <Search size={20} />
         <input
-          data-testid="product-search"
+          data-testid={testId}
+          autoFocus={autoFocus}
+          autoComplete="off"
+          spellCheck={false}
           dir="auto"
           value={value}
-          placeholder={t('searchPlaceholder')}
-          aria-label={t('search')}
+          placeholder={label ?? t('searchPlaceholder')}
+          aria-label={label ?? t('search')}
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
