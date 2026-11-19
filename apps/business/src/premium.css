@@ -331,3 +331,18 @@ tr:hover td { background:#f8fbfd; }
  .sidebar,.workspace-hero,.workspace-shortcuts,.workspace-priorities { display:none!important; }
  .metric,.panel,.cart-panel { box-shadow:none!important; }
 }
+
+/* Override legacy workspace selectors that otherwise take precedence. */
+.workspace-search-launch > .workspace-search-icon { flex: 0 0 42px; }
+.workspace-search-launch > .workspace-search-copy { flex: 1 1 auto; min-width: 0; }
+.workspace-shortcuts .workspace-shortcut {
+  display: flex; place-items: initial; align-content: initial;
+  min-height: 103px; font-size: 14px;
+}
+.workspace-shortcuts .workspace-shortcut > svg { flex: 0 0 auto; }
+@media(max-width:800px) {
+  .workspace-shortcuts .workspace-shortcut { min-height: 84px; }
+}
+@media(max-width:520px) {
+  .workspace-shortcuts .workspace-shortcut { flex-direction: column; min-height: 106px; font-size: 11px; }
+}
