@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, type ReactNode } from 'react';
-import { Search, X, Camera, CircleAlert, Package, Check } from 'lucide-react';
+import { Search, X, Camera, CircleAlert, Package, Check, Disc3, Cog, Zap, Wrench } from 'lucide-react';
 import { api, ApiError, mutationKey } from './api';
 import { useApp } from './context';
 import { contentValue, money, quantity } from '../../../packages/i18n/src/index';
@@ -72,12 +72,21 @@ export function ProductName({ product }: { product: Product }) {
 export function ProductVisual({ product }: { product: Product }) {
   const {t}=useApp(),[failed,setFailed]=useState(false);
   useEffect(()=>setFailed(false),[product.mediaId]);
+  const category=(product.category ?? '').toLowerCase();
+  const family=/brak|frein|فرامل/.test(category) ? 'brake'
+    : /filter|filtre|فلتر/.test(category) ? 'filter'
+    : /electric|sensor|electro|capteur|كهرب|حساس/.test(category) ? 'electrical'
+    : /engine|motor|moteur|محرك/.test(category) ? 'engine'
+    : /suspension|steer|direction|تعليق/.test(category) ? 'mechanical' : 'other';
+  const PlaceholderIcon=family==='brake' ? Disc3 : family==='electrical' ? Zap
+    : family==='engine' ? Cog : family==='mechanical' ? Wrench : Package;
+  const hasExactPhoto=Boolean(product.mediaId&&!failed);
   return (
-    <div className="product-visual">
-      {product.mediaId&&!failed ? (
+    <div className={`product-visual visual-${family}`} title={!hasExactPhoto ? t('IMAGE_UNAVAILABLE') : undefined}>
+      {hasExactPhoto ? (
         <img alt="" src={`/api/media/${product.mediaId}?size=thumbnail`} loading="lazy" decoding="async" width="64" height="64" onError={()=>setFailed(true)} />
       ) : (
-        <Package aria-label={t('IMAGE_UNAVAILABLE')} strokeWidth={1.4} size={30} />
+        <PlaceholderIcon aria-label={t('IMAGE_UNAVAILABLE')} strokeWidth={1.65} size={30} />
       )}
     </div>
   );
