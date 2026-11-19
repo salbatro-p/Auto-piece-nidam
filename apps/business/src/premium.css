@@ -610,3 +610,46 @@ tr:hover td { background:#f8fbfd; }
   .part-stock-summary div { padding:11px 8px; }
   .part-stock-summary dd { font-size:16px; }
 }
+
+
+/* Owner can choose cinematic overview or task-first compact mode without losing actions. */
+.workspace-view-controls { display:flex;justify-content:flex-end;align-items:center; min-height:42px; margin-bottom:-8px; }
+.workspace-view-controls button {
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:44px;padding:6px 12px;
+  border:1px solid #cfdfe8;border-radius:11px;
+  background:#fff;color:#3e6074;font-size:12px;font-weight:750;
+}
+.workspace-view-controls button:hover { background:#eaf8f5;border-color:#8fcac9;color:#135f67; }
+.workspace-view-controls button[aria-pressed='true'] { background:#e2f5f1;border-color:#94cfca;color:#126d6f; }
+.workspace-launch.compact .workspace-hero {
+  display:block;
+  min-height:96px;
+  border-radius:16px;
+}
+.workspace-launch.compact .workspace-hero-copy { width:100%;max-width:100%;padding:16px 20px; }
+.workspace-launch.compact .workspace-hero-eyebrow,
+.workspace-launch.compact .workspace-hero h2,
+.workspace-launch.compact .workspace-hero p { display:none; }
+.workspace-launch.compact .workspace-hero-illustration { opacity:.12;width:30%; }
+.workspace-launch.compact .workspace-search-launch {
+  width:min(100%,900px);
+  min-height:60px;
+  position:relative;
+}
+.workspace-launch.compact .workspace-shortcut { min-height:78px;padding:12px 18px!important; }
+.workspace-launch.compact .workspace-shortcut-symbol { width:44px;height:44px; }
+.workspace-launch.compact .workspace-priorities { gap:8px; }
+.workspace-launch.compact .workspace-priorities-grid button { min-height:54px; }
+@media(max-width:800px) {
+  .workspace-view-controls { margin-bottom:-7px; }
+  .workspace-launch.compact .workspace-hero { min-height:90px; }
+  .workspace-launch.compact .workspace-hero-copy { padding:14px; }
+  .workspace-launch.compact .workspace-hero-illustration { display:none; }
+}
+@media(max-width:520px) {
+  .workspace-launch.compact .workspace-shortcut { min-height:84px;padding:9px 4px!important; }
+  .workspace-launch.compact .workspace-hero { min-height:88px; }
+  .workspace-launch.compact .workspace-hero-copy { padding:12px; }
+  .workspace-launch.compact .workspace-search-launch { min-height:62px; }
+}
