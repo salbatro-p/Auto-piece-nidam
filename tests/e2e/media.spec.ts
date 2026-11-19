@@ -61,6 +61,11 @@ test('IMG-06/08: staged upload resumes after response loss; gallery, rights and 
   await dialog()
     .getByTestId('media-files')
     .setInputFiles({ name: 'synthetic-fixture.png', mimeType: 'image/png', buffer: bytes });
+  // Preview real user-selected bytes locally; no unreviewed upload is published.
+  await expect(dialog().getByTestId('photo-capture-guide')).toBeVisible();
+  await expect(dialog().getByTestId('photo-preview-grid').locator('img')).toHaveCount(1);
+  await expect(dialog().getByTestId('photo-preview-grid').locator('img')).toHaveAttribute('src', /^blob:/);
+  await expect(dialog().getByTestId('photo-capture-guide')).toContainText(t('en', 'photoCaptureReference'));
   let writes = 0;
   await page.route('**/api/media/stage', async (route) => {
     if (route.request().method() !== 'POST') return route.continue();
@@ -79,6 +84,8 @@ test('IMG-06/08: staged upload resumes after response loss; gallery, rights and 
       'SYNTHETIC front / أمامي',
     );
     await expect(dialog().getByText('synthetic-fixture.png', { exact: true }).first()).toBeVisible();
+    await expect(dialog().getByTestId('photo-capture-guide')).toContainText(t(locale, 'photoCaptureFace'));
+    await expect(dialog().getByTestId('photo-preview-grid').locator('img')).toHaveCount(1);
     await capture(page, `upload-retry-${locale}`, testInfo);
   }
   await page.unroute('**/api/media/stage');
