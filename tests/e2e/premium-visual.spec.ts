@@ -39,3 +39,26 @@ test('Premium automotive cockpit is usable, illustrated and responsive in AR FR 
   await page.getByRole('dialog').last().getByTestId('workspace-query').fill('AP-FLT-001');
   await expect(page.getByRole('dialog').last().getByText('AP-FLT-001').first()).toBeVisible();
 });
+
+test('Compact language control preserves accessibility, keyboard, RTL and usable header at 320 390 and 1280', async ({ page }, testInfo) => {
+  await login(page, 'owner');
+  for(const width of [320,390,1280]) {
+    await page.setViewportSize({ width, height: width === 1280 ? 800 : 720 });
+    for(const locale of locales) {
+      await switchLanguage(page, locale);
+      await checkHeader(page);
+      const picker=page.locator('.topbar').getByTestId('language-picker');
+      const toggle=page.locator('.topbar').getByTestId('language-toggle');
+      const rect=await toggle.boundingBox();
+      expect(rect!.width).toBeLessThanOrEqual(110);
+      await toggle.focus();
+      await page.keyboard.press('Enter');
+      await expect(picker).toHaveAttribute('open','');
+      for(const option of locales) await expect(picker.getByTestId(`language-${option}`)).toBeVisible();
+      await page.keyboard.press('Escape');
+      await expect(picker).not.toHaveAttribute('open','');
+      await expect(toggle).toBeFocused();
+      if(width === 320) await capture(page, `compact-header-320-${locale}`, testInfo);
+    }
+  }
+});
