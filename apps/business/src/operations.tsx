@@ -374,16 +374,27 @@ export function Catalog({ vehicleId, clearVehicle, categoryEntry, onIntake,cover
           }}
         />
       )}
-      {selected && <ProductDetails product={selected} onClose={() => setSelected(null)} />}
+      {selected && <ProductDetails product={selected} onClose={() => setSelected(null)} onMediaChanged={reload} />}
       {guided && <ProductEditor product={null} guided onClose={() => setGuided(false)}
         onSaved={() => { setGuided(false); reload(); }} onIntake={onIntake} />}
     </>
   );
 }
-export function ProductDetails({ product: p, onClose, onSell, onReceive, startUpload }: {
+export function ProductDetails({ product: initialProduct, onClose, onSell, onReceive, startUpload, onMediaChanged }: {
   product: Product; onClose: () => void; onSell?: () => void; onReceive?: () => void; startUpload?: boolean;
+  onMediaChanged?: () => void;
 }) {
   const { t, locale } = useApp();
+  const [p, setProduct] = useState(initialProduct);
+  const [mediaRefreshError, setMediaRefreshError] = useState<unknown>();
+  useEffect(() => setProduct(initialProduct), [initialProduct]);
+  const refreshApprovedPhoto = () => {
+    onMediaChanged?.();
+    setMediaRefreshError(undefined);
+    void api<Product>(`/products/${initialProduct.id}`)
+      .then((latest) => setProduct(latest))
+      .catch(setMediaRefreshError);
+  };
   const totals = totalStock(p);
   const mediaRef = useRef<HTMLDivElement>(null);
   const openPhotoGallery = () => {
@@ -392,6 +403,7 @@ export function ProductDetails({ product: p, onClose, onSell, onReceive, startUp
   };
   return (
     <Modal title={contentValue(p.names, locale, p.translationStatus).value || p.sku} onClose={onClose} wide>
+      <ErrorBanner error={mediaRefreshError}/>
       <div className="detail-intro">
         <ProductVisual product={p} />
         <div className="part-hero-facts">
@@ -450,7 +462,7 @@ export function ProductDetails({ product: p, onClose, onSell, onReceive, startUp
       </div>}
       <ShelfLocator productId={p.id} />
       <div className="part-media-anchor" ref={mediaRef} tabIndex={-1} data-testid="part-media-section">
-        <MediaGallery product={p} startUpload={startUpload}/>
+        <MediaGallery product={p} startUpload={startUpload} onReviewed={refreshApprovedPhoto}/>
       </div>
       <Replacements product={p} />
       <PartSuppliers productId={p.id}/>
