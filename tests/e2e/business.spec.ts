@@ -65,6 +65,8 @@ for (const viewport of [
     }
     await page.getByTestId('language-toggle').focus();
     await page.keyboard.press('Enter');
+    await page.getByTestId('language-ar').focus();
+    await page.keyboard.press('Enter');
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
     await page.getByTestId('login-email').fill('qa@invalid.local');
     await page.getByTestId('login-submit').click();
