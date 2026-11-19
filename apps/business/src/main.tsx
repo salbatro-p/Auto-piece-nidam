@@ -290,11 +290,12 @@ function App() {
             <small>{t('privateWorkspace')}</small>
           </div>
         </div>
-        <LanguageSwitcher
-          locale={locale}
-          onChange={(next) => void switchLocale(next)}
-          label={t('language')}
-        />
+        <div className="topbar-controls">
+          <LanguageSwitcher
+            locale={locale}
+            onChange={(next) => void switchLocale(next)}
+            label={t('language')}
+          />
         {user && (
           <div className="header-actions">
             <button type="button" className="icon-button workspace-header-search" data-testid="workspace-search"
@@ -323,6 +324,7 @@ function App() {
             </button>
           </div>
         )}
+        </div>
       </header>
       {!online && (
         <div className="offline-bar" role="status">
