@@ -19,6 +19,8 @@ import {
   ChevronRight,
   Image,
   ImageOff,
+  LayoutGrid,
+  List,
   Package,
   Plus,
   Printer,
@@ -229,6 +231,14 @@ export function Catalog({ vehicleId, clearVehicle, categoryEntry, onIntake,cover
 }) {
   const { t, can, locale } = useApp();
   const [exactVehicle,setExactVehicle]=useState(vehicleId),[category,setCategory]=useState('');
+  const [catalogLayout,setCatalogLayout]=useState<'table'|'visual'>(() => {
+    try { return sessionStorage.getItem('autoparts:catalog-layout') === 'visual' ? 'visual' : 'table'; }
+    catch { return 'table'; }
+  });
+  function changeCatalogLayout(value:'table'|'visual') {
+    setCatalogLayout(value);
+    try { sessionStorage.setItem('autoparts:catalog-layout',value); } catch {}
+  }
   useEffect(() => { if (categoryEntry) { setCategory(categoryEntry.category); setPage(1); } }, [categoryEntry]);
   useEffect(()=>{setExactVehicle(vehicleId);setPage(1);},[vehicleId]);
   const categories=useLoad<{items:{category:string;names:Record<string,string>}[]}>('/catalog/categories');
@@ -276,11 +286,20 @@ export function Catalog({ vehicleId, clearVehicle, categoryEntry, onIntake,cover
         </button>
       )}
       <ErrorBanner error={error} />
-      <div className="results-meta">
+      <div className="results-meta catalog-results-bar">
         <span>{t('productsCount', { count: data?.total ?? 0 })}</span>
-        <span>{t('privateWorkspace')}</span>
+        <div className="catalog-layout-group" role="group" aria-label={t('catalogViewPreference')}>
+          <button type="button" className={catalogLayout==='table' ? 'catalog-layout-button selected' : 'catalog-layout-button'}
+            data-testid="catalog-view-table" aria-pressed={catalogLayout==='table'} onClick={()=>changeCatalogLayout('table')}>
+            <List size={17} aria-hidden="true"/><span>{t('catalogTableView')}</span>
+          </button>
+          <button type="button" className={catalogLayout==='visual' ? 'catalog-layout-button selected' : 'catalog-layout-button'}
+            data-testid="catalog-view-visual" aria-pressed={catalogLayout==='visual'} onClick={()=>changeCatalogLayout('visual')}>
+            <LayoutGrid size={17} aria-hidden="true"/><span>{t('catalogVisualView')}</span>
+          </button>
+        </div>
       </div>
-      <section className="panel table-wrap" tabIndex={0} role="region" aria-label={t('scrollableTable')}>
+      {catalogLayout === 'table' ? <section className="panel table-wrap" tabIndex={0} role="region" aria-label={t('scrollableTable')}>
         <table className="catalog-table">
           <thead>
             <tr>
@@ -348,7 +367,38 @@ export function Catalog({ vehicleId, clearVehicle, categoryEntry, onIntake,cover
         {!data?.items.length && (
           <Empty title={loading ? t('loading') : t('noResults')} hint={t('emptyHint')} />
         )}
-      </section>
+      </section> : <section className="catalog-visual-results" aria-label={t('catalogVisualView')} data-testid="catalog-visual-results">
+        {data?.items.length ? <div className="catalog-visual-grid">
+          {data.items.map(p => <article className="catalog-visual-card" key={p.id} data-testid="catalog-visual-card">
+            <button className="catalog-visual-inspect" type="button" onClick={()=>setSelected(p)}
+              aria-label={`${t('catalogOpenPart')}: ${p.sku}`}>
+              <span className="catalog-visual-media">
+                <ProductVisual product={p}/>
+                <span className="catalog-visual-image-kind">{t(p.mediaId ? 'catalogImageOnFile' : 'catalogImageMissing')}</span>
+              </span>
+              <span className="catalog-visual-heading"><ProductName product={p}/></span>
+              <span className="catalog-visual-brand"><bdi>{p.brand}</bdi> · <CategoryName product={p}/></span>
+            </button>
+            <div className="catalog-visual-info">
+              <span className="catalog-visual-sku"><bdi dir="ltr">{p.sku}</bdi></span>
+              <span className="catalog-visual-price"><Amount minor={p.priceMinor}/></span>
+            </div>
+            <div className="catalog-visual-meta">
+              <StockBadge value={totalStock(p).available}/>
+              <Status value={p.status}/>
+              {exactVehicle && <Status value="VERIFIED"/>}
+            </div>
+            <div className="catalog-visual-footer">
+              <button type="button" className="button secondary" onClick={()=>setSelected(p)}>
+                {t('catalogOpenPart')}<ArrowUpRight size={16} aria-hidden="true"/>
+              </button>
+              {can('catalog') && <button className="text-button" type="button" onClick={()=>setEditing(p)}>
+                {t('edit')}
+              </button>}
+            </div>
+          </article>)}
+        </div> : <Empty title={loading ? t('loading') : t('noResults')} hint={t('emptyHint')}/>}
+      </section>}
       <div className="pagination">
         <button className="button secondary" disabled={page === 1} onClick={() => setPage((n) => n - 1)}>
           {t('previous')}

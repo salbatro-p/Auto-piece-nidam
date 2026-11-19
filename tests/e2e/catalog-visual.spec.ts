@@ -1,0 +1,61 @@
+import { test, expect } from '@playwright/test';
+import { login, navigate, switchLanguage, locales, capture, checkHeader } from './helpers';
+
+test('Catalog switches between operational table and visual product cards without changing stock data', async ({page},testInfo) => {
+  await page.setViewportSize({width:390,height:844});
+  await login(page,'owner');
+  await navigate(page,'catalog');
+  await page.getByTestId('product-search').fill('AP-FLT-001');
+  const table=page.locator('.catalog-table');
+  await expect(table).toBeVisible();
+  await expect(page.getByTestId('catalog-view-table')).toHaveAttribute('aria-pressed','true');
+  await page.getByTestId('catalog-view-visual').click();
+  await expect(page.getByTestId('catalog-view-visual')).toHaveAttribute('aria-pressed','true');
+  await expect(table).toHaveCount(0);
+  const cards=page.getByTestId('catalog-visual-card');
+  await expect(cards).toHaveCount(1);
+  const phoneCard=await cards.first().boundingBox();
+  expect(phoneCard).not.toBeNull();
+  expect(phoneCard!.width).toBeGreaterThan(250); // Single search hit must not occupy half the phone.
+  await expect(cards.first().getByText('AP-FLT-001')).toBeVisible();
+  const beforeResponse=await page.request.get('/api/products?q=AP-FLT-001');
+  expect(beforeResponse.ok()).toBe(true);
+  const beforeData=await beforeResponse.json();
+  const beforeProduct=beforeData.items.find((p:{sku:string})=>p.sku==='AP-FLT-001');
+  expect(beforeProduct).toBeTruthy();
+  for(const locale of locales) {
+    await switchLanguage(page,locale);
+    await checkHeader(page);
+    await expect(cards).toHaveCount(1);
+    await expect(cards.first().locator('.catalog-visual-price')).toBeVisible();
+    await expect(cards.first().locator('.catalog-visual-meta')).toBeVisible();
+    await expect(cards.first().locator('.catalog-visual-image-kind')).toBeVisible();
+    await capture(page,`catalog-cards-phone-${locale}`,testInfo);
+  }
+  await page.setViewportSize({width:320,height:720});
+  await switchLanguage(page,'ar');
+  await checkHeader(page);
+  const rect=await cards.first().boundingBox();
+  expect(rect).not.toBeNull();
+  expect(rect!.width).toBeGreaterThan(250);
+  await capture(page,'catalog-cards-narrow-ar',testInfo);
+  await cards.first().getByRole('button').first().click();
+  await expect(page.getByRole('dialog').last()).toBeVisible();
+  await page.getByRole('dialog').last().locator('.modal-heading .icon-button').click();
+  await page.setViewportSize({width:1280,height:800});
+  await page.evaluate(() => window.scrollTo(0,0));
+  await expect(cards).toHaveCount(1);
+  const tabletCard=await cards.first().boundingBox();
+  expect(tabletCard).not.toBeNull();
+  expect(tabletCard!.width).toBeGreaterThan(440); // A feature result needs a deliberate, legible layout.
+  await capture(page,'catalog-cards-tablet',testInfo);
+  await page.getByTestId('catalog-view-table').click();
+  await expect(table).toBeVisible();
+  await expect(page.getByTestId('catalog-view-table')).toHaveAttribute('aria-pressed','true');
+  await expect(page.getByTestId('catalog-visual-results')).toHaveCount(0);
+  const afterResponse=await page.request.get('/api/products?q=AP-FLT-001');
+  expect(afterResponse.ok()).toBe(true);
+  const afterData=await afterResponse.json();
+  const afterProduct=afterData.items.find((p:{sku:string})=>p.sku==='AP-FLT-001');
+  expect(afterProduct).toEqual(beforeProduct);
+});
