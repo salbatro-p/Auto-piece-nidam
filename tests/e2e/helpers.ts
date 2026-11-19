@@ -51,10 +51,14 @@ export async function switchLanguage(page: Page, locale: Locale) {
   const started = performance.now();
   const dialog = page.locator('dialog[open]');
   const scope = (await dialog.count()) ? dialog.last() : page;
+  const picker = scope.getByTestId('language-picker');
+  const toggle = scope.getByTestId('language-toggle');
+  if (!(await picker.evaluate((node: HTMLDetailsElement) => node.open))) await toggle.click();
   await scope.getByTestId(`language-${locale}`).click();
   await expect(page.locator('html')).toHaveAttribute('lang', locale);
   await expect(page.locator('html')).toHaveAttribute('dir', locale === 'ar' ? 'rtl' : 'ltr');
-  await expect(scope.getByTestId(`language-${locale}`)).toHaveAttribute('aria-pressed', 'true');
+  await expect(toggle).toHaveAttribute('data-current-language', locale);
+  await expect(picker).not.toHaveAttribute('open', '');
   return performance.now() - started;
 }
 export async function navigate(page: Page, name: string) {
@@ -64,17 +68,16 @@ export async function navigate(page: Page, name: string) {
 }
 export async function checkHeader(page: Page) {
   const view = page.viewportSize()!;
-  for (const locale of locales) {
-    const selector = page.getByTestId(`language-${locale}`);
-    await expect(selector).toBeVisible();
-    const rect = await selector.boundingBox();
-    expect(rect).not.toBeNull();
-    expect(rect!.x).toBeGreaterThanOrEqual(-1);
-    expect(rect!.x + rect!.width).toBeLessThanOrEqual(view.width + 1);
-    expect(rect!.y).toBeGreaterThanOrEqual(0);
-    expect(rect!.y).toBeLessThan(160);
-    expect(rect!.height).toBeGreaterThanOrEqual(44);
-  }
+  const toggle = page.locator('.topbar').getByTestId('language-toggle');
+  await expect(toggle).toBeVisible();
+  const rect = await toggle.boundingBox();
+  expect(rect).not.toBeNull();
+  expect(rect!.x).toBeGreaterThanOrEqual(-1);
+  expect(rect!.x + rect!.width).toBeLessThanOrEqual(view.width + 1);
+  expect(rect!.y).toBeGreaterThanOrEqual(0);
+  expect(rect!.y).toBeLessThan(100);
+  expect(rect!.height).toBeGreaterThanOrEqual(44);
+  expect(rect!.width).toBeLessThanOrEqual(110);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBe(true);
 }
 export async function capture(page: Page, name: string, testInfo?: TestInfo) {
