@@ -739,3 +739,144 @@ tr:hover td { background:#f8fbfd; }
 @media(prefers-reduced-motion:reduce) {
   .reference-copy-button { transition:none; }
 }
+
+
+/* Camera and file selection is the FIRST visual action, not hidden after technical metadata. */
+.photo-primary-picker {
+  display:block;
+  margin-block:15px 12px;
+  padding:14px 16px;
+  border:1.5px dashed #81bdb9;
+  background:linear-gradient(110deg,#f0faf8,#f8fcfd);
+  border-radius:15px;
+}
+.photo-primary-picker > .field {
+  display:flex;
+  flex-direction:row;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:10px 13px;
+  margin:0;
+}
+.photo-primary-picker .field > span:first-child {
+  color:#21485d;
+  font-size:14px;
+  font-weight:800;
+  margin-inline-end:auto;
+}
+.photo-primary-picker .button {
+  border-color:#8ecbc5;
+  color:#095f68;
+  background:#fff;
+  min-height:44px;
+}
+.photo-primary-picker .field > bdi {
+  min-width:0;
+  overflow-wrap:anywhere;
+  font-size:12px;
+  color:#4f6c7d;
+}
+@media(max-width:520px) {
+  .photo-primary-picker { padding:12px; }
+  .photo-primary-picker > .field { flex-direction:column;align-items:stretch;gap:8px; }
+  .photo-primary-picker .field > span:first-child { margin-inline-end:0; }
+  .photo-primary-picker .button { width:100%; }
+}
+
+/* Practical photography intake: show actual selected files before staging, never AI/SKU guesses. */
+.photo-capture-guide {
+  grid-column:1/-1;
+  border:1px solid #cde4e5;
+  border-radius:16px;
+  background:linear-gradient(120deg,#eaf8f5,#f5fafc);
+  padding:clamp(15px,2vw,21px);
+  margin-block:8px;
+  color:#214858;
+}
+.photo-capture-heading { display:flex;align-items:flex-start;gap:13px; }
+.photo-capture-heading > svg {
+  flex:none;
+  width:42px;height:42px;padding:10px;
+  border-radius:12px;
+  background:#d3eee9;color:#127e7b;
+}
+.photo-capture-heading strong { display:block;font-size:16px;font-weight:800; }
+.photo-capture-heading p { margin:5px 0 12px;font-size:12.5px;line-height:1.6;color:#4c6678; }
+.photo-capture-guide ol {
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:9px;list-style:none;margin:0;padding:0;
+}
+.photo-capture-guide ol li {
+  border:1px solid #d5e8e8;border-radius:11px;background:#fff;
+  padding:12px;min-height:62px;font-size:12.5px;
+  font-weight:680;line-height:1.55;
+}
+.photo-capture-legal {
+  display:flex;align-items:flex-start;gap:8px;margin:14px 0 0!important;
+  font-size:11.5px!important;line-height:1.55;color:#4b6473;
+}
+.photo-capture-legal svg { flex:none;color:#9a662c;margin-top:1px; }
+.photo-local-gallery { margin-block:16px 18px; }
+.photo-local-gallery-heading {
+  display:flex;justify-content:space-between;align-items:center;
+  gap:15px;margin-bottom:11px;color:#244456;
+}
+.photo-local-gallery-heading strong {font-size:14px;font-weight:800;}
+.photo-local-gallery-heading span {
+  border-radius:99px;padding:4px 9px;
+  background:#e1f4ed;color:#146f68;font-size:12px;font-weight:800;
+}
+.photo-selected-grid {
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr));
+  gap:12px;
+}
+.photo-selected-card {
+  display:flex;flex-direction:column;min-width:0;
+  border:1px solid #dce7ec;background:#fff;border-radius:15px;
+  overflow:hidden;box-shadow:0 3px 13px #1b44580b;
+}
+.photo-local-preview {
+  display:grid;place-items:center;
+  height:168px;width:100%;
+  background:repeating-linear-gradient(45deg,#ecf3f6,#ecf3f6 12px,#f4f8fa 12px,#f4f8fa 24px);
+  color:#588697;
+}
+.photo-local-preview img { width:100%;height:100%;object-fit:contain;display:block; }
+.photo-selected-detail {padding:12px;min-width:0;display:grid;gap:6px;}
+.photo-selected-name {
+  display:block;overflow-wrap:anywhere;
+  color:#1f4053;font-weight:750;font-size:12.5px;
+}
+.photo-selected-meta {font-size:11px;color:#5a7482;font-variant-numeric:tabular-nums;}
+.photo-selected-detail .field {margin:5px 0 0;font-size:12px;}
+.photo-selected-detail .field input {min-height:44px;}
+/* A single selected photo deserves an inspection-sized canvas, not a tiny lonely card. */
+@media(min-width:721px) {
+  .photo-selected-grid > .photo-selected-card:only-child {
+    grid-column:1/-1;
+    display:grid;
+    grid-template-columns:minmax(0,1.15fr) minmax(190px,.85fr);
+    min-height:218px;
+  }
+  .photo-selected-grid > .photo-selected-card:only-child .photo-local-preview {
+    width:100%;height:100%;min-height:218px;
+  }
+  .photo-selected-grid > .photo-selected-card:only-child .photo-selected-detail {
+    padding:18px;
+    display:flex;flex-direction:column;justify-content:center;align-items:stretch;
+    gap:9px;
+  }
+}
+@media(max-width:720px){
+ .photo-capture-guide ol {grid-template-columns:1fr;}
+ .photo-capture-guide ol li {min-height:42px;padding:9px 11px;}
+ .photo-selected-grid {grid-template-columns:repeat(2,minmax(0,1fr));}
+ .photo-local-preview {height:145px;}
+}
+@media(max-width:420px){
+ .photo-selected-grid {grid-template-columns:1fr;}
+ .photo-selected-card {flex-direction:row;align-items:stretch;}
+ .photo-local-preview {width:38%;height:auto;min-height:165px;flex:none;}
+ .photo-selected-detail {flex:1;min-width:0;}
+ .photo-capture-heading p {font-size:12px;}
+}

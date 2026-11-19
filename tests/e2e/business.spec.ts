@@ -162,6 +162,15 @@ test('I18N-03 shared tablet isolates employee preferences and independent sessio
   page,
   browser,
 }) => {
+  // An asynchronous logout must finish before a new employee signs in.
+  // The lock dialog also has login-submit, but its email is readonly; waiting for
+  // the actual logout response prevents an interrupted request from leaking sessions.
+  const signOut = async (tab: typeof page) => {
+    const finished = tab.waitForResponse(r => r.url().endsWith('/api/auth/logout') && r.request().method() === 'POST');
+    await tab.getByTestId('logout').click();
+    expect((await finished).ok()).toBe(true);
+    await expect(tab.getByTestId('login-email')).toBeEditable();
+  };
   const preparation = await browser.newContext({
     baseURL: process.env.E2E_BASE_URL ?? 'http://127.0.0.1:4173',
     locale: 'fr-FR',
@@ -171,7 +180,7 @@ test('I18N-03 shared tablet isolates employee preferences and independent sessio
     await login(setup, 'warehouse');
     await switchLanguage(setup, 'ar');
     await expect.poll(async () => (await currentSession(setup)).user.locale).toBe('ar');
-    await setup.getByTestId('logout').click();
+    await signOut(setup);
   } finally {
     await preparation.close();
   }
@@ -179,13 +188,13 @@ test('I18N-03 shared tablet isolates employee preferences and independent sessio
   await login(page, 'sales');
   await switchLanguage(page, 'en');
   await expect.poll(async () => (await currentSession(page)).user.locale).toBe('en');
-  await page.getByTestId('logout').click();
+  await signOut(page);
   await expect(page.getByTestId('login-submit')).toBeVisible();
   await expect(page.locator('html')).toHaveAttribute('lang', 'fr');
   await login(page, 'warehouse');
   await expect(page.locator('html')).toHaveAttribute('lang', 'ar');
   await expect(page.getByTestId('nav-team')).toHaveCount(0);
-  await page.getByTestId('logout').click();
+  await signOut(page);
   await login(page, 'sales');
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
   const other = await browser.newContext({

@@ -30,6 +30,22 @@ export const mediaMessages = {
   mediaLicenses: ['Image licenses', 'Licences des images', 'تراخيص الصور'],
   addPhotos: ['Add photos', 'Ajouter des photos', 'إضافة صور'],
   viewAngle: ['Viewing angle', 'Angle de vue', 'زاوية التصوير'],
+  photoCaptureTitle: ['Photograph the actual part', 'Photographier la pièce réelle', 'صوّر القطعة الحقيقية'],
+  photoCaptureIntro: [
+    'Three useful views help employees verify a part. Images remain pending review until approved; photos alone never prove vehicle compatibility.',
+    'Trois vues utiles facilitent la vérification. Les images restent en attente de validation ; une photo ne prouve jamais la compatibilité véhicule.',
+    'ثلاث زوايا مفيدة تساعد الموظفين على التحقق من القطعة. تبقى الصور قيد المراجعة حتى اعتمادها؛ الصورة وحدها لا تثبت توافق السيارة.',
+  ],
+  photoCaptureFace: ['1 · Overall view — show the entire part', '1 · Vue générale — montrez la pièce entière', '١ · صورة عامة — أظهر القطعة كاملة'],
+  photoCaptureReference: ['2 · Reference and packaging label — keep text legible', '2 · Référence et étiquette — texte bien lisible', '٢ · المرجع وملصق التغليف — اجعل النص واضحاً'],
+  photoCaptureConnector: ['3 · Connectors, mounting and orientation', '3 · Connecteurs, fixations et orientation', '٣ · الموصلات ونقاط التثبيت والاتجاه'],
+  photoCaptureRights: [
+    'Use your own photographs or approved licensed media; never alter the actual part geometry or printed references.',
+    'Utilisez vos photos ou des médias autorisés ; ne modifiez jamais la géométrie ni les références imprimées.',
+    'استعمل صورك أو صوراً مرخصة ومعتمدة، ولا تغيّر شكل القطعة الحقيقي أو المراجع المطبوعة عليها.',
+  ],
+  selectedPhotoPreview: ['Selected photo preview (not yet approved)', 'Aperçu de la photo sélectionnée (non validée)', 'معاينة الصورة المختارة (لم تُعتمد بعد)'],
+
   mediaKind: ['Image category', 'Catégorie d’image', 'نوع الصورة'],
   imageAlt: ['{kind} · {sku} · {angle}', '{kind} · {sku} · {angle}', '{kind} · {sku} · {angle}'],
   zoomPhoto: ['Enlarge photograph', 'Agrandir la photo', 'تكبير الصورة'],
