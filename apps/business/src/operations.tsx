@@ -10,7 +10,7 @@ import { OpeningBalances } from './opening-balances';
 import { Bins } from './bins';
 import { PartSuppliers,ShelfLocator } from './workspace';
 import { priceTotals, type TaxSettings } from '../../../packages/contracts/src/pricing';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   ArrowDownToLine,
   ArrowUpRight,
@@ -385,6 +385,11 @@ export function ProductDetails({ product: p, onClose, onSell, onReceive, startUp
 }) {
   const { t, locale } = useApp();
   const totals = totalStock(p);
+  const mediaRef = useRef<HTMLDivElement>(null);
+  const openPhotoGallery = () => {
+    mediaRef.current?.scrollIntoView({ behavior: 'auto', block: 'start' });
+    mediaRef.current?.focus({ preventScroll: true });
+  };
   return (
     <Modal title={contentValue(p.names, locale, p.translationStatus).value || p.sku} onClose={onClose} wide>
       <div className="detail-intro">
@@ -397,6 +402,10 @@ export function ProductDetails({ product: p, onClose, onSell, onReceive, startUp
             {p.mediaId ? <Image size={15} aria-hidden="true" /> : <ImageOff size={15} aria-hidden="true" />}
             <span>{t(p.mediaId ? 'partPhotoReview' : 'partPhotoPending')}</span>
           </p>
+          <button type="button" className="button secondary part-gallery-jump" data-testid="part-show-gallery"
+            onClick={openPhotoGallery}>
+            <Image size={17} aria-hidden="true" />{t('gallery')}<ArrowDownToLine size={16} aria-hidden="true" />
+          </button>
         </div>
       </div>
       <p dir="auto">{contentValue(p.descriptions, locale, p.translationStatus).value}</p>
@@ -440,7 +449,9 @@ export function ProductDetails({ product: p, onClose, onSell, onReceive, startUp
         {onReceive && <button className="button secondary" type="button" onClick={onReceive}>{t('receiveStock')}</button>}
       </div>}
       <ShelfLocator productId={p.id} />
-      <MediaGallery product={p} startUpload={startUpload}/>
+      <div className="part-media-anchor" ref={mediaRef} tabIndex={-1} data-testid="part-media-section">
+        <MediaGallery product={p} startUpload={startUpload}/>
+      </div>
       <Replacements product={p} />
       <PartSuppliers productId={p.id}/>
       <Attributes product={p}/>
