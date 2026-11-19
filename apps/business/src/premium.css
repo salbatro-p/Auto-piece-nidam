@@ -346,3 +346,17 @@ tr:hover td { background:#f8fbfd; }
 @media(max-width:520px) {
   .workspace-shortcuts .workspace-shortcut { flex-direction: column; min-height: 106px; font-size: 11px; }
 }
+
+/* Expressive category-specific ORIGINAL placeholders: never a product photograph. */
+.product-visual { position:relative;overflow:hidden;isolation:isolate; }
+.product-visual:not(:has(img))::before {
+  content:""; position:absolute;inset:-30% -42% auto auto;
+  width:95%;aspect-ratio:1;border-radius:50%;
+  background:#ffffffad;z-index:-1;
+}
+.product-visual:not(:has(img)) svg { filter:drop-shadow(0 2px 2px #0b31401c); }
+.product-visual.visual-brake:not(:has(img)) { background:linear-gradient(135deg,#ffeddf,#ffd8c7);color:#b75f42; }
+.product-visual.visual-filter:not(:has(img)) { background:linear-gradient(135deg,#e0f8ec,#c9ebdf);color:#147d6a; }
+.product-visual.visual-electrical:not(:has(img)) { background:linear-gradient(135deg,#e8ebff,#d5ddfb);color:#5866c5; }
+.product-visual.visual-engine:not(:has(img)) { background:linear-gradient(135deg,#e2f1fb,#c9e4f3);color:#267aaa; }
+.product-visual.visual-mechanical:not(:has(img)) { background:linear-gradient(135deg,#fff2da,#f8dca4);color:#ac772f; }
