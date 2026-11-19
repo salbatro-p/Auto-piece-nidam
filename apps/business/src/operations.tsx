@@ -390,18 +390,20 @@ export function Catalog({ vehicleId, clearVehicle, categoryEntry, onIntake,cover
                 <ProductVisual product={p}/>
                 <span className="catalog-visual-image-kind">{t(p.mediaId ? 'catalogImageOnFile' : 'catalogImageMissing')}</span>
               </span>
-              <span className="catalog-visual-heading"><ProductName product={p}/></span>
-              <span className="catalog-visual-brand"><bdi>{p.brand}</bdi> · <CategoryName product={p}/></span>
+              <span className="catalog-card-facts">
+                <span className="catalog-visual-heading"><ProductName product={p}/></span>
+                <span className="catalog-visual-brand"><bdi>{p.brand}</bdi> · <CategoryName product={p}/></span>
+                <span className="catalog-visual-info">
+                  <span className="catalog-visual-sku"><bdi dir="ltr">{p.sku}</bdi></span>
+                  <span className="catalog-visual-price"><Amount minor={p.priceMinor}/></span>
+                </span>
+                <span className="catalog-visual-meta">
+                  <StockBadge value={totalStock(p).available}/>
+                  <Status value={p.status}/>
+                  {exactVehicle && <Status value="VERIFIED"/>}
+                </span>
+              </span>
             </button>
-            <div className="catalog-visual-info">
-              <span className="catalog-visual-sku"><bdi dir="ltr">{p.sku}</bdi></span>
-              <span className="catalog-visual-price"><Amount minor={p.priceMinor}/></span>
-            </div>
-            <div className="catalog-visual-meta">
-              <StockBadge value={totalStock(p).available}/>
-              <Status value={p.status}/>
-              {exactVehicle && <Status value="VERIFIED"/>}
-            </div>
             <div className="catalog-visual-footer">
               <button type="button" className="button secondary" onClick={()=>setSelected(p)}>
                 {t('catalogOpenPart')}<ArrowUpRight size={16} aria-hidden="true"/>

@@ -75,6 +75,7 @@ body, .app-layout { background: var(--paper); color: var(--ink); }
 .workspace-search-launch:hover { background:white; border-color:var(--brass); box-shadow:var(--shadow-raised); }
 .workspace-search-copy strong, .workspace-search-copy small {color:var(--ink);}
 .workspace-search-icon, .workspace-search-launch kbd { background:var(--linen); color:var(--ink); }
+.workspace-search-launch kbd {white-space:nowrap;flex:none;}
 .workspace-search-launch > svg {color:var(--brass);}
 .workspace-launch.compact .workspace-hero { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-1); padding:var(--space-1); }
 .workspace-launch.compact .workspace-view-controls { position:static; order:2; }
@@ -127,6 +128,7 @@ body, .app-layout { background: var(--paper); color: var(--ink); }
 .part-hero-facts > .reference-value .reference-identifier {color:var(--ink);font-size:1rem;}
 .detail-intro > div:last-child > bdi:not(.mono) { color:var(--ink); }
 .detail-jumps {margin-block:var(--space-2);}
+.part-media-anchor, .detail-section-title {scroll-margin-block-start:80px;}
 .detail-section-title {font-size:var(--type-section);margin-block:var(--space-3) var(--space-1);}
 .detail-grid {margin-block:var(--space-1) var(--space-3);}
 .part-stock-summary div:nth-child(n) {background:var(--surface);border-color:var(--line);}
@@ -165,8 +167,15 @@ body, .app-layout { background: var(--paper); color: var(--ink); }
   .catalog-visual-grid {grid-template-columns:1fr;}
   .catalog-visual-card .catalog-visual-heading {font-size:1rem;}
 }
+.catalog-card-facts { display:grid; gap:4px; align-content:center; min-width:0; }
 @media(min-width:800px) {
-  .catalog-visual-card:only-child {grid-column:1 / -1;max-width:850px;width:100%;}
+  .catalog-visual-card:only-child {grid-column:1 / -1;max-width:850px;width:100%;border-top:3px solid #bc9344;}
+  .catalog-visual-card:only-child .catalog-visual-inspect {
+    display:grid;grid-template-columns:minmax(190px,.85fr) minmax(0,1.15fr);align-items:stretch;gap:0;padding:0;
+  }
+  .catalog-visual-card:only-child .catalog-card-facts {padding:var(--space-2);}
+  .catalog-visual-card:only-child .catalog-visual-heading .product-name {font-size:var(--type-section);}
+  .catalog-visual-card:only-child .catalog-visual-media {min-height:215px;}
 }
 @media print {
   .catalog-tools, .detail-jumps {display:none;}
