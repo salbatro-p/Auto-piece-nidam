@@ -880,3 +880,28 @@ tr:hover td { background:#f8fbfd; }
  .photo-selected-detail {flex:1;min-width:0;}
  .photo-capture-heading p {font-size:12px;}
 }
+
+
+/* Product photographs are one action away without distracting from stock or fitment. */
+.part-gallery-jump {
+  min-height:44px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  margin-top:9px;
+  padding:8px 12px;
+  border-color:#a3c9cb;
+  background:#fff;
+  color:#126872;
+  font-weight:750;
+}
+.part-gallery-jump:hover { background:#e5f7f3;border-color:#6ab2b4; }
+.part-gallery-jump:focus-visible { outline:3px solid #d18e37;outline-offset:2px; }
+.part-gallery-jump svg:last-child { color:#648d9d; }
+.part-media-anchor { scroll-margin-block-start:18px; }
+.part-media-anchor:focus { outline:none; }
+.part-media-anchor:focus-visible { outline:3px solid #148982;outline-offset:3px;border-radius:12px; }
+@media(max-width:520px) {
+  .part-gallery-jump { font-size:12px;max-width:100%; }
+}
