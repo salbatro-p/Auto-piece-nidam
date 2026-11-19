@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowDownToLine, ArrowUpRight, Boxes, Camera, CarFront, MapPin, Package, Search, ShoppingCart, Truck } from 'lucide-react';
+import { ArrowDownToLine, ArrowUpRight, Boxes, Camera, CarFront, MapPin, Minimize2, Maximize2, Package, Search, ShoppingCart, Truck } from 'lucide-react';
 import { contentValue, quantity } from '../../../packages/i18n/src/index';
 import { messageKey, type MessageKey } from '../../../packages/i18n/src/business';
 import { api } from './api';
@@ -22,8 +22,21 @@ export type WorkspaceTarget =
 export function WorkspaceShortcuts({ onSearch, onNavigate, onReceive, onPhotos }: {
   onSearch: () => void; onNavigate: (page: 'pos'|'inventory'|'vehicles') => void; onReceive: () => void; onPhotos: () => void;
 }) {
-  const { t, can } = useApp();
-  return <section className="workspace-launch" aria-label={t('quickActions')}>
+  const { t, can, user } = useApp();
+  const preferenceKey = 'autoparts:workspace-view:' + user.id;
+  const [compact, setCompact] = useState(() => {
+    try { return sessionStorage.getItem(preferenceKey) === 'compact'; } catch { return false; }
+  });
+  useEffect(() => {
+    try { sessionStorage.setItem(preferenceKey, compact ? 'compact' : 'visual'); } catch {}
+  }, [compact, preferenceKey]);
+  return <section className={`workspace-launch${compact ? ' compact' : ''}`} aria-label={t('quickActions')}>
+    <div className="workspace-view-controls">
+      <button type="button" data-testid="workspace-view-toggle" aria-pressed={compact} onClick={() => setCompact(value => !value)}>
+        {compact ? <Maximize2 size={16} aria-hidden="true"/> : <Minimize2 size={16} aria-hidden="true"/>}
+        {t(compact ? 'visualWorkspace' : 'compactWorkspace')}
+      </button>
+    </div>
     <div className="workspace-hero">
       <div className="workspace-hero-copy">
         <div className="workspace-hero-eyebrow"><span className="workspace-hero-signal" aria-hidden="true" />{t('quickActions')}</div>
