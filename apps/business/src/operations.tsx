@@ -371,8 +371,11 @@ export function Catalog({ vehicleId, clearVehicle, categoryEntry, onIntake,cover
         {data?.items.length ? <div className="catalog-visual-grid">
           {data.items.map(p => <article className="catalog-visual-card" key={p.id} data-testid="catalog-visual-card">
             <button className="catalog-visual-inspect" type="button" onClick={()=>setSelected(p)}
-              aria-label={t('catalogOpenPart') + ': ' + contentValue(p.names,locale)}>
-              <span className="catalog-visual-media"><ProductVisual product={p}/></span>
+              aria-label={`${t('catalogOpenPart')}: ${p.sku}`}>
+              <span className="catalog-visual-media">
+                <ProductVisual product={p}/>
+                <span className="catalog-visual-image-kind">{t(p.mediaId ? 'catalogImageOnFile' : 'catalogImageMissing')}</span>
+              </span>
               <span className="catalog-visual-heading"><ProductName product={p}/></span>
               <span className="catalog-visual-brand"><bdi>{p.brand}</bdi> · <CategoryName product={p}/></span>
             </button>
