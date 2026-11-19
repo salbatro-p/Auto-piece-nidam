@@ -90,7 +90,7 @@ h1, h2, h3, .brand strong, .metric strong {
 }
 .page-heading { margin-bottom: 20px; }
 .page-heading h1 { font-size: clamp(27px,2.2vw,38px); color: #1a334b; font-weight: 800; }
-.page-heading p { color: #687c90; font-size: 13px; }
+.page-heading p { color: #4e6477; font-size: 13px; }
 .button { border-radius: 11px; font-size: 12px; }
 .button.primary,.primary {
   background: #126c79; color: #fff;
