@@ -1,6 +1,7 @@
 /* AutoParts Business · Atelier cockpit / original visual language
    Vivid, editorial, functional. No fake catalog photography or data. */
 :root {
+  font-family: "Segoe UI Variable", "Segoe UI", system-ui, "Noto Sans Arabic", Tahoma, sans-serif;
   --ink: #18344a;
   --muted: #64768a;
   --teal: #0b857c;
