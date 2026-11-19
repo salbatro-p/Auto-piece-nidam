@@ -658,3 +658,84 @@ tr:hover td { background:#f8fbfd; }
   .workspace-launch.compact .workspace-hero-copy { padding:12px; }
   .workspace-launch.compact .workspace-search-launch { min-height:62px; }
 }
+
+
+/* Part identity workbench: readable original references, one-click copy and truthful imagery. */
+.part-hero-facts { display:flex;flex-direction:column;align-items:flex-start;gap:5px; min-width:0; }
+.part-hero-facts > p { margin:0; }
+.reference-value {
+  display:inline-flex;
+  align-items:center;
+  justify-content:flex-start;
+  flex-wrap:nowrap;
+  min-width:0;
+  max-width:100%;
+  gap:6px;
+  vertical-align:middle;
+}
+.reference-identifier {
+  min-width:0;
+  display:inline-block;
+  direction:ltr;
+  unicode-bidi:isolate;
+  font-size:inherit;
+  line-height:1.55;
+  overflow-wrap:anywhere;
+}
+.reference-copy-button {
+  flex:none;
+  width:44px;
+  height:44px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid #d3e3ea;
+  border-radius:10px;
+  background:#f4f9fa;
+  color:#1d6571;
+  cursor:pointer;
+  transition:background .16s ease,border-color .16s ease;
+}
+.reference-copy-button:hover { background:#e2f5f0;border-color:#8ccbc7;color:#096e67; }
+.reference-copy-button:focus-visible { outline:3px solid #d99235;outline-offset:2px; }
+.reference-copy-button[data-copy-state='copied'] {
+  background:#e1f7ed;
+  border-color:#90d8b7;
+  color:#116b50;
+}
+.reference-copy-button[data-copy-state='failed'] {
+  background:#fff0e7;
+  border-color:#f0b88a;
+  color:#aa4b31;
+}
+.part-hero-facts > .reference-value .reference-identifier {
+  font-size:13px;
+  font-weight:750;
+  color:#365b71;
+}
+.detail-grid .reference-value { width:100%; justify-content:space-between; }
+.detail-grid .reference-identifier { font-weight:750;color:#263e50; }
+.part-photo-confidence {
+  display:inline-flex;
+  align-items:flex-start;
+  gap:7px;
+  max-width:64ch;
+  border:1px solid #dce7ec;
+  border-radius:9px;
+  padding:7px 10px;
+  background:#f4f8fa;
+  color:#435e6e;
+  font-size:12px!important;
+  font-weight:600!important;
+  line-height:1.5;
+}
+.part-photo-confidence svg { flex:none;margin-top:2px;color:#0a8582; }
+@media(max-width:520px) {
+  .detail-grid .reference-value { flex-wrap:wrap; }
+  .reference-identifier { max-width:100%;font-size:12px; }
+  .reference-copy-button { width:44px;height:44px; }
+  .part-photo-confidence { font-size:11px!important; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .reference-copy-button { transition:none; }
+}

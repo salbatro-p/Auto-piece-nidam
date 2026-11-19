@@ -5,6 +5,7 @@ import {VehicleFilter} from './vehicle-filter';
 import {MediaBulk} from './media-bulk';
 import {AttributeEditor,Attributes} from './technical-attributes';
 import { Replacements } from './catalog-links';
+import { ReferenceValue } from './reference-value';
 import { OpeningBalances } from './opening-balances';
 import { Bins } from './bins';
 import { PartSuppliers,ShelfLocator } from './workspace';
@@ -16,6 +17,8 @@ import {
   Boxes,
   Check,
   ChevronRight,
+  Image,
+  ImageOff,
   Package,
   Plus,
   Printer,
@@ -386,12 +389,14 @@ export function ProductDetails({ product: p, onClose, onSell, onReceive, startUp
     <Modal title={contentValue(p.names, locale, p.translationStatus).value || p.sku} onClose={onClose} wide>
       <div className="detail-intro">
         <ProductVisual product={p} />
-        <div>
-          <bdi className="mono">{p.sku}</bdi>
-          <p>
-            <bdi>{p.brand}</bdi>
-          </p>
+        <div className="part-hero-facts">
+          <ReferenceValue value={p.sku} label={t('sku')} testId="part-copy-sku" />
+          <p><bdi>{p.brand}</bdi></p>
           <Amount minor={p.priceMinor} />
+          <p className="part-photo-confidence" data-testid="part-photo-confidence">
+            {p.mediaId ? <Image size={15} aria-hidden="true" /> : <ImageOff size={15} aria-hidden="true" />}
+            <span>{t(p.mediaId ? 'partPhotoReview' : 'partPhotoPending')}</span>
+          </p>
         </div>
       </div>
       <p dir="auto">{contentValue(p.descriptions, locale, p.translationStatus).value}</p>
@@ -399,17 +404,17 @@ export function ProductDetails({ product: p, onClose, onSell, onReceive, startUp
         <p className="warning-text">{t('translationMissing')}</p>
       )}
       <dl className="detail-grid">
-        <div><dt>{t('manufacturerPartNo')}</dt><dd><bdi dir="ltr">{p.manufacturerPartNo||'—'}</bdi></dd></div>
+        <div><dt>{t('manufacturerPartNo')}</dt><dd><ReferenceValue value={p.manufacturerPartNo} label={t('manufacturerPartNo')} testId="part-copy-manufacturer" /></dd></div>
         <div>
           <dt>{t('oem')}</dt>
           <dd>
-            <bdi dir="ltr">{p.oem || '—'}</bdi>
+            <ReferenceValue value={p.oem} label={t('oem')} testId="part-copy-oem" />
           </dd>
         </div>
         <div>
           <dt>{t('barcode')}</dt>
           <dd>
-            <bdi dir="ltr">{p.barcode || '—'}</bdi>
+            <ReferenceValue value={p.barcode} label={t('barcode')} testId="part-copy-barcode" />
           </dd>
         </div>
         <div>
