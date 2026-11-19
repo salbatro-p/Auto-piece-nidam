@@ -741,6 +741,48 @@ tr:hover td { background:#f8fbfd; }
 }
 
 
+/* Camera and file selection is the FIRST visual action, not hidden after technical metadata. */
+.photo-primary-picker {
+  display:block;
+  margin-block:15px 12px;
+  padding:14px 16px;
+  border:1.5px dashed #81bdb9;
+  background:linear-gradient(110deg,#f0faf8,#f8fcfd);
+  border-radius:15px;
+}
+.photo-primary-picker > .field {
+  display:flex;
+  flex-direction:row;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:10px 13px;
+  margin:0;
+}
+.photo-primary-picker .field > span:first-child {
+  color:#21485d;
+  font-size:14px;
+  font-weight:800;
+  margin-inline-end:auto;
+}
+.photo-primary-picker .button {
+  border-color:#8ecbc5;
+  color:#095f68;
+  background:#fff;
+  min-height:44px;
+}
+.photo-primary-picker .field > bdi {
+  min-width:0;
+  overflow-wrap:anywhere;
+  font-size:12px;
+  color:#4f6c7d;
+}
+@media(max-width:520px) {
+  .photo-primary-picker { padding:12px; }
+  .photo-primary-picker > .field { flex-direction:column;align-items:stretch;gap:8px; }
+  .photo-primary-picker .field > span:first-child { margin-inline-end:0; }
+  .photo-primary-picker .button { width:100%; }
+}
+
 /* Practical photography intake: show actual selected files before staging, never AI/SKU guesses. */
 .photo-capture-guide {
   grid-column:1/-1;
