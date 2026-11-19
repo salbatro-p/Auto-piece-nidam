@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Package, ZoomIn } from 'lucide-react';
+import { Camera, Package, ShieldAlert, ZoomIn } from 'lucide-react';
 import { useApp } from './context';
 import { api, ApiError } from './api';
 import {
@@ -221,6 +221,27 @@ export function MediaGallery({
     </section>
   );
 }
+function SelectedPhotoPreview({ file }: { file: File }) {
+  const { t } = useApp();
+  const [url, setUrl] = useState('');
+  useEffect(() => {
+    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) return;
+    const next = URL.createObjectURL(file);
+    setUrl(next);
+    return () => URL.revokeObjectURL(next);
+  }, [file]);
+  return (
+    <div className="photo-local-preview">
+      {url ? (
+        <img src={url} alt={`${t('selectedPhotoPreview')}: ${file.name}`} loading="lazy"
+          width={240} height={180} decoding="async" />
+      ) : (
+        <Package size={32} aria-label={t('IMAGE_UNAVAILABLE')} />
+      )}
+    </div>
+  );
+}
+
 function MediaUploader({
   product,
   vehicle,
@@ -376,6 +397,23 @@ function MediaUploader({
               </Field>
             </>
           )}
+          {product && ['EXACT_PRODUCT_PHOTO', 'COMPANY_ORIGINAL_PHOTO'].includes(kind) && (
+            <section className="photo-capture-guide" data-testid="photo-capture-guide"
+              aria-label={t('photoCaptureTitle')}>
+              <div className="photo-capture-heading">
+                <Camera size={21} aria-hidden="true" />
+                <div><strong>{t('photoCaptureTitle')}</strong>
+                  <p>{t('photoCaptureIntro')}</p></div>
+              </div>
+              <ol>
+                <li>{t('photoCaptureFace')}</li>
+                <li>{t('photoCaptureReference')}</li>
+                <li>{t('photoCaptureConnector')}</li>
+              </ol>
+              <p className="photo-capture-legal"><ShieldAlert size={17} aria-hidden="true" />
+                <span>{t('photoCaptureRights')}</span></p>
+            </section>
+          )}
           <FilePicker
             label={t('photo')}
             accept="image/jpeg,image/png,image/webp"
@@ -395,20 +433,35 @@ function MediaUploader({
           />
         </div>
       </fieldset>
-      <ul>
-        {files.map((f, i) => (
-          <li key={i}>
-            <bdi>{f.name}</bdi> {i < done ? '✓' : ''}
-            <Field label={`${t('viewAngle')} · ${f.name}`}>
-              <input
-                disabled={running || !!save.pending || i < done}
-                value={angles[i] ?? ''}
-                onChange={(e) => setAngles({ ...angles, [i]: e.target.value })}
-              />
-            </Field>
-          </li>
-        ))}
-      </ul>
+      {files.length > 0 && (
+        <section className="photo-local-gallery" data-testid="photo-preview-grid"
+          aria-label={t('selectedPhotoPreview')}>
+          <div className="photo-local-gallery-heading">
+            <strong>{t('selectedPhotoPreview')}</strong>
+            <span>{files.length}</span>
+          </div>
+          <div className="photo-selected-grid">
+            {files.map((f, i) => (
+              <article className="photo-selected-card" key={`${f.name}-${i}`}>
+                <SelectedPhotoPreview file={f} />
+                <div className="photo-selected-detail">
+                  <bdi className="photo-selected-name">{f.name}</bdi>
+                  <span className="photo-selected-meta">
+                    {Math.max(1, Math.round(f.size / 1024))} KB {i < done ? '✓' : ''}
+                  </span>
+                  <Field label={`${t('viewAngle')} · ${f.name}`}>
+                    <input
+                      disabled={running || !!save.pending || i < done}
+                      value={angles[i] ?? ''}
+                      onChange={(e) => setAngles({ ...angles, [i]: e.target.value })}
+                    />
+                  </Field>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
       <p role="status">{t('uploadProgress', { done, total: files.length, percent })}</p>
       <progress max={100} value={percent} aria-label={t('addPhotos')} />
       <ErrorBanner error={error || licenses.error} />
