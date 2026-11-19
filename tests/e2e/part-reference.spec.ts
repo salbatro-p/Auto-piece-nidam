@@ -32,6 +32,13 @@ test('Part identity panel copies exact SKU and OEM without changing records or m
       t(locale,product.mediaId ? 'partPhotoReview' : 'partPhotoPending')
     );
     await expect(dialog.getByTestId('part-copy-sku')).toBeVisible();
+    await expect(dialog.getByTestId('part-show-gallery')).toHaveAccessibleName(t(locale,'gallery'));
+    await dialog.getByTestId('part-show-gallery').click();
+    await expect(dialog.getByTestId('part-media-section')).toBeFocused();
+    await expect(dialog.getByTestId('part-media-section')).toBeInViewport();
+    await capture(page,`part-gallery-jump-phone-${locale}`,testInfo);
+    // Restore identity panel before the next language to keep screenshot comparisons stable.
+    await dialog.locator('.detail-intro').scrollIntoViewIfNeeded();
     await capture(page,`part-reference-panel-phone-${locale}`,testInfo);
   }
   const oemButton=dialog.getByTestId('part-copy-oem');
