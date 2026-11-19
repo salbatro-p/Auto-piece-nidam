@@ -32,6 +32,7 @@ import { Purchases, Suppliers, Vehicles, Imports, Audit, Team } from './manageme
 import './styles.css';
 import './refinements.css';
 import './workspace.css';
+import './premium.css';
 import { Invitation } from './invitation';
 
 type Page =
