@@ -102,10 +102,22 @@ test('IMG-06/08: staged upload resumes after response loss; gallery, rights and 
     .click();
   const productGallery = () => page.getByRole('region',{ name: t('en','gallery'), exact: true });
   await expect(productGallery().locator('.media-card')).toHaveCount(1);
-  const gallery = await (await page.request.get(`/api/products/${product.id}/gallery`)).json();
-  expect(gallery.items).toHaveLength(1);
-  expect(gallery.items[0].state).toBe('APPROVED_INTERNAL');
-  expect(gallery.items[0].displayApproved).toBe(true);
+  // Review saves asynchronously. Poll the server's authoritative persisted result,
+  // rather than inferring completion from an already-mounted gallery card.
+  await expect.poll(async () => {
+    const response = await page.request.get(`/api/products/${product.id}/gallery`);
+    expect(response.ok()).toBe(true);
+    const gallery = await response.json();
+    return {
+      count: gallery.items.length,
+      state: gallery.items[0]?.state,
+      displayApproved: gallery.items[0]?.displayApproved,
+    };
+  }, { timeout: 15000 }).toEqual({
+    count: 1,
+    state: 'APPROVED_INTERNAL',
+    displayApproved: true,
+  });
   expect((await (await page.request.get(`/api/products/${product.id}`)).json()).stock).toHaveLength(0);
   const audits = [];
   for (const viewport of [
