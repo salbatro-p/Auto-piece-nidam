@@ -1,55 +1,57 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" role="img" aria-label="Original conceptual automotive mechanical illustration">
-<defs>
-  <linearGradient id="rim" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#a7bfcf"/><stop offset=".48" stop-color="#31485b"/><stop offset="1" stop-color="#122537"/></linearGradient>
-  <linearGradient id="disc" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f5faff"/><stop offset=".48" stop-color="#7e99a8"/><stop offset="1" stop-color="#2c4559"/></linearGradient>
-  <linearGradient id="aqua" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#83f3db"/><stop offset="1" stop-color="#29bfa5"/></linearGradient>
-  <linearGradient id="amber" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffdfaa"/><stop offset="1" stop-color="#fa9959"/></linearGradient>
-  <radialGradient id="glow"><stop stop-color="#41c2b6" stop-opacity=".48"/><stop offset="1" stop-color="#41c2b6" stop-opacity="0"/></radialGradient>
-  <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="22"/></filter>
-  <pattern id="grid" width="34" height="34" patternUnits="userSpaceOnUse"><path d="M34 0H0V34" fill="none" stroke="#7e98a4" stroke-opacity=".12" stroke-width=".7"/></pattern>
-</defs>
-<rect width="900" height="620" fill="url(#grid)"/>
-<ellipse cx="500" cy="310" rx="330" ry="290" fill="url(#glow)"/>
-<g opacity=".48" fill="none" stroke="#6db5af" stroke-width="2">
- <path d="M55 458 C205 355 310 485 510 425 S765 322 874 413" stroke-dasharray="7 12"/>
- <path d="M180 108 L675 108 L802 186" stroke-dasharray="5 10"/>
- <path d="M123 506 H337 M672 102 H820 M720 517 H867"/>
-</g>
-<g transform="translate(512 321) rotate(-15)">
- <ellipse cx="12" cy="31" rx="224" ry="225" fill="#08141f" opacity=".6" filter="url(#shadow)"/>
- <circle r="220" fill="#071724" stroke="#477281" stroke-width="4"/>
- <circle r="203" fill="#233847" stroke="#0d202d" stroke-width="18"/>
- <circle r="176" fill="url(#rim)" stroke="#a8c7c8" stroke-width="4"/>
- <circle r="161" fill="#142b3b" stroke="#0e1c2a" stroke-width="8"/>
- <g fill="url(#disc)" stroke="#122538" stroke-width="4">
- <path d="M-32 -148 L27 -148 L17 -48 L-17 -48Z"/>
- <path d="M-32 -148 L27 -148 L17 -48 L-17 -48Z" transform="rotate(60)"/>
- <path d="M-32 -148 L27 -148 L17 -48 L-17 -48Z" transform="rotate(120)"/>
- <path d="M-32 -148 L27 -148 L17 -48 L-17 -48Z" transform="rotate(180)"/>
- <path d="M-32 -148 L27 -148 L17 -48 L-17 -48Z" transform="rotate(240)"/>
- <path d="M-32 -148 L27 -148 L17 -48 L-17 -48Z" transform="rotate(300)"/>
- </g>
- <circle r="77" fill="#153344" stroke="#a9c3cf" stroke-width="12"/>
- <circle r="49" fill="#0c1d2c" stroke="#3db9ae" stroke-opacity=".7" stroke-width="4"/>
- <circle r="26" fill="url(#aqua)" stroke="#153747" stroke-width="8"/>
- <g fill="#d8edf2"><circle cx="0" cy="-58" r="7"/><circle cx="55" cy="-18" r="7"/><circle cx="34" cy="47" r="7"/><circle cx="-34" cy="47" r="7"/><circle cx="-55" cy="-18" r="7"/></g>
- <circle r="186" fill="none" stroke="#b5e0dc" stroke-opacity=".38" stroke-width="3" stroke-dasharray="20 10"/>
- <circle r="220" fill="none" stroke="#6ee6cf" stroke-opacity=".47" stroke-width="3" stroke-dasharray="8 20"/>
-</g>
-<g transform="translate(648 236) rotate(-15)">
- <path d="M-15 -53 h87 q19 0 22 17 l6 98 q2 24 -17 28 h-105 q-21 -4 -20 -26 v-87 q0 -30 27 -30Z" fill="#402b29" stroke="#fbc28a" stroke-width="4"/>
- <path d="M1 -48 h65 q17 6 16 26 v54 h-92 v-53 q0 -19 11 -27Z" fill="url(#amber)"/>
- <path d="M-12 40 h99 v24 h-99Z" fill="#fda765"/>
- <path d="M5 8h61" stroke="#713e33" stroke-width="5"/>
- </g>
-<g opacity=".95">
- <rect x="74" y="128" width="182" height="89" rx="17" fill="#193849" stroke="#5c9a9c" stroke-opacity=".7"/>
- <circle cx="111" cy="171" r="18" fill="#255d5f"/><path d="M102 171l6 6 12-14" stroke="#a1ffee" stroke-width="4" fill="none" stroke-linecap="round"/>
- <rect x="142" y="155" width="88" height="6" rx="3" fill="#d1f2e9" opacity=".9"/><rect x="142" y="171" width="67" height="5" rx="2.5" fill="#6eabb4" opacity=".8"/><rect x="142" y="186" width="49" height="5" rx="2.5" fill="#6eabb4" opacity=".5"/>
- <rect x="97" y="426" width="180" height="88" rx="17" fill="#1a3547" stroke="#426c87"/>
- <path d="M128 473v-19 h25 v19z M159 473v-31h26v31z M191 473v-45h26v45z" fill="#55d0bb" opacity=".86"/>
- <path d="M122 487h128" stroke="#679ba4" opacity=".7"/>
-</g>
-<g stroke="#9be6d7" fill="none" stroke-width="2" stroke-opacity=".66"><path d="M256 177h94l77 81"/><circle cx="427" cy="258" r="5" fill="#9be6d7"/><path d="M277 467h114l64-73"/><circle cx="455" cy="394" r="5" fill="#9be6d7"/></g>
-<g fill="#95e7dd"><circle cx="766" cy="95" r="5"/><circle cx="846" cy="337" r="3"/><circle cx="90" cy="319" r="4"/></g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 340" fill="none" aria-hidden="true">
+  <!-- Original decorative study of a ventilated rotor. No SKU or fitment association. -->
+  <defs>
+    <linearGradient id="steel" x1=".1" y1="0" x2="1" y2=".9" gradientUnits="objectBoundingBox">
+      <stop stop-color="#f7f4de"/><stop offset=".26" stop-color="#7f8684"/><stop offset=".49" stop-color="#e7e4d7"/><stop offset=".78" stop-color="#666e70"/><stop offset="1" stop-color="#c0baaa"/>
+    </linearGradient>
+    <linearGradient id="hub" x2=".6" y2="1"><stop stop-color="#414b50"/><stop offset="1" stop-color="#172428"/></linearGradient>
+    <linearGradient id="brass" x2=".8" y2="1"><stop stop-color="#f6e09c"/><stop offset=".44" stop-color="#c39443"/><stop offset="1" stop-color="#83652c"/></linearGradient>
+    <g id="vents" fill="#445052">
+      <circle cx="2" cy="-106" r="2.5"/><circle cx="9" cy="-98" r="2.5"/><circle cx="14" cy="-89" r="2.5"/>
+    </g>
+    <g id="lug"><circle cy="-49" r="8.3" fill="#a3a6a0"/><circle cy="-49" r="6.4" fill="#1e292c"/></g>
+  </defs>
+  <g stroke="#897544" opacity=".53">
+    <circle cx="286" cy="169" r="152" stroke-dasharray="1 6"/>
+    <path d="M74 80h50l31 24m224 154 27 23h52M97 230h33m257-161h33"/>
+    <circle cx="71" cy="80" r="3"/><circle cx="461" cy="281" r="3"/>
+  </g>
+  <g transform="translate(287 170) rotate(-22) scale(1 .92)">
+    <ellipse cy="10" rx="128" ry="129" fill="#6b552b" opacity=".15"/>
+    <circle cy="4" r="126" fill="#374143"/>
+    <circle r="124" fill="url(#steel)" stroke="#525a58" stroke-width="2"/>
+    <g stroke="#5b6363" opacity=".49"><circle r="119"/><circle r="115"/><circle r="109"/><circle r="103"/><circle r="98"/><circle r="91"/><circle r="85"/><circle r="80"/></g>
+    <use href="#vents" transform="rotate(0)"/>
+    <use href="#vents" transform="rotate(18)"/>
+    <use href="#vents" transform="rotate(36)"/>
+    <use href="#vents" transform="rotate(54)"/>
+    <use href="#vents" transform="rotate(72)"/>
+    <use href="#vents" transform="rotate(90)"/>
+    <use href="#vents" transform="rotate(108)"/>
+    <use href="#vents" transform="rotate(126)"/>
+    <use href="#vents" transform="rotate(144)"/>
+    <use href="#vents" transform="rotate(162)"/>
+    <use href="#vents" transform="rotate(180)"/>
+    <use href="#vents" transform="rotate(198)"/>
+    <use href="#vents" transform="rotate(216)"/>
+    <use href="#vents" transform="rotate(234)"/>
+    <use href="#vents" transform="rotate(252)"/>
+    <use href="#vents" transform="rotate(270)"/>
+    <use href="#vents" transform="rotate(288)"/>
+    <use href="#vents" transform="rotate(306)"/>
+    <use href="#vents" transform="rotate(324)"/>
+    <use href="#vents" transform="rotate(342)"/>
+    <circle r="73" fill="url(#hub)" stroke="#d9d7be" stroke-width="3"/>
+    <circle r="62" stroke="#738082"/><circle r="36" fill="#8e9591"/><circle r="31" fill="#303b3d"/><circle r="27" fill="#e8d39e"/>
+    <use href="#lug" transform="rotate(0)"/>
+    <use href="#lug" transform="rotate(72)"/>
+    <use href="#lug" transform="rotate(144)"/>
+    <use href="#lug" transform="rotate(216)"/>
+    <use href="#lug" transform="rotate(288)"/>
+    <g transform="rotate(67)">
+      <path d="M-45-124q4-10 13-12h61q12 1 17 13l8 27q2 10-8 14l-23 6h-45l-23-6q-9-4-7-13z" fill="#584932" stroke="#665434" stroke-width="2"/>
+      <path d="M-42-126q1-9 14-10h52q11 0 14 9l9 26q2 8-7 11l-20 6h-39l-22-6q-8-3-6-11z" fill="url(#brass)" stroke="#c2a061" stroke-width="2"/>
+      <path d="M-25-122h48m-56 10h61" stroke="#8c6d37" stroke-width="3" stroke-linecap="round"/>
+    </g>
+  </g>
 </svg>

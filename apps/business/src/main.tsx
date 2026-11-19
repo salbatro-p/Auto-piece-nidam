@@ -33,6 +33,7 @@ import './styles.css';
 import './refinements.css';
 import './workspace.css';
 import './premium.css';
+import './atelier.css';
 import { Invitation } from './invitation';
 
 type Page =
@@ -341,24 +342,7 @@ function App() {
             <div className="eyebrow">AUTOPARTS BUSINESS</div>
             <h1>{t('welcome')}</h1>
             <p>{t('signInHint')}</p>
-            <div className="illustration">
-              <div className="illustration-ring" />
-              <div className="illustration-card">
-                <Boxes size={44} />
-                <strong>{t('inventory')}</strong>
-                <div className="illustration-bars">
-                  <i />
-                  <i />
-                  <i />
-                  <i />
-                  <i />
-                </div>
-              </div>
-              <div className="illustration-chip">
-                <ShieldCheck size={20} />
-                {t('privateWorkspace')}
-              </div>
-            </div>
+            <img className="login-art" src="/garage-dashboard.svg" alt="" width="520" height="340" />
             <p className="editorial-foot">
               <span className="dot" />
               {t('demoNotice')}
