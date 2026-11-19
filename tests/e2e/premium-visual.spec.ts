@@ -62,3 +62,23 @@ test('Compact language control preserves accessibility, keyboard, RTL and usable
     }
   }
 });
+
+
+test('Owner may use compact operating view without losing search or priority actions', async ({page}, testInfo) => {
+  await page.setViewportSize({width:1280,height:800});
+  await login(page,'owner');
+  await switchLanguage(page,'fr');
+  const toggle=page.getByTestId('workspace-view-toggle');
+  await expect(toggle).toBeVisible();
+  await toggle.click();
+  await expect(page.locator('.workspace-launch.compact')).toBeVisible();
+  await expect(toggle).toHaveAttribute('aria-pressed','true');
+  await expect(page.locator('.workspace-search-launch')).toBeVisible();
+  await expect(page.locator('.workspace-shortcuts .workspace-shortcut')).toHaveCount(3);
+  await capture(page,'premium-owner-compact-tablet-fr',testInfo);
+  await switchLanguage(page,'ar');
+  await expect(page.locator('.workspace-launch.compact')).toBeVisible();
+  await toggle.click();
+  await expect(page.locator('.workspace-launch:not(.compact)')).toBeVisible();
+  await expect(toggle).toHaveAttribute('aria-pressed','false');
+});
