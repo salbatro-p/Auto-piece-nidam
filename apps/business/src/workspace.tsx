@@ -24,20 +24,39 @@ export function WorkspaceShortcuts({ onSearch, onNavigate, onReceive, onPhotos }
 }) {
   const { t, can } = useApp();
   return <section className="workspace-launch" aria-label={t('quickActions')}>
-    <button type="button" className="workspace-search-launch" onClick={onSearch}>
-      <Search size={21} aria-hidden="true" />
-      <span><strong>{t('workspaceSearch')}</strong><small>{t('workspaceSearchHint')}</small></span>
-      <kbd aria-hidden="true">Ctrl K</kbd>
-    </button>
-    <div className="workspace-shortcuts">
-      <button type="button" onClick={() => onNavigate('inventory')}><Boxes size={22} aria-hidden="true" />{t('inventory')}</button>
-      {can('sell') && <button type="button" onClick={() => onNavigate('pos')}><ShoppingCart size={22} aria-hidden="true" />{t('pos')}</button>}
-      <button type="button" onClick={() => onNavigate('vehicles')}><CarFront size={22} aria-hidden="true" />{t('vehicles')}</button>
+    <div className="workspace-hero">
+      <div className="workspace-hero-copy">
+        <div className="workspace-hero-eyebrow"><span className="workspace-hero-signal" aria-hidden="true" />{t('quickActions')}</div>
+        <h2>{t('workspaceSearch')}</h2>
+        <p>{t('workspaceSearchHint')}</p>
+        <button type="button" className="workspace-search-launch" onClick={onSearch}>
+          <span className="workspace-search-icon" aria-hidden="true"><Search size={22}/></span>
+          <span className="workspace-search-copy"><strong>{t('workspaceSearch')}</strong><small>{t('workspaceSearchHint')}</small></span>
+          <kbd aria-hidden="true">Ctrl K</kbd><ArrowUpRight aria-hidden="true" size={19}/>
+        </button>
+      </div>
+      <img className="workspace-hero-illustration" src="/garage-dashboard.svg" alt="" aria-hidden="true" width="580" height="400" decoding="async"/>
+    </div>
+    <div className="workspace-shortcuts" aria-label={t('quickActions')}>
+      <button type="button" className="workspace-shortcut" onClick={() => onNavigate('inventory')}>
+        <span className="workspace-shortcut-symbol"><Boxes size={26} aria-hidden="true"/></span>
+        <span className="workspace-shortcut-name">{t('inventory')}</span><ArrowUpRight className="workspace-shortcut-arrow" aria-hidden="true" size={18}/>
+      </button>
+      {can('sell') && <button type="button" className="workspace-shortcut" onClick={() => onNavigate('pos')}>
+        <span className="workspace-shortcut-symbol"><ShoppingCart size={26} aria-hidden="true"/></span>
+        <span className="workspace-shortcut-name">{t('pos')}</span><ArrowUpRight className="workspace-shortcut-arrow" aria-hidden="true" size={18}/>
+      </button>}
+      <button type="button" className="workspace-shortcut" onClick={() => onNavigate('vehicles')}>
+        <span className="workspace-shortcut-symbol"><CarFront size={26} aria-hidden="true"/></span>
+        <span className="workspace-shortcut-name">{t('vehicles')}</span><ArrowUpRight className="workspace-shortcut-arrow" aria-hidden="true" size={18}/>
+      </button>
     </div>
     {(can('receive') || can('catalog')) && <div className="workspace-priorities">
-      <h2>{t('priorityActions')}</h2>
-      {can('receive') && <button type="button" onClick={onReceive}><ArrowDownToLine size={18} aria-hidden="true" />{t('receiveStock')}<ArrowUpRight size={16} aria-hidden="true" /></button>}
-      {can('catalog') && <button type="button" onClick={onPhotos}><Camera size={18} aria-hidden="true" />{t('addPhotos')}<ArrowUpRight size={16} aria-hidden="true" /></button>}
+      <div className="workspace-priorities-heading"><h2>{t('priorityActions')}</h2><span className="workspace-priorities-line" aria-hidden="true"/></div>
+      <div className="workspace-priorities-grid">
+        {can('receive') && <button type="button" onClick={onReceive}><span className="workspace-priority-icon"><ArrowDownToLine size={19} aria-hidden="true"/></span>{t('receiveStock')}<ArrowUpRight size={16} aria-hidden="true"/></button>}
+        {can('catalog') && <button type="button" onClick={onPhotos}><span className="workspace-priority-icon"><Camera size={19} aria-hidden="true"/></span>{t('addPhotos')}<ArrowUpRight size={16} aria-hidden="true"/></button>}
+      </div>
     </div>}
   </section>;
 }
