@@ -118,6 +118,7 @@ test('IMG-06/08: staged upload resumes after response loss; gallery, rights and 
     state: 'APPROVED_INTERNAL',
     displayApproved: true,
   });
+  const approvedGallery = await (await page.request.get(`/api/products/${product.id}/gallery`)).json();
   expect((await (await page.request.get(`/api/products/${product.id}`)).json()).stock).toHaveLength(0);
   const audits = [];
   for (const viewport of [
@@ -152,7 +153,7 @@ test('IMG-06/08: staged upload resumes after response loss; gallery, rights and 
     syntheticOnly: true,
     uploadResponseLost: true,
     writes,
-    assets: gallery.items.length,
+    assets: approvedGallery.items.length,
     stockUnchanged: true,
     audits,
     brokenImageFallback: true,
