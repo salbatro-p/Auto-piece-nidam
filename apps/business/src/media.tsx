@@ -96,11 +96,13 @@ export function MediaGallery({
   vehicle,
   diagrams = false,
   startUpload = false,
+  onReviewed,
 }: {
   product?: Product;
   vehicle?: Vehicle;
   diagrams?: boolean;
   startUpload?: boolean;
+  onReviewed?: () => void;
 }) {
   const { t, can } = useApp(),
     list = useLoad<{ items: Media[] }>(
@@ -215,6 +217,8 @@ export function MediaGallery({
           onSaved={() => {
             setReview(undefined);
             list.reload();
+            // The product hero's approved-thumbnail projection must refresh after review.
+            onReviewed?.();
           }}
         />
       )}
