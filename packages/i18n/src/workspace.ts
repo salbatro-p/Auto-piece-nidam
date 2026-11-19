@@ -7,6 +7,8 @@ export const workspaceMessages = {
   catalogVisualView: ['Visual cards', 'Cartes visuelles', 'بطاقات مرئية'],
   catalogViewPreference: ['Catalog layout', 'Présentation du catalogue', 'طريقة عرض الكتالوج'],
   catalogOpenPart: ['Inspect part', 'Examiner la pièce', 'فحص القطعة'],
+  catalogImageOnFile: ['Photo on file', 'Photo enregistrée', 'صورة مسجلة'],
+  catalogImageMissing: ['No verified photo', 'Aucune photo vérifiée', 'لا توجد صورة مؤكدة'],
   workspaceSearchHint: ['SKU, OEM, barcode, vehicle, supplier or shelf', 'SKU, référence OEM, code-barres, véhicule, fournisseur ou rayon', 'رمز الصنف أو المرجع الأصلي أو الباركود أو المركبة أو المورد أو الرف'],
   searchMinLength: ['Enter at least two characters.', 'Saisissez au moins deux caractères.', 'أدخل حرفين على الأقل.'],
   exactIdentifier: ['Exact identifier match', 'Identifiant exact', 'معرّف مطابق'],
