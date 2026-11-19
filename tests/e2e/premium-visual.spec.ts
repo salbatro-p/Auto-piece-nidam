@@ -10,10 +10,24 @@ test('Premium automotive cockpit is usable, illustrated and responsive in AR FR 
     await expect(page.locator('.workspace-hero')).toBeVisible();
     await expect(page.locator('.workspace-hero-illustration')).toHaveAttribute('src', '/garage-dashboard.svg');
     await expect(page.locator('.workspace-search-launch')).toBeVisible();
+    const searchRect=await page.locator('.workspace-search-launch').boundingBox();
+    expect(searchRect).not.toBeNull();
+    // A useful action must span the cockpit, not collapse to a 70px text column.
+    expect(searchRect!.width).toBeGreaterThan(200);
+    const amount=page.locator('.metric-grid .metric').last().locator('strong bdi');
+    await expect(amount).toBeVisible();
+    expect(await amount.evaluate(node=>getComputedStyle(node).overflowWrap)).toBe('normal');
     await expect(page.locator('.workspace-shortcuts .workspace-shortcut').first()).toBeVisible();
     await checkHeader(page);
     await capture(page, 'premium-owner-phone-' + locale, testInfo);
   }
+  await page.setViewportSize({width:320,height:720});
+  await switchLanguage(page,'ar');
+  await checkHeader(page);
+  const narrowSearch=await page.locator('.workspace-search-launch').boundingBox();
+  expect(narrowSearch).not.toBeNull();
+  expect(narrowSearch!.width).toBeGreaterThan(180);
+  await capture(page,'premium-owner-narrow-ar',testInfo);
   await page.setViewportSize({ width: 1280, height: 800 });
   await switchLanguage(page, 'en');
   await expect(page.locator('.workspace-hero')).toBeVisible();
