@@ -1,5 +1,7 @@
 export const workspaceMessages = {
   workspaceSearch: ['Search workspace', 'Rechercher dans l’espace de travail', 'البحث في مساحة العمل'],
+  compactWorkspace: ['Compact work view', 'Vue de travail compacte', 'عرض العمل المختصر'],
+  visualWorkspace: ['Visual overview', 'Vue d’ensemble visuelle', 'نظرة عامة مرئية'],
   catalogAndVehicles: ['Parts and vehicles', 'Pièces et véhicules', 'القطع والمركبات'],
   workspaceSearchHint: ['SKU, OEM, barcode, vehicle, supplier or shelf', 'SKU, référence OEM, code-barres, véhicule, fournisseur ou rayon', 'رمز الصنف أو المرجع الأصلي أو الباركود أو المركبة أو المورد أو الرف'],
   searchMinLength: ['Enter at least two characters.', 'Saisissez au moins deux caractères.', 'أدخل حرفين على الأقل.'],
