@@ -63,7 +63,7 @@ for (const viewport of [
       await capture(page, `${viewport.name}-login-${locale}`, testInfo);
       await axe(page, `${viewport.name}-login-${locale}`);
     }
-    await page.getByTestId('language-ar').focus();
+    await page.getByTestId('language-toggle').focus();
     await page.keyboard.press('Enter');
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
     await page.getByTestId('login-email').fill('qa@invalid.local');
