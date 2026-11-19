@@ -126,7 +126,15 @@ test('IMG-06/08: staged upload resumes after response loss; gallery, rights and 
     displayApproved: true,
   });
   const approvedGallery = await (await page.request.get(`/api/products/${product.id}/gallery`)).json();
-  expect((await (await page.request.get(`/api/products/${product.id}`)).json()).stock).toHaveLength(0);
+  // The identity hero must update in-place when an exact company photo is approved.
+  // A cashier should not have to close and reopen the product to see its reviewed image.
+  await expect(dialog().getByTestId('part-photo-confidence')).toContainText(
+    t('en', 'partPhotoReview'), { timeout: 15000 },
+  );
+  await expect(dialog().locator('.detail-intro .product-visual img')).toBeVisible();
+  const latestProduct = await (await page.request.get(`/api/products/${product.id}`)).json();
+  expect(latestProduct.mediaId).toBe(approvedGallery.items[0].id);
+  expect(latestProduct.stock).toHaveLength(0);
   const audits = [];
   for (const viewport of [
     { name: 'phone', width: 390, height: 844 },
