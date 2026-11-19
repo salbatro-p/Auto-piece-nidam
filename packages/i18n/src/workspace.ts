@@ -1,4 +1,9 @@
 export const workspaceMessages = {
+  lookupTitle: ['Find a part or reference', 'Retrouver une pièce ou une référence', 'ابحث عن قطعة أو مرجع'],
+  catalogTools: ['Photo tools and export', 'Outils photo et export', 'أدوات الصور والتصدير'],
+  partSections: ['Part sections', 'Rubriques de la pièce', 'أقسام بطاقة القطعة'],
+  partReferences: ['Part references', 'Références de la pièce', 'مراجع القطعة'],
+  vehicleCompatibility: ['Vehicle compatibility', 'Compatibilité véhicule', 'التوافق مع المركبات'],
   workspaceSearch: ['Search workspace', 'Rechercher dans l’espace de travail', 'البحث في مساحة العمل'],
   compactWorkspace: ['Compact work view', 'Vue de travail compacte', 'عرض العمل المختصر'],
   visualWorkspace: ['Visual overview', 'Vue d’ensemble visuelle', 'نظرة عامة مرئية'],

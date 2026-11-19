@@ -31,24 +31,22 @@ export function WorkspaceShortcuts({ onSearch, onNavigate, onReceive, onPhotos }
     try { sessionStorage.setItem(preferenceKey, compact ? 'compact' : 'visual'); } catch {}
   }, [compact, preferenceKey]);
   return <section className={`workspace-launch${compact ? ' compact' : ''}`} aria-label={t('quickActions')}>
-    <div className="workspace-view-controls">
-      <button type="button" data-testid="workspace-view-toggle" aria-pressed={compact} onClick={() => setCompact(value => !value)}>
-        {compact ? <Maximize2 size={16} aria-hidden="true"/> : <Minimize2 size={16} aria-hidden="true"/>}
-        {t(compact ? 'visualWorkspace' : 'compactWorkspace')}
-      </button>
-    </div>
     <div className="workspace-hero">
+      <div className="workspace-view-controls">
+        <button type="button" data-testid="workspace-view-toggle" aria-pressed={compact} onClick={() => setCompact(value => !value)}>
+          {compact ? <Maximize2 size={16} aria-hidden="true"/> : <Minimize2 size={16} aria-hidden="true"/>}
+          {t(compact ? 'visualWorkspace' : 'compactWorkspace')}
+        </button>
+      </div>
       <div className="workspace-hero-copy">
-        <div className="workspace-hero-eyebrow"><span className="workspace-hero-signal" aria-hidden="true" />{t('quickActions')}</div>
-        <h2>{t('workspaceSearch')}</h2>
-        <p>{t('workspaceSearchHint')}</p>
+        <h2>{t('lookupTitle')}</h2>
         <button type="button" className="workspace-search-launch" onClick={onSearch}>
           <span className="workspace-search-icon" aria-hidden="true"><Search size={22}/></span>
           <span className="workspace-search-copy"><strong>{t('workspaceSearch')}</strong><small>{t('workspaceSearchHint')}</small></span>
           <kbd aria-hidden="true">Ctrl K</kbd><ArrowUpRight aria-hidden="true" size={19}/>
         </button>
       </div>
-      <img className="workspace-hero-illustration" src="/garage-dashboard.svg" alt="" aria-hidden="true" width="580" height="400" decoding="async"/>
+      <img className="workspace-hero-illustration" src="/garage-dashboard.svg" alt="" aria-hidden="true" width="520" height="340" decoding="async"/>
     </div>
     <div className="workspace-shortcuts" aria-label={t('quickActions')}>
       <button type="button" className="workspace-shortcut" onClick={() => onNavigate('inventory')}>
