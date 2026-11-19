@@ -612,6 +612,11 @@ tr:hover td { background:#f8fbfd; }
 }
 
 
+/* Keep the language popup usable during offline warnings.
+   The header must own the higher stacking context; a child z-index cannot escape its parent. */
+.topbar { z-index: 55; }
+.offline-bar { z-index: 45; }
+
 /* Owner can choose cinematic overview or task-first compact mode without losing actions. */
 .workspace-view-controls { display:flex;justify-content:flex-end;align-items:center; min-height:42px; margin-bottom:-8px; }
 .workspace-view-controls button {
