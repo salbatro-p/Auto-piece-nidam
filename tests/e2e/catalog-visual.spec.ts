@@ -14,6 +14,9 @@ test('Catalog switches between operational table and visual product cards withou
   await expect(table).toHaveCount(0);
   const cards=page.getByTestId('catalog-visual-card');
   await expect(cards).toHaveCount(1);
+  const phoneCard=await cards.first().boundingBox();
+  expect(phoneCard).not.toBeNull();
+  expect(phoneCard!.width).toBeGreaterThan(250); // Single search hit must not occupy half the phone.
   await expect(cards.first().getByText('AP-FLT-001')).toBeVisible();
   const beforeResponse=await page.request.get('/api/products?q=AP-FLT-001');
   expect(beforeResponse.ok()).toBe(true);
@@ -40,7 +43,11 @@ test('Catalog switches between operational table and visual product cards withou
   await expect(page.getByRole('dialog').last()).toBeVisible();
   await page.getByRole('dialog').last().locator('.modal-heading .icon-button').click();
   await page.setViewportSize({width:1280,height:800});
+  await page.evaluate(() => window.scrollTo(0,0));
   await expect(cards).toHaveCount(1);
+  const tabletCard=await cards.first().boundingBox();
+  expect(tabletCard).not.toBeNull();
+  expect(tabletCard!.width).toBeGreaterThan(440); // A feature result needs a deliberate, legible layout.
   await capture(page,'catalog-cards-tablet',testInfo);
   await page.getByTestId('catalog-view-table').click();
   await expect(table).toBeVisible();
