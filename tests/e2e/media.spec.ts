@@ -226,6 +226,7 @@ test('IMG-05/06: CSV plus ZIP preview and interrupted batch resume preserve exac
       .map((r) => r.join(','))
       .join('\n');
   await navigate(page, 'catalog');
+  await page.getByTestId('catalog-tools').click();
   await page.getByRole('button', { name: t('en', 'imageBulk'), exact: true }).click();
   const dialog = () => page.locator('dialog[open]').last();
   await dialog()

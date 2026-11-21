@@ -15,11 +15,16 @@ import {
   ArrowDownToLine,
   ArrowUpRight,
   Boxes,
+  CarFront,
   Check,
   ChevronRight,
   Image,
   ImageOff,
   LayoutGrid,
+  Layers,
+  LockKeyhole,
+  SlidersHorizontal,
+  Wallet,
   List,
   Package,
   Plus,
@@ -131,11 +136,11 @@ export function Dashboard({
   const { t, locale, can,user } = useApp();
   const { data, error, reload,loading } = useLoad<Record<string, any>>('/dashboard');
   const signals = useLoad<Record<string,number|null>>('/workspace/attention');
-  const metrics: [MessageKey, string, boolean?][] = [
-    ['onHand', 'onHand'],
-    ['available', 'available'],
-    ['reserved', 'reserved'],
-    ['dailySales', 'salesTodayMinor', true],
+  const metrics: [MessageKey, string, typeof Boxes, boolean?][] = [
+    ['onHand', 'onHand', Layers],
+    ['available', 'available', Boxes],
+    ['reserved', 'reserved', LockKeyhole],
+    ['dailySales', 'salesTodayMinor', Wallet, true],
   ];
   return (
     <>
@@ -149,13 +154,13 @@ export function Dashboard({
       <ErrorBanner error={error} />
       {loading && !data && <p role="status">{t('loading')}</p>}
       <div className="metric-grid">
-        {metrics.map(([label, key, currency]) => (
+        {metrics.map(([label, key, Icon, currency]) => (
           <article className="metric" key={key}>
-            <span>{t(label)}</span>
+            <span className="metric-label"><Icon size={17} aria-hidden="true"/>{t(label)}</span>
             <strong>
               {data ? currency ? <Amount minor={data[key] ?? 0} /> : quantity(data[key] ?? 0, locale) : '—'}
             </strong>
-            <small>{currency ? t('dailySales') : t('PCS')}</small>
+            {!currency && <small>{t('PCS')}</small>}
           </article>
         ))}
       </div>
@@ -253,10 +258,6 @@ export function Catalog({ vehicleId, clearVehicle, categoryEntry, onIntake,cover
   return (
     <>
       <PageHeading title="catalog" hint="catalogHint">
-        <VisualLibraryButton />
-        <MediaCoverage onSelect={setSelected} entry={coverageEntry}/>
-        <MediaBulk/>
-        {can('catalog')&&<a className="button secondary" href="/api/reports/products.csv">{t('export')}</a>}
         {can('catalog') && (
           <button className="button primary" data-testid="product-create" onClick={() => setEditing(null)}>
             <Plus size={18} />
@@ -265,6 +266,7 @@ export function Catalog({ vehicleId, clearVehicle, categoryEntry, onIntake,cover
         )}
         {can('catalog') && <button className="button secondary" data-testid="guided-create" onClick={() => setGuided(true)}>{t('guidedProduct')}</button>}
       </PageHeading>
+      <section className="catalog-console" aria-label={t('search')}>
       <div className="toolbar">
         <SearchBox
           value={q}
@@ -277,14 +279,26 @@ export function Catalog({ vehicleId, clearVehicle, categoryEntry, onIntake,cover
           <RefreshCw size={18} />
         </button>
       </div>
+      <div className="catalog-filter-row">
       <VehicleFilter value={exactVehicle} onChange={id=>{setExactVehicle(id);setPage(1);}}/>
       <Field label={t('category')}><select value={category} onChange={e=>{setCategory(e.target.value);setPage(1);}}><option value="">{t('all')}</option>{categories.data?.items.map(c=><option key={c.category} value={c.category}>{c.names[locale]||c.category}</option>)}</select></Field>
+      </div>
       {exactVehicle && (
         <button className="text-button" onClick={()=>{clearVehicle();setExactVehicle('');setPage(1);}}>
           {t('clearVehicle')}
           <X size={16} />
         </button>
       )}
+      </section>
+      {can('catalog') && <details className="catalog-tools" open={coverageEntry ? true : undefined}>
+        <summary data-testid="catalog-tools"><SlidersHorizontal size={17} aria-hidden="true"/>{t('catalogTools')}</summary>
+        <div className="catalog-tools-actions">
+          <VisualLibraryButton />
+          <MediaCoverage onSelect={setSelected} entry={coverageEntry}/>
+          <MediaBulk/>
+          <a className="button secondary" href="/api/reports/products.csv">{t('export')}</a>
+        </div>
+      </details>}
       <ErrorBanner error={error} />
       <div className="results-meta catalog-results-bar">
         <span>{t('productsCount', { count: data?.total ?? 0 })}</span>
@@ -339,7 +353,7 @@ export function Catalog({ vehicleId, clearVehicle, categoryEntry, onIntake,cover
                 <td>
                   <StockBadge value={totalStock(p).available} />
                 </td>
-                <td>
+                <td className="catalog-unit-price">
                   <Amount minor={p.priceMinor} />
                 </td>
                 <td>
@@ -376,18 +390,20 @@ export function Catalog({ vehicleId, clearVehicle, categoryEntry, onIntake,cover
                 <ProductVisual product={p}/>
                 <span className="catalog-visual-image-kind">{t(p.mediaId ? 'catalogImageOnFile' : 'catalogImageMissing')}</span>
               </span>
-              <span className="catalog-visual-heading"><ProductName product={p}/></span>
-              <span className="catalog-visual-brand"><bdi>{p.brand}</bdi> · <CategoryName product={p}/></span>
+              <span className="catalog-card-facts">
+                <span className="catalog-visual-heading"><ProductName product={p}/></span>
+                <span className="catalog-visual-brand"><bdi>{p.brand}</bdi> · <CategoryName product={p}/></span>
+                <span className="catalog-visual-info">
+                  <span className="catalog-visual-sku"><bdi dir="ltr">{p.sku}</bdi></span>
+                  <span className="catalog-visual-price"><Amount minor={p.priceMinor}/></span>
+                </span>
+                <span className="catalog-visual-meta">
+                  <StockBadge value={totalStock(p).available}/>
+                  <Status value={p.status}/>
+                  {exactVehicle && <Status value="VERIFIED"/>}
+                </span>
+              </span>
             </button>
-            <div className="catalog-visual-info">
-              <span className="catalog-visual-sku"><bdi dir="ltr">{p.sku}</bdi></span>
-              <span className="catalog-visual-price"><Amount minor={p.priceMinor}/></span>
-            </div>
-            <div className="catalog-visual-meta">
-              <StockBadge value={totalStock(p).available}/>
-              <Status value={p.status}/>
-              {exactVehicle && <Status value="VERIFIED"/>}
-            </div>
             <div className="catalog-visual-footer">
               <button type="button" className="button secondary" onClick={()=>setSelected(p)}>
                 {t('catalogOpenPart')}<ArrowUpRight size={16} aria-hidden="true"/>
@@ -447,6 +463,7 @@ export function ProductDetails({ product: initialProduct, onClose, onSell, onRec
   };
   const totals = totalStock(p);
   const mediaRef = useRef<HTMLDivElement>(null);
+  const fitmentRef = useRef<HTMLHeadingElement>(null);
   const openPhotoGallery = () => {
     mediaRef.current?.scrollIntoView({ behavior: 'auto', block: 'start' });
     mediaRef.current?.focus({ preventScroll: true });
@@ -457,6 +474,7 @@ export function ProductDetails({ product: initialProduct, onClose, onSell, onRec
       <div className="detail-intro">
         <ProductVisual product={p} />
         <div className="part-hero-facts">
+          <span className="part-family"><CategoryName product={p}/></span>
           <ReferenceValue value={p.sku} label={t('sku')} testId="part-copy-sku" />
           <p><bdi>{p.brand}</bdi></p>
           <Amount minor={p.priceMinor} />
@@ -464,16 +482,30 @@ export function ProductDetails({ product: initialProduct, onClose, onSell, onRec
             {p.mediaId ? <Image size={15} aria-hidden="true" /> : <ImageOff size={15} aria-hidden="true" />}
             <span>{t(p.mediaId ? 'partPhotoReview' : 'partPhotoPending')}</span>
           </p>
+        </div>
+      </div>
+      <dl className="part-stock-summary">
+        {(['available','reserved','onHand'] as const).map(metric=><div key={metric}><dt>{t(metric)}</dt>
+          <dd><bdi>{quantity(totals[metric],locale)}</bdi> <small>{t('PCS')}</small></dd></div>)}
+      </dl>
+      {(onSell || onReceive) && <div className="toolbar">
+        {onSell && <button className="button primary" type="button" onClick={onSell}><ShoppingCart size={18}/>{t('openInPos')}</button>}
+        {onReceive && <button className="button secondary" type="button" onClick={onReceive}>{t('receiveStock')}</button>}
+      </div>}
+      <div className="detail-jumps" role="group" aria-label={t('partSections')}>
           <button type="button" className="button secondary part-gallery-jump" data-testid="part-show-gallery"
             onClick={openPhotoGallery}>
             <Image size={17} aria-hidden="true" />{t('gallery')}<ArrowDownToLine size={16} aria-hidden="true" />
           </button>
-        </div>
+        <button type="button" className="button secondary" onClick={() => fitmentRef.current?.focus()}>
+          <CarFront size={17} aria-hidden="true"/>{t('vehicleCompatibility')}
+        </button>
       </div>
       <p dir="auto">{contentValue(p.descriptions, locale, p.translationStatus).value}</p>
       {contentValue(p.descriptions, locale, p.translationStatus).missing && (
         <p className="warning-text">{t('translationMissing')}</p>
       )}
+      <h3 className="detail-section-title">{t('partReferences')}</h3>
       <dl className="detail-grid">
         <div><dt>{t('manufacturerPartNo')}</dt><dd><ReferenceValue value={p.manufacturerPartNo} label={t('manufacturerPartNo')} testId="part-copy-manufacturer" /></dd></div>
         <div>
@@ -501,15 +533,6 @@ export function ProductDetails({ product: initialProduct, onClose, onSell, onRec
           </div>
         )}
       </dl>
-      <div className="notice warning">{t('fitmentWarning')}</div>
-      <dl className="part-stock-summary">
-        {(['available','reserved','onHand'] as const).map(metric=><div key={metric}><dt>{t(metric)}</dt>
-          <dd><bdi>{quantity(totals[metric],locale)}</bdi> <small>{t('PCS')}</small></dd></div>)}
-      </dl>
-      {(onSell || onReceive) && <div className="toolbar">
-        {onSell && <button className="button primary" type="button" onClick={onSell}><ShoppingCart size={18}/>{t('openInPos')}</button>}
-        {onReceive && <button className="button secondary" type="button" onClick={onReceive}>{t('receiveStock')}</button>}
-      </div>}
       <ShelfLocator productId={p.id} />
       <div className="part-media-anchor" ref={mediaRef} tabIndex={-1} data-testid="part-media-section">
         <MediaGallery product={p} startUpload={startUpload} onReviewed={refreshApprovedPhoto}/>
@@ -544,7 +567,8 @@ export function ProductDetails({ product: initialProduct, onClose, onSell, onRec
           </tbody>
         </table>
       </div>
-      <h3>{t('vehicles')}</h3>
+      <h3 className="detail-section-title" tabIndex={-1} ref={fitmentRef}>{t('vehicleCompatibility')}</h3>
+      <div className="notice warning">{t('fitmentWarning')}</div>
       {p.fitments?.length ? (
         p.fitments.map((f: any, i) => (
           <div className="list-row" key={i}>

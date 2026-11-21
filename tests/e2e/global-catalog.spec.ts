@@ -57,6 +57,7 @@ test('Official model-year snapshot and reviewed original category visuals work i
   await dialog.getByRole('button',{name:'Close',exact:true}).click();
 
   await navigate(page,'catalog');
+  await page.getByTestId('catalog-tools').click();
   await page.getByRole('button',{name:'Illustrations and diagrams'}).click();
   dialog = page.getByRole('dialog').last();
   await dialog.getByLabel('Category',{exact:true}).selectOption('filters');

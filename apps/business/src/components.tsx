@@ -85,6 +85,13 @@ export function ProductVisual({ product }: { product: Product }) {
     <div className={`product-visual visual-${family}`} title={!hasExactPhoto ? t('IMAGE_UNAVAILABLE') : undefined}>
       {hasExactPhoto ? (
         <img alt="" src={`/api/media/${product.mediaId}?size=thumbnail`} loading="lazy" decoding="async" width="64" height="64" onError={()=>setFailed(true)} />
+      ) : family === 'filter' ? (
+        <svg viewBox="0 0 48 48" width="30" height="30" role="img" aria-label={t('IMAGE_UNAVAILABLE')}
+          fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+          <ellipse cx="24" cy="10" rx="13" ry="5"/>
+          <ellipse cx="24" cy="10" rx="4" ry="1.5"/>
+          <path d="M11 10v26c0 7 26 7 26 0V10M11 32c0 7 26 7 26 0M16 16v15m5-14v16m6-16v16m5-17v15"/>
+        </svg>
       ) : (
         <PlaceholderIcon aria-label={t('IMAGE_UNAVAILABLE')} strokeWidth={1.65} size={30} />
       )}
