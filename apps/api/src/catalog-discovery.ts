@@ -10,9 +10,10 @@ export function registerCatalogDiscovery(app: FastifyInstance, pool: Pool) {
     const filter = z.object({
       q: z.string().max(160).default(''),
       group: z.string().max(64).default(''),
+      range: z.enum(['all','counter']).default('all'),
       page: z.coerce.number().int().min(1).max(10000).default(1),
     }).strict().parse(request.query);
-    const matches = findMerchandiseTypes(filter.q, filter.group);
+    const matches = findMerchandiseTypes(filter.q, filter.group, filter.range === 'counter');
     const start = (filter.page - 1) * 50;
     return {
       groups: assortmentGroups.map(({code,names}) => ({code,names})),

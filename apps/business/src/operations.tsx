@@ -5,7 +5,8 @@ import {MediaGallery,MediaCoverage} from './media';
 import { VisualLibraryButton } from './original-visuals';
 import {VehicleFilter} from './vehicle-filter';
 import {MediaBulk} from './media-bulk';
-import {AttributeEditor,Attributes} from './technical-attributes';
+import {Attributes} from './technical-attributes';
+import {RetailAttributeEditor} from './retail-attributes';
 import { Replacements } from './catalog-links';
 import { ReferenceValue } from './reference-value';
 import { OpeningBalances } from './opening-balances';
@@ -938,7 +939,7 @@ export function ProductEditor({
             </Field>
           ))}
         </fieldset>
-        <div hidden={guided && step!==1}><AttributeEditor value={attributes} onChange={setAttributes}/></div>
+        <div hidden={guided && step!==1}><RetailAttributeEditor category={form.category} value={attributes} onChange={setAttributes}/></div>
         <div className="upload-zone" hidden={guided && step!==2}>
             <FilePicker label={t('photo')} hint={t('rightsHelp')}
               data-testid="product-image"

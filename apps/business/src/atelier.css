@@ -195,6 +195,8 @@ body, .app-layout { background: var(--paper); color: var(--ink); }
 .catalog-console > .button { margin-block-start:var(--space-1); }
 .assortment-picker { display:grid; gap:var(--space-2); }
 .assortment-picker > p { margin:0; }
+.assortment-essentials { display:flex; align-items:center; gap:.65rem; min-height:44px; cursor:pointer; }
+.assortment-essentials input { width:1.15rem; height:1.15rem; min-height:0; accent-color:var(--ink); }
 .assortment-result-actions { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:var(--space-1); }
 .assortment-list {
   list-style:none; margin:0; padding:0; display:grid; gap:6px;

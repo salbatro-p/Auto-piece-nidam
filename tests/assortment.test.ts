@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { fileURLToPath } from 'node:url';
 import { readFile } from 'node:fs/promises';
 import { readSheet } from 'read-excel-file/node';
-import { assortmentGroups, merchandiseTypes, findMerchandiseTypes, merchandiseTypeByCode, merchandiseTypesCsv } from '../packages/contracts/src/assortment.js';
+import { assortmentGroups, counterEssentials, merchandiseTypes, findMerchandiseTypes, merchandiseTypeByCode, merchandiseTypesCsv } from '../packages/contracts/src/assortment.js';
 import { productSchema } from '../apps/api/src/catalog.js';
 
 test('Assortment keeps every blueprint code, unique identities and three populated labels', async () => {
@@ -39,6 +39,20 @@ test('Search matches counter terms, type codes and cross-language terms within d
     else assert.equal(result.length,0);
     assert.ok(result.every(type => type.group === group));
   }
+});
+
+test('AAA counter range retains exact grades and exports the proposed assortment', async () => {
+  const proposed = findMerchandiseTypes('','',true);
+  assert.equal(proposed.length,counterEssentials.size);
+  const sheet = await readFile(new URL('../samples/AAA-counter-essentials.csv', import.meta.url), 'utf8');
+  assert.equal(sheet.replaceAll('\r\n','\n'), merchandiseTypesCsv(proposed).replaceAll('\r\n','\n'));
+  for (const query of ['5W30','٥W٣٠']) {
+    assert.deepEqual(findMerchandiseTypes(query,'MOTOR_OILS',true).map(type=>type.code), ['MOTOR_OILS_5W30']);
+  }
+  assert.ok(findMerchandiseTypes('antijene','',true).some(type=>type.code==='COOLANT_SHELF_PREMIX'));
+  assert.ok(findMerchandiseTypes('gresses','GREASES',true).some(type=>type.code==='GREASES_LITHIUM'));
+  assert.equal(findMerchandiseTypes('Si-OAT','',true).length,0);
+  assert.ok(findMerchandiseTypes('Si-OAT','COOLANT_SHELF').length>0);
 });
 
 test('Product registration and imports supply only missing category translations for exact type codes', () => {

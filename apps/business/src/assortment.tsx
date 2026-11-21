@@ -12,10 +12,11 @@ export function AssortmentPicker({ onSelect }: { onSelect: (type: MerchandiseTyp
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [group, setGroup] = useState('');
+  const [essentialsOnly, setEssentialsOnly] = useState(false);
   const [page, setPage] = useState(0);
-  const matches = open ? findMerchandiseTypes(query, group) : [];
+  const matches = open ? findMerchandiseTypes(query, group, essentialsOnly) : [];
   function show() {
-    setQuery(''); setGroup(''); setPage(0); setOpen(true);
+    setQuery(''); setGroup(''); setEssentialsOnly(false); setPage(0); setOpen(true);
   }
   function exportMatches() {
     const url = URL.createObjectURL(new Blob([merchandiseTypesCsv(matches)], {type:'text/csv;charset=utf-8'}));
@@ -37,6 +38,10 @@ export function AssortmentPicker({ onSelect }: { onSelect: (type: MerchandiseTyp
           <option value="">{t('all')}</option>
           {assortmentGroups.map(g => <option key={g.code} value={g.code}>{g.names[locale]}</option>)}
         </select></Field>
+        <label className="assortment-essentials">
+          <input type="checkbox" checked={essentialsOnly} onChange={e => {setEssentialsOnly(e.target.checked); setPage(0);}}/>
+          {t('counterEssentials')}
+        </label>
         <div className="assortment-result-actions">
           <span role="status">{t('typeCount', {count: matches.length})}</span>
           <button type="button" className="text-button" disabled={!matches.length} onClick={exportMatches}>
