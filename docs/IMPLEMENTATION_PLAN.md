@@ -2,6 +2,10 @@
 
 Updated 11 November 2026 (Europe/Istanbul). Same repository, same `codex/phase1` branch and authoritative PostgreSQL. This extends the existing plan/traceability; it is not a replacement project. User authorization covers local development and synthetic testing. Production/public deployment, real providers and paid licenses remain unapproved.
 
+## Staff handoff
+
+The [shop-network handoff](SHOP_NETWORK_HANDOFF.md) adds a private HTTPS installation for an always-on shop computer, first-owner MFA enrollment, staff invitations, counter setup, encrypted recovery and an isolated deployment rehearsal. The field pilot still needs the shop's host, devices, signed inventory, approved content, qualified reviews and operational sign-off. Public Shop remains Phase 2.
+
 ## Inspected checkpoint
 
 Workspace continuation: the delivered interface extends the saved catalog release at `0f9508c`. Search, part inspection, shelf locations, guided product registration, owner attention and tablet/cart behavior were verified locally. The [workspace acceptance record](WORKSPACE_ACCEPTANCE.md) covers evidence, UX limitations, and the blocked deployment gate.

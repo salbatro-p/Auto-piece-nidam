@@ -1,4 +1,10 @@
 export const workspaceMessages = {
+  prepareCounter: ['Prepare your counter', 'Préparer le comptoir', 'تجهيز نقطة البيع'],
+  staffSetupStep: ['Activate the first staff account', 'Activer le premier compte employé', 'تفعيل أول حساب موظف'],
+  catalogSetupStep: ['Register a part for sale', 'Enregistrer une pièce à vendre', 'تسجيل قطعة للبيع'],
+  intakeSetupStep: ['Record the first stock intake', 'Enregistrer la première entrée de stock', 'تسجيل أول استلام للمخزون'],
+  taxSetupStep: ['Confirm the tax settings', 'Confirmer les paramètres de taxe', 'تأكيد إعدادات الضريبة'],
+  completedSetup: ['Completed', 'Terminé', 'مكتمل'],
   checkingScan: ['Checking the scanned reference…', 'Vérification de la référence scannée…', 'جارٍ التحقق من المرجع الممسوح…'],
   inspectScan: ['Scan could not be added. Check the exact reference and available stock.', 'Ajout impossible. Vérifiez la référence exacte et le stock disponible.', 'تعذرت إضافة القطعة الممسوحة. تحقق من المرجع الدقيق والكمية المتاحة.'],
   lookupTitle: ['Find a part or reference', 'Retrouver une pièce ou une référence', 'ابحث عن قطعة أو مرجع'],

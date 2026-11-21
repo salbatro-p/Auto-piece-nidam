@@ -128,7 +128,7 @@ export function Dashboard({
   openMissingPhotos,
   openCounts,
 }: {
-  navigate: (page: 'pos' | 'inventory' | 'catalog' | 'imports'|'purchases'|'vehicles') => void;
+  navigate: (page: 'pos' | 'inventory' | 'catalog' | 'imports'|'purchases'|'vehicles'|'team') => void;
   shortcuts?: React.ReactNode;
   openMissingPhotos?: () => void;
   openCounts?: () => void;
@@ -136,6 +136,14 @@ export function Dashboard({
   const { t, locale, can,user } = useApp();
   const { data, error, reload,loading } = useLoad<Record<string, any>>('/dashboard');
   const signals = useLoad<Record<string,number|null>>('/workspace/attention');
+  const setup = useLoad<{steps: Record<'staff'|'catalog'|'intake'|'tax', boolean> | null}>(
+    user.role === 'owner' && !user.demo ? '/workspace/company-setup' : null,
+  );
+  const steps = [
+    ['staff','staffSetupStep','team'], ['catalog','catalogSetupStep','catalog'],
+    ['intake','intakeSetupStep','inventory'], ['tax','taxSetupStep','team'],
+  ] as const;
+  const completed = steps.filter(([id]) => setup.data?.steps?.[id]).length;
   const metrics: [MessageKey, string, typeof Boxes, boolean?][] = [
     ['onHand', 'onHand', Layers],
     ['available', 'available', Boxes],
@@ -145,11 +153,26 @@ export function Dashboard({
   return (
     <>
       <PageHeading title={user.role==='owner'||user.role==='manager' ? 'ownerWorkspace' : user.role==='warehouse' ? 'warehouseWorkspace' : user.role==='sales' ? 'counterWorkspace' : 'dashboard'} hint="overviewHint">
-        <button className="button secondary" onClick={() => { reload(); signals.reload(); }}>
+        <button className="button secondary" onClick={() => { reload(); signals.reload(); setup.reload(); }}>
           <RefreshCw size={17} />
           {t('refresh')}
         </button>
       </PageHeading>
+      <ErrorBanner error={setup.error}/>
+      {setup.data?.steps && completed < steps.length && (
+        <section className="company-setup panel" aria-labelledby="company-setup-title" data-testid="company-setup">
+          <header>
+            <h2 id="company-setup-title">{t('prepareCounter')}</h2>
+            <span><bdi>{quantity(completed,locale)} / {quantity(steps.length,locale)}</bdi></span>
+          </header>
+          <ul>{steps.map(([id,label,destination]) => (
+            <li key={id}>{setup.data?.steps?.[id]
+              ? <span className="setup-done"><Check size={18} aria-hidden="true"/>{t(label)}<span className="sr-only">{t('completedSetup')}</span></span>
+              : <button type="button" onClick={() => navigate(destination)}>{t(label)}<ArrowUpRight size={17} aria-hidden="true"/></button>}
+            </li>
+          ))}</ul>
+        </section>
+      )}
       {shortcuts}
       <ErrorBanner error={error} />
       {loading && !data && <p role="status">{t('loading')}</p>}

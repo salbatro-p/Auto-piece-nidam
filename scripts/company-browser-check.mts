@@ -15,6 +15,20 @@ if(!invite.ok)throw new Error('Staff invitation failed');
 const {token}=await invite.json(), password=randomBytes(24).toString('hex');
 const browser=await chromium.launch();
 try {
+  await mkdir(dir+'/staff-evidence',{recursive:true});
+  const ownerContext=await browser.newContext({viewport:{width:390,height:844}});
+  await ownerContext.addCookies([{name:'ap_business',value:headers.cookie.split('=')[1],domain:'localhost',path:'/api',httpOnly:true,secure:true,sameSite:'Strict'}]);
+  const ownerPage=await ownerContext.newPage();
+  await ownerPage.goto(origin);
+  await ownerPage.getByTestId('company-setup').waitFor();
+  await switchLanguage(ownerPage,'ar');
+  const setup=ownerPage.getByTestId('company-setup');
+  await expect(setup).toBeVisible();
+  await expect(setup.locator('.setup-done')).toHaveCount(2);
+  await ownerPage.screenshot({path:dir+'/staff-evidence/owner-setup-ar.png'});
+  await setup.getByRole('button',{name:translate('ar','staffSetupStep')}).click();
+  await expect(ownerPage.getByRole('button',{name:translate('ar','invite'),exact:true})).toBeVisible();
+  await ownerContext.close();
   const page=await browser.newPage({viewport:{width:1024,height:900}});
   await page.goto(origin);
   await switchLanguage(page,'en');
@@ -31,6 +45,7 @@ try {
   await page.getByTestId('login-password').fill(password);
   await page.getByTestId('login-submit').click();
   await page.getByTestId('product-search').fill('QA-001');
+  if ((await page.request.get(origin+'/api/workspace/company-setup')).status() !== 403) throw new Error('Staff setup permission failed');
   await page.getByTestId('add-to-cart-QA-001').click();
   await page.getByTestId('sale-submit').click();
   const receipt=page.getByTestId('receipt');

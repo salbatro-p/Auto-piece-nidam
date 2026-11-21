@@ -180,3 +180,14 @@ body, .app-layout { background: var(--paper); color: var(--ink); }
 @media print {
   .catalog-tools, .detail-jumps {display:none;}
 }
+
+.company-setup { padding:var(--space-3); margin-block-end:var(--space-3); }
+.company-setup header { display:flex; align-items:center; justify-content:space-between; gap:var(--space-1); }
+.company-setup h2 { margin:0; font-size:var(--type-section); }
+.company-setup header > span { background:var(--linen); color:var(--ink); border-radius:99px; padding:4px 12px; }
+.company-setup ul { list-style:none; display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr)); gap:var(--space-1); padding:0; margin:var(--space-2) 0 0; }
+.company-setup li > * { width:100%; min-height:44px; padding:8px 12px; display:flex; align-items:center; gap:var(--space-1); border-radius:var(--radius-control); }
+.company-setup button { background:var(--paper); border:1px solid var(--line); color:var(--ink); text-align:start; justify-content:space-between; }
+.company-setup button:hover { background:var(--linen); }
+.company-setup .setup-done { color:#285b44; background:#edf4e9; }
+.company-setup svg { flex:none; }

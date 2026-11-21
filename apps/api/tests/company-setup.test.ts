@@ -51,6 +51,8 @@ test('A blank company can enroll one owner, open its receiving bins and invite s
     assert.equal(signed.json().user.companyName,setup.company);
     assert.equal(signed.json().user.demo,false);
     const headers = {cookie:String(signed.headers['set-cookie']).split(';')[0]!, 'x-csrf-token':signed.json().csrfToken,'idempotency-key':token()};
+    const setupSteps = (await app.inject({url:'/api/workspace/company-setup',headers})).json().steps;
+    assert.deepEqual(setupSteps,{staff:false,catalog:false,intake:false,tax:false});
     const bins = (await app.inject({url:'/api/bins',headers})).json().items;
     assert.equal(bins.length,2);
     assert.ok(bins.every((b:{isDefault:boolean})=>b.isDefault));
