@@ -6,6 +6,8 @@
 
 الدليل فيه 327 نوعاً فـ26 قسماً، من بينها الأنواع المئة الواردة في ملف المشروع. فيه أيضاً الشاحنات والمقطورات والدراجات والمركبات الكهربائية، والزيوت وأدوات الورشة والطلاء والتثبيت والتنظيف والإكسسوارات. زر **تنزيل الأنواع (CSV)** كيصدر نتائج البحث كاملة مع رموزها وتسمياتها الثلاث. الرموز كتستعمل فعمود `category` عند استيراد سلع المورد. التطبيق كيكمل التسميات الناقصة ديال الرموز المعروفة ويحافظ على التسميات الخاصة اللي عطاها المحل.
 
+المخزون ونقطة البيع كيحسبو وحدات بيع صحيحة. مثلاً سجّل قنينة زيت 1 لتر وقنينة 5 لترات بجوج مراجع مستقلين، وحدّد السعة فالمواصفات. البيع السائب بالوزن أو بالمتر مع الكسور كيحتاج مسار قياس خاص.
+
 The directory classifies merchandise. Each saleable SKU, stock receipt, licensed image and exact vehicle fitment still uses its own existing registration or review workflow. Supplier coverage is measured from authorized feeds. General references for the range of retail and workshop departments include [Bosch Mobility Aftermarket Africa](https://www.boschaftermarket.com/afr/en/) and [ZF commercial vehicle systems](https://aftermarket.zf.com/en/aftermarket-portal/our-portfolio/trucks-trailers-buses/products/).
 
 ## Try the sample

@@ -5,6 +5,14 @@ import { mkdir, readFile } from 'node:fs/promises';
 import { login, navigate, switchLanguage } from './helpers';
 import { translate as t } from '../../packages/i18n/src/business';
 
+test('Older password-only loopback previews keep the demo notice during an upgrade', async ({page}) => {
+  await page.route('**/api/config', route => route.fulfill({json:{defaultLocale:'en',passwordOnlyLogin:true}}));
+  await page.goto('/');
+  await switchLanguage(page,'en');
+  await expect(page.getByText(t('en','demoNotice'),{exact:true})).toBeVisible();
+  await expect(page.getByTestId('login-totp')).toHaveCount(0);
+});
+
 test('Merchandise directory works before stock exists and carries a trilingual type into registration', async ({page,request}) => {
   await page.setViewportSize({width:390,height:844});
   expect((await request.get('/api/catalog/assortment')).status()).toBe(401);
