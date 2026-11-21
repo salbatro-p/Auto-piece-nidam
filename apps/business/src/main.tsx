@@ -120,13 +120,15 @@ function App() {
   useEffect(() => {
     Promise.all([
       api<{ user: User; csrfToken: string }>('/me').catch(() => null),
-      api<{ defaultLocale: Locale; passwordOnlyLogin: boolean; demo: boolean }>('/config').catch(() => ({ defaultLocale: 'fr' as Locale, passwordOnlyLogin: false, demo: false })),
+      api<{ defaultLocale: Locale; passwordOnlyLogin: boolean; demo?: boolean }>('/config').catch(() => ({ defaultLocale: 'fr' as Locale, passwordOnlyLogin: false, demo: false })),
     ])
       .then(([session, config]) => {
-        setDemoLogin(config.demo === true);
+        // Older loopback previews identify themselves through their existing local login policy.
+        const demo = config.demo ?? config.passwordOnlyLogin === true;
+        setDemoLogin(demo);
         setPasswordOnlyLogin(config.passwordOnlyLogin === true);
         if (session) {
-          setUser(session.user);
+          setUser({...session.user, demo: session.user.demo ?? demo});
           setCsrf(session.csrfToken);
           setLocale(session.user.locale);
         } else if (!localeChosen.current)
@@ -217,7 +219,7 @@ function App() {
     setError(undefined);
   }
   function loginSuccess(session: { user: User; csrfToken: string }) {
-    setUser(session.user);
+    setUser({...session.user, demo: session.user.demo ?? demoLogin});
     setCsrf(session.csrfToken);
     setLocale(session.user.locale);
     setLocked(false);

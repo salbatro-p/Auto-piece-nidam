@@ -191,3 +191,17 @@ body, .app-layout { background: var(--paper); color: var(--ink); }
 .company-setup button:hover { background:var(--linen); }
 .company-setup .setup-done { color:#285b44; background:#edf4e9; }
 .company-setup svg { flex:none; }
+
+.catalog-console > .button { margin-block-start:var(--space-1); }
+.assortment-picker { display:grid; gap:var(--space-2); }
+.assortment-picker > p { margin:0; }
+.assortment-result-actions { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:var(--space-1); }
+.assortment-list {
+  list-style:none; margin:0; padding:0; display:grid; gap:6px;
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));
+}
+.assortment-list button {
+  width:100%; height:100%; min-height:44px; padding:9px 12px; text-align:start;
+  border:1px solid var(--line); background:var(--paper); color:var(--ink); border-radius:var(--radius-control);
+}
+.assortment-list button:hover { background:var(--linen); }

@@ -1,4 +1,6 @@
 import { TranslationReviewer } from './catalog-admin';
+import { AssortmentPicker } from './assortment';
+import { merchandiseTypeByCode, type MerchandiseType } from '../../../packages/contracts/src/assortment';
 import {MediaGallery,MediaCoverage} from './media';
 import { VisualLibraryButton } from './original-visuals';
 import {VehicleFilter} from './vehicle-filter';
@@ -259,6 +261,7 @@ export function Catalog({ vehicleId, clearVehicle, categoryEntry, onIntake,cover
 }) {
   const { t, can, locale } = useApp();
   const [exactVehicle,setExactVehicle]=useState(vehicleId),[category,setCategory]=useState('');
+  const selectedType = merchandiseTypeByCode(category);
   const [catalogLayout,setCatalogLayout]=useState<'table'|'visual'>(() => {
     try { return sessionStorage.getItem('autoparts:catalog-layout') === 'visual' ? 'visual' : 'table'; }
     catch { return 'table'; }
@@ -304,8 +307,12 @@ export function Catalog({ vehicleId, clearVehicle, categoryEntry, onIntake,cover
       </div>
       <div className="catalog-filter-row">
       <VehicleFilter value={exactVehicle} onChange={id=>{setExactVehicle(id);setPage(1);}}/>
-      <Field label={t('category')}><select value={category} onChange={e=>{setCategory(e.target.value);setPage(1);}}><option value="">{t('all')}</option>{categories.data?.items.map(c=><option key={c.category} value={c.category}>{c.names[locale]||c.category}</option>)}</select></Field>
+      <Field label={t('category')}><select value={category} onChange={e=>{setCategory(e.target.value);setPage(1);}}><option value="">{t('all')}</option>
+        {selectedType && !categories.data?.items.some(c=>c.category===selectedType.code) &&
+          <option value={selectedType.code}>{selectedType.names[locale]}</option>}
+        {categories.data?.items.map(c=><option key={c.category} value={c.category}>{c.names[locale]||c.category}</option>)}</select></Field>
       </div>
+      <AssortmentPicker onSelect={type => {setCategory(type.code); setPage(1);}}/>
       {exactVehicle && (
         <button className="text-button" onClick={()=>{clearVehicle();setExactVehicle('');setPage(1);}}>
           {t('clearVehicle')}
@@ -456,6 +463,7 @@ export function Catalog({ vehicleId, clearVehicle, categoryEntry, onIntake,cover
       {editing !== undefined && (
         <ProductEditor
           product={editing}
+          initialType={selectedType}
           onClose={() => setEditing(undefined)}
           onSaved={() => {
             setEditing(undefined);
@@ -464,7 +472,7 @@ export function Catalog({ vehicleId, clearVehicle, categoryEntry, onIntake,cover
         />
       )}
       {selected && <ProductDetails product={selected} onClose={() => setSelected(null)} onMediaChanged={reload} />}
-      {guided && <ProductEditor product={null} guided onClose={() => setGuided(false)}
+      {guided && <ProductEditor product={null} initialType={selectedType} guided onClose={() => setGuided(false)}
         onSaved={() => { setGuided(false); reload(); }} onIntake={onIntake} />}
     </>
   );
@@ -609,12 +617,14 @@ export function ProductDetails({ product: initialProduct, onClose, onSell, onRec
 
 export function ProductEditor({
   product,
+  initialType,
   onClose,
   onSaved,
   guided = false,
   onIntake,
 }: {
   product: Product | null;
+  initialType?: MerchandiseType;
   onClose: () => void;
   onSaved: () => void;
   guided?: boolean;
@@ -633,12 +643,12 @@ export function ProductEditor({
     brand: product?.brand ?? '',
     oem: product?.oem ?? '',
     barcode: product?.barcode ?? '',
-    category: product?.category ?? '',
+    category: product?.category ?? initialType?.code ?? '',
     manufacturerPartNo: product?.manufacturerPartNo ?? '',
     categoryNames: {
-      ar: product?.categoryNames?.ar ?? '',
-      fr: product?.categoryNames?.fr ?? '',
-      en: product?.categoryNames?.en ?? '',
+      ar: product ? product.categoryNames?.ar ?? '' : initialType?.names.ar ?? '',
+      fr: product ? product.categoryNames?.fr ?? '' : initialType?.names.fr ?? '',
+      en: product ? product.categoryNames?.en ?? '' : initialType?.names.en ?? '',
     },
     packSize: String(product?.packSize ?? 1),
     price: String((product?.priceMinor ?? 0) / 100),
@@ -811,9 +821,24 @@ export function ProductEditor({
               data-testid="product-category"
               dir="auto"
               value={form.category}
-              onChange={(e) => change('category', e.target.value)}
+              onChange={e => {
+                const code = e.target.value;
+                setForm(f => {
+                  const oldType = merchandiseTypeByCode(f.category), nextType = merchandiseTypeByCode(code);
+                  const categoryNames = {...f.categoryNames};
+                  for (const lang of ['ar','fr','en'] as const) {
+                    if (!categoryNames[lang] || categoryNames[lang] === oldType?.names[lang])
+                      categoryNames[lang] = nextType?.names[lang] ?? '';
+                  }
+                  return {...f, category:code, categoryNames};
+                });
+              }}
             />
           </Field>
+          <AssortmentPicker onSelect={type => {
+            setForm(f => ({...f, category: type.code, categoryNames: {...type.names}}));
+            if (guided) setKeepDraft(true);
+          }}/>
           {(['ar', 'fr', 'en'] as const).map((l) => (
             <Field
               key={'category-' + l}
