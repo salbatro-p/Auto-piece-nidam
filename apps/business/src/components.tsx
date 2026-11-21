@@ -211,11 +211,16 @@ export function useMutation() {
   async function run<T>(path: string, body: unknown, method = 'POST',onUploadProgress?:(percent:number)=>void): Promise<T | undefined> {
     if (busyRef.current) return;
     const recovering=pendingRef.current;
+    if (recovering && (path !== recovering.path || method !== recovering.method)) {
+      setError(new ApiError('unknownOutcome'));
+      return;
+    }
     const request = recovering ?? { path, body, key: mutationKey(), method };
     if (!online) {
       setError(new ApiError('NETWORK_ERROR'));
       return;
     }
+    let checking = Boolean(recovering);
     busyRef.current=true;setBusy(true);
     setError(undefined);
     try {
@@ -223,6 +228,7 @@ export function useMutation() {
         const recovered = await api<{ status: string; response: T }>(
           '/requests/' + encodeURIComponent(request.key),
         );
+        checking = false;
         if (recovered.status === 'COMMITTED') {
           updatePending(null);
           return recovered.response;
@@ -233,7 +239,7 @@ export function useMutation() {
       return result;
     } catch (err) {
       setError(err);
-      if (err instanceof ApiError && (err.code === 'NETWORK_ERROR' || (err.status ?? 0) >= 500))
+      if (checking || (err instanceof ApiError && (err.code === 'NETWORK_ERROR' || (err.status ?? 0) >= 500)))
         updatePending(request);
       else updatePending(null);
       return;
@@ -256,13 +262,15 @@ export function SearchBox({
   value,
   onChange,
   onEnter,
+  onScan,
   label,
   testId = 'product-search',
   autoFocus = false,
 }: {
   value: string;
   onChange: (value: string) => void;
-  onEnter?: () => void;
+  onEnter?: (value: string) => void;
+  onScan?: (value: string) => void;
   label?: string;
   testId?: string;
   autoFocus?: boolean;
@@ -287,7 +295,10 @@ export function SearchBox({
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
               e.preventDefault();
-              onEnter?.();
+              if (!e.repeat) {
+                onEnter?.(e.currentTarget.value);
+                if (onScan) e.currentTarget.select();
+              }
             }
           }}
         />
@@ -299,10 +310,11 @@ export function SearchBox({
         <button
           className="icon-button scan-button"
           onClick={() => {
-            if (!('BarcodeDetector' in window)) {
+            if (!('BarcodeDetector' in window) || !navigator.mediaDevices?.getUserMedia) {
               setError(true);
               return;
             }
+            setError(false);
             setScan(true);
           }}
           title={t('camera')}
@@ -321,6 +333,7 @@ export function SearchBox({
           onClose={() => setScan(false)}
           onValue={(code) => {
             onChange(code);
+            onScan?.(code);
             setScan(false);
           }}
         />
@@ -337,6 +350,10 @@ function Scanner({ onClose, onValue }: { onClose: () => void; onValue: (value: s
     let stream: MediaStream | undefined,
       stopped = false,
       timer: ReturnType<typeof setTimeout>;
+    const fail = () => {
+      stream?.getTracks().forEach(track => track.stop());
+      if (!stopped) setFailed(true);
+    };
     void navigator.mediaDevices
       .getUserMedia({ video: { facingMode: 'environment' } })
       .then(async (result) => {
@@ -357,12 +374,13 @@ function Scanner({ onClose, onValue }: { onClose: () => void; onValue: (value: s
         const loop = async () => {
           if (stopped || !video.current) return;
           const hits = await detector.detect(video.current);
-          if (hits[0]) onValue(hits[0].rawValue);
-          else timer = setTimeout(() => void loop(), 200);
+          if (stopped) return;
+          if (hits[0]?.rawValue) onValue(hits[0].rawValue);
+          else timer = setTimeout(() => void loop().catch(fail), 200);
         };
         await loop();
       })
-      .catch(() => setFailed(true));
+      .catch(fail);
     return () => {
       stopped = true;
       clearTimeout(timer);

@@ -5,6 +5,17 @@ import { requirePermission, type AuthedRequest } from './auth.js';
 import { DomainError, normalize } from './db.js';
 
 export function registerWorkspace(app: FastifyInstance, pool: Pool) {
+  app.get('/api/workspace/company-setup', async request => {
+    const actor = (request as AuthedRequest).actor;
+    requirePermission(actor,'staff');
+    const {rows} = await pool.query(`SELECT
+      EXISTS(SELECT 1 FROM staff_users WHERE org_id=o.id AND active AND role<>'owner') AS staff,
+      EXISTS(SELECT 1 FROM products WHERE org_id=o.id AND status='ACTIVE_INTERNAL') AS catalog,
+      EXISTS(SELECT 1 FROM stock_movements WHERE org_id=o.id AND on_hand_delta>0) AS intake,
+      o.tax_configured AS tax
+      FROM organizations o WHERE o.id=$1 AND o.workspace_kind='company'`, [actor.org_id]);
+    return { steps: rows[0] ?? null };
+  });
   app.get('/api/workspace/identifiers',async request => {
     const actor = (request as AuthedRequest).actor;
     requirePermission(actor,'catalog');

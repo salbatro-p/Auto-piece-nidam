@@ -1,0 +1,86 @@
+name: Company network rehearsal
+on: [push, pull_request, workflow_dispatch]
+permissions: { contents: read }
+jobs:
+  private-stack:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      COMPOSE_FILE: infrastructure/company.compose.yaml
+      COMPANY_HOST: localhost
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 24.16.0, cache: npm }
+      - run: npm ci
+      - name: Configure an isolated company
+        run: |
+          umask 077
+          for key in COMPANY_ADMIN_PASSWORD COMPANY_DB_PASSWORD COMPANY_MFA_KEY; do
+            value=$(openssl rand -hex 32)
+            echo "::add-mask::$value"
+            echo "$key=$value" >> "$GITHUB_ENV"
+          done
+          echo '{"database":"autoparts_company","company":"QA Atelier","locale":"fr","owner":{"name":"QA owner","email":"operator@example.invalid"},"warehouses":[{"code":"MAIN","name":"Counter"}]}' > "$RUNNER_TEMP/company.json"
+      - name: Start the local-only container network
+        run: |
+          docker compose config --quiet
+          docker compose up -d --build
+          for i in $(seq 1 40); do
+            if docker compose cp gateway:/data/caddy/pki/authorities/local/root.crt "$RUNNER_TEMP/company-ca.crt"; then break; fi
+            sleep 2
+          done
+          curl --fail --silent --retry 10 --retry-all-errors --cacert "$RUNNER_TEMP/company-ca.crt" https://localhost/api/health
+          test "$(docker compose exec -T db psql -U postgres -d autoparts_company -Atc "SELECT NOT rolsuper AND NOT rolcreaterole AND NOT rolcreatedb FROM pg_roles WHERE rolname='autoparts_app'")" = t
+      - name: Activate and exercise the private company via TLS
+        run: |
+          umask 077
+          docker compose exec -T api sh -c 'umask 077; cat > /tmp/company.json' < "$RUNNER_TEMP/company.json"
+          docker compose exec -T api node --import=tsx apps/api/src/setup-company.ts /tmp/company.json /tmp/company-ticket
+          docker compose exec -T api cat /tmp/company-ticket > "$RUNNER_TEMP/company-ticket"
+          NODE_EXTRA_CA_CERTS="$RUNNER_TEMP/company-ca.crt" node --import=tsx scripts/company-network-check.mts
+      - name: Verify persistence after a restart
+        run: |
+          docker compose restart db
+          docker compose restart api business gateway
+          curl --fail --silent --retry 15 --retry-delay 2 --retry-all-errors --cacert "$RUNNER_TEMP/company-ca.crt" https://localhost/api/health
+          NODE_EXTRA_CA_CERTS="$RUNNER_TEMP/company-ca.crt" node --import=tsx scripts/company-network-check.mts --after-restart
+      - name: Check staff activation and printed-receipt content in three languages
+        run: |
+          npx playwright install --with-deps chromium
+          sudo apt-get install -y libnss3-tools
+          for db in "$HOME/.pki/nssdb" "$HOME/.local/share/pki/nssdb"; do
+            mkdir -p "$db"
+            if [ ! -f "$db/cert9.db" ]; then certutil -N -d "sql:$db" --empty-password; fi
+            certutil -A -d "sql:$db" -n autoparts-ci-root -t "C,," -i "$RUNNER_TEMP/company-ca.crt"
+          done
+          NODE_EXTRA_CA_CERTS="$RUNNER_TEMP/company-ca.crt" node --import=tsx scripts/company-browser-check.mts
+      - name: Restore the encrypted backup to a separate database and media directory
+        run: |
+          umask 077
+          export GNUPGHOME="$RUNNER_TEMP/recovery-key"
+          mkdir -m 700 "$GNUPGHOME"
+          gpg --batch --passphrase '' --quick-generate-key 'QA recovery <qa@example.invalid>' default default 1d
+          recipient=$(gpg --list-secret-keys --with-colons | awk -F: '$1=="fpr" {print $10; exit}')
+          env | grep -E '^COMPANY_(HOST|DB_PASSWORD|ADMIN_PASSWORD|MFA_KEY)=' > "$RUNNER_TEMP/company.env"
+          bash scripts/backup-company.sh "$RUNNER_TEMP/company.env" "$recipient" "$RUNNER_TEMP/company-backup.gpg"
+          restored="$RUNNER_TEMP/restored"
+          mkdir -m 700 "$restored" "$RUNNER_TEMP/restored-media"
+          gpg --batch --decrypt "$RUNNER_TEMP/company-backup.gpg" | tar -xf - -C "$restored"
+          (cd "$restored" && sha256sum -c SHA256SUMS)
+          cmp "$restored/company.env" "$RUNNER_TEMP/company.env"
+          tar -xf "$restored/media.tar" -C "$RUNNER_TEMP/restored-media"
+          docker compose exec -T db createdb -U postgres autoparts_restore_check
+          docker compose exec -T db pg_restore --no-owner --no-acl --exit-on-error -U postgres -d autoparts_restore_check < "$restored/database.dump"
+          for db in autoparts_company autoparts_restore_check; do
+            docker compose exec -T db psql -U postgres -At -d "$db" -c 'SELECT id,total_minor FROM sales ORDER BY id; SELECT product_id,on_hand,reserved FROM inventory_balances ORDER BY product_id; SELECT id,thumbnail_key FROM product_media ORDER BY id' > "$restored/$db.check"
+          done
+          cmp "$restored/autoparts_company.check" "$restored/autoparts_restore_check.check"
+          key=$(docker compose exec -T db psql -U postgres -At -d autoparts_restore_check -c 'SELECT thumbnail_key FROM product_media LIMIT 1')
+          test -n "$key" && test -s "$RUNNER_TEMP/restored-media/$key"
+          docker compose exec -T api cat "/var/lib/autoparts/media/$key" | cmp - "$RUNNER_TEMP/restored-media/$key"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: private-company-receipts
+          path: ${{ runner.temp }}/staff-evidence/*.png
+          retention-days: 14

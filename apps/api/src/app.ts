@@ -136,12 +136,11 @@ export async function createApp(pool: Pool, options: { logger?: boolean } = {}) 
       return { status: 'unavailable', code: 'DATABASE_UNAVAILABLE' };
     }
   });
-  app.get('/api/config', async (request) => ({
-    defaultLocale:
-      (await pool.query('SELECT default_locale FROM organizations WHERE id=$1', [ORG_ID])).rows[0]
-        ?.default_locale ?? 'fr',
-    passwordOnlyLogin: localPasswordLogin(request),
-  }));
+  app.get('/api/config', async (request) => {
+    const org = (await pool.query('SELECT default_locale,workspace_kind FROM organizations WHERE id=$1', [ORG_ID])).rows[0];
+    const demo = org?.workspace_kind === 'demo';
+    return { defaultLocale: org?.default_locale ?? 'fr', passwordOnlyLogin: demo && localPasswordLogin(request), demo };
+  });
   registerCatalog(app, pool);
   registerInventory(app, pool);
   registerOperations(app, pool);

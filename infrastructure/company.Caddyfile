@@ -1,0 +1,7 @@
+{
+  skip_install_trust
+}
+https://{$COMPANY_HOST} {
+  tls internal
+  reverse_proxy business:80
+}

@@ -65,6 +65,7 @@ const visitor: User = { id: '', name: '', email: '', role: '', locale: 'fr', per
 function App() {
   const [locale, setLocale] = useState<Locale>(() => resolveLocale(null, navigator.language));
   const [user, setUser] = useState<User | null>(null),
+    [demoLogin, setDemoLogin] = useState(false),
     [passwordOnlyLogin, setPasswordOnlyLogin] = useState(false),
     [starting, setStarting] = useState(true),
     [warehouses, setWarehouses] = useState<Warehouse[]>([]);
@@ -119,9 +120,10 @@ function App() {
   useEffect(() => {
     Promise.all([
       api<{ user: User; csrfToken: string }>('/me').catch(() => null),
-      api<{ defaultLocale: Locale; passwordOnlyLogin: boolean }>('/config').catch(() => ({ defaultLocale: 'fr' as Locale, passwordOnlyLogin: false })),
+      api<{ defaultLocale: Locale; passwordOnlyLogin: boolean; demo: boolean }>('/config').catch(() => ({ defaultLocale: 'fr' as Locale, passwordOnlyLogin: false, demo: false })),
     ])
       .then(([session, config]) => {
+        setDemoLogin(config.demo === true);
         setPasswordOnlyLogin(config.passwordOnlyLogin === true);
         if (session) {
           setUser(session.user);
@@ -343,10 +345,10 @@ function App() {
             <h1>{t('welcome')}</h1>
             <p>{t('signInHint')}</p>
             <img className="login-art" src="/garage-dashboard.svg" alt="" width="520" height="340" />
-            <p className="editorial-foot">
+            {demoLogin && <p className="editorial-foot">
               <span className="dot" />
               {t('demoNotice')}
-            </p>
+            </p>}
           </section>
           <section className="login-form-wrap">
             <div className="eyebrow">{t('privateWorkspace')}</div>
@@ -354,10 +356,10 @@ function App() {
             <p className="muted">{t('inviteOnly')}</p>
             <LoginForm onSuccess={loginSuccess} passwordOnlyLogin={passwordOnlyLogin} />
             <Invitation />
-            <div className="demo-login">
+            {demoLogin && <div className="demo-login">
               <span className="badge neutral">{t('demo')}</span>
               <p>{t(passwordOnlyLogin ? 'localPasswordHelp' : 'localDemoHelp')}</p>
-            </div>
+            </div>}
           </section>
         </main>
       ) : (
@@ -367,10 +369,8 @@ function App() {
               <div className="workspace-label">
                 <span className="workspace-avatar">AP</span>
                 <div>
-                  <strong>AutoParts Morocco</strong>
-                  <small>
-                    Casablanca <span className="dot-separator">·</span> {t('demo')}
-                  </small>
+                  <strong><bdi>{user.demo ? 'AutoParts Morocco' : user.companyName || 'AutoParts Business'}</bdi></strong>
+                  <small>{t(user.demo ? 'demo' : 'privateWorkspace')}</small>
                 </div>
               </div>
               <nav aria-label={t('workspace')}>
@@ -419,7 +419,7 @@ function App() {
                 <span>{t('workspace')}</span>
                 <ChevronRight size={13} />
                 <span>{t(page)}</span>
-                <span className="demo-label">{t('demo')}</span>
+                {user.demo && <span className="demo-label">{t('demo')}</span>}
               </div>
               {!!error && <ErrorBanner error={error} />}
               <div key={user.id}>
@@ -453,7 +453,7 @@ function App() {
               </div>
               <footer className="content-footer">
                 <span>
-                  <Activity size={13} /> {t('demoNotice')}
+                  <Activity size={13} /> {t(user.demo ? 'demoNotice' : 'privateWorkspace')}
                 </span>
                 <span>AutoParts Business · v0.1</span>
               </footer>

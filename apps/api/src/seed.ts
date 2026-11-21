@@ -16,10 +16,12 @@ export async function seed(pool: Pool) {
     );
   return transaction(pool, async (c) => {
     await c.query('SELECT pg_advisory_xact_lock(87124522)');
-    await c.query('INSERT INTO organizations(id,name) VALUES($1,$2) ON CONFLICT DO NOTHING', [
+    await c.query("INSERT INTO organizations(id,name,workspace_kind) VALUES($1,$2,'demo') ON CONFLICT DO NOTHING", [
       ORG_ID,
       'AutoParts Morocco — ISOLATED DEMO',
     ]);
+    if ((await c.query('SELECT workspace_kind FROM organizations WHERE id=$1', [ORG_ID])).rows[0]?.workspace_kind !== 'demo')
+      throw new Error('Demo seed refused for company or unclassified workspace');
     if ((await c.query('SELECT id FROM staff_users WHERE org_id=$1 LIMIT 1', [ORG_ID])).rowCount) {
       console.log('Demo already initialized; existing records preserved');
       return;
