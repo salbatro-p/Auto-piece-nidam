@@ -70,8 +70,20 @@ async function main() {
   console.log('Owner invitation ready in the specified private file. Valid for 24 hours.');
 }
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
-  main().catch(() => {
-    console.error('Company setup did not complete. Check the target, configuration, pending invitation and private output path.');
+  main().catch((error: unknown) => {
+    const messages = [
+      'Database name does not match setup file', 'No matching unclaimed owner invitation',
+      'Setup requires an empty migrated database', 'Company setup requires private mode and a valid MFA encryption key',
+      'Usage: setup-company <company.json> <new private ticket file> [--renew]',
+    ];
+    const filesystem: Record<string,string> = {
+      EACCES: 'Setup cannot access the configuration or ticket file with this operating-system account.',
+      ENOENT: 'Configuration file or ticket directory is missing.',
+      EEXIST: 'Ticket file already exists. Choose a new private path.',
+    };
+    const code = (error as NodeJS.ErrnoException)?.code ?? '';
+    const message = error instanceof Error && messages.includes(error.message) ? error.message : filesystem[code];
+    console.error(message ?? 'Company setup did not complete. Check the configuration, migration state and database access.');
     process.exitCode=1;
   });
 }

@@ -34,9 +34,10 @@ jobs:
           test "$(docker compose exec -T db psql -U postgres -d autoparts_company -Atc "SELECT NOT rolsuper AND NOT rolcreaterole AND NOT rolcreatedb FROM pg_roles WHERE rolname='autoparts_app'")" = t
       - name: Activate and exercise the private company via TLS
         run: |
-          docker compose cp "$RUNNER_TEMP/company.json" api:/tmp/company.json
+          umask 077
+          docker compose exec -T api sh -c 'umask 077; cat > /tmp/company.json' < "$RUNNER_TEMP/company.json"
           docker compose exec -T api node --import=tsx apps/api/src/setup-company.ts /tmp/company.json /tmp/company-ticket
-          docker compose cp api:/tmp/company-ticket "$RUNNER_TEMP/company-ticket"
+          docker compose exec -T api cat /tmp/company-ticket > "$RUNNER_TEMP/company-ticket"
           NODE_EXTRA_CA_CERTS="$RUNNER_TEMP/company-ca.crt" node --import=tsx scripts/company-network-check.mts
       - name: Verify persistence after a restart
         run: |
