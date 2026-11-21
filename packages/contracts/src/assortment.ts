@@ -44,6 +44,14 @@ export function findMerchandiseTypes(query: string, group = '') {
     .map(row => row.type);
 }
 
+export function merchandiseTypesCsv(types: MerchandiseType[]) {
+  const rows = [
+    ['group_code', 'category', 'category_ar', 'category_fr', 'category_en'],
+    ...types.map(type => [type.group, type.code, type.names.ar, type.names.fr, type.names.en]),
+  ];
+  return '\uFEFF' + rows.map(row => row.map(cell => '"' + cell.replaceAll('"', '""') + '"').join(',')).join('\r\n') + '\r\n';
+}
+
 export function supplyCategoryNames<T extends { category: string; categoryNames: TypeNames }>(product: T): T {
   const type = byCode.get(product.category);
   if (!type) return product;

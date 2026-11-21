@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Download, ListTree } from 'lucide-react';
-import { assortmentGroups, findMerchandiseTypes, type MerchandiseType } from '../../../packages/contracts/src/assortment';
+import { assortmentGroups, findMerchandiseTypes, merchandiseTypesCsv, type MerchandiseType } from '../../../packages/contracts/src/assortment';
 import { useApp } from './context';
 import { Field, Modal } from './components';
 
@@ -18,12 +18,7 @@ export function AssortmentPicker({ onSelect }: { onSelect: (type: MerchandiseTyp
     setQuery(''); setGroup(''); setPage(0); setOpen(true);
   }
   function exportMatches() {
-    const rows = [
-      ['group_code', 'category', 'category_ar', 'category_fr', 'category_en'],
-      ...matches.map(type => [type.group, type.code, type.names.ar, type.names.fr, type.names.en]),
-    ];
-    const csv = rows.map(row => row.map(cell => '"' + cell.replaceAll('"', '""') + '"').join(',')).join('\r\n');
-    const url = URL.createObjectURL(new Blob(['\uFEFF', csv], {type:'text/csv;charset=utf-8'}));
+    const url = URL.createObjectURL(new Blob([merchandiseTypesCsv(matches)], {type:'text/csv;charset=utf-8'}));
     const link = document.createElement('a');
     link.href = url;
     link.download = 'autoparts-merchandise-types.csv';
