@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFile, writeFile } from 'node:fs/promises';
 import { randomBytes, randomUUID } from 'node:crypto';
+import sharp from 'sharp';
 import { totp } from '../apps/api/src/auth.js';
 
 // Disposable CI stack only. The trust root is supplied before Node starts.
@@ -35,7 +36,7 @@ if (process.argv.includes('--after-restart')) {
   assert.match(cookie,/; Secure/);assert.match(cookie,/HttpOnly/);assert.match(cookie,/SameSite=Strict/);
   const headers={cookie:cookie.split(';')[0]!, 'x-csrf-token':signed.data.csrfToken};
   const post=(url:string,data:object,key=randomUUID())=>call(url,data,{...headers,'idempotency-key':key});
-  const product=await post('/products',{sku:'QA-001',brand:'SYNTHETIC',names:{en:'Test filter',ar:'مرشح تجريبي',fr:'Filtre test'},
+  const product=await post('/products',{sku:'QA-001',brand:'SYNTHETIC',manufacturerPartNo:'QA-FILTER',names:{en:'Test filter',ar:'مرشح تجريبي',fr:'Filtre test'},
     category:'filters',packSize:1,priceMinor:4200,costMinor:2000,status:'ACTIVE_INTERNAL'});
   assert.equal(product.response.status,200);
   const productId=product.data.id;
@@ -47,6 +48,14 @@ if (process.argv.includes('--after-restart')) {
   const replay=await post('/sales',body,key);assert.equal(replay.data.id,sold.data.id);
   const stock=(await call('/products/'+productId,undefined,headers)).data.stock;
   assert.equal(stock.find((s:{warehouseId:string})=>s.warehouseId===warehouseId).available,3);
+  const license=await post('/media/licenses',{name:'QA fixture',sourceType:'COMPANY',termsVersion:'QA',
+    proof:'Synthetic image for isolated recovery testing only.',internalDisplayPermitted:true,publicDisplayPermitted:false});
+  assert.equal(license.response.status,200);
+  const fixture=await sharp({create:{width:640,height:480,channels:3,background:'#745927'}}).png().toBuffer();
+  const image=await post('/media/stage',{productId,kind:'COMPANY_ORIGINAL_PHOTO',sku:'QA-001',manufacturerBrand:'SYNTHETIC',
+    manufacturerPartNumber:'QA-FILTER',licenseId:license.data.id,mime:'image/png',data:fixture.toString('base64')});
+  assert.equal(image.response.status,200);
+  assert.equal(image.data.state,'REVIEW_REQUIRED');
   await writeFile(dir+'/company-session.json',JSON.stringify({id:sold.data.id,headers}),{mode:0o600});
   console.log('Verified first-owner MFA, secure session, receipt replay, available stock and anonymous access policy over trusted HTTPS.');
 }

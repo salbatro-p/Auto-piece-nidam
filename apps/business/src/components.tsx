@@ -211,11 +211,16 @@ export function useMutation() {
   async function run<T>(path: string, body: unknown, method = 'POST',onUploadProgress?:(percent:number)=>void): Promise<T | undefined> {
     if (busyRef.current) return;
     const recovering=pendingRef.current;
+    if (recovering && (path !== recovering.path || method !== recovering.method)) {
+      setError(new ApiError('unknownOutcome'));
+      return;
+    }
     const request = recovering ?? { path, body, key: mutationKey(), method };
     if (!online) {
       setError(new ApiError('NETWORK_ERROR'));
       return;
     }
+    let checking = Boolean(recovering);
     busyRef.current=true;setBusy(true);
     setError(undefined);
     try {
@@ -223,6 +228,7 @@ export function useMutation() {
         const recovered = await api<{ status: string; response: T }>(
           '/requests/' + encodeURIComponent(request.key),
         );
+        checking = false;
         if (recovered.status === 'COMMITTED') {
           updatePending(null);
           return recovered.response;
@@ -233,7 +239,7 @@ export function useMutation() {
       return result;
     } catch (err) {
       setError(err);
-      if (err instanceof ApiError && (err.code === 'NETWORK_ERROR' || (err.status ?? 0) >= 500))
+      if (checking || (err instanceof ApiError && (err.code === 'NETWORK_ERROR' || (err.status ?? 0) >= 500)))
         updatePending(request);
       else updatePending(null);
       return;

@@ -45,3 +45,42 @@ jobs:
           docker compose restart api business gateway
           curl --fail --silent --retry 15 --retry-delay 2 --retry-all-errors --cacert "$RUNNER_TEMP/company-ca.crt" https://localhost/api/health
           NODE_EXTRA_CA_CERTS="$RUNNER_TEMP/company-ca.crt" node --import=tsx scripts/company-network-check.mts --after-restart
+      - name: Check staff activation and printed-receipt content in three languages
+        run: |
+          npx playwright install --with-deps chromium
+          sudo apt-get install -y libnss3-tools
+          for db in "$HOME/.pki/nssdb" "$HOME/.local/share/pki/nssdb"; do
+            mkdir -p "$db"
+            if [ ! -f "$db/cert9.db" ]; then certutil -N -d "sql:$db" --empty-password; fi
+            certutil -A -d "sql:$db" -n autoparts-ci-root -t "C,," -i "$RUNNER_TEMP/company-ca.crt"
+          done
+          NODE_EXTRA_CA_CERTS="$RUNNER_TEMP/company-ca.crt" node --import=tsx scripts/company-browser-check.mts
+      - name: Restore the encrypted backup to a separate database and media directory
+        run: |
+          umask 077
+          export GNUPGHOME="$RUNNER_TEMP/recovery-key"
+          mkdir -m 700 "$GNUPGHOME"
+          gpg --batch --passphrase '' --quick-generate-key 'QA recovery <qa@example.invalid>' default default 1d
+          recipient=$(gpg --list-secret-keys --with-colons | awk -F: '$1=="fpr" {print $10; exit}')
+          env | grep -E '^COMPANY_(HOST|DB_PASSWORD|ADMIN_PASSWORD|MFA_KEY)=' > "$RUNNER_TEMP/company.env"
+          bash scripts/backup-company.sh "$RUNNER_TEMP/company.env" "$recipient" "$RUNNER_TEMP/company-backup.gpg"
+          restored="$RUNNER_TEMP/restored"
+          mkdir -m 700 "$restored" "$RUNNER_TEMP/restored-media"
+          gpg --batch --decrypt "$RUNNER_TEMP/company-backup.gpg" | tar -xf - -C "$restored"
+          (cd "$restored" && sha256sum -c SHA256SUMS)
+          cmp "$restored/company.env" "$RUNNER_TEMP/company.env"
+          tar -xf "$restored/media.tar" -C "$RUNNER_TEMP/restored-media"
+          docker compose exec -T db createdb -U postgres autoparts_restore_check
+          docker compose exec -T db pg_restore --no-owner --no-acl --exit-on-error -U postgres -d autoparts_restore_check < "$restored/database.dump"
+          for db in autoparts_company autoparts_restore_check; do
+            docker compose exec -T db psql -U postgres -At -d "$db" -c 'SELECT id,total_minor FROM sales ORDER BY id; SELECT product_id,on_hand,reserved FROM inventory_balances ORDER BY product_id; SELECT id,thumbnail_key FROM product_media ORDER BY id' > "$restored/$db.check"
+          done
+          cmp "$restored/autoparts_company.check" "$restored/autoparts_restore_check.check"
+          key=$(docker compose exec -T db psql -U postgres -At -d autoparts_restore_check -c 'SELECT thumbnail_key FROM product_media LIMIT 1')
+          test -n "$key" && test -s "$RUNNER_TEMP/restored-media/$key"
+          docker compose exec -T api cat "/var/lib/autoparts/media/$key" | cmp - "$RUNNER_TEMP/restored-media/$key"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: private-company-receipts
+          path: ${{ runner.temp }}/staff-evidence/*.png
+          retention-days: 14
