@@ -960,7 +960,7 @@ export function ProductEditor({
 }
 
 export function Receipt({ sale, onClose }: { sale: Sale; onClose: () => void }) {
-  const { t, locale } = useApp();
+  const { t, locale, user } = useApp();
   const createdAt = sale.createdAt ?? sale.created_at;
   return (
     <Modal title={t('receipt')} onClose={onClose}>
@@ -972,7 +972,7 @@ export function Receipt({ sale, onClose }: { sale: Sale; onClose: () => void }) 
         lang={locale}
       >
         <div className="receipt-logo">
-          AutoParts <strong>Business</strong>
+          <strong><bdi>{user.demo ? 'AutoParts Business' : user.companyName || 'AutoParts Business'}</bdi></strong>
         </div>
         <p>{t(sale.kind === 'QUOTE' ? 'quote' : 'saleConfirmed')}</p>
         {sale.expiresAt && (
@@ -1022,7 +1022,7 @@ export function Receipt({ sale, onClose }: { sale: Sale; onClose: () => void }) 
         </div>
         <p className="small">{t(sale.kind === 'QUOTE' ? 'quoteDisclaimer' : 'receiptDisclaimer')}</p>
         {!sale.taxConfigured && <p className="small">{t('taxNotConfigured')}</p>}
-        <p className="small">{t('demoNotice')}</p>
+        {user.demo && <p className="small">{t('demoNotice')}</p>}
       </article>
       <button className="button primary full no-print" onClick={() => window.print()}>
         <Printer size={18} />
@@ -1053,27 +1053,49 @@ export function PointOfSale({ entry,active=true }: { entry?: { sku: string }; ac
   const commit = useMutation(),
     reserve = useMutation(),
     release = useMutation();
-  const blocked =
-    !!reserved ||
-    commit.busy ||
-    reserve.busy ||
-    !!commit.pending ||
-    !!reserve.pending ||
-    quote.busy ||
-    !!quote.pending;
+  const [refreshing, setRefreshing] = useState(false);
+  const [scans, setScans] = useState(0);
+  const [scanNotice, setScanNotice] = useState<MessageKey>();
+  const mutations = [commit, reserve, release, quote];
+  const working = refreshing || mutations.some(action => action.busy);
+  const pendingPath = mutations.find(action => action.pending)?.pending?.path;
+  const cartLocked = !!reserved || working || !!pendingPath;
+  const blocked = cartLocked || scans > 0;
+  const canRun = (path: string) => online && !working && !scans && (!pendingPath || pendingPath === path);
   const totals = priceTotals(
       cart.map((l) => ({ priceMinor: l.product.priceMinor, quantity: l.quantity })),
       tax.data ?? { rateBps: 0, inclusive: false },
     ),
     total = totals.totalMinor;
   function add(p: Product) {
-    if (blocked || p.status !== 'ACTIVE_INTERNAL' || totalStock(p, wh).available <= 0) return;
-    setCart((lines) => {
-      const old = lines.find((l) => l.product.id === p.id);
-      return old
-        ? lines.map((l) => (l.product.id === p.id ? { ...l, quantity: l.quantity + 1 } : l))
-        : [...lines, { product: p, quantity: 1 }];
-    });
+    if (cartLocked || p.status !== 'ACTIVE_INTERNAL' || totalStock(p, wh).available <= 0) return;
+    setCart(lines => lines.some(line => line.product.id === p.id)
+      ? lines.map(line => line.product.id === p.id ? { ...line, quantity: line.quantity + 1 } : line)
+      : [...lines, { product: p, quantity: 1 }]);
+  }
+  async function scanToCart(input: string) {
+    const code = input.trim();
+    if (!code || !wh || cartLocked || !active) return;
+    setScans(count => count + 1);
+    setRefreshError(undefined);
+    setScanNotice(undefined);
+    try {
+      const query = new URLSearchParams({ q: code, warehouseId: wh });
+      const result = await api<{ items: Product[]; total: number }>(`/products?${query}`);
+      const part = result.items[0];
+      const fold = (value: string) => value.normalize('NFD').toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
+      const exact = part && result.total === 1 &&
+        [part.sku, part.oem, part.barcode, part.manufacturerPartNo].some(ref => ref && fold(ref) === fold(code));
+      if (exact && part.status === 'ACTIVE_INTERNAL' && totalStock(part, wh).available > 0) {
+        add(part);
+      } else {
+        setScanNotice('inspectScan');
+      }
+    } catch (err) {
+      setRefreshError(err);
+    } finally {
+      setScans(count => count - 1);
+    }
   }
   const lines = cart.map((l) => ({ productId: l.product.id, quantity: l.quantity }));
   async function finish() {
@@ -1109,24 +1131,20 @@ export function PointOfSale({ entry,active=true }: { entry?: { sku: string }; ac
               testId={active ? 'product-search' : 'inactive-pos-search'}
               value={q}
               onChange={setQ}
-              onEnter={() => {
-                if (!products.loading && products.data?.items.length === 1 && q.trim()) {
-                  const selected = products.data.items[0];
-                  const fold = (value: string) => value.normalize('NFD').toLowerCase().replace(/[^\p{L}\p{N}]/gu,'');
-                  if ([selected.sku,selected.oem,selected.barcode,selected.manufacturerPartNo].some(value => value && fold(value)===fold(q)))
-                    add(selected);
-                }
-              }}
+              onEnter={scanToCart}
+              onScan={scanToCart}
             />
             <WarehouseSelect
               value={wh}
               onChange={(id) => {
-                if (cart.length) return;
+                if (cart.length || scans) return;
                 setWarehouse(id);
               }}
-              disabled={cart.length > 0}
+              disabled={cart.length > 0 || scans > 0}
             />
           </div>
+          {scans > 0 && <p role="status">{t('checkingScan')}</p>}
+          {scanNotice && <p className="notice warning" role="status">{t(scanNotice)}</p>}
           <ErrorBanner error={products.error} />
           <div className="parts-grid">
             {products.data?.items.map((p) => (
@@ -1163,7 +1181,7 @@ export function PointOfSale({ entry,active=true }: { entry?: { sku: string }; ac
               <button
                 className="list-row full"
                 key={s.id}
-                onClick={() => void api<Sale>(`/sales/${s.id}`).then(setSale)}
+                onClick={() => void api<Sale>(`/sales/${s.id}`).then(setSale).catch(setRefreshError)}
               >
                 <bdi className="mono">{s.id.slice(0, 8)}</bdi>
                 <Amount minor={s.totalMinor} />
@@ -1180,7 +1198,7 @@ export function PointOfSale({ entry,active=true }: { entry?: { sku: string }; ac
                 {q.status === 'OPEN' && (
                   <button
                     className="text-button"
-                    disabled={quote.busy}
+                    disabled={!canRun(`/quotes/${q.id}/cancel`)}
                     onClick={async () => {
                       if (await quote.run(`/quotes/${q.id}/cancel`, {})) quotes.reload();
                     }}
@@ -1280,9 +1298,10 @@ export function PointOfSale({ entry,active=true }: { entry?: { sku: string }; ac
             {!tax.data?.configured && <p className="small muted">{t('taxNotConfigured')}</p>}
             <button
               className="text-button"
-              disabled={!cart.length || commit.busy || !!commit.pending}
+              disabled={!cart.length || !online || working || scans > 0 || !!pendingPath}
               onClick={async () => {
                 setRefreshError(undefined);
+                setRefreshing(true);
                 try {
                   const updated = await Promise.all(
                     cart.map(async (l) => ({
@@ -1294,6 +1313,8 @@ export function PointOfSale({ entry,active=true }: { entry?: { sku: string }; ac
                   tax.reload();
                 } catch (e) {
                   setRefreshError(e);
+                } finally {
+                  setRefreshing(false);
                 }
               }}
             >
@@ -1302,16 +1323,7 @@ export function PointOfSale({ entry,active=true }: { entry?: { sku: string }; ac
             <button
               data-testid="sale-submit"
               className="button primary full"
-              disabled={
-                !cart.length ||
-                !online ||
-                !tax.data ||
-                commit.busy ||
-                reserve.busy ||
-                release.busy ||
-                quote.busy ||
-                !!quote.pending
-              }
+              disabled={!cart.length || !tax.data || !canRun('/sales')}
               onClick={() => void finish()}
             >
               {commit.busy ? t('pending') : t(commit.pending ? 'retry' : 'completeSale')}
@@ -1320,15 +1332,7 @@ export function PointOfSale({ entry,active=true }: { entry?: { sku: string }; ac
             <MutationState state={quote} />
             <button
               className="button secondary full"
-              disabled={
-                !cart.length ||
-                !tax.data ||
-                !online ||
-                quote.busy ||
-                commit.busy ||
-                !!commit.pending ||
-                !!reserved
-              }
+              disabled={!cart.length || !tax.data || !!reserved || !canRun('/quotes')}
               onClick={async () => {
                 const q = await quote.run<Sale>('/quotes', { warehouseId: wh, lines, locale });
                 if (q) {
@@ -1337,12 +1341,12 @@ export function PointOfSale({ entry,active=true }: { entry?: { sku: string }; ac
                 }
               }}
             >
-              {t(quote.pending ? 'retry' : 'saveQuote')}
+              {t(quote.pending?.path === '/quotes' ? 'retry' : 'saveQuote')}
             </button>
             {reserved ? (
               <button
                 className="button secondary full"
-                disabled={release.busy || commit.busy}
+                disabled={!canRun(`/inventory/reservations/${reserved}/release`)}
                 onClick={() =>
                   void release.run(`/inventory/reservations/${reserved}/release`, {}).then((result) => {
                     if (result) {
@@ -1352,12 +1356,12 @@ export function PointOfSale({ entry,active=true }: { entry?: { sku: string }; ac
                   })
                 }
               >
-                {t('release')}
+                {t(release.pending ? 'retry' : 'release')}
               </button>
             ) : (
               <button
                 className="button secondary full"
-                disabled={!cart.length || !online || commit.busy || reserve.busy || !!commit.pending}
+                disabled={!cart.length || !canRun('/inventory/reservations')}
                 onClick={() =>
                   void reserve
                     .run<{ id: string }>('/inventory/reservations', {
@@ -1374,7 +1378,7 @@ export function PointOfSale({ entry,active=true }: { entry?: { sku: string }; ac
                     })
                 }
               >
-                {t('reserve')}
+                {t(reserve.pending ? 'retry' : 'reserve')}
               </button>
             )}
           </div>

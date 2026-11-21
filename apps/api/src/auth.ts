@@ -112,9 +112,11 @@ export function totp(secret: string, step = Math.floor(Date.now() / 30000)) {
   const offset = digest[19]! & 15;
   return String((digest.readUInt32BE(offset) & 0x7fffffff) % 1000000).padStart(6, '0');
 }
-export function userView(actor: Actor) {
+export function userView(actor: Actor & { organization_name?: string; workspace_kind?: string }) {
   return {
     id: actor.id,
+    companyName: actor.organization_name,
+    demo: actor.workspace_kind === 'demo',
     name: actor.name,
     email: (actor as Actor & { email?: string }).email,
     role: actor.role,
@@ -166,7 +168,7 @@ export function installAuth(app: FastifyInstance, pool: Pool) {
     const token = cookieValue(request);
     if (!token) throw new DomainError('UNAUTHENTICATED', 401);
     const result = await pool.query(
-      `SELECT u.*,s.csrf_token,s.token_hash FROM sessions s JOIN staff_users u ON u.id=s.user_id WHERE s.token_hash=$1 AND s.expires_at>now() AND s.revoked_at IS NULL AND s.last_seen>now()-interval '5 minutes' AND u.active`,
+      `SELECT u.*,o.name AS organization_name,o.workspace_kind,s.csrf_token,s.token_hash FROM sessions s JOIN staff_users u ON u.id=s.user_id JOIN organizations o ON o.id=u.org_id WHERE s.token_hash=$1 AND s.expires_at>now() AND s.revoked_at IS NULL AND s.last_seen>now()-interval '5 minutes' AND u.active`,
       [hash(token)],
     );
     if (!result.rowCount) {
@@ -205,7 +207,7 @@ export function installAuth(app: FastifyInstance, pool: Pool) {
     if (attempts.size > 10000)
       for (const [key, value] of attempts) if (value.until < Date.now()) attempts.delete(key);
     return transaction(pool, async (c) => {
-      const result = await c.query('SELECT * FROM staff_users WHERE lower(email)=$1 AND active FOR UPDATE', [
+      const result = await c.query('SELECT u.*,o.name AS organization_name,o.workspace_kind FROM staff_users u JOIN organizations o ON o.id=u.org_id WHERE lower(u.email)=$1 AND u.active FOR UPDATE OF u', [
         data.email.toLowerCase(),
       ]);
       const row = result.rows[0];
@@ -215,7 +217,7 @@ export function installAuth(app: FastifyInstance, pool: Pool) {
           'dummy:00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000',
       );
       if (!row || !valid) throw new DomainError('INVALID_CREDENTIALS', 401);
-      if (['owner', 'manager'].includes(row.role) && !localPasswordLogin(request)) {
+      if (['owner', 'manager'].includes(row.role) && !(row.workspace_kind === 'demo' && localPasswordLogin(request))) {
         if (!row.mfa_secret) throw new DomainError('MFA_SETUP_REQUIRED', 403);
         if (!data.totp) throw new DomainError('MFA_REQUIRED', 401);
         const step = Math.floor(Date.now() / 30000);

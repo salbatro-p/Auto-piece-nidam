@@ -1,4 +1,6 @@
 export const workspaceMessages = {
+  checkingScan: ['Checking the scanned reference…', 'Vérification de la référence scannée…', 'جارٍ التحقق من المرجع الممسوح…'],
+  inspectScan: ['Scan could not be added. Check the exact reference and available stock.', 'Ajout impossible. Vérifiez la référence exacte et le stock disponible.', 'تعذرت إضافة القطعة الممسوحة. تحقق من المرجع الدقيق والكمية المتاحة.'],
   lookupTitle: ['Find a part or reference', 'Retrouver une pièce ou une référence', 'ابحث عن قطعة أو مرجع'],
   catalogTools: ['Photo tools and export', 'Outils photo et export', 'أدوات الصور والتصدير'],
   partSections: ['Part sections', 'Rubriques de la pièce', 'أقسام بطاقة القطعة'],

@@ -1,5 +1,7 @@
 import type { Locale } from '../../../packages/i18n/src/index';
 export interface User {
+  companyName?: string;
+  demo?: boolean;
   id: string;
   name: string;
   email: string;

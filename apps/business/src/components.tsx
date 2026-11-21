@@ -256,13 +256,15 @@ export function SearchBox({
   value,
   onChange,
   onEnter,
+  onScan,
   label,
   testId = 'product-search',
   autoFocus = false,
 }: {
   value: string;
   onChange: (value: string) => void;
-  onEnter?: () => void;
+  onEnter?: (value: string) => void;
+  onScan?: (value: string) => void;
   label?: string;
   testId?: string;
   autoFocus?: boolean;
@@ -287,7 +289,10 @@ export function SearchBox({
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
               e.preventDefault();
-              onEnter?.();
+              if (!e.repeat) {
+                onEnter?.(e.currentTarget.value);
+                if (onScan) e.currentTarget.select();
+              }
             }
           }}
         />
@@ -299,10 +304,11 @@ export function SearchBox({
         <button
           className="icon-button scan-button"
           onClick={() => {
-            if (!('BarcodeDetector' in window)) {
+            if (!('BarcodeDetector' in window) || !navigator.mediaDevices?.getUserMedia) {
               setError(true);
               return;
             }
+            setError(false);
             setScan(true);
           }}
           title={t('camera')}
@@ -321,6 +327,7 @@ export function SearchBox({
           onClose={() => setScan(false)}
           onValue={(code) => {
             onChange(code);
+            onScan?.(code);
             setScan(false);
           }}
         />
@@ -337,6 +344,10 @@ function Scanner({ onClose, onValue }: { onClose: () => void; onValue: (value: s
     let stream: MediaStream | undefined,
       stopped = false,
       timer: ReturnType<typeof setTimeout>;
+    const fail = () => {
+      stream?.getTracks().forEach(track => track.stop());
+      if (!stopped) setFailed(true);
+    };
     void navigator.mediaDevices
       .getUserMedia({ video: { facingMode: 'environment' } })
       .then(async (result) => {
@@ -357,12 +368,13 @@ function Scanner({ onClose, onValue }: { onClose: () => void; onValue: (value: s
         const loop = async () => {
           if (stopped || !video.current) return;
           const hits = await detector.detect(video.current);
-          if (hits[0]) onValue(hits[0].rawValue);
-          else timer = setTimeout(() => void loop(), 200);
+          if (stopped) return;
+          if (hits[0]?.rawValue) onValue(hits[0].rawValue);
+          else timer = setTimeout(() => void loop().catch(fail), 200);
         };
         await loop();
       })
-      .catch(() => setFailed(true));
+      .catch(fail);
     return () => {
       stopped = true;
       clearTimeout(timer);

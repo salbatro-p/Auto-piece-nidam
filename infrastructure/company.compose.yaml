@@ -1,0 +1,69 @@
+name: autoparts-company
+x-db: &database-url postgresql://autoparts_app:${COMPANY_DB_PASSWORD:?Use a unique hex password}@db:5432/autoparts_company
+x-api: &api
+  build: { context: .., dockerfile: infrastructure/Dockerfile, target: api }
+  environment:
+    DATABASE_URL: *database-url
+    NODE_ENV: production
+    DEMO_MODE: "false"
+    LOCAL_PREVIEW_PASSWORD_ONLY: "false"
+    APP_ORIGINS: https://${COMPANY_HOST:?Set the approved local DNS name or IP}
+    MFA_ENCRYPTION_KEY: ${COMPANY_MFA_KEY:?Use a private 64-character hex key}
+  networks: [private]
+services:
+  db:
+    image: postgres:18.6
+    environment:
+      POSTGRES_DB: autoparts_company
+      POSTGRES_PASSWORD: ${COMPANY_ADMIN_PASSWORD:?Use a separate administrator password}
+      COMPANY_DB_PASSWORD: ${COMPANY_DB_PASSWORD:?Use a unique hex password}
+    volumes:
+      - company-db:/var/lib/postgresql
+      - ./company-role.sql:/docker-entrypoint-initdb.d/01-app-role.sql:ro
+    networks: [private]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U postgres -d autoparts_company"]
+      interval: 3s
+      timeout: 3s
+      retries: 40
+  migrate:
+    <<: *api
+    command: ["node","--import=tsx","apps/api/src/migrate.ts"]
+    depends_on: { db: { condition: service_healthy } }
+    restart: "no"
+  api:
+    <<: *api
+    volumes: ["company-media:/var/lib/autoparts/media"]
+    depends_on: { migrate: { condition: service_completed_successfully } }
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD","node","-e","fetch('http://127.0.0.1:4310/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 3s
+      timeout: 3s
+      retries: 40
+  business:
+    build: { context: .., dockerfile: infrastructure/Dockerfile, target: business }
+    networks: [private]
+    depends_on: { api: { condition: service_healthy } }
+    restart: unless-stopped
+  gateway:
+    image: caddy:2.10-alpine
+    environment:
+      COMPANY_HOST: ${COMPANY_HOST:?Set the approved local DNS name or IP}
+    ports: ["${COMPANY_BIND_IP:-127.0.0.1}:443:443"]
+    volumes:
+      - ./company.Caddyfile:/etc/caddy/Caddyfile:ro
+      - company-tls:/data
+      - company-tls-config:/config
+    networks: [edge,private]
+    depends_on: [business]
+    restart: unless-stopped
+networks:
+  private: { internal: true }
+  edge: {}
+volumes:
+  company-db:
+  company-media:
+  company-tls:
+  company-tls-config:

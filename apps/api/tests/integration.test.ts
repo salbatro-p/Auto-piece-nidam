@@ -822,8 +822,9 @@ test('SEC-02: CSRF, SQL injection, brute force, malformed image and public endpo
     assert.equal(fake.statusCode, 400);
     const config = await app.inject({ url: '/api/config' });
     assert.equal(config.statusCode, 200);
-    assert.deepEqual(Object.keys(config.json()), ['defaultLocale', 'passwordOnlyLogin']);
+    assert.deepEqual(Object.keys(config.json()), ['defaultLocale', 'passwordOnlyLogin', 'demo']);
     assert.equal(config.json().passwordOnlyLogin, false);
+    assert.equal(config.json().demo, true);
   }));
 test('Local password login preserves enrolled MFA and requires MFA again outside the local preview', () =>
   measured('LOCAL-PASSWORD-LOGIN', async () => {
