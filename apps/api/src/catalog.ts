@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { type Actor, audit, DomainError, hash, normalize, warehouseScope } from './db.js';
 import { type AuthedRequest, requirePermission } from './auth.js';
 import { mutation } from './inventory.js';
+import { supplyCategoryNames } from '../../../packages/contracts/src/assortment.js';
 const uuid = z.string().uuid();
 const localized = z
   .object({
@@ -20,7 +21,7 @@ const metadata = z
     suppliedReviewStatus: localized.default({ ar: '', fr: '', en: '' }),
   })
   .strict();
-export const productSchema = z
+const productFields = z
   .object({
     sku: z.string().trim().min(1).max(80),
     names: localized.refine((n) => Object.values(n).some(Boolean)),
@@ -44,6 +45,7 @@ export const productSchema = z
     sourceId: uuid.optional(),
   })
   .strict();
+export const productSchema = productFields.transform(supplyCategoryNames);
 type ProductData = z.infer<typeof productSchema>;
 async function sourceAllowed(c: PoolClient, actor: Actor, id?: string) {
   if (
@@ -269,7 +271,7 @@ export function registerCatalog(app: FastifyInstance, pool: Pool) {
     pool,
     '/api/products/:id/update',
     'catalog',
-    productSchema.extend({ version: z.number().int().positive() }),
+    productFields.extend({ version: z.number().int().positive() }).transform(supplyCategoryNames),
     async (c, actor, d, req) => {
       const id = uuid.parse((req.params as any).id),
         old = (

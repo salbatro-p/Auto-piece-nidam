@@ -1,4 +1,10 @@
 export const workspaceMessages = {
+  browseTypes: ['Browse merchandise types', 'Parcourir les types d’articles', 'تصفح أنواع السلع'],
+  searchType: ['Search by name or type code', 'Rechercher par nom ou code de type', 'البحث باسم النوع أو رمزه'],
+  assortmentGroup: ['Department', 'Rayon', 'القسم'],
+  downloadTypes: ['Download types (CSV)', 'Télécharger les types (CSV)', 'تنزيل الأنواع (CSV)'],
+  typeCount: ['Merchandise types found · {count, number}', 'Types d’articles trouvés · {count, number}', 'عدد أنواع السلع المطابقة · {count, number}'],
+  customTypeHint: ['Try another name or enter a custom category when registering the item.', 'Essayez un autre nom ou saisissez une catégorie libre sur la fiche article.', 'جرّب اسماً آخر أو أدخل فئة خاصة عند تسجيل الصنف.'],
   prepareCounter: ['Prepare your counter', 'Préparer le comptoir', 'تجهيز نقطة البيع'],
   staffSetupStep: ['Activate the first staff account', 'Activer le premier compte employé', 'تفعيل أول حساب موظف'],
   catalogSetupStep: ['Register a part for sale', 'Enregistrer une pièce à vendre', 'تسجيل قطعة للبيع'],

@@ -3,8 +3,23 @@ import type { Pool } from 'pg';
 import { z } from 'zod';
 import { type AuthedRequest, requirePermission } from './auth.js';
 import { DomainError } from './db.js';
+import { assortmentGroups, findMerchandiseTypes } from '../../../packages/contracts/src/assortment.js';
 const vehicleColumns = `id,make,model,generation,year_from AS "yearFrom",year_to AS "yearTo",market,engine,equipment,fuel,transmission,body`;
 export function registerCatalogDiscovery(app: FastifyInstance, pool: Pool) {
+  app.get('/api/catalog/assortment', async (request) => {
+    const filter = z.object({
+      q: z.string().max(160).default(''),
+      group: z.string().max(64).default(''),
+      page: z.coerce.number().int().min(1).max(10000).default(1),
+    }).strict().parse(request.query);
+    const matches = findMerchandiseTypes(filter.q, filter.group);
+    const start = (filter.page - 1) * 50;
+    return {
+      groups: assortmentGroups.map(({code,names}) => ({code,names})),
+      items: matches.slice(start,start+50),
+      total: matches.length,
+    };
+  });
   app.get('/api/catalog/vehicle-options', async (request) => {
     const actor = (request as AuthedRequest).actor,
       q = z
