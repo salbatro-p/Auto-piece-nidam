@@ -1,0 +1,80 @@
+{
+  "date": "2026-11-22",
+  "source": "31a49a598ee15202e2a5ad50be8043f97150c0f8",
+  "startingMain": "2c1e8c8ea69993ed50a7292c4999e90db4c1d6a9",
+  "os": "Windows",
+  "node": "v24.16.0",
+  "fixtures": {
+    "skus": 10728,
+    "types": 447,
+    "units": 648996,
+    "warehouses": 2
+  },
+  "company": {
+    "companyBootstrapRefused": true,
+    "renewRefused": true,
+    "demoSeedRefused": true,
+    "unchanged": {
+      "o": "1",
+      "p": "10729",
+      "users": "4",
+      "invites": "4"
+    },
+    "logout": true,
+    "ownerMfa": true,
+    "searchSamples": 60,
+    "searchP50Ms": 14,
+    "searchP95Ms": 20,
+    "ledger": true
+  },
+  "previewRecovery": {
+    "tables": 49,
+    "sequences": 1,
+    "mediaFiles": 2844,
+    "equal": true,
+    "restoredOwnerLogin": true
+  },
+  "companyRecovery": {
+    "tables": 49,
+    "sequences": 1,
+    "mediaFiles": 3,
+    "equal": true,
+    "restoredOwnerLogin": true
+  },
+  "privateRoleVerifiedAfterRestore": true,
+  "passphraseProtectedKeyRestore": true,
+  "core": {
+    "passed": 57,
+    "failed": 0
+  },
+  "browser": {
+    "passed": 27,
+    "failed": 0,
+    "durationMinutes": 8
+  },
+  "strengthenedReceiptAndLanguageTests": {
+    "passed": 3
+  },
+  "screens": {
+    "count": 156,
+    "widths": [
+      320,
+      390,
+      1024,
+      1440
+    ],
+    "languages": [
+      "ar",
+      "fr",
+      "en"
+    ],
+    "reportedAxeViolations": 0,
+    "bodyHorizontalOverflow": 0
+  },
+  "sale": {
+    "amountMinor": 4255,
+    "unknownFitments": 0,
+    "receiptTimestampMatched": true
+  },
+  "portableBackup": "OpenSSL CMS AES-256-GCM; Windows tar and PostgreSQL custom-format archive. Physical off-host transfer pending."
+}

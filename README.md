@@ -1,5 +1,7 @@
 # AutoParts Morocco — private Business, shared commerce backend
 
+[Windows company setup and recovery](docs/WINDOWS_COMPANY_GUIDE_AR.md) · [Local Phase 1 acceptance, 22 November 2026](docs/LOCAL_PHASE1_2026-11-22.md)
+
 Working local Phase 1 software based on the supplied v1.2 blueprint and v1.3 additions. **Development and acceptance testing are in progress; this is not a production release.** Phase 2 Shop has its own application boundary and public contracts, but is not launched.
 
 Business: <http://127.0.0.1:4173/>. API: <http://127.0.0.1:4310/api/health>. Both bind locally. The synthetic demo is isolated from other PostgreSQL installations and from real company inventory.

@@ -1,4 +1,8 @@
-# Phase 1 acceptance report — NOT READY FOR RELEASE
+# AutoParts Business acceptance
+
+The [22 November local acceptance matrix](LOCAL_PHASE1_2026-11-22.md) covers the Windows company installation, migration 016, language checks and local recovery. Earlier dated observations follow.
+
+## Historical Phase 1 report
 
 ## 12 November 2026 — requested local login change
 

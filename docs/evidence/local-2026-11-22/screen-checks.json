@@ -1,0 +1,1406 @@
+[
+  {
+    "screen": "receipt",
+    "width": 320,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "0ebaf5517b7b3ef33f1d43ab36fe5f3cf0e7922434f9fa91c1e9bfd1e3663859"
+  },
+  {
+    "screen": "dashboard",
+    "width": 320,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "789bba7fcbe14451bb2dc497ec9bb417bf00e8b8d8f04b3307137b6e0e5c9c43"
+  },
+  {
+    "screen": "pos",
+    "width": 320,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "07ff5b5e421a92b00b1f3e232dc237831a0c0a983cd22b2b05c456560fe19111"
+  },
+  {
+    "screen": "inventory",
+    "width": 320,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "3cf6590f2335f429d3ceee56565af14dc309732eb0542f6f83ff2016c665d851"
+  },
+  {
+    "screen": "purchases",
+    "width": 320,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "89846691ce915de3ba1293be6cd881e248a5ed1f1a4027c96c65af1d75bc5867"
+  },
+  {
+    "screen": "suppliers",
+    "width": 320,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "9e916617d15ff8da6c0aed1b5c3e4eb418a3a63ff48428e36bb0be33ba52d5ce"
+  },
+  {
+    "screen": "vehicles",
+    "width": 320,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "4cdb073f978e6009acf16f7d05144324322e3b82e203fdd3e70171250b9de881"
+  },
+  {
+    "screen": "imports",
+    "width": 320,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "5da77cc4800ba0135559dbda81409f2ca2a6be1d176db9c35b685727f88187a3"
+  },
+  {
+    "screen": "audit",
+    "width": 320,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "22b35c99b9762450909fc27f9d98d60540ec8e3f71b2346e00397ada22f41769"
+  },
+  {
+    "screen": "team",
+    "width": 320,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "0edccaf617cf90d93cecbd42cfb19daee0e482e5cede0a405c46102f869a91bb"
+  },
+  {
+    "screen": "catalog",
+    "width": 320,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "8391ee07e6502b18c7b0aaf83d3d5f8d831d3908e87d3340adab2ffc07624146"
+  },
+  {
+    "screen": "photo",
+    "width": 320,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "7a8c2e3e9cf838b7c3ac85e767d9d92ed3e27955587bcc7cb0dea4554ad50cc3"
+  },
+  {
+    "screen": "upload",
+    "width": 320,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "076998649711ecdab55d7852bd8f64abd4370dd873fb8dfeb3b8f34005cdaa90"
+  },
+  {
+    "screen": "receipt",
+    "width": 320,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "ae2633e3c902b9db93283fe750e93165690e68aa0572b21c3df8fcdcefae8cb7"
+  },
+  {
+    "screen": "dashboard",
+    "width": 320,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "d788e76a0d7cdbbee6bd028e1a172dcf53e73c5d643be536548728aa34f0067d"
+  },
+  {
+    "screen": "pos",
+    "width": 320,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "c8a57ec88ecb33829ff90e1615fc87365afd190a9d8e69d8f28423e04b1d80c0"
+  },
+  {
+    "screen": "inventory",
+    "width": 320,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "ece4ba4125d80383e52635a560a57ad97df61622eb21df4667acf6362c9ce22d"
+  },
+  {
+    "screen": "purchases",
+    "width": 320,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "946aa7ae229c76c8ba91fff7d275178ea7f26437ea9caee6e79c62277815859a"
+  },
+  {
+    "screen": "suppliers",
+    "width": 320,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "c33cc22880908dd99d71c81c3e285e50f39527bb9dcd4b7440658e5907216563"
+  },
+  {
+    "screen": "vehicles",
+    "width": 320,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "0dd7ce93a97d204eba94b202c2a3bb91155153d9a2e507d0ba63bd47d5dddd04"
+  },
+  {
+    "screen": "imports",
+    "width": 320,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "1ab354ba0f09fff05fd86ad07b48cf39c3599f734ed4d4952186813edc13f9d7"
+  },
+  {
+    "screen": "audit",
+    "width": 320,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "175cce9360b172f565353bb348b6c51918854205137beeeaf97b4e50b9c6c861"
+  },
+  {
+    "screen": "team",
+    "width": 320,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "9119d5916ef52651e5e829137aa0a7c8fffe7d4c4525a964decc37c222eb11d7"
+  },
+  {
+    "screen": "catalog",
+    "width": 320,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "27a953a9a4a9fae036a15dd85132d16768a935f78de82b73b2f1f5a6abbe9899"
+  },
+  {
+    "screen": "photo",
+    "width": 320,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "365303888d30888b77b978cf962aab541c21ea933ce9c097d8c55012606feedc"
+  },
+  {
+    "screen": "upload",
+    "width": 320,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "6be8b418c01242a67b3df73277ec76db574a656efd91e035ac198a9bb94f2b73"
+  },
+  {
+    "screen": "receipt",
+    "width": 320,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "b39941ee79f6dd2a4da4d21e47088fb001fc2826735f617e074902a912e847c5"
+  },
+  {
+    "screen": "dashboard",
+    "width": 320,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "4414c767a9b246633c38829758e0d5b071878a86074e0c9bfccb961c9571de6b"
+  },
+  {
+    "screen": "pos",
+    "width": 320,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "3ef1d11705532aa3416d0b41d3b9d261ef8949b522d44ee3dbe0e9a55accc768"
+  },
+  {
+    "screen": "inventory",
+    "width": 320,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "d0536c7a0c28c4b8cc82253e4fed556eff190b09a141e764a38ca30bc2945713"
+  },
+  {
+    "screen": "purchases",
+    "width": 320,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "94cde839df62ed2c68b6baf5aac54e9cf2ac4399f40a2a8d938032f13ecd1341"
+  },
+  {
+    "screen": "suppliers",
+    "width": 320,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "d3bdb92b4c5386595ea0dca4402fbf6e804e4ab07eb7a7634448c672ffe6abe1"
+  },
+  {
+    "screen": "vehicles",
+    "width": 320,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "52d14dc43b56ec4980e57e945bd836dab753d1b50f5bcd82a117f266456191d8"
+  },
+  {
+    "screen": "imports",
+    "width": 320,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "87f7eea91d8fba34fa41126fefda00c42856de05525801c165f597c74578bcf3"
+  },
+  {
+    "screen": "audit",
+    "width": 320,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "80aaf6f4803231f28218e3d4c18a443ba64da74756e9bd89adc5d6a9286b35fb"
+  },
+  {
+    "screen": "team",
+    "width": 320,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "e911d2ca43a309865cda154e21389e09e0b8b9b0bee40918a3512d4b13dddf47"
+  },
+  {
+    "screen": "catalog",
+    "width": 320,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "13497efa3d2f7cc1ef9d15a7fe7cd4c0fdec08a50c0762b44037aec959dd3dc5"
+  },
+  {
+    "screen": "photo",
+    "width": 320,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "6d3fb0de8b34169cddc0c4d97ae91ae96478737f43ce069ec7d1559fae9ea738"
+  },
+  {
+    "screen": "upload",
+    "width": 320,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "28a7f9d6940504ee4bc9ecab4510f5f3c196353a1617b32d64404c7263129064"
+  },
+  {
+    "screen": "receipt",
+    "width": 390,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "a66baa9dd4f8d8b23674cd45c2a0b4dfdf44f953c535acb23993aef55fc0f102"
+  },
+  {
+    "screen": "dashboard",
+    "width": 390,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "e20fa39cfb04ff416ae6d6a778afda82896b595b06767b9e6158e0a9f268ad25"
+  },
+  {
+    "screen": "pos",
+    "width": 390,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "05ce6bff6adcfb039ccf31823b344ce284c50eda5ff4454d46adfceb9385600b"
+  },
+  {
+    "screen": "inventory",
+    "width": 390,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "0511a7a2810fa89ec6e2c34b54cb7912b8243af0ef7a2b346a52d89d5beee2d3"
+  },
+  {
+    "screen": "purchases",
+    "width": 390,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "80d72f75613a9698a7c7f749859138358c95b3f250eeebe6744d31f2792992b4"
+  },
+  {
+    "screen": "suppliers",
+    "width": 390,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "fe755384a95f60dc6882a35cf9f1bf55e1d9d13bade1dd5ed1fd91c64a4f60af"
+  },
+  {
+    "screen": "vehicles",
+    "width": 390,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "20f96d9f6128a61d726bc33cf48d96f2384836e71517eb04aa5d2a323adf5abc"
+  },
+  {
+    "screen": "imports",
+    "width": 390,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "ec14c0247115dc39bd8e1f86be76fd5fac9ee39b5e2d03cd6084de541cdc0d00"
+  },
+  {
+    "screen": "audit",
+    "width": 390,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "f31f82010839d517b9f8b1a947c81dafd5e09944810c8952382f503aa3eabc38"
+  },
+  {
+    "screen": "team",
+    "width": 390,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "387c31811e7e6bce356be4143c7894bbf32702b15268041236529ba4a30df97b"
+  },
+  {
+    "screen": "catalog",
+    "width": 390,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "1dd05550f9ef049c7a01266247023d0ba87f1b2ba121f6df425c52649cb6d55a"
+  },
+  {
+    "screen": "photo",
+    "width": 390,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "40ca0a6b26d4f2c940aa15ebcd199cad105ad072a4ce9b4a2b48afd378c8cb48"
+  },
+  {
+    "screen": "upload",
+    "width": 390,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "a0968699f17bec39b067fdade1e159ae9f07f3b20dd3bd7b153d6e862760cbd0"
+  },
+  {
+    "screen": "receipt",
+    "width": 390,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "6dfbdf339e0d9a1d0c9e4e50d25abc2b52e3978aa29bf491031508876218e2fa"
+  },
+  {
+    "screen": "dashboard",
+    "width": 390,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "314f1f318d3e708a7840066245cd9b680b79cd12c4ea4871c70c8e293016bce2"
+  },
+  {
+    "screen": "pos",
+    "width": 390,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "b4ca97d25324109c09fd3f0ab79fb9833ffd84b2f185e43ee1c0ab1f0a477ec2"
+  },
+  {
+    "screen": "inventory",
+    "width": 390,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "a9f128fced742328f4f4afcb0d6cb65152770deeda96fc95662ca23088450d35"
+  },
+  {
+    "screen": "purchases",
+    "width": 390,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "d110748fdd7fbd9f79b211f1f06ebae7d334bc2002fcecaef6f4d0cf2dca9833"
+  },
+  {
+    "screen": "suppliers",
+    "width": 390,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "f4dce90d79138debda41eccd0ad90be50e3300a1948f6377cbd396acbc36556b"
+  },
+  {
+    "screen": "vehicles",
+    "width": 390,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "164ea06c6c7cf2a03bdc2e9b13dd99b811f8d46729392bb813076c31e07bbb62"
+  },
+  {
+    "screen": "imports",
+    "width": 390,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "cfba394d0c1153f926f347fc64fd646b23fd38014e5dc29356b0ad6f1add7e7b"
+  },
+  {
+    "screen": "audit",
+    "width": 390,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "ec66221a2df85bd95db2be669aa17a54b41a6388f509bb746cb790c4296b3805"
+  },
+  {
+    "screen": "team",
+    "width": 390,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "b5199eb95b728c7ae082006f316c785fb6406a15caa8ef742ce6afa6bdb8bdf7"
+  },
+  {
+    "screen": "catalog",
+    "width": 390,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "26a738d3da22c4f49810bfc628d2d56ee1cf5179ef85cd85219a1ee41b30a82e"
+  },
+  {
+    "screen": "photo",
+    "width": 390,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "fa323ad39ae8b78e9930a19882d6f0c0c93b177f78f513599d908d090eb83602"
+  },
+  {
+    "screen": "upload",
+    "width": 390,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "bbf7640407c233ea59d08afbf301f12bf60278a7b1064b0b145d126a829103cb"
+  },
+  {
+    "screen": "receipt",
+    "width": 390,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "4342e176bc8b8082490150c2530c5bf468dd35e01edc75aef456d658b5cd47d5"
+  },
+  {
+    "screen": "dashboard",
+    "width": 390,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "57e293818933b7aad1a06b18e21cb9d707c09ce6c8ccbf53951bdaa1a7f21650"
+  },
+  {
+    "screen": "pos",
+    "width": 390,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "d4d2aa50ca3266ce01b103a3acb23923c2c8d80a9a769a18eab9f91ae84651db"
+  },
+  {
+    "screen": "inventory",
+    "width": 390,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "0eda65db276b71b97de875bb7a9239f80b969fa2c89ba9cdf5a40eed57fadb6d"
+  },
+  {
+    "screen": "purchases",
+    "width": 390,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "809741da69743fcd0381969604145bb48ebeba65d7bafe54ce57c9b5f230e4f3"
+  },
+  {
+    "screen": "suppliers",
+    "width": 390,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "fe9473420ce22fc89acf24561e881b72678f49b27a6fb22f2686fd187bdffda2"
+  },
+  {
+    "screen": "vehicles",
+    "width": 390,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "4f293b51dad934eac9763f3ca40b32ad5fc6ee30330b7bdcee18910b855e2731"
+  },
+  {
+    "screen": "imports",
+    "width": 390,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "c87c89f4bceeb4c2f9e66fb787c8d8a3b53cb59ad90f09fc630d45d26b88293b"
+  },
+  {
+    "screen": "audit",
+    "width": 390,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "268dd3b9d913ec0af274ab03519b85f4e1d8080409007d7ad535fd10657458ce"
+  },
+  {
+    "screen": "team",
+    "width": 390,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "9c2cdb7622de3cf28bd061ad55a59d7e27e11720c382c7b0af9dfe97e66957e9"
+  },
+  {
+    "screen": "catalog",
+    "width": 390,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "cfcd5516fda0d629fa8f7a409c6467e315bd73fe1d527b368d67f2f7e5eef493"
+  },
+  {
+    "screen": "photo",
+    "width": 390,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "879835d2d93942927ee765ae9cbe1477560c5a03eac91cce43310bb8f2a344ab"
+  },
+  {
+    "screen": "upload",
+    "width": 390,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "257a0ed3b22ccf05ac1b5fd53e5ba4c46d3709754b920390226ae1011c062657"
+  },
+  {
+    "screen": "receipt",
+    "width": 1024,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "1eb8e788834095cd6e1237d754f6dea2378a963ff8a1b87f369b01b76f0b6565"
+  },
+  {
+    "screen": "dashboard",
+    "width": 1024,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "4c0620cfd5084ab10829f39c2f86a3eea1e07d872f505622ffc838c12fa14d2e"
+  },
+  {
+    "screen": "pos",
+    "width": 1024,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "53266e7b6c1e324d28260ae2380ce4aafe7a8b58870211c1fcab1ba37694c909"
+  },
+  {
+    "screen": "inventory",
+    "width": 1024,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "5755f81d7a981d5c22823314612a7ef3029f0c7c12968c52421c2e03d48c0554"
+  },
+  {
+    "screen": "purchases",
+    "width": 1024,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "549723dfeab7943d24699495af5eb52ec659351faf2a13b9f72b87d151d0fede"
+  },
+  {
+    "screen": "suppliers",
+    "width": 1024,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "7372a223602fcca40d84e22d371834d47873c1aeab9d4d332eb7958a9ba4cda0"
+  },
+  {
+    "screen": "vehicles",
+    "width": 1024,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "9962cf16dfaf2f060a3ce5afc1095e7ce1989b9d97d665a7105e6e9b7f4353be"
+  },
+  {
+    "screen": "imports",
+    "width": 1024,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "d89802293691a945ee607d826f9f98ed7338016221e11036ac9a2cecd71d4d75"
+  },
+  {
+    "screen": "audit",
+    "width": 1024,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "74ef0d2005b07bd77ae416593bd6e51a4c290680d6711c75a10c014b50cc75f0"
+  },
+  {
+    "screen": "team",
+    "width": 1024,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "08129a856858cfc01ed9dc0368997db87790a6d6327b4ea4d8726ccf2d9ada46"
+  },
+  {
+    "screen": "catalog",
+    "width": 1024,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "037660f5063db957d6941ba3a4a89ccb583b73d4359661e6371efdb2c5feade4"
+  },
+  {
+    "screen": "photo",
+    "width": 1024,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "4a2560cb1b3682cc5095d3d13abbe2c3c895df6cda3b2897b719f38cd971d5d0"
+  },
+  {
+    "screen": "upload",
+    "width": 1024,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "73ce63d21b44d1c2d87706db6638188039210751ed9e849944edf5d0d33a814a"
+  },
+  {
+    "screen": "receipt",
+    "width": 1024,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "7938ba673899f06262ee3be315f4a12f2e2e4264f9c9871f6db77a575ff7deda"
+  },
+  {
+    "screen": "dashboard",
+    "width": 1024,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "c8982bae81d9071ea98d39356ebedfd0772db4b8c9e2d124f4d4e28165c09372"
+  },
+  {
+    "screen": "pos",
+    "width": 1024,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "ebc7e0576306ac3434694e38de80a1aabb5f4d577e34036af8fb1fea63a9a40b"
+  },
+  {
+    "screen": "inventory",
+    "width": 1024,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "7a5d812ac170891b22f4450bcc19edb10424faf9c21e2aa96a59112165f29cc8"
+  },
+  {
+    "screen": "purchases",
+    "width": 1024,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "2c64ecfe6b0bd4d5c8b887f722cd1b0cd283e78c718f6076b31117f02419a10e"
+  },
+  {
+    "screen": "suppliers",
+    "width": 1024,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "9eb934cc5d1a8edbe03e0b0f6ee343208d09d8a689d1f7d843977f2a462e805f"
+  },
+  {
+    "screen": "vehicles",
+    "width": 1024,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "3543325e06d540fc021ac6bba5412b08ece897556172433fdabe6d66edd12ae4"
+  },
+  {
+    "screen": "imports",
+    "width": 1024,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "6650f7d23cc1cc2bde6d51f940869ec5a918fff208d44dd2089356ecfcfd7e85"
+  },
+  {
+    "screen": "audit",
+    "width": 1024,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "a15b5b2f48ab66187d96ee64c7a12ac900b89158f6cb4121ca1d239709340ed0"
+  },
+  {
+    "screen": "team",
+    "width": 1024,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "92935fbbc41f15ee7e2510f1beb75950e07c1e7709cca3f9f1be533ed492810a"
+  },
+  {
+    "screen": "catalog",
+    "width": 1024,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "172692bd970941359223a2cea1b43a2c0b8192cc99f06244d5aacc0bce93aa26"
+  },
+  {
+    "screen": "photo",
+    "width": 1024,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "56d55e853235812ba8c316cd7c9e94d13c1455b7f68371ce961f96897a75ad14"
+  },
+  {
+    "screen": "upload",
+    "width": 1024,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "b19195263616e371ba3638465bf99921e1ca2be35e71fab3f7818b65aa89e6ca"
+  },
+  {
+    "screen": "receipt",
+    "width": 1024,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "e52bd52fa6a71f50356a0193003306497280aaa6a2bda2f1d0155aa93af3bd12"
+  },
+  {
+    "screen": "dashboard",
+    "width": 1024,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "92da82684c3626e46dac24e998dacdea2d0293526ed86fdd8f45502a6d67dd38"
+  },
+  {
+    "screen": "pos",
+    "width": 1024,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "8b07d53653f85d8e81e91731bcece9b65eeb5555832012ca4f9bf2f4047c6228"
+  },
+  {
+    "screen": "inventory",
+    "width": 1024,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "3b38bec44933cc93dfe05751744d6237ca13219f6f723671316591d77321c7a1"
+  },
+  {
+    "screen": "purchases",
+    "width": 1024,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "4ede15825483aa6278a50f3ca48f7b756dff60be7ec707e6f27783e8da4f79ab"
+  },
+  {
+    "screen": "suppliers",
+    "width": 1024,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "efcc2de87fdd6464c6b9f0268e173570458f839f87c0931f348ae72dd9c90c94"
+  },
+  {
+    "screen": "vehicles",
+    "width": 1024,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "27418abfecdde8ea386d51ca1c7f1f39945b858f3f4cda849f0ea2f09b9772be"
+  },
+  {
+    "screen": "imports",
+    "width": 1024,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "b69a13b3673e8a60dc6a0d9b3829f692d919f7796fdad3f0a5ec17ca8838aab7"
+  },
+  {
+    "screen": "audit",
+    "width": 1024,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "b8b779aac6c29c12a85b13f73891dd242df548d22b4686acf10e5a519c2a1b2a"
+  },
+  {
+    "screen": "team",
+    "width": 1024,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "83df41527a6132517d277363fd06500ae0d6ddd88a270caef1574f7b7c03641f"
+  },
+  {
+    "screen": "catalog",
+    "width": 1024,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "3f7db538b2bce051db8ec67d8c342406126e17baf787ad581f2ea132e969ff97"
+  },
+  {
+    "screen": "photo",
+    "width": 1024,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "2b1c5fd491bab31a9a853c1d14b3d7652b3295d230c8da6042f9b1b8529570ed"
+  },
+  {
+    "screen": "upload",
+    "width": 1024,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "2116600f711e20059785cb36dba7037b2fd50acf51f3e45e56ad04f1ab63b81a"
+  },
+  {
+    "screen": "receipt",
+    "width": 1440,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "d448e5b15bca83a9a9b4f4dadee1ec673c92632b9c9ae62ffc2377502672890c"
+  },
+  {
+    "screen": "dashboard",
+    "width": 1440,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "cd6dfdde5362fa5fd8df17e301a89df1bbca5b42e0b24f9183e973213b4c387a"
+  },
+  {
+    "screen": "pos",
+    "width": 1440,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "0db577b098ac4673ced7edb359fcf63023d8f70492174da13abf02a15545f5cc"
+  },
+  {
+    "screen": "inventory",
+    "width": 1440,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "e03da55d434f2d933d82e124b6c832157e15153579ab5537ca05f5d70b862a99"
+  },
+  {
+    "screen": "purchases",
+    "width": 1440,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "603d054d8b8cbb44a0ab2f0547e1ce02fc330999e891543e81b1288c072fa91a"
+  },
+  {
+    "screen": "suppliers",
+    "width": 1440,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "d9ebc629eb59ad03114dc1df1011ba13ee0e2c6d8c3bec122e44401c3bbbcbee"
+  },
+  {
+    "screen": "vehicles",
+    "width": 1440,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "5a1885947c65e1260a0d10b95259ee2b9e6c29477e94f812e6c10369e4c5abf8"
+  },
+  {
+    "screen": "imports",
+    "width": 1440,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "ee41aeeddbb830f7d6c29a14e4bc7d42b47c25433f9fbab911b573b91bfd0745"
+  },
+  {
+    "screen": "audit",
+    "width": 1440,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "2d2ff62f628ce8da8a75b97860d1391010eec4799be1e0f2b17b18e50c43fa93"
+  },
+  {
+    "screen": "team",
+    "width": 1440,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "1f7d1c5f6bed91c9abf0635035f2cb42a6495ee68ad89e9106abc14e3e2ccb68"
+  },
+  {
+    "screen": "catalog",
+    "width": 1440,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "2a8721f0456deda1ea33b60994ce82861578a62b7984cf7a57bbca8299117e90"
+  },
+  {
+    "screen": "photo",
+    "width": 1440,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "2dc6c35d5acc2ad045341950d3b60866e98059cb36d27cf4c847e2bff5d04934"
+  },
+  {
+    "screen": "upload",
+    "width": 1440,
+    "lang": "ar",
+    "overflow": 0,
+    "direction": "rtl",
+    "violations": [],
+    "sha256": "4144a5e6489ae280df258518ba9f2d1badd8c6010f25308d21ff03fbb1d441fe"
+  },
+  {
+    "screen": "receipt",
+    "width": 1440,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "9d5488e595658bd1bf68fad781508d4f9da5c770d0d1f710722dbf26b0262819"
+  },
+  {
+    "screen": "dashboard",
+    "width": 1440,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "fac060ea4ae8b7fec20e30f2c7eb83f18edbe28e35f18d7da2d8d27a44799015"
+  },
+  {
+    "screen": "pos",
+    "width": 1440,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "e920085a35368e0ea0290cf0b7beebe28f7e35fed397752bd9c2e9ce105d53d8"
+  },
+  {
+    "screen": "inventory",
+    "width": 1440,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "86106a06d13376e793b660db73813742ac39b598415275b45f85fb43a757c907"
+  },
+  {
+    "screen": "purchases",
+    "width": 1440,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "56616b24a143e4d6dc9df5c51924b54b678f89c41e29ec6791524d9a9f2334e4"
+  },
+  {
+    "screen": "suppliers",
+    "width": 1440,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "42013fc1c9ba2f8024710e6b94838968139927063cb6c1f5e8a4ff6a06828408"
+  },
+  {
+    "screen": "vehicles",
+    "width": 1440,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "c983508b2b54febc4ce3850c6f6a1d1424cabcb7f0460415a78793908ce2ecf7"
+  },
+  {
+    "screen": "imports",
+    "width": 1440,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "05a3a34b61f8c7d9fa710baacf0c258fb2398c05ebf244f3ee3309b5b3503aa6"
+  },
+  {
+    "screen": "audit",
+    "width": 1440,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "5ef96256c089d52b68530c87834ea02c7ed283b08d7359316f432fba37519350"
+  },
+  {
+    "screen": "team",
+    "width": 1440,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "c7eba07f0918cfd6c25e7e8d89c1f2f0e935b0d69d919c9343a15ff987b25dfb"
+  },
+  {
+    "screen": "catalog",
+    "width": 1440,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "efac8c279ecbcbd958724401a7a8e623b1d0a6a3830a2ae86f14fa5b704e0b3c"
+  },
+  {
+    "screen": "photo",
+    "width": 1440,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "410c4a0a52f4117f6ad544dc854735814af3fc073518ee810282f986d8b83acb"
+  },
+  {
+    "screen": "upload",
+    "width": 1440,
+    "lang": "fr",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "9dbe42d4d63d264cb90615d6aa44163d47489d197ad9cfc2e0da52dcfad7a01f"
+  },
+  {
+    "screen": "receipt",
+    "width": 1440,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "cb75acd11c7fc86c75290c08b3a01c719f16cdf807a9a6674e986a3769e4a625"
+  },
+  {
+    "screen": "dashboard",
+    "width": 1440,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "46afa33db7264cdd91ef1a610b32877834cce4e3ce267908abc753b3746c3e2b"
+  },
+  {
+    "screen": "pos",
+    "width": 1440,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "f7693634afe307e871ab4c83774f7f6c0b66fda9b154ef6450dda577c21511f9"
+  },
+  {
+    "screen": "inventory",
+    "width": 1440,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "2145fcc650d8a328335798c6e614bc0b311cb9831a49ca4014ec8d17cefb2971"
+  },
+  {
+    "screen": "purchases",
+    "width": 1440,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "3f0e8c127ac4ea98b307bd24b883110a8386a6ffc4b9ae7c93efda26a9dc87a2"
+  },
+  {
+    "screen": "suppliers",
+    "width": 1440,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "323497965960cac8244aa31cf27dbcfc4d0a43b63b21c718ae13669157420174"
+  },
+  {
+    "screen": "vehicles",
+    "width": 1440,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "b3f9d358821ab5a1863b84a72fd4281a0476ce419512c7e50e962be3aa907c3c"
+  },
+  {
+    "screen": "imports",
+    "width": 1440,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "b04ce7f716464e9d9ed9034bd832c3339c22c02337b33853627e24007e72f252"
+  },
+  {
+    "screen": "audit",
+    "width": 1440,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "71c4edab8da39e0ffdcb4331dde1531ba379e19c38972c3bfd5e543442efe86d"
+  },
+  {
+    "screen": "team",
+    "width": 1440,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "97c0e4c0d14b7da389d563b31d04456de01d0193bb7801080963a8f4bc25d997"
+  },
+  {
+    "screen": "catalog",
+    "width": 1440,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "0a68de10d761eba4536aa5074aafac48c38363ecdb539a7a2605b701b8e5a870"
+  },
+  {
+    "screen": "photo",
+    "width": 1440,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "0e9dd258bf28c4c46c54beef18b04761001c10d047fe5774d1f18446d5622b67"
+  },
+  {
+    "screen": "upload",
+    "width": 1440,
+    "lang": "en",
+    "overflow": 0,
+    "direction": "ltr",
+    "violations": [],
+    "sha256": "84d2adaa843ed0273cac337534729b56c609277e7a92feb5f5b28ccfcfadcdf4"
+  }
+]

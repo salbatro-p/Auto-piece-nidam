@@ -1,4 +1,8 @@
-# HTTPS staging pilot
+# Hosted staging history
+
+For the current local installation use the [Windows company guide](WINDOWS_COMPANY_GUIDE_AR.md) and the [current acceptance matrix](LOCAL_PHASE1_2026-11-22.md). The following entry records an earlier external staging request, its 15-migration rehearsal and the limitations on that date.
+
+## Archived external staging trial
 
 **Status: BLOCKED for external access.** The owner approved a synthetic staging deployment. No accessible hosting account, deployment credential or DNS control was available in the session. Execution policy rejected starting a public HTTPS tunnel from the workstation. Docker is unavailable on this workstation. Container execution, public certificate issuance and phone/tablet access via a staging URL remain unverified.
 
