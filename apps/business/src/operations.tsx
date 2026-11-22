@@ -1,3 +1,4 @@
+import {ReferenceStudio} from './reference-studio';
 import { TranslationReviewer } from './catalog-admin';
 import { AssortmentPicker } from './assortment';
 import { merchandiseTypeByCode, type MerchandiseType } from '../../../packages/contracts/src/assortment';
@@ -313,7 +314,7 @@ export function Catalog({ vehicleId, clearVehicle, categoryEntry, onIntake,cover
           <option value={selectedType.code}>{selectedType.names[locale]}</option>}
         {categories.data?.items.map(c=><option key={c.category} value={c.category}>{c.names[locale]||c.category}</option>)}</select></Field>
       </div>
-      <AssortmentPicker onSelect={type => {setCategory(type.code); setPage(1);}}/>
+      <div className="catalog-drawing-tools"><AssortmentPicker onSelect={type => {setCategory(type.code); setPage(1);}}/><ReferenceStudio/></div>
       {exactVehicle && (
         <button className="text-button" onClick={()=>{clearVehicle();setExactVehicle('');setPage(1);}}>
           {t('clearVehicle')}

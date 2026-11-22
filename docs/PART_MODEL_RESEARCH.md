@@ -27,3 +27,9 @@ Le catalogue de pièces du véhicule associe le repère 12 à la berline BMW 325
 - [Archives BMW, génération et moteur](https://www.bmwgroup-classic.com/en/models/bmw-classics/product-description-page.ad-996-1.bmw-325xi-e46.html)
 
 [Modèle original en millimètres](../apps/business/src/reference-models/bmw-11431740045.stl) · [Rotation avec identification du véhicule](evidence/assortment/bmw-11431740045-2004.gif). Le téléchargement du modèle est proposé sur les fiches BMW portant cette référence. Son ajout à la galerie vérifiée passe par le même circuit de validation que les autres dessins. Aucune quantité en stock n’est créée.
+
+## Atelier 3D du comptoir
+
+Depuis le catalogue, ouvrir **Atelier pièces 3D**. Choisir la référence, puis une vue de dessus, de profil ou en perspective. Faire glisser la pièce verticalement ou régler l’angle au clavier. La fiche produit présente aussi le dessin lorsque la marque et la référence correspondent. Le dessin représente la géométrie nominale sans prétendre reproduire les marques de surface ni les tolérances de fabrication.
+
+Le joint de vidange en cuivre **febi 07215**, DIN 7603 A/CU, est modélisé avec un alésage de 14 mm, un diamètre extérieur de 20 mm et une épaisseur de 1,5 mm. Le fabricant donne la correspondance Mercedes-Benz 007603 014106. Le catalogue Mercedes-Benz Classic USA associe cette référence au joint de vidange de la C 250 Base 1,8 L de 2014. Ces deux sources décrivent une application américaine. La consultation du dessin ne crée aucune association de véhicule ou quantité dans la base de l'entreprise. [Fiche febi](https://partsfinder.bilsteingroup.com/en/article/febi/07215) · [Catalogue Mercedes-Benz USA](https://classicparts.mbusa.com/v-2014-mercedes-benz-c250--base--1-8l-l4-gas/engine--engine-parts).
