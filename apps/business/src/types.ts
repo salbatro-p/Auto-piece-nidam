@@ -48,7 +48,9 @@ export interface Product {
   status: string;
   translationStatus?: Partial<Record<Locale, string>>;
   stock: Stock[];
-  fitments?: { status: string; vehicleId?: string; sourceId?: string }[];
+  fitments?: { status: string; vehicleId?: string; sourceId?: string; sourceName?: string; make?: string;
+    model?: string; generation?: string; yearFrom?: number; yearTo?: number; engine?: string; market?: string;
+    equipment?: string; qualifiers?: string }[];
   mediaId?: string;
 }
 export interface TechnicalAttribute {code:string;labels:Partial<Record<Locale,string>>;value:string;unit:string;}

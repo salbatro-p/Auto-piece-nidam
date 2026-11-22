@@ -207,3 +207,8 @@ body, .app-layout { background: var(--paper); color: var(--ink); }
   border:1px solid var(--line); background:var(--paper); color:var(--ink); border-radius:var(--radius-control);
 }
 .assortment-list button:hover { background:var(--linen); }
+.part-spin summary,.stl-intake summary { cursor:pointer; min-height:44px; align-content:center; font-weight:650; }
+.part-spin figure { margin:0; }
+.part-spin canvas,.part-spin figure img { display:block; width:100%; height:auto; max-height:420px; object-fit:contain; background:#eeeada; border-radius:var(--radius-control); }
+.part-spin figcaption,.part-spin .toolbar { margin-block:var(--space-2); }
+.part-spin li small { display:block; }
