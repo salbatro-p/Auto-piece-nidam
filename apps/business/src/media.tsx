@@ -18,6 +18,8 @@ import { contentValue, quantity } from '../../../packages/i18n/src/index';
 import { messageKey } from '../../../packages/i18n/src/business';
 import type { Product, Source, Vehicle } from './types';
 import { CategoryOriginals } from './original-visuals';
+import {ReferenceDrawing} from './reference-studio';
+import {findDrawing} from './reference-drawings';
 import { PartSpin, renderPartFrames } from './part-spin';
 import { STL_PROVIDER, yearMatches, type SpinMedia } from './part-mesh';
 const kinds = [
@@ -113,6 +115,7 @@ export function MediaGallery({
   const [zoom, setZoom] = useState<Media>(),
     [review, setReview] = useState<Media>(),
     [upload, setUpload] = useState(startUpload);
+  const drawing = product && findDrawing(product.brand, product.manufacturerPartNo);
   const spinListing=useLoad<{items:SpinMedia[]}>(product && list.data ? '/products/'+product.id+'/spin-frames' : null,[list.data]);
   const items =
     list.data?.items.filter(
@@ -133,6 +136,7 @@ export function MediaGallery({
       <ErrorBanner error={spinListing.error}/>
       {product && spinListing.data && !spinListing.loading && !spinListing.error && <PartSpin key={product.id} product={product} media={spinListing.data.items}
         hasPhoto={items.some(item=>item.displayApproved && ['EXACT_PRODUCT_PHOTO','COMPANY_ORIGINAL_PHOTO'].includes(item.kind))}/>}
+      {drawing && <ReferenceDrawing key={drawing.reference} drawing={drawing}/>}
       {!items.length && (
         <Empty
           title={t('IMAGE_UNAVAILABLE')}

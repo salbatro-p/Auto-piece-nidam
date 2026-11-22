@@ -62,15 +62,24 @@ export function parseStl(buffer: ArrayBuffer): Mesh {
   return prepareMesh(faces);
 }
 
-export function drawMesh(canvas: HTMLCanvasElement, mesh: Mesh, angle: number) {
+export function drawMesh(canvas: HTMLCanvasElement, mesh: Mesh, angle: number, studio?: {tilt: number; heightRatio: number; dimension?: {ratio: number; vertical: boolean}}) {
   const ctx=canvas.getContext('2d');
   if(!ctx) throw new Error('IMAGE_UNAVAILABLE');
-  const {width:w,height:h}=canvas, scale=Math.min(w*.6,h*.69);
-  const c=Math.cos(angle),s=Math.sin(angle), tilt=.34,ct=Math.cos(tilt),st=Math.sin(tilt);
+  const {width:w,height:h}=canvas, scale=studio ? Math.min(w*.7,h*.85/(Math.sin(studio.tilt)+studio.heightRatio*Math.cos(studio.tilt))) : Math.min(w*.6,h*.69);
+  const c=Math.cos(angle),s=Math.sin(angle), tilt=studio?.tilt??.34,ct=Math.cos(tilt),st=Math.sin(tilt);
   const background=ctx.createRadialGradient(w*.43,h*.34,4,w*.5,h*.5,w*.67);
-  background.addColorStop(0,'#fffcf1');background.addColorStop(1,'#e8e4d4');
+  background.addColorStop(0,studio?'#3e665d':'#fffcf1');background.addColorStop(1,studio?'#0b2426':'#e8e4d4');
   ctx.fillStyle=background;ctx.fillRect(0,0,w,h);
-  ctx.fillStyle='#a6a49555';ctx.beginPath();ctx.ellipse(w*.5,h*.87,scale*.43,scale*.063,0,0,Math.PI*2);ctx.fill();
+  if (studio) {
+    // A fine reference grid stays fixed as the part tilts.
+    ctx.fillStyle='#c8dbc032';
+    for(let y=10;y<h;y+=24) for(let x=12;x<w;x+=24) ctx.fillRect(x,y,1.5,1.5);
+    ctx.strokeStyle='#e9d89b58';ctx.lineWidth=1;
+    for(const x of [18,w-18]) for(const y of [18,h-18]){
+      ctx.beginPath();ctx.moveTo(x,y+(y<h/2?12:-12));ctx.lineTo(x,y);ctx.lineTo(x+(x<w/2?12:-12),y);ctx.stroke();
+    }
+  }
+  ctx.fillStyle=studio?'#06181765':'#a6a49555';ctx.beginPath();ctx.ellipse(w*.5,studio ? h*.49+scale*.5*(st+studio.heightRatio*ct)+3 : h*.87,scale*.43,studio?5:scale*.063,0,0,Math.PI*2);ctx.fill();
   const projected=mesh.map(face=>{
     const p=face.points.map(([x,y,z])=>{
       const rx=c*x+s*z, rz=-s*x+c*z;
@@ -83,10 +92,28 @@ export function drawMesh(canvas: HTMLCanvasElement, mesh: Mesh, angle: number) {
     const nx=uy*vz-uz*vy,ny=uz*vx-ux*vz,nz=ux*vy-uy*vx,len=Math.hypot(nx,ny,nz);
     if(len<1e-12) continue;
     const light=.57+.5*Math.max(0,(-.38*nx+.7*ny+.6*nz)*(nz<0?-1:1)/len);
+    let finish=1;
+    if(studio){
+      const phase=Math.atan2(a[2]+b[2]+c[2],a[0]+b[0]+c[0]);
+      finish=.98+.19*Math.sin(3*phase+.7)+.13*Math.pow(Math.max(0,Math.cos(phase-.8)),12);
+    }
     const rgb=parseInt(color.slice(1),16);
-    ctx.fillStyle='rgb('+[((rgb>>16)&255),((rgb>>8)&255),(rgb&255)].map(v=>Math.round(v*light)).join(',')+')';
+    ctx.fillStyle='rgb('+[((rgb>>16)&255),((rgb>>8)&255),(rgb&255)].map(v=>Math.round(Math.min(255,v*light*finish))).join(',')+')';
     ctx.beginPath();p.forEach(([x,y],i)=>{const px=w*.5+x*scale,py=h*.49-y*scale;i?ctx.lineTo(px,py):ctx.moveTo(px,py);});
     ctx.closePath();ctx.fill();ctx.strokeStyle=ctx.fillStyle;ctx.lineWidth=.55;ctx.stroke();
+  }
+  if (studio?.dimension) {
+    const {ratio,vertical}=studio.dimension, extent=scale*ratio/2;
+    const x=w*.5+(vertical?scale*.55:0), y=h*.49;
+    ctx.save();ctx.strokeStyle='#fff1a9';ctx.lineWidth=3;
+    ctx.beginPath();
+    if(vertical){ctx.moveTo(x,y-extent);ctx.lineTo(x,y+extent);}
+    else{ctx.moveTo(x-extent,y);ctx.lineTo(x+extent,y);}
+    for(const sign of [-1,1]){
+      if(vertical){ctx.moveTo(x-8,y+sign*extent);ctx.lineTo(x+8,y+sign*extent);}
+      else{ctx.moveTo(x+sign*extent,y-8);ctx.lineTo(x+sign*extent,y+8);}
+    }
+    ctx.stroke();ctx.restore();
   }
 }
 

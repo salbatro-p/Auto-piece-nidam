@@ -1,0 +1,20 @@
+.reference-drawing{border:1px solid #d8d3c1;border-radius:18px;overflow:hidden;background:#fffdf6;color:#263631;min-width:0}
+.drawing-stage{position:relative;isolation:isolate;background:#173530;color:#fff7df;overflow:hidden}
+.drawing-stage canvas{display:block;width:100%;height:auto;touch-action:pan-x;cursor:grab}
+.drawing-stage canvas:active{cursor:grabbing}
+.drawing-stage [role=status]{margin:0;padding:8px 14px;color:inherit}
+.drawing-id,.drawing-angle{position:absolute;display:inline-flex;align-items:center;gap:6px;background:#0c2524ee;color:#ffe6ac;border:1px solid #78938c;border-radius:8px;font-size:.8rem;line-height:1.3;font-weight:700;padding:4px 8px;pointer-events:none}
+.drawing-id{position:relative;margin-block-start:8px;margin-inline:10px;border-color:#54736b}.drawing-angle{inset-block-end:8px;inset-inline-end:10px}
+.drawing-body{padding:clamp(10px,2vw,20px);display:grid;gap:12px}
+.drawing-body h3,.drawing-body p,.drawing-sizes{margin:0}
+.drawing-views{display:flex;flex-wrap:wrap;gap:4px}
+.drawing-views button{flex:1;min-height:44px;border:1px solid #cfcbb8;border-radius:10px;background:#f4f0e4;color:#283e37;font:inherit;font-weight:650;padding:5px 8px;cursor:pointer}
+.drawing-views button[aria-pressed=true]{background:#204639;color:#fff7df;border-color:#204639}
+.drawing-slider{display:flex;align-items:center;gap:9px;font-size:.88rem;flex-wrap:wrap}
+.drawing-slider input{min-width:70px;width:auto;flex:1;accent-color:#286144;height:44px;margin:0;padding:0}
+.drawing-sizes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.drawing-sizes button{font:inherit;text-align:start;color:inherit;border:1px solid #d5d1bf;background:#f1edde;border-radius:9px;padding:8px;min-height:44px;cursor:pointer}.drawing-sizes button[aria-pressed=true]{outline:2px solid #36705d;outline-offset:-2px;background:#e4eee5}
+.drawing-sizes span{display:block;font-size:.8rem;color:#4c5549;overflow-wrap:anywhere}
+.drawing-sizes strong{display:block;margin:3px 0 0;font-weight:750;font-variant-numeric:tabular-nums}
+.drawing-source{font-size:.87rem;line-height:1.5}.drawing-body a{color:#285540;text-decoration:underline;text-underline-offset:3px}
+.drawing-selection{margin-block-end:12px}.catalog-drawing-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
