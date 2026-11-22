@@ -2,6 +2,8 @@ export const workspaceMessages = {
   browseTypes: ['Browse merchandise types', 'Parcourir les types d’articles', 'تصفح أنواع السلع'],
   searchType: ['Search by name or type code', 'Rechercher par nom ou code de type', 'البحث باسم النوع أو رمزه'],
   assortmentGroup: ['Department', 'Rayon', 'القسم'],
+  packLabelDetails: ['Details from the retail label', 'Informations de l’étiquette du produit', 'بيانات العبوة كما كُتبت على الملصق'],
+  counterEssentials: ['Suggested counter essentials', 'Sélection conseillée pour le comptoir', 'تشكيلة مقترحة لرفوف المحل'],
   downloadTypes: ['Download types (CSV)', 'Télécharger les types (CSV)', 'تنزيل الأنواع (CSV)'],
   typeCount: ['Merchandise types found · {count, number}', 'Types d’articles trouvés · {count, number}', 'عدد أنواع السلع المطابقة · {count, number}'],
   customTypeHint: ['Try another name or enter a custom category when registering the item.', 'Essayez un autre nom ou saisissez une catégorie libre sur la fiche article.', 'جرّب اسماً آخر أو أدخل فئة خاصة عند تسجيل الصنف.'],
