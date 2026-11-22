@@ -37,7 +37,7 @@ export function LanguageSwitcher({
 
   return (
     <details className="language-picker" ref={details} data-testid="language-picker">
-      <summary ref={trigger} aria-label={label} title={label} data-testid="language-toggle" data-current-language={locale}>
+      <summary ref={trigger} aria-label={locale.toUpperCase() + ' · ' + label} title={label} data-testid="language-toggle" data-current-language={locale}>
         <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c-4 5-4 13 0 18M12 3c4 5 4 13 0 18"/>
         </svg>
