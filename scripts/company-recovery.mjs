@@ -10,8 +10,8 @@ const [action,...args]=process.argv.slice(2);
 const win=process.platform==='win32';
 if(!win)throw Error('This command targets Windows. See SHOP_NETWORK_HANDOFF.md for Linux.');
 const ssl=process.env.OPENSSL_BIN || 'openssl.exe';
-function run(bin,argv,env=process.env){
-  try{return execFileSync(bin,argv,{env,windowsHide:true,encoding:'utf8',maxBuffer:64*1024*1024,stdio:['ignore','pipe','pipe']});}
+function run(bin,argv,env=process.env,interactive=false){
+  try{return execFileSync(bin,argv,{env,windowsHide:true,encoding:'utf8',maxBuffer:64*1024*1024,stdio:interactive ? ['inherit','pipe','inherit'] : ['ignore','pipe','pipe']});}
   catch{throw Error(bin+' failed. Check the selected paths, rights and private configuration.');}
 }
 async function digest(file){const hash=createHash('sha256');for await(const chunk of createReadStream(file))hash.update(chunk);return hash.digest('hex');}
@@ -72,7 +72,8 @@ if(action==='backup' && args.length===3){
   if((await c.query('SELECT 1 FROM pg_database WHERE datname=$1',[name])).rowCount)throw Error('Recovery requires a new database');
   await scratch(newDir,async tmp=>{
    const tar=join(tmp,'decrypted.tar');
-   run(ssl,['cms','-decrypt','-binary','-inform','DER','-in',archive,'-recip',cert,'-inkey',key,'-out',tar]);
+   const passin=process.env.AUTOPARTS_RECOVERY_PASSPHRASE ? ['-passin','env:AUTOPARTS_RECOVERY_PASSPHRASE'] : [];
+   run(ssl,['cms','-decrypt','-binary','-inform','DER','-in',archive,'-recip',cert,'-inkey',key,...passin,'-out',tar],process.env,passin.length===0);
    const allowed=/^(?:\.|(?:checksums\.json|application\.env|database\.dump|localhost\.(?:crt|key)|company\.json)|media(?:\/[0-9a-f]{64}(?:\/(?:source|display|thumbnail)\.webp)?)?)$/;
    for(const line of run('tar.exe',['-tf',tar]).trim().split(/\r?\n/)){if(!allowed.test(line.replace(/^\.\//,'').replace(/\/$/,'')||'.'))throw Error('Unexpected backup member');}
    if(run('tar.exe',['-tvf',tar]).trim().split(/\r?\n/).some(line=>!['d','-'].includes(line[0])))throw Error('Unsupported archive object');
