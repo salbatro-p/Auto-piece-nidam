@@ -44,6 +44,18 @@ export const imageStageSchema = z
   })
   .strict();
 type Stage = z.infer<typeof imageStageSchema>;
+const spinProvider='AutoParts measured turntable v1';
+// Bind even the individual image bytes to the live maker reference and verified model year.
+const spinStillMatches = `EXISTS (SELECT 1 FROM products sp
+  JOIN manufacturer_parts sm ON sm.id=sp.manufacturer_part_id
+  JOIN fitments sf ON sf.product_id=sp.id AND sf.vehicle_id=m.vehicle_variant_id AND sf.status='VERIFIED'
+  JOIN sources ss ON ss.id=sf.source_id AND ss.org_id=sp.org_id AND ss.can_store
+  JOIN vehicles sv ON sv.id=sf.vehicle_id AND sv.org_id=sp.org_id
+  WHERE sp.id=m.product_id AND sp.org_id=m.org_id AND sp.sku=m.sku_snapshot AND sp.brand=m.manufacturer_brand
+    AND sm.part_number=m.manufacturer_part_number AND sm.part_number<>'' AND length(trim(m.source_url))>=8
+    AND m.kind='GENERIC_CATEGORY_ILLUSTRATION' AND m.illustration_id ~ '^mesh-sha256:[0-9a-f]{64}:[0-9]{4}$'
+    AND CASE WHEN right(m.illustration_id,4) ~ '^[0-9]{4}$' THEN right(m.illustration_id,4)::int END
+      BETWEEN sv.year_from AND coalesce(sv.year_to,sv.year_from))`;
 async function subject(c: PoolClient, actor: Actor, d: Stage) {
   const productKind = [
     'EXACT_PRODUCT_PHOTO',
@@ -77,6 +89,18 @@ async function subject(c: PoolClient, actor: Actor, d: Stage) {
 }
 export async function stageImage(c: PoolClient, actor: Actor, d: Stage, requestId: string) {
   await subject(c, actor, d);
+  if(d.provider===spinProvider){
+    if(!d.manufacturerPartNumber || !d.vehicleVariantId || d.kind!=='GENERIC_CATEGORY_ILLUSTRATION' ||
+      !/^mesh-sha256:[0-9a-f]{64}:\d{4}$/.test(d.illustrationId) || d.sourceUrl.trim().length<8 ||
+      !['0','30','60','90','120','150','180','210','240','270','300','330'].includes(d.viewAngle))
+      throw new DomainError('MEDIA_REFERENCE_MISMATCH',409);
+    const confirmed=await c.query(`SELECT 1 FROM fitments f JOIN vehicles v ON v.id=f.vehicle_id
+      JOIN sources s ON s.id=f.source_id AND s.org_id=v.org_id AND s.can_store
+      WHERE f.product_id=$1 AND v.id=$2 AND v.org_id=$3 AND f.status='VERIFIED'
+        AND $4::int BETWEEN v.year_from AND coalesce(v.year_to,v.year_from)`,
+      [d.productId,d.vehicleVariantId,actor.org_id,Number(d.illustrationId.slice(-4))]);
+    if(!confirmed.rowCount)throw new DomainError('MEDIA_APPLICABILITY_MISMATCH',409);
+  }
   await licenseFor(c, actor, d.licenseId);
   const stored = await storeMedia(d.data, d.mime);
   await c.query('SELECT pg_advisory_xact_lock(hashtextextended($1,0))', [
@@ -155,6 +179,8 @@ async function validateApproval(c: PoolClient, actor: Actor, m: any, isPublic: b
   )
     throw new DomainError('MEDIA_RIGHTS_BLOCKED', 409);
   if (!m.object_key) throw new DomainError('MEDIA_REVIEW_REQUIRED', 409);
+  if(m.provider===spinProvider && !(await c.query(`SELECT 1 FROM product_media m WHERE m.id=$1 AND ${spinStillMatches}`,[m.id])).rowCount)
+    throw new DomainError('MEDIA_APPLICABILITY_MISMATCH',409);
   if (m.product_id) {
     const p = (
       await c.query(
@@ -339,6 +365,15 @@ export function registerMediaCatalog(app: FastifyInstance, pool: Pool) {
       );
     },
   );
+  app.get('/api/products/:id/spin-frames',async(request)=>{
+    const actor=(request as AuthedRequest).actor,id=uuid.parse((request.params as {id:string}).id);
+    const result=await pool.query(`SELECT m.id,m.product_id AS "productId",m.vehicle_variant_id AS "vehicleVariantId",
+      m.sku_snapshot AS sku,m.manufacturer_brand AS "manufacturerBrand",m.manufacturer_part_number AS "manufacturerPartNumber",
+      m.kind,m.provider,m.illustration_id AS "illustrationId",m.license_id AS "licenseId",m.view_angle AS "viewAngle",true AS "displayApproved"
+      FROM usable_internal_media m WHERE m.org_id=$1 AND m.product_id=$2 AND m.provider=$3 AND ${spinStillMatches}
+      ORDER BY m.reviewed_at DESC,m.id`,[actor.org_id,id,spinProvider]);
+    return {items:result.rows};
+  });
   app.get('/api/products/:id/gallery', async (request) => {
     const actor = (request as AuthedRequest).actor,
       id = uuid.parse((request.params as any).id),
@@ -346,8 +381,8 @@ export function registerMediaCatalog(app: FastifyInstance, pool: Pool) {
     return {
       items: (
         await pool.query(
-          `SELECT ${columns} FROM product_media m LEFT JOIN media_source_licenses l ON l.id=m.license_id LEFT JOIN usable_internal_media usable ON usable.id=m.id WHERE m.product_id=$1 AND m.org_id=$2 AND ($3 OR usable.id IS NOT NULL) ORDER BY m.created_at DESC LIMIT 100`,
-          [id, actor.org_id, reviewer],
+          `SELECT ${columns} FROM product_media m LEFT JOIN media_source_licenses l ON l.id=m.license_id LEFT JOIN usable_internal_media usable ON usable.id=m.id WHERE m.product_id=$1 AND m.org_id=$2 AND ($3 OR usable.id IS NOT NULL) AND (m.provider<>$4 OR ${spinStillMatches}) ORDER BY m.created_at DESC LIMIT 100`,
+          [id, actor.org_id, reviewer,spinProvider],
         )
       ).rows,
     };
@@ -426,8 +461,8 @@ export function registerMediaCatalog(app: FastifyInstance, pool: Pool) {
         .parse(request.query);
     const m = (
       await pool.query(
-        'SELECT m.*,u.id AS usable FROM product_media m LEFT JOIN usable_internal_media u ON u.id=m.id WHERE m.id=$1 AND m.org_id=$2',
-        [id, actor.org_id],
+        `SELECT m.*,u.id AS usable FROM product_media m LEFT JOIN usable_internal_media u ON u.id=m.id WHERE m.id=$1 AND m.org_id=$2 AND (m.provider<>$3 OR ${spinStillMatches})`,
+        [id, actor.org_id,spinProvider],
       )
     ).rows[0];
     if (!m) throw new DomainError('NOT_FOUND', 404);

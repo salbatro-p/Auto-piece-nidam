@@ -18,6 +18,8 @@ import { contentValue, quantity } from '../../../packages/i18n/src/index';
 import { messageKey } from '../../../packages/i18n/src/business';
 import type { Product, Source, Vehicle } from './types';
 import { CategoryOriginals } from './original-visuals';
+import { PartSpin, renderPartFrames } from './part-spin';
+import { STL_PROVIDER, yearMatches, type SpinMedia } from './part-mesh';
 const kinds = [
   'EXACT_PRODUCT_PHOTO',
   'COMPANY_ORIGINAL_PHOTO',
@@ -111,6 +113,7 @@ export function MediaGallery({
   const [zoom, setZoom] = useState<Media>(),
     [review, setReview] = useState<Media>(),
     [upload, setUpload] = useState(startUpload);
+  const spinListing=useLoad<{items:SpinMedia[]}>(product && list.data ? '/products/'+product.id+'/spin-frames' : null,[list.data]);
   const items =
     list.data?.items.filter(
       (m) => !vehicle || (diagrams ? m.kind === 'EXPLODED_DIAGRAM' : m.kind === 'VEHICLE_PHOTO'),
@@ -127,6 +130,9 @@ export function MediaGallery({
       </div>
       <p className="small muted">{t('imageNotFitment')}</p>
       <ErrorBanner error={list.error} />
+      <ErrorBanner error={spinListing.error}/>
+      {product && spinListing.data && !spinListing.loading && !spinListing.error && <PartSpin key={product.id} product={product} media={spinListing.data.items}
+        hasPhoto={items.some(item=>item.displayApproved && ['EXACT_PRODUCT_PHOTO','COMPANY_ORIGINAL_PHOTO'].includes(item.kind))}/>}
       {!items.length && (
         <Empty
           title={t('IMAGE_UNAVAILABLE')}
@@ -277,6 +283,9 @@ function MediaUploader({
     [axle, setAxle] = useState(''),
     [provider, setProvider] = useState(''),
     [illustration, setIllustration] = useState('');
+  const [variant,setVariant]=useState(''),[modelYear,setModelYear]=useState(''),[modelEvidence,setModelEvidence]=useState('');
+  const verified=(product?.fitments??[]).filter(f=>f.vehicleId && f.sourceId && f.status==='VERIFIED' && f.model && f.yearFrom);
+  const target=verified.find(f=>f.vehicleId===variant);
   async function upload() {
     setError(undefined);
     if (!license || !files.length) {
@@ -300,7 +309,7 @@ function MediaUploader({
           '/media/stage',
           {
             productId: product?.id,
-            vehicleVariantId: vehicle?.id,
+            vehicleVariantId: provider===STL_PROVIDER ? variant : vehicle?.id,
             kind,
             sku: product?.sku ?? '',
             manufacturerBrand: product?.brand ?? '',
@@ -315,6 +324,7 @@ function MediaUploader({
               ...(vehicle ? { engine: vehicle.engine, equipment: vehicle.equipment ?? '' } : {}),
             },
             provider,
+            ...(provider===STL_PROVIDER ? {sourceUrl:modelEvidence.trim()} : {}),
             illustrationId: illustration,
           },
           'POST',
@@ -352,10 +362,41 @@ function MediaUploader({
                 return;
               }
               setFiles(selected);
+              if (provider === STL_PROVIDER) {setProvider('');setIllustration('');setKind('COMPANY_ORIGINAL_PHOTO');}
+              setAngles({});
               setDone(0);
               setError(undefined);
             }}
           />
+          {product?.manufacturerPartNo && <details className="stl-intake">
+            <summary>{t('authorizedStl')}</summary>
+            <p className="small">{t('stlIntakeHint')}</p>
+            <fieldset disabled={running || !!save.pending || done>0 || provider===STL_PROVIDER}>
+              <Field label={t('verifiedSpinVehicles')}><select value={variant} onChange={e=>{setVariant(e.target.value);setModelYear('');}}>
+                <option value="">{t('selectOption')}</option>
+                {verified.map(f=><option key={f.vehicleId} value={f.vehicleId}>{[f.make,f.model,f.generation,f.yearFrom+'–'+(f.yearTo??f.yearFrom),f.engine,f.market,f.equipment,f.qualifiers].filter(Boolean).join(' · ')}</option>)}
+              </select></Field>
+              <Field label={t('spinModelYear')}><input type="number" value={modelYear} min={target?.yearFrom} max={target?.yearTo??target?.yearFrom} onChange={e=>setModelYear(e.target.value)}/></Field>
+              <Field label={t('spinEvidence')}><input value={modelEvidence} maxLength={1000} onChange={e=>setModelEvidence(e.target.value)}/></Field>
+            </fieldset>
+            {target && yearMatches(target,Number(modelYear)) && <button type="button" className="text-button" onClick={()=>{
+              const spec={kind:'measured-revolution-v1',unit:'mm',axisymmetric:false,sku:product.sku,
+                manufacturerPartNumber:product.manufacturerPartNo,vehicleId:target.vehicleId,year:Number(modelYear),profile:[]};
+              const url=URL.createObjectURL(new Blob([JSON.stringify(spec,null,2)],{type:'application/json'}));
+              const link=document.createElement('a');link.href=url;link.download='part-measurements.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+            }}>{t('downloadProfile')}</button>}
+            <FilePicker label={t('authorizedStl')} accept=".stl,.json" data-testid="stl-file"
+              disabled={running || !!save.pending || done>0 || !target || !yearMatches(target,Number(modelYear)) || modelEvidence.trim().length<8}
+              onChange={async e=>{
+                const file=e.target.files?.[0];if(!file || !target || !yearMatches(target,Number(modelYear)))return;
+                setRunning(true);setError(undefined);
+                try {
+                  const result=await renderPartFrames(file,product,target,Number(modelYear));
+                  setFiles(result.files);setAngles(result.angles);setDone(0);setKind('GENERIC_CATEGORY_ILLUSTRATION');
+                  setProvider(STL_PROVIDER);setIllustration(result.id);setAngle('');
+                }catch(err){setError(err);}finally{setRunning(false);}
+              }}/>
+          </details>}
       </section>
       {files.length > 0 && (
         <section className="photo-local-gallery" data-testid="photo-preview-grid"
@@ -375,7 +416,7 @@ function MediaUploader({
                   </span>
                   <Field label={`${t('viewAngle')} · ${f.name}`}>
                     <input
-                      disabled={running || !!save.pending || i < done}
+                      disabled={running || !!save.pending || i < done || provider === STL_PROVIDER}
                       value={angles[i] ?? ''}
                       onChange={(e) => setAngles({ ...angles, [i]: e.target.value })}
                     />
@@ -407,7 +448,7 @@ function MediaUploader({
       <fieldset disabled={running || !!save.pending || done > 0}>
         <div className="form-grid">
           <Field label={t('mediaKind')}>
-            <select value={kind} onChange={(e) => setKind(e.target.value as Kind)}>
+            <select disabled={provider===STL_PROVIDER} value={kind} onChange={(e) => setKind(e.target.value as Kind)}>
               {kinds
                 .filter((k) =>
                   product
