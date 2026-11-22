@@ -1,5 +1,6 @@
 import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import {translate} from '../../packages/i18n/src/business';
 import { randomUUID } from 'node:crypto';
 import sharp from 'sharp';
 import moment from 'moment-timezone';
@@ -27,7 +28,7 @@ async function product(page: Page, sku: string) {
 }
 async function axe(page: Page, name: string) {
   const result = await new AxeBuilder({ page })
-    .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
     .analyze();
   await jsonEvidence(`axe-${name}`, {
     url: page.url(),
@@ -134,6 +135,7 @@ test('I18N-01 tablet mid-sale language changes and lost response produce exactly
     await switchLanguage(page, locale);
     await expect(page.getByTestId('receipt-total')).toHaveAttribute('data-minor', String(expectedMinor));
     await expect(page.getByTestId('receipt')).toContainText(sku);
+    await expect(page.getByTestId('receipt')).toContainText(translate(locale, 'demoNotice'));
     const utc = Date.parse(savedSale.createdAt);
     const wallClock = utc - moment.tz.zone('Africa/Casablanca')!.utcOffset(utc) * 60000;
     const expectedDate = new Intl.DateTimeFormat({ ar:'ar-MA', fr:'fr-MA', en:'en-GB' }[locale], {
