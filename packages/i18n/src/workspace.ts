@@ -1,6 +1,7 @@
 export const workspaceMessages = {
   spinModelYear: ['Model year documented for this geometry','Année modèle attestée pour cette géométrie','السنة الموثّقة لهذا المجسّم'],
   spinEvidence: ['Geometry source and drawing revision','Source et révision du plan','مصدر المجسّم وإصدار الرسم الهندسي'],
+  downloadRingDrawing: ['Download the original nominal 3D drawing for review (STL, 19.5 × 3 mm)', 'Télécharger le dessin 3D original aux cotes nominales pour vérification (STL, 19,5 × 3 mm)', 'تحميل الرسم الثلاثي الأبعاد الأصلي للمراجعة حسب المقاسات الاسمية (STL، ‏19.5 × 3 مم)'],
   researchModel: ['Research this manufacturer reference','Rechercher cette référence fabricant','البحث عن مجسّم مرجع الصانع'],
   reviewedPartSpin: ['Reviewed 3D views for this reference','Vues 3D contrôlées pour cette référence','زوايا ثلاثية الأبعاد مراجعة لهاد المرجع'],
   reviewedSpinHint: ['Rendered from the supplied mesh for this reference. Check size and specifications against the supplier record.', 'Rendu du modèle fourni pour cette référence. Vérifiez les cotes et spécifications sur la fiche fournisseur.', 'صور مأخوذة من المجسم المقدّم لهذا المرجع. راجع المقاسات والمواصفات في بطاقة المورد.'],

@@ -48,10 +48,14 @@ export function PartSpin({product,media,hasPhoto}:{product:Product;media:SpinMed
     const variants=(product.fitments??[]).filter(f=>f.status==='VERIFIED' && f.sourceId && f.vehicleId);
     const searches=variants.length ? variants : [undefined];
     const maker=product.brand.toLowerCase().replace(/[^a-z0-9]/g,''),number=part?.toUpperCase().replaceAll(' ','');
+    const hasRingDrawing = maker === 'bmw' && part?.replace(/[\s-]/g, '') === '11431740045';
     const official=maker==='mannfilter' && number==='W75/3' ? 'https://www.mann-filter.com/fr-fr/catalogue/resultats-de-la-recherche/produit.html/w75/3_mann-filter.html'
-      : maker==='skf' && number==='6203-2RSH' ? 'https://www.skf.com/lv/products/rolling-bearings/ball-bearings/deep-groove-ball-bearings/productid-6203-2RSH' : '';
+      : maker==='skf' && number==='6203-2RSH' ? 'https://www.skf.com/lv/products/rolling-bearings/ball-bearings/deep-groove-ball-bearings/productid-6203-2RSH'
+      : hasRingDrawing ? 'https://parts.bmwofsouthatlanta.com/oem-parts/bmw-engine-oil-dipstick-tube-seal-11431740045' : '';
 
-    return <div className="small"><p>{t('needsSkuGeometry')}</p>{official && <p><a href={official} target="_blank" rel="noreferrer">{t('source')} · <bdi>{product.brand} {part}</bdi></a></p>}{part && searches.map(f=>{
+    return <div className="small"><p>{t('needsSkuGeometry')}</p>
+      {hasRingDrawing && <p><a download="bmw-11431740045.stl" href={new URL('./reference-models/bmw-11431740045.stl', import.meta.url).href}>{t('downloadRingDrawing')}</a></p>}
+      {official && <p><a href={official} target="_blank" rel="noreferrer">{t('source')} · <bdi>{product.brand} {part}</bdi></a></p>}{part && searches.map(f=>{
       const vehicle=[f?.make,f?.model,f?.generation,f?.yearFrom,f?.yearTo,f?.engine].filter(Boolean).join(' ');
       const query=new URLSearchParams({q:[product.brand,'"'+part+'"',vehicle,'CAD 3D manufacturer'].filter(Boolean).join(' ')});
       return <p key={f?.vehicleId??'part'}><a href={'https://www.google.com/search?'+query} target="_blank" rel="noreferrer">

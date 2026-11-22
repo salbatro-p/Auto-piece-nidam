@@ -53,3 +53,39 @@ test('Original measured views require the exact reference, year, review and live
   expect((await(await page.request.get(endpoint)).json()).items).toHaveLength(0);
   expect((await page.request.get('/api/media/'+frames[0].id)).status()).toBe(404);
 });
+
+test('BMW nominal drawing downloads only on its manufacturer reference in all three languages', async ({page}) => {
+  await login(page, 'owner');
+  await switchLanguage(page, 'en');
+  const session = await currentSession(page);
+  for (const brand of ['REFERENCE-QA', 'BMW']) {
+    const sku = 'RING-' + randomUUID().slice(0, 8);
+    const response = await page.request.post('/api/products', {
+      headers: {'x-csrf-token': session.csrfToken, 'idempotency-key': randomUUID()},
+      data: {sku, brand, manufacturerPartNo: '11 43 1 740 045', names: {en: 'Reference drawing check'}, category: 'HARDWARE_BEARING', packSize: 1, priceMinor: 0, costMinor: 0},
+    });
+    expect(response.ok()).toBeTruthy();
+    await page.reload();
+    await navigate(page, 'catalog');
+    await page.getByTestId('product-search').fill(sku);
+    await page.locator('.catalog-table tr').filter({hasText: sku}).locator('.product-cell').click();
+    const dialog = page.getByRole('dialog').last();
+    await expect(dialog.getByText(t('en', 'needsSkuGeometry'))).toBeVisible();
+    if (brand !== 'BMW') {
+      await expect(dialog.getByRole('link', {name: t('en', 'downloadRingDrawing')})).toHaveCount(0);
+      continue;
+    }
+    for (const language of ['en', 'fr', 'ar'] as const) {
+      await switchLanguage(page, language);
+      const link = dialog.getByRole('link', {name: t(language, 'downloadRingDrawing')});
+      await expect(link).toBeVisible();
+      const asset = await page.request.get((await link.getAttribute('href'))!);
+      expect(asset.ok()).toBeTruthy();
+      const bytes = await asset.body();
+      expect(bytes.readUInt32LE(80)).toBe(6144);
+      expect(bytes.length).toBe(84 + 6144 * 50);
+    }
+    await expect(dialog.locator('.part-spin')).toHaveCount(0);
+  }
+});
+

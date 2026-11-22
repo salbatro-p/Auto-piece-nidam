@@ -28,3 +28,25 @@ test('Measured profiles reject other years, other references and crossing contou
  for(const patch of [{year:2015},{manufacturerPartNumber:'other'},{axisymmetric:false},{unit:'inch'},{profile:[[0,0],[4,4],[0,4],[4,0]]}])
     assert.throws(()=>measuredProfile(JSON.stringify({...spec,...patch}),id));
 });
+
+test('The BMW 11431740045 reference drawing has the documented nominal bore, section and outside diameter in millimetres', async () => {
+  const {readFile} = await import('node:fs/promises');
+  const file = await readFile(new URL('../apps/business/src/reference-models/bmw-11431740045.stl', import.meta.url));
+  const count = file.readUInt32LE(80);
+  assert.equal(file.length, 84 + count * 50);
+  assert.ok(count > 0);
+  let minRadius = Infinity, maxRadius = 0, minZ = Infinity, maxZ = -Infinity;
+  for (let face = 0; face < count; face++) {
+    for (const shift of [0, 12, 24]) {
+      const offset = 96 + face * 50 + shift;
+      const r = Math.hypot(file.readFloatLE(offset), file.readFloatLE(offset + 4));
+      const z = file.readFloatLE(offset + 8);
+      minRadius = Math.min(minRadius, r); maxRadius = Math.max(maxRadius, r);
+      minZ = Math.min(minZ, z); maxZ = Math.max(maxZ, z);
+      assert.ok(Math.abs(Math.hypot(r - 11.25, z) - 1.5) < 0.00001);
+    }
+  }
+  assert.ok(Math.abs(2 * minRadius - 19.5) < 0.00001);
+  assert.ok(Math.abs(2 * maxRadius - 25.5) < 0.00001);
+  assert.equal(maxZ - minZ, 3);
+});
