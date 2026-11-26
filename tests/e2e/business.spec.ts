@@ -144,6 +144,18 @@ test('I18N-01 tablet mid-sale language changes and lost response produce exactly
     await expect(page.getByTestId('receipt-date')).toHaveText(expectedDate);
     await expect(page.getByTestId('receipt-date')).toHaveAttribute('datetime', savedSale.createdAt);
     await capture(page, `tablet-receipt-${locale}`, testInfo);
+    const viewport=page.viewportSize()!;
+    await page.setViewportSize({width:320,height:700});
+    const amounts=page.getByTestId('receipt').locator('.receipt-line > bdi, .total-row > bdi, .receipt-total strong:last-child > bdi');
+    expect(await amounts.count()).toBeGreaterThanOrEqual(4);
+    for(const amount of await amounts.all()){
+      expect(await amount.evaluate(el=>{
+        const range=document.createRange();range.selectNodeContents(el);
+        const rects=Array.from(range.getClientRects()).filter(r=>r.height>0);
+        return rects.length>0 && Math.max(...rects.map(r=>r.top))-Math.min(...rects.map(r=>r.top))<2;
+      })).toBe(true);
+    }
+    await page.setViewportSize(viewport);
   }
   await jsonEvidence('sale-response-loss', {
     saleId: committed!.id,

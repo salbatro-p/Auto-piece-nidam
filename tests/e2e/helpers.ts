@@ -50,7 +50,9 @@ export async function login(page: Page, role = 'sales') {
 export async function switchLanguage(page: Page, locale: Locale) {
   const started = performance.now();
   const dialog = page.locator('dialog[open]');
-  const scope = (await dialog.count()) ? dialog.last() : page;
+  // A page dialog can be portalled after the React root even while the native lock is above it.
+  const lock = page.locator('dialog.lock-overlay[open]');
+  const scope = await lock.count() ? lock : (await dialog.count()) ? dialog.last() : page;
   const picker = scope.getByTestId('language-picker');
   const toggle = scope.getByTestId('language-toggle');
   if (!(await picker.evaluate((node: HTMLDetailsElement) => node.open))) await toggle.click();

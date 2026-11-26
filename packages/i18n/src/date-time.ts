@@ -1,4 +1,4 @@
-import casablanca from './data/casablanca.json';
+import casablanca from './data/casablanca.json' with { type: 'json' };
 
 // Browser, Node and PostgreSQL timezone databases can contain different Morocco rules.
 // Use the bundled IANA transitions for the wall clock, and Intl only for localized presentation.

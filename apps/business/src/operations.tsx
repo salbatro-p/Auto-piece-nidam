@@ -1,3 +1,4 @@
+import './dashboard-overview.css';
 import {ReferenceStudio} from './reference-studio';
 import { TranslationReviewer } from './catalog-admin';
 import { AssortmentPicker } from './assortment';
@@ -154,6 +155,22 @@ export function Dashboard({
     ['reserved', 'reserved', LockKeyhole],
     ['dailySales', 'salesTodayMinor', Wallet, true],
   ];
+  const leadsShop = user.role === 'owner' || user.role === 'manager';
+  const displayMetrics = leadsShop ? [metrics[3], ...metrics.slice(0,3)] : metrics;
+  const overview = (
+    <section className={leadsShop ? "metric-grid owner-overview" : "metric-grid"} aria-label={t('stockOverview')}>
+        {displayMetrics.map(([label, key, Icon, currency]) => (
+          <article className={currency ? "metric metric-sales" : "metric"} key={key} aria-label={t(label)}>
+            <span className="metric-label"><Icon size={17} aria-hidden="true"/>{t(label)}</span>
+            <strong>
+              {data ? currency ? <Amount minor={data[key] ?? 0} /> : quantity(data[key] ?? 0, locale) : '—'}
+            </strong>
+            {leadsShop && currency && data && <small>{t('saleCountToday',{count:quantity(data.salesToday,locale)})}</small>}
+            {!currency && <small>{t('PCS')}</small>}
+          </article>
+        ))}
+      </section>
+  );
   return (
     <>
       <PageHeading title={user.role==='owner'||user.role==='manager' ? 'ownerWorkspace' : user.role==='warehouse' ? 'warehouseWorkspace' : user.role==='sales' ? 'counterWorkspace' : 'dashboard'} hint="overviewHint">
@@ -162,6 +179,9 @@ export function Dashboard({
           {t('refresh')}
         </button>
       </PageHeading>
+      <ErrorBanner error={error} />
+      {loading && !data && <p role="status">{t('loading')}</p>}
+      {leadsShop && overview}
       <ErrorBanner error={setup.error}/>
       {setup.data?.steps && completed < steps.length && (
         <section className="company-setup panel" aria-labelledby="company-setup-title" data-testid="company-setup">
@@ -169,33 +189,23 @@ export function Dashboard({
             <h2 id="company-setup-title">{t('prepareCounter')}</h2>
             <span><bdi>{quantity(completed,locale)} / {quantity(steps.length,locale)}</bdi></span>
           </header>
-          <ul>{steps.map(([id,label,destination]) => (
-            <li key={id}>{setup.data?.steps?.[id]
-              ? <span className="setup-done"><Check size={18} aria-hidden="true"/>{t(label)}<span className="sr-only">{t('completedSetup')}</span></span>
-              : <button type="button" onClick={() => navigate(destination)}>{t(label)}<ArrowUpRight size={17} aria-hidden="true"/></button>}
-            </li>
+          <ul>{steps.filter(([id])=>!setup.data?.steps?.[id]).map(([id,label,destination])=>(
+            <li key={id}><button type="button" onClick={()=>navigate(destination)}>{t(label)}<ArrowUpRight size={17} aria-hidden="true"/></button></li>
           ))}</ul>
+          {completed>0 && <details className="completed-setup">
+            <summary>{t('completedSetup')} · {quantity(completed,locale)}</summary>
+            <ul>{steps.filter(([id])=>setup.data?.steps?.[id]).map(([id,label])=>(
+              <li key={id}><span className="setup-done"><Check size={18} aria-hidden="true"/>{t(label)}</span></li>
+            ))}</ul>
+          </details>}
         </section>
       )}
       {shortcuts}
-      <ErrorBanner error={error} />
-      {loading && !data && <p role="status">{t('loading')}</p>}
-      <div className="metric-grid">
-        {metrics.map(([label, key, Icon, currency]) => (
-          <article className="metric" key={key}>
-            <span className="metric-label"><Icon size={17} aria-hidden="true"/>{t(label)}</span>
-            <strong>
-              {data ? currency ? <Amount minor={data[key] ?? 0} /> : quantity(data[key] ?? 0, locale) : '—'}
-            </strong>
-            {!currency && <small>{t('PCS')}</small>}
-          </article>
-        ))}
-      </div>
+      {!leadsShop && overview}
       <div className="dashboard-grid workspace-dashboard">
         <section className="panel">
           <div className="panel-heading">
             <h2>{t('recentMovements')}</h2>
-            <span className="badge neutral">{t('today')}</span>
           </div>
           {data?.recentMovements?.length ? (
             <div className="activity-list">
@@ -1086,7 +1096,7 @@ export function PointOfSale({ entry,active=true }: { entry?: { sku: string }; ac
   const { t, warehouses, notify, online, locale } = useApp();
   const [q, setQ] = useState(''),
     [warehouseId, setWarehouse] = useState(''),
-    [cart, setCart] = useState<{ product: Product; quantity: number }[]>([]),
+    [cart, setCart] = useState<{ product: Product; quantity: number; limitHit?: boolean }[]>([]),
     [reserved, setReserved] = useState<string>(),
     [sale, setSale] = useState<Sale | null>(null);
   useEffect(() => { if (entry) setQ(entry.sku); }, [entry]);
@@ -1117,11 +1127,52 @@ export function PointOfSale({ entry,active=true }: { entry?: { sku: string }; ac
       tax.data ?? { rateBps: 0, inclusive: false },
     ),
     total = totals.totalMinor;
+  const warehouseName = warehouses.find(w => w.id === wh)?.name ?? '';
+  // A reservation owns its stock already. A lost-response retry must replay its original request.
+  const checkAvailability = !reserved && !pendingPath;
+  const exceedsStock = checkAvailability && cart.some(line => line.quantity > totalStock(line.product, wh).available);
+  const cappedLines = checkAvailability ? cart.filter(line => line.limitHit && line.quantity === totalStock(line.product, wh).available) : [];
+  function stockMessage(key: 'cartStockLimit' | 'cartStockExcess', product: Product) {
+    return t(key, {sku: product.sku, available: quantity(totalStock(product, wh).available, locale), warehouse: warehouseName});
+  }
+  function updateVisibleStock(fresh: Product[]) {
+    const byId = new Map(fresh.map(p => [p.id, p]));
+    products.setData(list => list && ({
+      ...list, items: list.items.map(p => ({...p, stock: byId.get(p.id)?.stock ?? p.stock})),
+    }));
+  }
+  async function refreshCart(mode: 'prices' | 'stock') {
+    setRefreshError(undefined);
+    setRefreshing(true);
+    try {
+      const updated = await Promise.all(cart.map(async line => {
+        const p = await api<Product>(`/products/${line.product.id}`);
+        return {...line, limitHit: false, product: mode === 'prices' ? p : {...line.product, stock:p.stock}};
+      }));
+      setCart(updated);
+      updateVisibleStock(updated.map(line => line.product));
+      if (mode === 'prices') tax.reload();
+      products.reload();
+    } catch (err) {
+      setRefreshError(err);
+    } finally {
+      setRefreshing(false);
+    }
+  }
   function add(p: Product) {
-    if (cartLocked || p.status !== 'ACTIVE_INTERNAL' || totalStock(p, wh).available <= 0) return;
-    setCart(lines => lines.some(line => line.product.id === p.id)
-      ? lines.map(line => line.product.id === p.id ? { ...line, quantity: line.quantity + 1 } : line)
-      : [...lines, { product: p, quantity: 1 }]);
+    if (cartLocked || p.status !== 'ACTIVE_INTERNAL') return;
+    setCart(lines => {
+      const available = totalStock(p, wh).available;
+      if (!lines.some(line => line.product.id === p.id)) {
+        return available > 0 ? [...lines, {product: p, quantity: 1}] : lines;
+      }
+      return lines.map(line => {
+        if (line.product.id !== p.id) return line;
+        const product = {...line.product, stock: p.stock};
+        const limitHit = line.quantity >= totalStock(product, wh).available;
+        return {...line, product, quantity: limitHit ? line.quantity : line.quantity + 1, limitHit};
+      });
+    });
   }
   async function scanToCart(input: string) {
     const code = input.trim();
@@ -1136,8 +1187,10 @@ export function PointOfSale({ entry,active=true }: { entry?: { sku: string }; ac
       const fold = (value: string) => value.normalize('NFD').toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
       const exact = part && result.total === 1 &&
         [part.sku, part.oem, part.barcode, part.manufacturerPartNo].some(ref => ref && fold(ref) === fold(code));
-      if (exact && part.status === 'ACTIVE_INTERNAL' && totalStock(part, wh).available > 0) {
+      if (exact && part.status === 'ACTIVE_INTERNAL') {
+        updateVisibleStock([part]);
         add(part);
+        if (totalStock(part, wh).available <= 0) setScanNotice('inspectScan');
       } else {
         setScanNotice('inspectScan');
       }
@@ -1195,6 +1248,7 @@ export function PointOfSale({ entry,active=true }: { entry?: { sku: string }; ac
           </div>
           {scans > 0 && <p role="status">{t('checkingScan')}</p>}
           {scanNotice && <p className="notice warning" role="status">{t(scanNotice)}</p>}
+          {cappedLines.map(line => <p key={line.product.id} className="notice warning" role="status">{stockMessage('cartStockLimit', line.product)}</p>)}
           <ErrorBanner error={products.error} />
           <div className="parts-grid">
             {products.data?.items.map((p) => (
@@ -1277,9 +1331,15 @@ export function PointOfSale({ entry,active=true }: { entry?: { sku: string }; ac
                     <small>
                       <bdi dir="ltr">{line.product.sku}</bdi>
                     </small>
+                    {checkAvailability && line.quantity > totalStock(line.product, wh).available && (
+                      <p className="notice warning" id={"cart-limit-" + line.product.id} role="status">
+                        {stockMessage('cartStockExcess', line.product)}
+                      </p>
+                    )}
                     <div className="cart-line-controls">
                       <input
                         data-testid={`cart-quantity-${line.product.sku}`}
+                        aria-describedby={checkAvailability && line.quantity > totalStock(line.product, wh).available ? `cart-limit-${line.product.id}` : undefined}
                         aria-label={`${t('quantity')} ${line.product.sku}`}
                         type="number"
                         min={1}
@@ -1292,6 +1352,7 @@ export function PointOfSale({ entry,active=true }: { entry?: { sku: string }; ac
                               l.product.id === line.product.id
                                 ? {
                                     ...l,
+                                    limitHit: false,
                                     quantity: Math.min(
                                       1000000,
                                       Math.trunc(Math.max(1, Number(e.target.value) || 1)),
@@ -1349,31 +1410,14 @@ export function PointOfSale({ entry,active=true }: { entry?: { sku: string }; ac
             <button
               className="text-button"
               disabled={!cart.length || !online || working || scans > 0 || !!pendingPath}
-              onClick={async () => {
-                setRefreshError(undefined);
-                setRefreshing(true);
-                try {
-                  const updated = await Promise.all(
-                    cart.map(async (l) => ({
-                      ...l,
-                      product: await api<Product>(`/products/${l.product.id}`),
-                    })),
-                  );
-                  setCart(updated);
-                  tax.reload();
-                } catch (e) {
-                  setRefreshError(e);
-                } finally {
-                  setRefreshing(false);
-                }
-              }}
+              onClick={() => void refreshCart('prices')}
             >
               {t('refreshPrices')}
             </button>
             <button
               data-testid="sale-submit"
               className="button primary full"
-              disabled={!cart.length || !tax.data || !canRun('/sales')}
+              disabled={!cart.length || !tax.data || exceedsStock || !canRun('/sales')}
               onClick={() => void finish()}
             >
               {commit.busy ? t('pending') : t(commit.pending ? 'retry' : 'completeSale')}
@@ -1401,7 +1445,7 @@ export function PointOfSale({ entry,active=true }: { entry?: { sku: string }; ac
                   void release.run(`/inventory/reservations/${reserved}/release`, {}).then((result) => {
                     if (result) {
                       setReserved(undefined);
-                      products.reload();
+                      void refreshCart('stock');
                     }
                   })
                 }
@@ -1411,7 +1455,7 @@ export function PointOfSale({ entry,active=true }: { entry?: { sku: string }; ac
             ) : (
               <button
                 className="button secondary full"
-                disabled={!cart.length || !canRun('/inventory/reservations')}
+                disabled={!cart.length || exceedsStock || !canRun('/inventory/reservations')}
                 onClick={() =>
                   void reserve
                     .run<{ id: string }>('/inventory/reservations', {
