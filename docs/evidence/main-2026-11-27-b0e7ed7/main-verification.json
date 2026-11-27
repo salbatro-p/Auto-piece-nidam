@@ -1,0 +1,41 @@
+{
+  "source": "b0e7ed797b058f4e3af9c6feb554464672f3c2f0",
+  "windowsMainCopiesClean": 2,
+  "gitHubMainMatched": true,
+  "companyMigrations": "001-016",
+  "localBrowser": {
+    "startTime": "2026-11-27T02:20:41.512Z",
+    "duration": 562052.105,
+    "expected": 33,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "localBrowserSha256": "2c5e5f7af2fa7f4c365e7eb597089e8eef1182a1fc8bfba55138eabe98a0434f",
+  "localCore": {
+    "pass": 58,
+    "sha256": "a667fc10325048b3a46e04990d4382647cef194d56efeae817845a0faa148dae",
+    "tests": 58,
+    "fail": 0
+  },
+  "gitHubPushRuns": {
+    "companyNetworkAndRestore": 45927714584,
+    "quality": 45927714466
+  },
+  "servedFileMatches": {
+    "company": 16,
+    "demo": 16
+  },
+  "anonymousDemoProductsStatus": 401,
+  "localeTimingMs": {
+    "samples": 63,
+    "p95": 131.0,
+    "scope": "Windows Chromium emulation including automation round trips",
+    "maximum": 142.0
+  },
+  "trainingCaptureScope": "Synthetic company, actual served build, no asset substitution",
+  "screenArchiveSha256": "e1cb52ea8b80941627ee9fef1c17b3367846dd54004fabce0fce1865adfc1676",
+  "fieldPilot": "NOT TESTED",
+  "worldwideRank": "NOT TESTED",
+  "shopPhase2": "NOT TESTED"
+}

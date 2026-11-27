@@ -1,0 +1,88 @@
+{
+  "commit": "b0e7ed797b058f4e3af9c6feb554464672f3c2f0",
+  "checked": "2026-11-27T07:33:46.214Z",
+  "origin": "https://127.0.0.1:4265",
+  "browser": "156.0.8078.4",
+  "assets": [
+    {
+      "name": "assets/bmw-11431740045-BsFBW4y7.stl",
+      "bytes": 307284,
+      "sha256": "2a0fd2e22dbad89af0c04be0e7722516396808e6fac493f3c070555b01ac4b88"
+    },
+    {
+      "name": "assets/image-file.worker-BePAyqb_.js",
+      "bytes": 68409,
+      "sha256": "e7ff87f79b53089db4fd0968d6c57d31f492efee6e3fef4dc006e21f20eb9f22"
+    },
+    {
+      "name": "assets/image-file.worker-BePAyqb_.js.map",
+      "bytes": 459953,
+      "sha256": "01c554ab266c78a19fc397a880160e878927653812a02de696d3ae8a6472034e"
+    },
+    {
+      "name": "assets/import-file.worker-CA7-ZZDT.js",
+      "bytes": 69390,
+      "sha256": "d086dad07f35afc8e498edba74478e911107deb7db51032f4d8d64d7b0abc939"
+    },
+    {
+      "name": "assets/import-file.worker-CA7-ZZDT.js.map",
+      "bytes": 465752,
+      "sha256": "5f3ffddb777794b46d5ad8e9350bedb2ee12aaab03231288f1fc1df19358b6de"
+    },
+    {
+      "name": "assets/index-2X151HWB.css",
+      "bytes": 83952,
+      "sha256": "a1c1bde5c389eeb41a8cc2ab18963c4d772574c7e7f8363ff53c62555959d89e"
+    },
+    {
+      "name": "assets/index-CGHnJuh1.js",
+      "bytes": 622503,
+      "sha256": "c3d84afa8323d2dd8e30c4fe9388d5c8be456172ed519b2525c753ddba9da181"
+    },
+    {
+      "name": "assets/index-CGHnJuh1.js.map",
+      "bytes": 2087084,
+      "sha256": "3ac1dfeb8f2c270c445077ba576842a98f8b03ac55f9feaca96c134c82d18da8"
+    },
+    {
+      "name": "garage-dashboard.svg",
+      "bytes": 3592,
+      "sha256": "4e94b150645985426211799f76f1b97fd9b323d878727d84bb9805cd2edef65c"
+    },
+    {
+      "name": "icon.svg",
+      "bytes": 209,
+      "sha256": "98ceeebdab87d48382ecf4f48ee30a8ce75eb45f7db2b8a59013bed5be4da7cf"
+    },
+    {
+      "name": "index.html",
+      "bytes": 610,
+      "sha256": "be1d285844c9328ba42ddcbea7d0c686c0ed2fbe665d1bf03d28d214cda03fac"
+    },
+    {
+      "name": "manifest.webmanifest",
+      "bytes": 294,
+      "sha256": "c17f6cfb117a86cd473cd1c5740baf708dcef52eb9ba8de78043ca08f4a014cf"
+    },
+    {
+      "name": "offline.css",
+      "bytes": 613,
+      "sha256": "8abc08b5a13d333009f0dd56e998c0eb42fd8a8ff289903748be0dd9232c4007"
+    },
+    {
+      "name": "offline.html",
+      "bytes": 1204,
+      "sha256": "bd68bbc586fa3eb31f2c921ce4f2fcf5fffb16bcccb648773d7653cf7877f59d"
+    },
+    {
+      "name": "offline.js",
+      "bytes": 583,
+      "sha256": "882e087afe01dba6f07c6c5592ae7391fc260ebb907cbf81c05b4d7e58a30d06"
+    },
+    {
+      "name": "sw.js",
+      "bytes": 903,
+      "sha256": "d99e98ab55209480f5482d94aed7fb4f9bfcd357febe42e510149650e4dc7d4a"
+    }
+  ]
+}
