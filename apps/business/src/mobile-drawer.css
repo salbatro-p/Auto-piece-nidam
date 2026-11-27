@@ -1,0 +1,55 @@
+.mobile-drawer {
+  margin: 0;
+  inset-block: 0;
+  inset-inline: 0 auto;
+  padding: 0;
+  border: 0;
+  border-inline-end: 1px solid var(--line);
+  width: min(21rem, calc(100vw - 24px));
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  box-sizing: border-box;
+  color: var(--ink);
+  background: #f1ebdd;
+}
+.mobile-drawer[open] { display: flex; flex-direction: column; }
+.mobile-drawer::backdrop { background: rgb(20 37 34 / 48%); }
+.drawer-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line);
+  background: #fffdf7;
+}
+.drawer-controls .language-options { inset-inline: 0 auto; }
+.drawer-controls .icon-button { min-width: 44px; min-height: 44px; }
+.mobile-drawer .sidebar.menu-open {
+  position: static;
+  width: auto;
+  height: auto;
+  min-height: 0;
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  box-shadow: none;
+  border: 0;
+}
+html:has(.mobile-drawer[open]) { overflow: hidden; }
+
+dialog.lock-overlay {
+  inset: 0;
+  margin: 0;
+  width: 100%;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  border: 0;
+  box-sizing: border-box;
+  color: var(--ink);
+  background: var(--graphite);
+}
+dialog.lock-overlay::backdrop { background: var(--graphite); }
+.lock-tools { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+html:has(dialog.lock-overlay[open]) { overflow: hidden; }

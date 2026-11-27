@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import {translate as t} from '../../packages/i18n/src/business';
 import { capture, checkHeader, login, navigate, switchLanguage, locales } from './helpers';
 
 test('Premium automotive cockpit is usable, illustrated and responsive in AR FR EN', async ({ page }, testInfo) => {
@@ -14,7 +15,10 @@ test('Premium automotive cockpit is usable, illustrated and responsive in AR FR 
     expect(searchRect).not.toBeNull();
     // A useful action must span the cockpit, not collapse to a 70px text column.
     expect(searchRect!.width).toBeGreaterThan(200);
-    const amount=page.locator('.metric-grid .metric').last().locator('strong bdi');
+    const amount=page.getByRole('article',{name:t(locale,'dailySales'),exact:true}).locator('strong bdi');
+    const rect=await amount.boundingBox();
+    expect(rect).not.toBeNull();
+    expect(rect!.y+rect!.height).toBeLessThan(page.viewportSize()!.height);
     await expect(amount).toBeVisible();
     expect(await amount.evaluate(node=>getComputedStyle(node).overflowWrap)).toBe('normal');
     await expect(page.locator('.workspace-shortcuts .workspace-shortcut').first()).toBeVisible();

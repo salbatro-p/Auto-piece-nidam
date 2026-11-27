@@ -26,6 +26,7 @@ test('all AR FR EN messages compile with ICU, key parity and no missing domain e
         () => translate(locale, key, {
           done: 2, current: 2, total: 3, count: 3, quantity: 1, pack: 10, pieces: 10,
           kind: 'صورة', sku: '00-TEST/ع', angle: 'Front', percent: 50,
+          warehouse: 'Dépôt QA 07', available: 7,
           accepted: 2, duplicate: 1, conflict: 1, rejected: 0,
         }),
         locale + ':' + key,

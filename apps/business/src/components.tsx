@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, type ReactNode } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { Search, X, Camera, CircleAlert, Package, Check, Disc3, Cog, Zap, Wrench } from 'lucide-react';
 import { api, ApiError, mutationKey } from './api';
 import { useApp } from './context';
@@ -145,11 +145,14 @@ export function Modal({
   onClose: () => void;
   wide?: boolean;
 }) {
-  const { t, locale, changeLocale } = useApp();
+  const { t, locale, changeLocale, locked } = useApp();
   const ref = useRef<HTMLDialogElement>(null);
-  useEffect(() => {
+  useLayoutEffect(() => {
     const dialog = ref.current;
-    dialog?.showModal();
+    if (dialog && !locked && !dialog.open) dialog.showModal();
+  }, [locked]);
+  useLayoutEffect(() => {
+    const dialog = ref.current;
     return () => dialog?.close();
   }, []);
   return (

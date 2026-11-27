@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
   Activity,
@@ -34,6 +34,7 @@ import './refinements.css';
 import './workspace.css';
 import './premium.css';
 import './atelier.css';
+import './mobile-drawer.css';
 import { Invitation } from './invitation';
 
 type Page =
@@ -85,6 +86,55 @@ function App() {
   const [coverageEntry,setCoverageEntry] = useState<{queue:'missing'}>();
   const [supplierEntry,setSupplierEntry] = useState<{id:string}>();
   const detailRequest = useRef<AbortController | undefined>(undefined);
+  const menuTrigger = useRef<HTMLButtonElement>(null);
+  const drawer = useRef<HTMLDialogElement>(null);
+  const main = useRef<HTMLElement>(null);
+  const focusAfterMenu = useRef<'trigger' | 'page' | 'sidebar' | null>(null);
+  const closeMenu = useCallback((focus: 'trigger' | 'page' | 'sidebar') => {
+    focusAfterMenu.current = focus;
+    setMenu(false);
+  }, []);
+  useLayoutEffect(() => {
+    const panel = drawer.current;
+    if (menu && panel && !locked) {
+      panel.showModal();
+      panel.querySelector<HTMLButtonElement>('[aria-current="page"]')?.focus();
+      const compact = window.matchMedia('(max-width: 800px)');
+      const syncWidth = () => { if (!compact.matches) closeMenu('sidebar'); };
+      compact.addEventListener('change', syncWidth);
+      syncWidth();
+      return () => { compact.removeEventListener('change', syncWidth); panel.close(); };
+    }
+    const destination = focusAfterMenu.current;
+    focusAfterMenu.current = null;
+    if (locked || !destination) return;
+    const target = destination === 'trigger' ? menuTrigger.current : destination === 'page' ? main.current :
+      document.querySelector<HTMLElement>('#workspace-navigation [aria-current="page"]');
+    target?.focus({preventScroll: true});
+  }, [menu, locked, closeMenu]);
+  const lockDialog = useRef<HTMLDialogElement>(null);
+  const focusBeforeLock = useRef<HTMLElement | null>(null);
+  const displayLock = useCallback(() => {
+    if (locked) return;
+    const focused = document.activeElement;
+    focusBeforeLock.current = focused instanceof HTMLElement ? focused : null;
+    setMenu(false);
+    setLocked(true);
+  }, [locked]);
+  useLayoutEffect(() => {
+    const panel = lockDialog.current;
+    if (locked && panel) {
+      panel.showModal();
+      panel.querySelector<HTMLInputElement>('input[type="password"]')?.focus();
+      return () => panel.close();
+    }
+    const previous = focusBeforeLock.current;
+    focusBeforeLock.current = null;
+    if (user && previous) {
+      const target = previous.isConnected && previous.getClientRects().length ? previous : main.current;
+      target?.focus({preventScroll:true});
+    }
+  }, [locked, user?.id]);
   const lastActivity = useRef(Date.now());
   const localeSave = useRef(Promise.resolve());
   const localeChosen = useRef(false);
@@ -107,11 +157,11 @@ function App() {
   useEffect(()=>{window.scrollTo({top:0,left:0,behavior:'instant'});},[page]);
   useEffect(() => {
     const expired = () => {
-      if (user) setLocked(true);
+      if (user) displayLock();
     };
     window.addEventListener('autoparts-session-expired', expired);
     return () => window.removeEventListener('autoparts-session-expired', expired);
-  }, [user?.id]);
+  }, [user?.id, displayLock]);
   useEffect(() => {
     document.documentElement.lang = locale;
     document.documentElement.dir = direction(locale);
@@ -157,9 +207,9 @@ function App() {
   }, [notice]);
   const lock = useCallback(() => {
     if (!user || locked) return;
-    setLocked(true);
+    displayLock();
     void api('/auth/lock', { method: 'POST', body: {} }).catch(() => {});
-  }, [user, locked]);
+  }, [user, locked, displayLock]);
   useEffect(() => {
     if (!user || locked) return;
     lastActivity.current = Date.now();
@@ -176,20 +226,22 @@ function App() {
       clearInterval(timer);
     };
   }, [user?.id, locked, lock]);
+  function saveLocale(next: Locale) {
+    localeSave.current = localeSave.current.then(async () => {
+      try {
+        await api('/me/locale', { method:'PATCH', body:{locale:next} });
+      } catch (err) {
+        setError(err);
+      }
+    });
+  }
   async function switchLocale(next: Locale) {
     localeChosen.current = true;
     setLocale(next);
-    if (user && !locked) {
-      localeSave.current = localeSave.current.then(async () => {
-        try {
-          await api('/me/locale', { method: 'PATCH', body: { locale: next } });
-        } catch (err) {
-          setError(err);
-        }
-      });
-    }
+    if (user && !locked) saveLocale(next);
   }
   async function logout() {
+    setError(undefined);
     try {
       await localeSave.current;
       await api('/auth/logout', { method: 'POST', body: {} });
@@ -199,6 +251,7 @@ function App() {
         return;
       }
     }
+    setMenu(false);
     setUser(null);
     try { if (user) sessionStorage.removeItem('autoparts:registration:'+user.id); } catch {}
     setCsrf('');
@@ -234,6 +287,7 @@ function App() {
     user: user ?? visitor,
     warehouses,
     online,
+    locked,
     can,
     notify: setNotice,
   };
@@ -241,7 +295,7 @@ function App() {
     if (next === 'pos' && !can('sell')) return;
     if (next !== 'catalog') setCoverageEntry(undefined);
     setPage(next);
-    setMenu(false);
+    if (menu) closeMenu('page');
   };
   useEffect(() => { if (page === 'pos') setPosLoaded(true); },[page]);
   function closeDetails() {
@@ -277,6 +331,57 @@ function App() {
       navigate('inventory');
     } else if (target.kind === 'nav') navigate(target.page);
   }
+  const sidebar = user && (
+    <aside id="workspace-navigation" className={`sidebar ${menu ? 'menu-open' : ''}`} inert={locked}>
+      <div className="workspace-label">
+        <span className="workspace-avatar">AP</span>
+        <div>
+          <strong><bdi>{user.demo ? 'AutoParts Morocco' : user.companyName || 'AutoParts Business'}</bdi></strong>
+          <small>{t(user.demo ? 'demo' : 'privateWorkspace')}</small>
+        </div>
+      </div>
+      <nav aria-label={t('workspace')}>
+        {navGroups.filter(group=>navItems.some(item=>item.group===group&&(!item.permission||can(item.permission)))).map((group) => (
+          <div className="nav-group" key={group}>
+            <div className="nav-label">{t(group)}</div>
+            {navItems
+              .filter((item) => item.group === group && (!item.permission || can(item.permission)))
+              .map((item) => (
+                <button
+                  className={`nav-item ${page === item.id ? 'active' : ''}`}
+                  key={item.id}
+                  data-testid={`nav-${item.id}`}
+                  aria-current={page === item.id ? 'page' : undefined}
+                  onClick={() => navigate(item.id)}
+                >
+                  <item.icon size={20} />
+                  <span>{t(item.id)}</span>
+                  {page === item.id && <span className="nav-dot" />}
+                </button>
+              ))}
+          </div>
+        ))}
+      </nav>
+      <div className="sidebar-footer">
+        <div className="user-avatar">{user.name.slice(0, 2).toUpperCase()}</div>
+        <div className="user-details">
+          <strong>
+            <bdi>{user.name}</bdi>
+          </strong>
+          <small>{t(messageKey(user.role.toUpperCase()) ?? 'role')}</small>
+        </div>
+        <button
+          aria-label={t('logout')}
+          title={t('logout')}
+          data-testid="logout"
+          className="icon-button"
+          onClick={() => void logout()}
+        >
+          <LogOut size={18} />
+        </button>
+      </div>
+    </aside>
+  );
   return (
     <AppContext.Provider value={context}>
       <a className="skip-link" href="#main">
@@ -320,10 +425,14 @@ function App() {
             </button>
             <button
               className="icon-button mobile-menu"
-              title={t('workspace')}
-              aria-label={t('workspace')}
+              ref={menuTrigger}
+              title={t('openNavigation')}
+              aria-label={t('openNavigation')}
+              aria-controls="workspace-navigation"
+              aria-haspopup="dialog"
               aria-expanded={menu}
-              onClick={() => setMenu(!menu)}
+              disabled={locked}
+              onClick={() => setMenu(true)}
             >
               {menu ? <X size={21} /> : <Menu size={21} />}
             </button>
@@ -367,63 +476,28 @@ function App() {
       ) : (
         <>
           <div className="app-layout">
-            <aside className={`sidebar ${menu ? 'menu-open' : ''}`} inert={locked}>
-              <div className="workspace-label">
-                <span className="workspace-avatar">AP</span>
-                <div>
-                  <strong><bdi>{user.demo ? 'AutoParts Morocco' : user.companyName || 'AutoParts Business'}</bdi></strong>
-                  <small>{t(user.demo ? 'demo' : 'privateWorkspace')}</small>
+            {menu && !locked ? (
+              <dialog ref={drawer} className="mobile-drawer" aria-label={t('workspace')}
+                onCancel={e=>{e.preventDefault();closeMenu('trigger');}}
+                onClick={e=>{if(e.target===e.currentTarget)closeMenu('trigger');}}>
+                <div className="drawer-controls">
+                  <LanguageSwitcher locale={locale} onChange={next=>void switchLocale(next)} label={t('language')}/>
+                  <button type="button" className="icon-button" aria-label={t('close')} onClick={()=>closeMenu('trigger')}>
+                    <X size={21} aria-hidden="true"/>
+                  </button>
                 </div>
-              </div>
-              <nav aria-label={t('workspace')}>
-                {navGroups.filter(group=>navItems.some(item=>item.group===group&&(!item.permission||can(item.permission)))).map((group) => (
-                  <div className="nav-group" key={group}>
-                    <div className="nav-label">{t(group)}</div>
-                    {navItems
-                      .filter((item) => item.group === group && (!item.permission || can(item.permission)))
-                      .map((item) => (
-                        <button
-                          className={`nav-item ${page === item.id ? 'active' : ''}`}
-                          key={item.id}
-                          data-testid={`nav-${item.id}`}
-                          aria-current={page === item.id ? 'page' : undefined}
-                          onClick={() => navigate(item.id)}
-                        >
-                          <item.icon size={20} />
-                          <span>{t(item.id)}</span>
-                          {page === item.id && <span className="nav-dot" />}
-                        </button>
-                      ))}
-                  </div>
-                ))}
-              </nav>
-              <div className="sidebar-footer">
-                <div className="user-avatar">{user.name.slice(0, 2).toUpperCase()}</div>
-                <div className="user-details">
-                  <strong>
-                    <bdi>{user.name}</bdi>
-                  </strong>
-                  <small>{t(messageKey(user.role.toUpperCase()) ?? 'role')}</small>
-                </div>
-                <button
-                  aria-label={t('logout')}
-                  title={t('logout')}
-                  data-testid="logout"
-                  className="icon-button"
-                  onClick={() => void logout()}
-                >
-                  <LogOut size={18} />
-                </button>
-              </div>
-            </aside>
-            <main id="main" className="main-content" inert={locked}>
+                {!!error && <ErrorBanner error={error} />}
+                {sidebar}
+              </dialog>
+            ) : sidebar}
+            <main ref={main} id="main" className="main-content" aria-label={t(page)} tabIndex={-1} inert={locked}>
               <div className="breadcrumb">
                 <span>{t('workspace')}</span>
                 <ChevronRight size={13} />
                 <span>{t(page)}</span>
                 {user.demo && <span className="demo-label">{t('demo')}</span>}
               </div>
-              {!!error && <ErrorBanner error={error} />}
+              {!menu && !locked && !!error && <ErrorBanner error={error} />}
               <div key={user.id}>
                 {page === 'dashboard' && <Dashboard navigate={navigate}
                   openMissingPhotos={() => {setCoverageEntry({queue:'missing'});navigate('catalog');}}
@@ -461,15 +535,18 @@ function App() {
               </footer>
             </main>
           </div>
-          {!locked && search && <WorkspaceSearch close={() => setSearch(undefined)} choose={choose} photoOnly={search==='photos'} />}
-          {!locked && details && (details.product ? <ProductDetails product={details.product} onClose={closeDetails} startUpload={details.photos}
+          {search && <WorkspaceSearch close={() => setSearch(undefined)} choose={choose} photoOnly={search==='photos'} />}
+          {details && (details.product ? <ProductDetails product={details.product} onClose={closeDetails} startUpload={details.photos}
             onSell={can('sell') ? () => { setPosEntry({sku:details.product!.sku}); closeDetails(); navigate('pos'); } : undefined}
             onReceive={can('receive') ? () => { setInventoryEntry({product:details.product,receipt:true}); closeDetails(); navigate('inventory'); } : undefined}
           /> : <Modal title={t('catalog')} onClose={closeDetails}><ErrorBanner error={details.error} />{!details.error && <p role="status">{t('loading')}</p>}</Modal>)}
           {locked && (
-            <section role="dialog" aria-modal="true" aria-labelledby="lock-title" className="lock-overlay">
+            <dialog ref={lockDialog} aria-labelledby="lock-title" className="lock-overlay" onCancel={e=>e.preventDefault()}>
               <div className="lock-panel">
-                <LockKeyhole size={32} />
+                <div className="lock-tools">
+                  <LockKeyhole size={32} aria-hidden="true"/>
+                  <LanguageSwitcher locale={locale} onChange={next=>void switchLocale(next)} label={t('language')}/>
+                </div>
                 <h2 id="lock-title">{t('locked')}</h2>
                 <p>{t('lockHint')}</p>
                 <LoginForm
@@ -479,15 +556,17 @@ function App() {
                   onSuccess={(session) => {
                     setUser(session.user);
                     setCsrf(session.csrfToken);
+                    if (session.user.locale !== locale) saveLocale(locale);
                     setLocked(false);
                     lastActivity.current = Date.now();
                   }}
                 />
+                {!!error && <ErrorBanner error={error} />}
                 <button className="text-button" onClick={() => void logout()}>
                   {t('logout')}
                 </button>
               </div>
-            </section>
+            </dialog>
           )}
         </>
       )}

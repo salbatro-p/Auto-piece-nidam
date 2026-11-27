@@ -1,4 +1,9 @@
 export const workspaceMessages = {
+  openNavigation: ['Open navigation menu','Ouvrir le menu de navigation','فتح قائمة التنقل'],
+  saleCountToday: ['Transactions today · {count}','Transactions du jour · {count}','عمليات البيع اليوم · {count}'],
+  stockOverview: ['Stock and sales','Stock et ventes','المخزون والمبيعات'],
+  cartStockLimit: ["{sku} · All {available} available in {warehouse} are already in the cart.", "{sku} · Les {available} unités disponibles à {warehouse} sont déjà dans le panier.", "{sku} · الكمية المتاحة في {warehouse} كاملة في السلة ({available})."],
+  cartStockExcess: ["{sku} · {available} available in {warehouse}. Reduce the quantity for a sale or save a quote.", "{sku} · {available} disponibles à {warehouse}. Réduisez la quantité pour vendre, ou enregistrez un devis.", "{sku} · المتاح في {warehouse} هو {available}. نقص الكمية لإتمام البيع أو سجّل عرض ثمن."],
   partStudio: ["3D parts bench","Atelier pièces 3D","مشغل القطع ثلاثية الأبعاد"],
   drawingReference: ["Manufacturer reference","Référence fabricant","مرجع الصانع"],
   copperDrainSeal: ["Copper drain plug washer","Joint de bouchon de vidange en cuivre","حلقة نحاسية لسدادة تفريغ الزيت"],

@@ -242,3 +242,19 @@ th {
 .table-wrap:focus-visible { outline: 3px solid #17695f; outline-offset: -3px; }
 .media-section{margin-block:1.5rem}.section-heading{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}.media-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:1rem}.media-card{display:flex;flex-direction:column;gap:.6rem;border:1px solid var(--border,#d1dbd5);border-radius:12px;padding:12px;min-width:0}.media-card bdi,.media-card small{overflow-wrap:anywhere}.media-zoom{position:relative;background:#f4f7f5;border:0;cursor:zoom-in;padding:0;border-radius:8px}.media-zoom svg{position:absolute;inset-inline-end:8px;bottom:8px;background:white;border-radius:4px}.media-thumbnail{width:100%;height:180px;object-fit:contain;display:block}.media-large{width:100%;height:auto;max-height:65vh;object-fit:contain}.image-fallback{min-height:150px;display:flex;align-items:center;justify-content:center;gap:12px;color:#465c50}.coverage-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px}.coverage-summary div{background:#f1f6f3;border-radius:8px;padding:12px}.coverage-summary dd{margin:8px 0 0;font-size:1.5rem;font-weight:700}.license-list{display:flex;flex-wrap:wrap;gap:8px;margin-block:12px}.vehicle-filter{padding:16px;margin-block:16px}.vehicle-filter summary{cursor:pointer;font-weight:600;min-height:40px}.media-section progress{max-width:100%}.media-section fieldset{min-width:0}.checkbox{display:flex;align-items:center;gap:10px;margin-block:12px;min-height:44px}.checkbox input{width:20px;height:20px;flex-shrink:0}
 html{scroll-padding-top:160px}button,input,select,textarea,a{scroll-margin-top:160px}
+
+/* Keep one monetary value together when receipt labels need another line. */
+.receipt-paper .receipt-line, .receipt-paper .total-row, .receipt-paper .receipt-total {
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 8px;
+}
+.receipt-paper .receipt-line > div { flex: 1 1 7rem; min-width: 0; overflow-wrap: anywhere; }
+.receipt-paper .receipt-line > bdi, .receipt-paper .total-row > bdi, .receipt-paper .receipt-total > strong:last-child {
+  white-space: nowrap;
+  margin-inline-start: auto;
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 480px) {
+  .receipt-paper { padding-inline: 12px; }
+}

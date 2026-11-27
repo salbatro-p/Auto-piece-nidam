@@ -9,6 +9,7 @@ export interface AppContextValue {
   user: User;
   warehouses: Warehouse[];
   online: boolean;
+  locked: boolean;
   can: (permission: string) => boolean;
   notify: (key: MessageKey) => void;
 }
